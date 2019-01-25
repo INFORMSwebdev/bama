@@ -1,3 +1,24 @@
+<?php
+	//get the global DB object set up by con.php
+	require_once "../scripts/con.php";
+	
+	//define variables and init them to empty values
+	$username = $password = $confirm_password = "";
+	$username_err = $password_err = $confirm_password_err = "";
+	
+	//process form data when the form is submitted
+	if($_SERVER["REQUEST_METHOD"] == "POST"){
+		
+		//validate username
+		if(empty(trim($_POST["username"]))){
+			//no user name was supplied
+			$username_err = "Please enter a username.";
+		}
+		else {
+			
+		}
+	}
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -8,7 +29,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title>Register</title>
   </head>
   <body>
     <h1>Hello, world!</h1>
