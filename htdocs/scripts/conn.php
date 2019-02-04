@@ -1,11 +1,26 @@
 <?php
 	//define constants to use throughout
-	define("SETTINGSDIR", "../../../cgi-bin/settings/");
+	# can set these up to use absolute paths, but currently they are all relative paths from this document: [/var/www/bama/htdocs]/scripts/conn.php
+	# I think we can even build on already defined constants for other constants, but I'm not sure if that's true or not.
+	define("ROOTDIR", "/var/www/bama/htdocs/");
+	define("SETTINGSDIR", "../../settings/");
 	define("IMAGESDIR", "images/");
 	define("ICONSDIR", "images/statusIcons/");
+	define("USERSDIR", "../users/");
+	
+	//auto load stuff?
+	//require_once( "/common/classes/autoload.php" );
+	
+	//get the DB connection settings
+	require_once(SETTINGSDIR . "settings.php");
+	
 	//set the global DB object up for functions to use
 	try{
-		$g_db = new pdo_db( "/common/settings/common.ini", "analytics_education_settings" );
+		# the only reason I didn't use the usual wrapper class is that it didn't have functions already in it for the prepare() function,
+		# I didn't want to mess stuff up AND learn how to do this stuff at the same time.
+		# ToDo (optional): update the wrapper class and add in a prepare method so that this system can use the wrapper class Dave made
+		//$g_db = new pdo_db( "/common/settings/common.ini", "analytics_education_settings" );
+		$g_db = new PDO($dsn, $user, $pass, $options);
 	} catch(\PDOException $e){
 		throw new \PDOException($e->getMessage(), (int)$e->getCode());
 	}

@@ -1,4 +1,15 @@
-<!doctype html>
+<?php
+	//initialize the session
+	session_start();
+	
+	//check if user is logged in, if not then redirect them to the login page
+	if(!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] !== true){
+		header("Location: users/login.php");
+		//stop execution of this script after redirect
+		die;
+	}
+?>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -8,15 +19,39 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-    <title>All Programs</title>
+    <title>Program Administrator Dashboard</title>
   </head>
   <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="https://www.informs.org" target="_blank">
+			<img src="/images/nav/logo_125x30.png" height="30" alt="INFORMS logo" />
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon" />
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="/index.php">Home <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/users/register.php">Register Program Admin</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-nav">
+			<a class="nav-item btn btn-sm btn-outline-danger" href="/users/logout.php" role="button">Log out</a>
+		</div>
+	</nav>
 	<div class="container">
-		<div class="row">
-			
+		<div class="jumbotron">
+			<h1 class="display-4">Welcome <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
+			<p class="lead">Message can go here about system</p>
+			<hr class="my-4" />
+			<a class="btn btn-primary" href="#" role="button">View all programs</a>
+			<a class="btn btn-primary" href="#" role="button">View my programs</a>
 		</div>
 	</div>
-    <h1>Hello, world!</h1>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
