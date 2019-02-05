@@ -1,40 +1,41 @@
 <?php
-	# my first attempt at changing my code to fit with Dave's style!
-	
-	//display all errors
-	ini_set('display_errors', 1);
-	error_reporting(E_ALL);
-	
-	//initialize the session
-	session_start();
-	
-	//get the settings for sites
-	//parse the ini file for all sites
-	$ini = parse_ini_file("/common/settings/common.ini", TRUE);
-	//include the settings for this specific site
-	//require_once($ini['analytics_education_settings']
-	# ToDo: figure out how to get the PDO wrapper class in here or at least how to use the settings that were just parsed
-	//I think it's done as below, but I'm unsure at this time
-	$host = $ini['ecommerce_settings']['db_hostname'];
-	//so I would pass the variables as above to the PDO wrapper class, OR in the meantime, I can just use them to make a new PDO object
-	//for now, I am just using the /scripts/conn.php file since it was already created
-	
-	//check if user is logged in, if not then redirect them to the login page
-	if(!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] !== true){
-		header("Location: users/login.php");
-		//stop execution of this script after redirect
-		die;
-	}
-	
-	//user is logged in, get their username and info
-	//don't want any XSS so we put the variable through the htmlspecialchars() function
-	$user = htmlspecialchars($_SESSION['username']);
-	
-	//set up utility links? 
-	# ToDo: Ask Dave what these are
-	$util_links = '<a href="/index.php">Home</a>';
-	
-	$content = <<<EOT
+# my first attempt at changing my code to fit with Dave's style!
+
+//display all errors
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+//initialize the session
+session_start();
+
+//get the settings for sites
+//parse the ini file for all sites
+$ini = parse_ini_file("/common/settings/common.ini", TRUE);
+//autoload common classes, we want that wrapper3 class!
+require_once("/common/classes/autoload.php");
+
+# ToDo: figure out how to get the PDO wrapper class in here or at least how to use the settings that were just parsed
+//I think it's done as below, but I'm unsure at this time
+$host = $ini['analytics_education_settings']['db_hostname'];
+//so I would pass the variables as above to the PDO wrapper class, OR in the meantime, I can just use them to make a new PDO object
+//for now, I am just using the /scripts/conn.php file since it was already created
+
+//check if user is logged in, if not then redirect them to the login page
+if(!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] !== true){
+	header("Location: users/login.php");
+	//stop execution of this script after redirect
+	die;
+}
+
+//user is logged in, get their username and info
+//don't want any XSS so we put the variable through the htmlspecialchars() function
+$user = htmlspecialchars($_SESSION['username']);
+
+//set up utility links?
+# ToDo: Ask Dave what these are
+$util_links = '<a href="/index.php">Home</a>';
+
+$content = <<<EOT
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="https://www.informs.org" target="_blank">
 				<img src="/images/nav/logo_125x30.png" height="30" alt="INFORMS logo" />
@@ -43,14 +44,18 @@
 				<span class="navbar-toggler-icon" />
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
+				<div class="navbar-nav">
+					<a class="nav-item nav-link active" href="/index.php">Home <span class="sr-only">(current)</span></a>
+					<a class="nav-item nav-link" href="/users/register.php">Register Program Admin</a>
+				</div>
+				<!--<ul class="navbar-nav mr-auto">
 					<li class="nav-item active">
 						<a class="nav-link" href="/index.php">Home <span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="/users/register.php">Register Program Admin</a>
 					</li>
-				</ul>
+				</ul>-->
 			</div>
 			<div class="navbar-nav">
 				<a class="nav-item btn btn-sm btn-outline-danger" href="/users/logout.php" role="button">Log out</a>
@@ -66,35 +71,23 @@
 			</div>
 		</div>
 EOT;
-	
-	//create the parameters to pass to the wrapper
-	$page_params = array();
-	$page_params['loggedIn'] = TRUE;
-	$page_params['content'] = $content;
-	$page_params['page_title'] = "Program Administrator Dashboard";
-	$page_params['site_title'] = "Analytics Education Admin";
-	
+
+//create the parameters to pass to the wrapper
+$page_params = array();
+$page_params['loggedIn'] = TRUE;
+$page_params['content'] = $content;
+$page_params['page_title'] = "Program Administrator Dashboard";
+$page_params['site_title'] = "Analytics Education Admin";
+$page_params['site_url'] = 'https://bama-dev.informs.org/index.php';
+$page_params['show_title_bar'] = FALSE;
+//do not display the usual header/footer
+$page_params['admin'] = TRUE;
+//put custom/extra css files, if used
+//$page_params['css'][] = array("url" => "");
+//put custom/extra JS files, if used
+//$page_params['js'][] = array("url" => "");
+//wrapper class to pass all the content and params to
+$wrapper = new wrapper3($page_params);
+//display the content
+$wrapper->html();
 ?>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
-    <title></title>
-  </head>
-  <body>
-	
-	
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-  </body>
-</html>
