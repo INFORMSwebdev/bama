@@ -81,7 +81,7 @@
 		//get the global DB object
 		global $g_db;
 		
-		$stmt = $g_db->prepare("SELECT * FROM users WHERE username = ?");
+		$stmt = $g_db->prepare("SELECT * FROM users WHERE Username = ?");
 		//only 1 results, if any, should be returned
 		$stmt->execute([$username]);
 		
@@ -126,7 +126,7 @@
 		global $g_db;
 		
 		//prepare the statement to execute, since we will be passing inputs
-		$stmt = $g_db->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+		$stmt = $g_db->prepare("INSERT INTO users (Username, Password) VALUES (?, ?)");
 		//execute the statement, pass in the username and a hashed password 
 		$stmt->execute([$user, password_hash($pass, PASSWORD_DEFAULT)]);
 		$count = $stmt->rowCount();
@@ -173,7 +173,7 @@
 		}
 		else {
 			//see if the username is already taken
-			$sql = "SELECT id FROM users WHERE username = ?";
+			$sql = "SELECT UserId FROM users WHERE Username = ?";
 			//prepare the statement
 			$stmt = $g_db->prepare($sql);
 			//execute the prepared statement with the proposed username that was passed in the POST call

@@ -50,14 +50,14 @@
 		//validate credentials
 		if(empty($username_err) && empty($password_err)){
 			//no invalid input found, check the DB to make sure the entered username is in the system
-			$stmt = $g_db->prepare("SELECT id, password FROM users WHERE username = ?");
+			$stmt = $g_db->prepare("SELECT UserId, Password FROM users WHERE Username = ?");
 			$stmt->execute([$username]);
 			
 			//only 1 row should be returned
 			if($stmt->rowCount() === 1){
 				if($row = $stmt->fetch()){
-					$id = $row['id'];
-					$hashedPw = $row['password'];
+					$id = $row['UserId'];
+					$hashedPw = $row['Password'];
 					
 					//verify the password input with the stored hash value
 					if(password_verify($password, $hashedPw)){
