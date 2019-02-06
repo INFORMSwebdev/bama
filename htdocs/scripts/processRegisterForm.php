@@ -81,7 +81,7 @@
 		//get the global DB object
 		global $g_db;
 		
-		$stmt = $g_db->prepare("SELECT * FROM users WHERE Username = ?");
+		$stmt = $g_db->prepare("SELECT * FROM users WHERE Username = ? AND Deleted = 0");
 		//only 1 results, if any, should be returned
 		$stmt->execute([$username]);
 		
@@ -173,7 +173,7 @@
 		}
 		else {
 			//see if the username is already taken
-			$sql = "SELECT UserId FROM users WHERE Username = ?";
+			$sql = "SELECT UserId FROM users WHERE Username = ? AND Deleted = 0";
 			//prepare the statement
 			$stmt = $g_db->prepare($sql);
 			//execute the prepared statement with the proposed username that was passed in the POST call

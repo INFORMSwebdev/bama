@@ -50,7 +50,7 @@
 		//validate credentials
 		if(empty($username_err) && empty($password_err)){
 			//no invalid input found, check the DB to make sure the entered username is in the system
-			$stmt = $g_db->prepare("SELECT UserId, Password FROM users WHERE Username = ?");
+			$stmt = $g_db->prepare("SELECT UserId, Password FROM users WHERE Username = ? AND Deleted = 0");
 			$stmt->execute([$username]);
 			
 			//only 1 row should be returned

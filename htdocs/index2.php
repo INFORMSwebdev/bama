@@ -36,40 +36,13 @@ $user = htmlspecialchars($_SESSION['username']);
 $util_links = '<a href="/index.php">Home</a>';
 
 $content = <<<EOT
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="https://www.informs.org" target="_blank">
-				<img src="/images/nav/logo_125x30.png" height="30" alt="INFORMS logo" />
-			</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon" />
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<div class="navbar-nav">
-					<a class="nav-item nav-link active" href="/index.php">Home <span class="sr-only">(current)</span></a>
-					<a class="nav-item nav-link" href="/users/register.php">Register Program Admin</a>
-				</div>
-				<!--<ul class="navbar-nav mr-auto">
-					<li class="nav-item active">
-						<a class="nav-link" href="/index.php">Home <span class="sr-only">(current)</span></a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/users/register.php">Register Program Admin</a>
-					</li>
-				</ul>-->
-			</div>
-			<div class="navbar-nav">
-				<a class="nav-item btn btn-sm btn-outline-danger" href="/users/logout.php" role="button">Log out</a>
-			</div>
-		</nav>
-		<div class="container">
-			<div class="jumbotron">
-				<h1 class="display-4">Welcome $user!</h1>
-				<p class="lead">Message can go here about system</p>
-				<hr class="my-4" />
-				<a class="btn btn-primary" href="#" role="button">View all programs</a>
-				<a class="btn btn-primary" href="#" role="button">View my programs</a>
-			</div>
-		</div>
+	<div class="jumbotron">
+		<h1 class="display-4">Welcome $user!</h1>
+		<p class="lead">Message can go here about system</p>
+		<hr class="my-4" />
+		<a class="btn btn-primary" href="#" role="button">View all programs</a>
+		<a class="btn btn-primary" href="#" role="button">View my programs</a>
+	</div>
 EOT;
 
 //create the parameters to pass to the wrapper
@@ -87,7 +60,7 @@ $page_params['admin'] = TRUE;
 //put custom/extra JS files, if used
 //$page_params['js'][] = array("url" => "");
 //wrapper class to pass all the content and params to
-$wrapper = new wrapper3($page_params);
+$wrapper = new wrapperBama($page_params);
 //display the content
 $wrapper->html();
 ?>
