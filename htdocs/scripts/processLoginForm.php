@@ -3,7 +3,7 @@
 	session_start();
 	
 	//check if user is already logged in (first checking if the session variable is set, then if it is true)
-	if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] === true){
+	if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true){
 		//redirect user to their institution admin dashboard 
 		# ToDo: update this location when the admin dashboard is created
 		header("Location: ../index.php");
@@ -54,7 +54,7 @@
 			$stmt->execute([$username]);
 			
 			//only 1 row should be returned
-			if($stmt->rowCount() === 1){
+			if($stmt->rowCount() == 1){
 				if($row = $stmt->fetch()){
 					$id = $row['UserId'];
 					$hashedPw = $row['Password'];

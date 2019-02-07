@@ -13,7 +13,7 @@
 		//validate the inputs and return an array of length 2 (successfull validation) or more (exact # depending on potential errors to be thrown; invalid data was passed somewhere)
 		$results = validateInputs(trim($_POST["username"]), trim($_POST["password"]), trim($_POST["confirm_password"]));
 		
-		if(count($results) === 2){
+		if(count($results) == 2){
 			
 			//the input is valid, check if username exists already or not
 			if(checkUsernameExists($results[0]) == false){
@@ -132,7 +132,7 @@
 		$count = $stmt->rowCount();
 		
 		//if the row count is greater than 0, it means the statement was executed successfully and the user was added to the DB
-		# Technically, we are only expected 1 row to be added to the DB, so this COULD be if($count === 1). We could add in more error messages,
+		# Technically, we are only expected 1 row to be added to the DB, so this COULD be if($count == 1). We could add in more error messages,
 		# but I don't think that's necessary at this time.
 		if($count == 1){
 			//user successfully added to the DB

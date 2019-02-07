@@ -22,13 +22,15 @@ $host = $ini['analytics_education_settings']['db_hostname'];
 
 //check if user is logged in, if not then redirect them to the login page; GET string is only used for testing purposes
 # ToDo: remove the GET string from this test before actual use
-if((!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] !== true) && !isset($_GET['testing'])){
-	header("Location: users/login.php");
-	//stop execution of this script after redirect
-	die;
+if ((!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] != true) && !isset($_GET['testing'])) {
+    header("Location: users/login.php");
+    //stop execution of this script after redirect
+    die;
 }
-if(isset($_GET['testing'])){
-	$_SESSION['username'] = "foo";
+if (isset($_GET['testing'])) {
+    $_SESSION['username'] = "foo";
+    $_SESSION['id'] = 41;
+    $_SESSION['loggedIn'] = true;
 }
 
 //user is logged in, get their username and info

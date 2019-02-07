@@ -3,7 +3,7 @@
 	session_start();
 	
 	//check if user is already logged in
-	if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true){
+	if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
 		//redirect to ?
 		# ToDo: update this when the program admin dashboard is created
 		header("Location: /index.php");
@@ -98,7 +98,7 @@
 				// Loop over them and prevent submission
 				var validation = Array.prototype.filter.call(forms, function(form) {
 					form.addEventListener('submit', function(event) {
-						if (form.checkValidity() === false) {
+						if (form.checkValidity() == false) {
 							event.preventDefault();
 							event.stopPropagation();
 						}
