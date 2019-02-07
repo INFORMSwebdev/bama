@@ -9,9 +9,9 @@ error_reporting(E_ALL);
 session_start();
 
 //get the settings for sites
-//parse the ini file for all sites
+//parse the ini file for all site settings
 $ini = parse_ini_file("/common/settings/common.ini", TRUE);
-//autoload common classes, we want that wrapper3 class!
+//autoload common classes, we want that wrapperBama class!
 require_once("/common/classes/autoload.php");
 
 # ToDo: figure out how to get the PDO wrapper class in here or at least how to use the settings that were just parsed
@@ -20,11 +20,15 @@ $host = $ini['analytics_education_settings']['db_hostname'];
 //so I would pass the variables as above to the PDO wrapper class, OR in the meantime, I can just use them to make a new PDO object
 //for now, I am just using the /scripts/conn.php file since it was already created
 
-//check if user is logged in, if not then redirect them to the login page
-if(!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] !== true){
+//check if user is logged in, if not then redirect them to the login page; GET string is only used for testing purposes
+# ToDo: remove the GET string from this test before actual use
+if((!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] !== true) && !isset($_GET['testing'])){
 	header("Location: users/login.php");
 	//stop execution of this script after redirect
 	die;
+}
+if(isset($_GET['testing'])){
+	$_SESSION['username'] = "foo";
 }
 
 //user is logged in, get their username and info
@@ -33,7 +37,7 @@ $user = htmlspecialchars($_SESSION['username']);
 
 //set up utility links?
 # ToDo: Ask Dave what these are
-$util_links = '<a href="/index.php">Home</a>';
+//$util_links = '<a href="/index.php">Home</a>';
 
 $content = <<<EOT
 	<div class="jumbotron">
@@ -55,6 +59,12 @@ $page_params['site_url'] = 'https://bama-dev.informs.org/index.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;
+$page_params['active_menu_item'] = 'home';
+//$page_params['root_path'] = $ini['analytics_education_settings']['root_dir'];
+//$page_params['users_path'] = $ini['analytics_education_settings']['user_dir'];
+//$page_params['scripts_path'] = $ini['analytics_education_settings']['scripts_dir'];
+//$page_params['images_path'] = $ini['analytics_education_settings']['images_dir'];
+//$page_params['settings_path'] = $ini['analytics_education_settings']['settings_dir'];
 //put custom/extra css files, if used
 //$page_params['css'][] = array("url" => "");
 //put custom/extra JS files, if used
