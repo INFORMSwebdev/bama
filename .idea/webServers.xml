@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="6e5304ae-baa8-43f9-905b-0c92449e7282" name="inplace" url="http://localhost:63342/bama">
+        <fileTransfer port="0" accessType="LOCAL" />
+      </webServer>
+      <webServer id="04dffcec-2f21-4e8b-8aa4-639e3a7c684c" name="local" url="http://localhost">
+        <fileTransfer port="0" mountedRoot="C:\PHP" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>
