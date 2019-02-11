@@ -10,29 +10,51 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-//initialize the session
-session_start();
+//load the init.php file, which has a session_start() and also sets up path constants; not to mention it's autoload
+require_once('../../init.php');
 
-//parse the ini file for all site settings
-$ini = parse_ini_file("/common/settings/common.ini", TRUE);
+//check if user is logged in as an institution admin
+# TODO: if a user IS logged in, we only want INFORMS admin to be able to add other requests? If so, we will have to
+ # redirect logged in users to a different location or display something other than the register form.
+if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
+    //user is an institution admin who already has a user account
+    header('Location: ' . ROOTDIR . 'index.php');
+    die;
+}
+//user is either logged in as an INFORMS admin or an anonymous user
 
 // ToDo: if needed, uncomment the line below to use the PDO wrapper object
 //$db = new pdo_db( "/common/settings/common.ini", "analytics_education_settings" );
-
 
 //set up variables in case user actually needs them
 $content = '';
 $page_params = array();
 
-//check if user is logged in and set the content displayed
-# TODO: if a user IS logged in, we only want INFORMS admin to be able to add other requests? If so, we will have to
-# TODO derp
-# redirect logged in users to a different location or display something other than the register form.
-// TODO help with todo stuff
+# ToDo: remove the testing query string before deploying anywhere
+$registerFormProcessor = '';
+if(isset($_GET['testing'])){
+    $registerFormProcessor = SCRIPTS_DIR . 'processRegisterForm.php?testing';
+}
+else{
+    $registerFormProcessor = SCRIPTS_DIR . 'processRegisterForm.php';
+}
+
+//get list of all institutions
+$institutions = Institution::getInstitutions();
+//turn that into an array of name/value pairs to pass to the optionsHTML.php file
+$instListHelper = array();
+$instListHelper[] = array('name' => '', 'value' => '');
+foreach($institutions as $inst){
+    $instListHelper[] = array('name' => $inst->Attributes['InstitutionName'], 'value' => $inst->Attributes['InstitutionId']);
+}
+$instListHelper[] = array('name' => 'Other', 'value' => 'Other');
+//pass the name/value pairs to the file to get the generated HTML for a select list
+$instListHTML = optionsHTML($instListHelper);
+$page_title = '';
+
 if((isset($_SESSION['admin']) && $_SESSION['admin'] != TRUE) || isset($_GET['testing'])){
     //user is an INFORMS admin OR the system is being tested
-    //autoload common classes
-    require_once("/common/classes/autoload.php");
+    $page_title = 'Create a new Institution Administrator';
     $content = <<<EOT
 <div class="row">
 	<h1>Register a Program Administrator</h1>
@@ -42,38 +64,39 @@ if((isset($_SESSION['admin']) && $_SESSION['admin'] != TRUE) || isset($_GET['tes
 	<p class="text-warning">Submitting this form will create a user record and assign it to the specified institution as the institution administrator account.</p>
 </div>
 <div class="row">
-	<form action="{$ini['analytics_education_settings']['user_dir']}processRegisterForm.php" method="post">
+	<form action="{$registerFormProcessor}" method="post">
 		<div class="form-group">
 			<label for="Username">Email Address</label>
-			<input type="text" class="form-control" name="Username" id="UsernameInput" aria-describedby="userNameHelp" placeholder="Email address is the username." required>
-			<small id="userNameHelp" class="form-text text-muted">This is a separate login from an INFORMS account.</small>
+			<input type="text" class="form-control" name="Username" id="UsernameInput" aria-describedby="UserNameHelp" placeholder="Email address is the username." required>
+			<small id="UserNameHelp" class="form-text text-muted">This is a separate login from an INFORMS account.</small>
 		</div>
 		<div class="form-group">
 			<label for="Password">Password</label>
-			<input type="password" class="form-control" name="Password" id="PasswordInput" aria-describedby="passwordHelp" placeholder="Password" required>
-			<small id="passwordHelp" class="form-text text-muted">Password must be at least 6 characters.</small>
+			<input type="password" class="form-control" name="Password" id="PasswordInput" aria-describedby="PasswordHelp" placeholder="Password" required>
+			<small id="PasswordHelp" class="form-text text-muted">Password must be at least 6 characters.</small>
 		</div>
 		<div class="form-group">
 			<label for="confirmPasswordInput">Confirm Password</label>
 			<input type="password" class="form-control" name="confirm_password" id="confirmPasswordInput" placeholder="Confirm password" required>
 		</div>
 		<div class="form-group">
+		    <label for="Institution">Institution (select one)</label>
+		    <select class="form-control" id="Institution" aria-describedby="InstitutionHelp" required>
+		        $instListHTML
+            </select>
+            <small id="InstitutionHelp" class="form-text text-muted">A user may only be an administrator for 1 institution?</small>
+        </div>
+        COMMENTS TEXT AREA
+		<div class="form-group">
 			<button type="submit" class="btn btn-primary" value="Submit">Submit</button>
 		</div>
 	</form>
 </div>
 EOT;
-# todo add fields
-}
-else if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
-    //user is an institution admin who already has a user account
-    header('Location: ' .  $ini['analytics_education_settings']['root_dir'] . 'index.php');
-    die;
 }
 else{
     //user is anonymous
-    //autoload common classes
-    require_once("/common/classes/autoload.php");
+    $page_title = 'Become an Institution Administrator';
     $content = <<<EOT
 <div class="row">
 	<h1>Request for Program Administrator</h1>
@@ -83,27 +106,59 @@ else{
 	<p class="text-warning">Submitting this form will create a user record and assign it to the specified institution as the institution administrator account.</p>
 </div>
 <div class="row">
-	<form action="{$ini['analytics_education_settings']['user_dir']}processRegisterForm.php" method="post">
+	<form action="{$registerFormProcessor}" method="post">
 		<div class="form-group">
 			<label for="Username">Email Address</label>
-			<input type="text" class="form-control" name="Username" id="UsernameInput" aria-describedby="userNameHelp" placeholder="Email address is the username." required>
-			<small id="userNameHelp" class="form-text text-muted">This is a separate login from an INFORMS account.</small>
+			<input type="text" class="form-control" name="Username" id="UsernameInput" aria-describedby="UserNameHelp" placeholder="Email address is the username." required>
+			<small id="UserNameHelp" class="form-text text-muted">This is a separate login from an INFORMS account.</small>
 		</div>
 		<div class="form-group">
 			<label for="FirstName">First Name</label>
-			<input type="text" class="form-control" name="FirstName" id="FirstNameInput" aria-describedby="passwordHelp" placeholder="Password" required>
+			<input type="text" class="form-control" name="FirstName" id="FirstNameInput" placeholder="First Name" required>
+			<!--<small id="FirstNameHelp" class="form-text text-muted">We could add in help text for international people here if needed</small>-->
 		</div>
 		<div class="form-group">
 			<label for="LastName">Last Name</label>
-			<input type="text" class="form-control" name="LastName" id="LastNameInput" placeholder="Confirm password" required>
+			<input type="text" class="form-control" name="LastName" id="LastNameInput" placeholder="Last Name" required>
+			<!--<small id="LastNameHelp" class="form-text text-muted">We could add in help text for international people here if needed</small>-->
 		</div>
+		<div class="form-group">
+		    <label for="Institution">Institution (select one)</label>
+		    <select class="form-control" id="Institution" aria-describedby="InstitutionHelp" required>
+		        $instListHTML
+            </select>
+            <small id="InstitutionHelp" class="form-text text-muted">Select the institution that you wish to be an administrator for.</small>
+            <small id="InstitutionOther" class="form-text text-warning">If you do not see your institution in the list, please select the 'Other' option and specify your institution in the Justification box below.</small>
+        </div>
+        <div class="form-group">
+            <label for="Comments">Justification</label>
+            <textarea class="form-control" id="Comments" rows="3" />
+        </div>
 		<div class="form-group">
 			<button type="submit" class="btn btn-primary" value="Submit">Submit</button>
 		</div>
 	</form>
 </div>
 EOT;
-# TODO switch up the fields in the anonymous section to indicate they will be requesting access and to give the INFORMS admin info to decide on whether
- # or not to approve the admin request
+# ToDo:
 }
-//todo: change POST variable names to sync w/ the updated fields for this page
+# todo: change POST variable names to sync w/ the updated fields for this page
+
+//set page parameters up
+$page_params['loggedIn'] = TRUE;
+$page_params['content'] = $content;
+$page_params['page_title'] = $page_title;
+$page_params['site_title'] = "Analytics Education Admin";
+$page_params['site_url'] = 'https://bama-dev.informs.org/index.php';
+$page_params['show_title_bar'] = FALSE;
+//do not display the usual header/footer
+$page_params['admin'] = TRUE;
+$page_params['active_menu_item'] = 'home';
+//put custom/extra css files, if used
+//$page_params['css'][] = array("url" => "");
+//put custom/extra JS files, if used
+//$page_params['js'][] = array("url" => "");
+//wrapper class to pass all the content and params to
+$wrapper = new wrapperBama($page_params);
+//display the content
+$wrapper->html();
