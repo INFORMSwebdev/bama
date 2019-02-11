@@ -9,6 +9,20 @@
 class Institution extends AOREducationObject {
     public static $table = "institutions";
     public static $primary_key = "InstitutionId";
+    public static $data_structure = array(
+        'InstitutionId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
+        'InstitutionName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
+        'InstitutionAddress' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
+        'InstitutionCity' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
+        'InstitutionState' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
+        'InstitutionZip' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
+        'InstitutionRegion' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
+        'InstitutionPhone' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
+        'InstitutionEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
+        'InstitutionAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
+        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
+    );
 
     public static function getInstitutions( $active = TRUE, $asObjects = TRUE) {
         $institutions = [];
