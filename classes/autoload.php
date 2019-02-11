@@ -11,8 +11,7 @@ function bama_autoload($classname) {
     $filename = "/common/classes/" . $classname . ".php";
     if (file_exists( $filename )) include_once($filename);
     else {
-        $ini = parse_ini_file( "/common/settings/common.ini", TRUE );
-        $filename = $ini['ecommerce_settings']['app_root'] . "/classes/" . $classname . ".php";
+        $filename = CLASSES_DIR . $classname . ".php";
         include_once($filename);
     }
 }
