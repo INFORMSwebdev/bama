@@ -17,4 +17,12 @@ class Software extends AOREducationObject
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
     );
+
+    public function assignToCourse( $CourseId ) {
+
+    }
+
+    public function unassignFromCourse( $CourseId ) {
+
+    }
 }

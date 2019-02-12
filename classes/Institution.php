@@ -24,6 +24,14 @@ class Institution extends AOREducationObject {
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
     );
 
+    public function assignAdmin( $UserId ) {
+
+    }
+
+    public function getColleges() {
+
+    }
+
     public static function getInstitutions( $active = TRUE, $asObjects = TRUE) {
         $institutions = [];
         $db = new pdo_db( "/common/settings/common.ini", "analytics_education_settings");
@@ -39,6 +47,10 @@ class Institution extends AOREducationObject {
             }
         }
         return $institutions;
+    }
+
+    public function getPrograms() {
+
     }
 }
 

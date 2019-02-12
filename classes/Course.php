@@ -23,4 +23,36 @@ class Course extends AOREducationObject
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
     );
+
+    public function assignCaseStudy( $CaseId ) {
+
+    }
+
+    public function assignDataset( $DatasetId ) {
+
+    }
+
+    public function assignSoftware( $SoftwareId ) {
+
+    }
+
+    public function assignTextbook( $TextbookId ) {
+
+    }
+
+    public function unassignCaseStudy( $CaseId ) {
+
+    }
+
+    public function unassignDataset( $DatasetId ) {
+
+    }
+
+    public function unassignSoftware( $SoftwareId ) {
+
+    }
+
+    public function unassignTextbook( $TextbookId ) {
+
+    }
 }
