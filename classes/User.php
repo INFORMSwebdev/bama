@@ -36,4 +36,8 @@ class User extends AOREducationObject
     public function sendPasswordResetEmail() {
 
     }
+
+    public static function checkUsernameExists($Username){
+
+    }
 }
