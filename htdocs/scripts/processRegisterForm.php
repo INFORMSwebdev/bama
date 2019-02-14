@@ -6,13 +6,13 @@ require_once '../../init.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //check session variables to see what kind of register form was submitted
     // if admin set then it was a create; not set then it was an access request
-    if ((isset($_SESSION['admin']) && $_SESSION['admin'] != TRUE) || isset($_GET['testing'])) {
+    if ((isset($_SESSION['admin']) && $_SESSION['admin'] == TRUE) || isset($_GET['testing'])) {
         //INFORMS admin has set up a new user account, go ahead and make it and associate the new account as the admin of the specified institution
         # required inputs = Email (Username), Password, Confirm Password, Institution
         # optional inputs = Comments
 
         //check the validity of the admin input; if the input is valid
-        $results = validateAdminInputs(trim($_POST['Username']), trim($_POST['Password']), trim($_POST['ConfirmPassword']), trim($_POST['Institution']));
+        $results = validateAdminInputs(trim($_POST['Username']), trim($_POST['FirstName']), trim($_POST['LastName']), trim($_POST['Institution']));
 
         # ToDo: don't forget that we also want to pass the user input back to the form page so that the user will not
          # have to type things in again (excluding password fields)
@@ -131,40 +131,35 @@ function processResults($formType, $results){
  *
  * @author Dan Herold
  * @param string $email The input from the email address (username) field
- * @param string $pass The input from the password field
- * @param string $confPass The input from the confirm password field
+ * @param string $firstName The input from the password field
+ * @param string $lastName The input from the confirm password field
  * @param int $inst The InstitutionId that this user will be an admin of, from the institution select field
  * @return mixed[] The first item indicates if there were errors; Array full of error strings OR an array with the email address, password to use, and the institution the user will be an admin of.
  */
-function validateAdminInputs($email, $pass, $confPass, $inst){
+function validateAdminInputs($email, $firstName, $lastName, $inst){
     //set up the variables to hold any possible errors that would result from the user input
-    $username_err = $password_err = $confirmPassword_err = $institution_err = '';
+    $username_err = $firstName_err = $lastName_err = $institution_err = '';
 
     //validate the email address/username
     if(empty($email)){
         $username_err = 'No email address was supplied.';
     } else {
         //check if username is already taken
-        if(User::checkUsernameExists($email)) {
+        if(User::usernameExists($email)) {
             //username already exists
             $username_err = 'Email address already exists in the system, please use a different one.';
         }
     }
 
-    //validate the password
-    if(empty($pass)){
-        $password_err = 'No password was supplied.';
+    //validate the first name
+    if(empty($firstName)){
+        $firstName_err = 'No first name was supplied.';
     }
     # ToDo: put in more password validation checks to enforce password requirements
 
-    //validate the confirm password
-    if(empty($confPass)){
-        $confirmPassword_err = 'No confirm password was supplied.';
-    } else {
-        //ensure the confirm password matches the password, but we don't want to do the check if there is an error with the password input
-        if(empty($password_err) && ($pass != $confPass)){
-            $confirmPassword_err = 'Password did not match confirm password.';
-        }
+    //validate the last name
+    if(empty($lastName)){
+        $lastName_err = 'No last name was supplied.';
     }
 
     //validate institution field has something selected
@@ -174,16 +169,16 @@ function validateAdminInputs($email, $pass, $confPass, $inst){
     # ToDo: put in more validation checks to see if the institution selected actually exists in the system
 
     //check to see if we have any errors in the inputs
-    if(empty($username_err) && empty($password_err) && empty($confirmPassword_err) && empty($institution_err)){
+    if(empty($username_err) && empty($firstName_err) && empty($lastName_err) && empty($institution_err)){
         //inputs passed were valid
         # ToDo: figure out what should be returned here, if anything.
          # Keep in mind this function will be called from inside this script!
-        return array('errors' => false, 'username' => $email, 'password' => $pass, 'institution' => $inst);
+        return array('errors' => false, 'username' => $email, 'password' => $firstName, 'institution' => $inst);
     }
     else {
         //inputs passed were not valid
         # ToDO: figure out the best way to get these error messages passed back to the script that called this script, see above todo
-        return array('errors' => true, 'usernameError' => $username_err, 'passwordError' => $password_err, 'confirmError' => $confirmPassword_err, 'institutionError' => $institution_err);
+        return array('errors' => true, 'usernameError' => $username_err, 'passwordError' => $firstName_err, 'confirmError' => $lastName_err, 'institutionError' => $institution_err);
     }
 }
 

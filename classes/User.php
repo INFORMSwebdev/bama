@@ -37,7 +37,7 @@ class User extends AOREducationObject
 
     }
 
-    public static function checkUsernameExists($Username){
+    public static function usernameExists($Username){
 
     }
 }

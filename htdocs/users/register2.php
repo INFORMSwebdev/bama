@@ -39,7 +39,6 @@ else{
 $institutions = Institution::getInstitutions();
 //turn that into an array of name/value pairs to pass to the optionsHTML.php file
 $instListHelper = array();
-//$instListHelper[] = array('text' => '', 'value' => '');
 foreach($institutions as $inst){
     $instListHelper[] = array('text' => $inst->Attributes['InstitutionName'], 'value' => $inst->Attributes['InstitutionId']);
 }
@@ -47,57 +46,22 @@ $instListHelper[] = array('text' => 'Other', 'value' => 'Other');
 //pass the name/value pairs to the file to get the generated HTML for a select list
 include_once('/common/classes/optionsHTML.php');
 $instListHTML = optionsHTML($instListHelper);
+
 $page_title = '';
+$commentBoxLabel = 'Comments';
 
 if((isset($_SESSION['admin']) && $_SESSION['admin'] != TRUE) || isset($_GET['testing'])){
     //user is an INFORMS admin OR the system is being tested
     $page_title = 'Create a new Institution Administrator';
-    $content = <<<EOT
-<div class="row">
-	<h1>Register a Program Administrator</h1>
-</div>
-<div class="row d-block">
-	<p>Please fill this form to create a Program Administrator account.</p>
-	<p class="text-warning">Submitting this form will create a user record and assign it to the specified institution as the institution administrator account.</p>
-</div>
-<div class="row">
-	<form action="{$registerFormProcessor}" method="post">
-		<div class="form-group">
-			<label for="Username">Email Address</label>
-			<input type="text" class="form-control" name="Username" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." required>
-			<small id="UserNameHelp" class="form-text text-muted">This is a separate login from an INFORMS account.</small>
-		</div>
-		<div class="form-group">
-			<label for="Password">Password</label>
-			<input type="password" class="form-control" name="Password" id="Password" aria-describedby="PasswordHelp" placeholder="Password" required>
-			<small id="PasswordHelp" class="form-text text-muted">Password must be at least 6 characters.</small>
-		</div>
-		<div class="form-group">
-			<label for="confirmPasswordInput">Confirm Password</label>
-			<input type="password" class="form-control" name="ConfirmPassword" id="ConfirmPassword" placeholder="Confirm password" required>
-		</div>
-		<div class="form-group">
-		    <label for="Institution">Institution (select one)</label>
-		    <select class="form-control" name="Institution" id="Institution" aria-describedby="InstitutionHelp" required>
-		        $instListHTML
-            </select>
-            <small id="InstitutionHelp" class="form-text text-muted">A user may only be an administrator for 1 institution?</small>
-        </div>
-        <div class="form-group">
-            <label for="Comments">Comments</label>
-            <textarea class="form-control" id="Comments" rows="3"></textarea>
-        </div>
-		<div class="form-group">
-			<button type="submit" class="btn btn-primary" value="Submit">Submit</button>
-		</div>
-	</form>
-</div>
-EOT;
 }
 else{
     //user is anonymous
     $page_title = 'Become an Institution Administrator';
-    $content = <<<EOT
+    $commentBoxLabel = 'Justification';
+}
+
+//set the form that will be displayed to users
+$content = <<<EOT
 <div class="row">
 	<h1>Request for Program Administrator</h1>
 </div>
@@ -130,7 +94,7 @@ else{
             <small id="InstitutionOther" class="form-text text-warning">If you do not see your institution in the list, please select the 'Other' option and specify your institution in the Justification box below.</small>
         </div>
         <div class="form-group">
-            <label for="Comments">Justification</label>
+            <label for="Comments">{$commentBoxLabel}</label>
             <textarea class="form-control" id="Comments" name="Comments" rows="3"></textarea>
         </div>
 		<div class="form-group">
@@ -139,9 +103,6 @@ else{
 	</form>
 </div>
 EOT;
-# ToDo:
-}
-# todo: change POST variable names to sync w/ the updated fields for this page
 
 //set page parameters up
 $page_params['loggedIn'] = TRUE;
