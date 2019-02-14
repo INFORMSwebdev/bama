@@ -40,19 +40,16 @@ class User extends AOREducationObject
         $db = new EduDB();
     }
 
-    public static function usernameExists ( $username, $excludeUserId = null ) {
+    public static function usernameExists ( $username, $excludeUserId = null )
+    {
         $db = new EduDB();
         $sql = "SELECT UserId FROM users WHERE Username=:Username";
-        $params =  array( array(':Username', $username, PDO::PARAM_STR ));
+        $params = array(array(':Username', $username, PDO::PARAM_STR));
         if ($excludeUserId) {
             $sql .= " WHERE UserId != :UserId";
-            $params[] = array( ":UserId", $excludeUserId, PDO::PARAM_INT );
+            $params[] = array(":UserId", $excludeUserId, PDO::PARAM_INT);
         }
-        $matchedUserId = $db->queryItemSafe( $sql, $params );
+        $matchedUserId = $db->queryItemSafe($sql, $params);
         return $matchedUserId;
-    }
-
-    public static function usernameExists($Username){
-
     }
 }
