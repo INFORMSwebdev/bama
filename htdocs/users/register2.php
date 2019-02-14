@@ -20,6 +20,7 @@ if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
 }
 //user is either logged in as an INFORMS admin or an anonymous user
 
+# ToDo: set up checks for error session variables and display them appropriately
 //set up variables in case user actually needs them
 $content = '';
 $page_params = array();
@@ -63,21 +64,21 @@ if((isset($_SESSION['admin']) && $_SESSION['admin'] != TRUE) || isset($_GET['tes
 	<form action="{$registerFormProcessor}" method="post">
 		<div class="form-group">
 			<label for="Username">Email Address</label>
-			<input type="text" class="form-control" name="Username" id="UsernameInput" aria-describedby="UserNameHelp" placeholder="Email address is the username." required>
+			<input type="text" class="form-control" name="Username" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." required>
 			<small id="UserNameHelp" class="form-text text-muted">This is a separate login from an INFORMS account.</small>
 		</div>
 		<div class="form-group">
 			<label for="Password">Password</label>
-			<input type="password" class="form-control" name="Password" id="PasswordInput" aria-describedby="PasswordHelp" placeholder="Password" required>
+			<input type="password" class="form-control" name="Password" id="Password" aria-describedby="PasswordHelp" placeholder="Password" required>
 			<small id="PasswordHelp" class="form-text text-muted">Password must be at least 6 characters.</small>
 		</div>
 		<div class="form-group">
 			<label for="confirmPasswordInput">Confirm Password</label>
-			<input type="password" class="form-control" name="confirm_password" id="confirmPasswordInput" placeholder="Confirm password" required>
+			<input type="password" class="form-control" name="ConfirmPassword" id="ConfirmPassword" placeholder="Confirm password" required>
 		</div>
 		<div class="form-group">
 		    <label for="Institution">Institution (select one)</label>
-		    <select class="form-control" id="Institution" aria-describedby="InstitutionHelp" required>
+		    <select class="form-control" name="Institution" id="Institution" aria-describedby="InstitutionHelp" required>
 		        $instListHTML
             </select>
             <small id="InstitutionHelp" class="form-text text-muted">A user may only be an administrator for 1 institution?</small>
@@ -107,22 +108,22 @@ else{
 	<form action="{$registerFormProcessor}" method="post">
 		<div class="form-group">
 			<label for="Username">Email Address</label>
-			<input type="text" class="form-control" name="Username" id="UsernameInput" aria-describedby="UserNameHelp" placeholder="Email address is the username." required />
+			<input type="text" class="form-control" name="Username" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." required />
 			<small id="UserNameHelp" class="form-text text-muted">This is a separate login from an INFORMS account.</small>
 		</div>
 		<div class="form-group">
 			<label for="FirstName">First Name</label>
-			<input type="text" class="form-control" name="FirstName" id="FirstNameInput" placeholder="First Name" required />
+			<input type="text" class="form-control" name="FirstName" id="FirstName" placeholder="First Name" required />
 			<!--<small id="FirstNameHelp" class="form-text text-muted">We could add in help text for international people here if needed</small>-->
 		</div>
 		<div class="form-group">
 			<label for="LastName">Last Name</label>
-			<input type="text" class="form-control" name="LastName" id="LastNameInput" placeholder="Last Name" required />
+			<input type="text" class="form-control" name="LastName" id="LastName" placeholder="Last Name" required />
 			<!--<small id="LastNameHelp" class="form-text text-muted">We could add in help text for international people here if needed</small>-->
 		</div>
 		<div class="form-group">
 		    <label for="Institution">Institution (select one)</label>
-		    <select class="form-control" id="Institution" aria-describedby="InstitutionHelp" required>
+		    <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required>
 		        $instListHTML
             </select>
             <small id="InstitutionHelp" class="form-text text-muted">Select the institution that you wish to be an administrator for.</small>
@@ -130,7 +131,7 @@ else{
         </div>
         <div class="form-group">
             <label for="Comments">Justification</label>
-            <textarea class="form-control" id="Comments" rows="3"></textarea>
+            <textarea class="form-control" id="Comments" name="Comments" rows="3"></textarea>
         </div>
 		<div class="form-group">
 			<button type="submit" class="btn btn-primary" value="Submit">Submit</button>

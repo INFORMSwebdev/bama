@@ -8,15 +8,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // if admin set then it was a create; not set then it was an access request
     if ((isset($_SESSION['admin']) && $_SESSION['admin'] != TRUE) || isset($_GET['testing'])) {
         //INFORMS admin has set up a new user account, go ahead and make it and associate the new account as the admin of the specified institution
-        # ToDo: set up another validateInputs function for the different kinds of requests?
         # required inputs = Email (Username), Password, Confirm Password, Institution
         # optional inputs = Comments
 
+        //check the validity of the admin input; if the input is valid
+        $results = validateAdminInputs(trim($_POST['Username']), trim($_POST['Password']), trim($_POST['ConfirmPassword']), trim($_POST['Institution']));
+
+        # ToDo: don't forget that we also want to pass the user input back to the form page so that the user will not
+         # have to type things in again (excluding password fields)
+        //if there were no errors, proceed with user account creation and link it to the institution specified
+        if($results['errors'] == false){
+
+        } else {
+            //set up the error message and pass the input (not passwords tho) back to the form page so the INFORMS admin doesn't have to re-input everything
+        }
     } else {
         //anonymous user has requested to become and institution admin
         # required inputs = Email (Username), First Name, Last Name, Institution
         # optional inputs = Justification (Comments)
 
+        //check the validity of the anon input
+        $results = validateAnonInputs(trim($_POST['Username']), trim($_POST['FirstName']), trim($_POST['LastName']), trim($_POST['Institution']));
+
+        //if there were no errors, proceed with notifying the INFORMS admin that a request to join has been submitted
+        # ToDo: figure out how to send a notification and store the information input for use if admin request is approved
     }
 }
 //process form data when the form is submitted
@@ -82,78 +97,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-/**
- * Query the DB and check whether a proposed username is already taken
- *
- * @param string $username the proposed username
- * @return true if query returns results, false username is not already in system
- */
-function checkUsernameExists($username)
-{
-    //get the global DB object
-    global $g_db;
-
-    $stmt = $g_db->prepare("SELECT * FROM users WHERE Username = ? AND Deleted = 0");
-    //only 1 results, if any, should be returned
-    $stmt->execute([$username]);
-
-    # for some reason, even though the PHP documentation states that execute returns boolean AND I don't change the
-    # stmt variable to the results of the execute() function, calling fetch() on $stmt always encountered a BS
-    # fatal error of attempting to fetch on a boolean. I have changed the functionality around
-    # so that the row count is used to check if a username actually exists because I couldn't figure out
-    # why this was happening or how to fix it.
-    $count = $stmt->rowCount();
-    if ($count == 1) {
-        return true;
+function processResults($formType, $results){
+    if($formType == 'admin'){
+        //admin form submission processing
+        if($results['errors'] == true){
+            //pass the errors to a session variable so they can be displayed on the register page
+            $_SESSION['registerErrors'] = $results;
+        } else {
+            //no errors in inputs
+            $_SESSION['registerValid'] = $results;
+        }
+    } else if ($formType == 'anon') {
+        //anon form submission processing
+        if($results['errors'] == true){
+            //there were errors in the input passed
+            //$_SESSION[''];
+        } else {
+            //no errors in inputs
+        }
     } else {
-        return false;
-    }
-    # Below is the original (flawed) method of checking whether a user exists in the system.
-    # It was flawed because it would always return true, even if the username wasn't in the system.
-    # I think this is because the SELECT statement was executed successfully, even though no results were returned.
-    /*
-    $foo = $stmt->fetch();
-
-    if($foo){
-        //username is already in use
-        return true;
-    }
-    else {
-        //username is not currently in use
-        return false;
-    }
-    */
-}
-
-/**
- * Create a new user record in the DB
- *
- * @param string $user the username for the new account
- * @param string $pass the password for the new account
- * @return string containing results of executing the insertion query
- */
-function createUser($user, $pass)
-{
-    //will need to access the global DB object
-    global $g_db;
-
-    //prepare the statement to execute, since we will be passing inputs
-    $stmt = $g_db->prepare("INSERT INTO users (Username, Password) VALUES (?, ?)");
-    //execute the statement, pass in the username and a hashed password
-    $stmt->execute([$user, password_hash($pass, PASSWORD_DEFAULT)]);
-    $count = $stmt->rowCount();
-
-    //if the row count is greater than 0, it means the statement was executed successfully and the user was added to the DB
-    # Technically, we are only expected 1 row to be added to the DB, so this COULD be if($count == 1). We could add in more error messages,
-    # but I don't think that's necessary at this time.
-    if ($count == 1) {
-        //user successfully added to the DB
-        return "User created successfully.";
-        # ToDo: add in/set this as a session variable instead
-    } else {
-        //something went wrong
-        return "Error inserting user in DB.";
-        # ToDo: add in/set this as a session variable instead
+        //unknown type submission encountered
     }
 }
 
@@ -166,11 +129,10 @@ function createUser($user, $pass)
  * @param string $pass The input from the password field
  * @param string $confPass The input from the confirm password field
  * @param int $inst The InstitutionId that this user will be an admin of, from the institution select field
- * @return mixed[]
+ * @return mixed[] The first item indicates if there were errors; Array full of error strings OR an array with the email address, password to use, and the institution the user will be an admin of.
  */
 function validateAdminInputs($email, $pass, $confPass, $inst){
-    //set up the variables to hold the info passed and any possible errors that would result from them
-    $username = $password = $confirmPassword = $institution = '';
+    //set up the variables to hold any possible errors that would result from the user input
     $username_err = $password_err = $confirmPassword_err = $institution_err = '';
 
     //validate the email address/username
@@ -181,9 +143,6 @@ function validateAdminInputs($email, $pass, $confPass, $inst){
         if(User::checkUsernameExists($email)) {
             //username already exists
             $username_err = 'Email address already exists in the system, please use a different one.';
-            # ToDo: what do we do with this message now? Put it in a session variable? How do we let the calling
-             # page know what the results of the check are? They will need to know if they can't use the proposed
-             # email address as their username so they can pick a unique one.
         }
     }
 
@@ -213,11 +172,13 @@ function validateAdminInputs($email, $pass, $confPass, $inst){
     if(empty($username_err) && empty($password_err) && empty($confirmPassword_err) && empty($institution_err)){
         //inputs passed were valid
         # ToDo: figure out what should be returned here, if anything.
-         # Keep in mind this will be called from inside this script!
+         # Keep in mind this function will be called from inside this script!
+        return array('errors' => false, 'username' => $email, 'password' => $pass, 'institution' => $inst);
     }
     else {
         //inputs passed were not valid
         # ToDO: figure out the best way to get these error messages passed back to the script that called this script, see above todo
+        return array('errors' => true, 'usernameError' => $username_err, 'passwordError' => $password_err, 'confirmError' => $confirmPassword_err, 'institutionError' => $institution_err);
     }
 }
 
