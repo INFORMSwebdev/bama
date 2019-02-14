@@ -14,6 +14,8 @@ class User extends AOREducationObject
         'UserId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
         'Username' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
         'Password' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
+        'FirstName' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
+        'LastName' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
         'Comments' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'Token' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'CreateDate' => array( 'required' => TRUE, 'datatype'=> PDO::PARAM_STR ),
