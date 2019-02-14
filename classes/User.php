@@ -14,16 +14,25 @@ class User extends AOREducationObject
         'UserId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
         'Username' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
         'Password' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
+        'FirstName' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
+        'LastName' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
         'Comments' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'Token' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'CreateDate' => array( 'required' => TRUE, 'datatype'=> PDO::PARAM_STR ),
-        'Deleted' => array( 'required' => TRUE, 'datatype'=> PDO::PARAM_INT ),
-        'FirstName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
-        'LastName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR )
+        'Deleted' => array( 'required' => TRUE, 'datatype'=> PDO::PARAM_INT )
     );
 
+    /**
+     * Add record to institution_admins table for current user and specified inst
+     * @param $InstitutionId	int
+     * @returns int (1 on success, 0 on failure)
+     */
     public function assignToInstitution($InstitutionId) {
         $db = new EduDB();
+        $sql = "INSERT IGNORE INTO institution_admins (InstitutionId, UserId) VALUES (:InstitutionId, {$this->id})";
+        $params = array( array( ":InstitutionId", $InstitutionId, PDO::PARAM_INT ));
+        $result = $db->execSafe( $sql, $params );
+        return $result;
     }
 
     public function generateToken() {
@@ -42,16 +51,21 @@ class User extends AOREducationObject
         $db = new EduDB();
     }
 
-    public static function usernameExists ( $username, $excludeUserId = null )
-    {
+    /**
+     * check if given username already exists, optionally specify a UserId to exclude from the search
+     * @param $username string (email)
+     * $param $excludeUserId    int optional
+     * @returns int (UserId) for match or null for no match
+     */
+    public static function usernameExists ( $username, $excludeUserId = null ) {
         $db = new EduDB();
         $sql = "SELECT UserId FROM users WHERE Username=:Username";
-        $params = array(array(':Username', $username, PDO::PARAM_STR));
+        $params =  array( array(':Username', $username, PDO::PARAM_STR ));
         if ($excludeUserId) {
             $sql .= " WHERE UserId != :UserId";
-            $params[] = array(":UserId", $excludeUserId, PDO::PARAM_INT);
+            $params[] = array( ":UserId", $excludeUserId, PDO::PARAM_INT );
         }
-        $matchedUserId = $db->queryItemSafe($sql, $params);
+        $matchedUserId = $db->queryItemSafe( $sql, $params );
         return $matchedUserId;
     }
 }
