@@ -30,8 +30,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //check the validity of the anon input
         $results = validateAnonInputs(trim($_POST['Username']), trim($_POST['FirstName']), trim($_POST['LastName']), trim($_POST['Institution']));
 
-        //if there were no errors, proceed with notifying the INFORMS admin that a request to join has been submitted
         # ToDo: figure out how to send a notification and store the information input for use if admin request is approved
+        //if there were no errors, proceed with notifying the INFORMS admin that a request to join has been submitted
+        if($results['errors'] == false){
+
+        } else {
+            //set up the error message and pass the input back to the form page so the anon user doesn't have to re-input everything
+        }
     }
 }
 //process form data when the form is submitted
