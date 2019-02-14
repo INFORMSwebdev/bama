@@ -7,7 +7,4 @@
  */
 
 require_once( "../init.php");
-$inst = new Institution(1);
-print_r($inst);
-$insts = Institution::getInstitutions(1,0);
-print_r($insts);
+echo User::usernameExists('test1', 8);

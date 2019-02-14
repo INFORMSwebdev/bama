@@ -20,21 +20,36 @@ class User extends AOREducationObject
         'Deleted' => array( 'required' => TRUE, 'datatype'=> PDO::PARAM_INT )
     );
 
-    public function assignToInstitution($InstitutionId)
-    {
-
+    public function assignToInstitution($InstitutionId) {
+        $db = new EduDB();
     }
 
     public function generateToken() {
-
+        $db = new EduDB();
     }
 
     public function sendInviteEmail() {
-
+        $db = new EduDB();
     }
 
     public function sendPasswordResetEmail() {
+        $db = new EduDB();
+    }
 
+    public function unassignFromInstitution( $InstitutionId ){
+        $db = new EduDB();
+    }
+
+    public static function usernameExists ( $username, $excludeUserId = null ) {
+        $db = new EduDB();
+        $sql = "SELECT UserId FROM users WHERE Username=:Username";
+        $params =  array( array(':Username', $username, PDO::PARAM_STR ));
+        if ($excludeUserId) {
+            $sql .= " WHERE UserId != :UserId";
+            $params[] = array( ":UserId", $excludeUserId, PDO::PARAM_INT );
+        }
+        $matchedUserId = $db->queryItemSafe( $sql, $params );
+        return $matchedUserId;
     }
 
     public static function usernameExists($Username){
