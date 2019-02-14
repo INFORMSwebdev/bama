@@ -7,4 +7,5 @@
  */
 
 require_once( "../init.php");
-echo User::usernameExists('test1', 8);
+$u = new User(1);
+echo $u->assignToInstitution(1);
