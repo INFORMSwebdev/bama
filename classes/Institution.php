@@ -34,9 +34,9 @@ class Institution extends AOREducationObject {
 
     public static function getInstitutions( $active = TRUE, $asObjects = TRUE) {
         $institutions = [];
-        $db = new pdo_db( "/common/settings/common.ini", "analytics_education_settings");
+        $db = new EduDB();
         $sql = "SELECT InstitutionId FROM institutions";
-        $sql .= " WHERE Deleted = " . ($active == TRUE) ? "0" : "1";
+        $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
         $insts = $db->queryColumn( $sql );
         foreach( $insts as $inst){
             if ($asObjects) {

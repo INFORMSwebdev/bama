@@ -11,7 +11,7 @@ class AOREducationObject {
 
   public function __construct( $id ) {
     $this->id = $id;
-    $db = new pdo_db( "/common/settings/common.ini", "analytics_education_settings" );
+    $db = new EduDB();
     $sql = "SELECT * FROM ".static::$table." WHERE ".static::$primary_key."=:primary_key";
     $params = array( array( ":primary_key", $id, PDO::PARAM_INT ) );
     $row = $db->queryRowSafe( $sql, $params );
@@ -28,7 +28,7 @@ class AOREducationObject {
   }
 
   public static function create( $params ) {
-    $db = new pdo_db( "/common/settings/common.ini", "analytics_education_settings" );
+    $db = new EduDB();
     $params = self::clean_input_array( $params, static::$data_structure );
     $keys = array_keys( $params );
     $sql = "INSERT INTO ".static::$table." (".implode(",", $keys).") VALUES (:".implode(",:", $keys).")";
@@ -44,13 +44,13 @@ class AOREducationObject {
   }
   
   public function delete() {
-    $db = new pdo_db( "/common/settings/common.ini", "analytics_education_settings" );
+    $db = new EduDB();
     $sql = "DELETE FROM ".static::$table." WHERE ".static::$primary_key."=$this->id";
     return $db->exec( $sql );
   }
   
   public function update( $key, $value ) {
-    $db = new pdo_db( "/common/settings/common.ini", "analytics_education_settings" );
+    $db = new EduDB();
     $params = array();
     $sql = "UPDATE ".static::$table." SET $key=:value WHERE ".static::$primary_key ." = $this->id";
     $datatype = (is_null($value)) ? PDO::PARAM_NULL : static::$data_structure[$key]['datatype'];
