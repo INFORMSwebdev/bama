@@ -18,8 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if($results['errors'] == TRUE){
         //set up the error message and pass the input back to the form page so the user doesn't have to re-input everything
         $_SESSION['registerErrors'] = $results;
-        $_SESSION['registerInput'] = array( 'Username' => $user, 'FirstName' =>  $firstName, 'LastName' => $lastName,
-            'Institution' => $instId, 'Comments' => $comments );
+        $_SESSION['registerInput'] = array( $user, $firstName, $lastName, $instId, $comments );
 
         //redirect to the register page
         header('Location: ' . USER_DIR . 'register.php' );
@@ -36,15 +35,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $newUserId = User::create( array( 'Username' => $user, 'FirstName' => $firstName, 'LastName' => $lastName,
             'Comments' => $instId ) );
         $newUser = new User($newUserId);
-        $newUser->assignToInstitution(trim($_POST['Institution']));
+        $newUser->assignToInstitution($instId);
 
         //report successful user creation and institution assignment via session variable
         //make sure the registerErrors session variable gets reset
         unset($_SESSION['registerErrors']);
         //since the account was successfully created, we don't want the user to have to clear out the fields themselves
         unset($_SESSION['registerInput']);
+
         //set a new session variable up
-        $_SESSION[registerSuccess] = array( 'newUserId' => $newUserId );
+        $_SESSION['registerSuccess'] = $newUserId;
         # ToDo: figure out what I want to pass back to the register page (if anything) to display to the INFORMS admin
          # current ideas: newUserId (definitely), FirstName? LastName? Comments? InstitutionId?
          # We don't need to pass back the input since it was already accepted and processed through, but would we
@@ -69,13 +69,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         # ToDo: figure out how to send a notification and what is needed for it
          # from, to, subject, body?
 
-        # ToDo: do we want to display the users' entered info on this thank you page? Some info? Confer w/ Dave
-        //pass the user input to the thank you page, which will decide what to display
-        $_SESSION['registerInput'] = array( 'Username' => $user, 'FirstName' =>  $firstName, 'LastName' => $lastName,
-            'Institution' => $instId, 'Comments' => $comments );
-
         //make sure we aren't passing unwanted session variables around
         unset($_SESSION['registerErrors']);
+
+        //indicate successful pending user creation
+        $_SESSION['registerSuccess'] = $pendingUserId;
+        # ToDo: do we want to display the users' entered info on this thank you page? Some info? Confer w/ Dave
+        //pass the user input to the thank you page, which will decide what to display
+        $_SESSION['registerInput'] = array( $user, $firstName, $lastName, $instId, $comments );
 
         //redirect anon user to a Thank You For Registering Page
         header('Location: ' . USER_DIR . 'thankyou.php' );
@@ -121,6 +122,8 @@ function validateInputs($email, $firstName, $lastName, $inst){
     //validate institution field has something selected
     if(empty($inst)){
         $institution_err = "No institution selected.";
+    } else if( !is_numeric($inst)){
+        $institution_err = "Valid institution must be selected. InstitutionId passed was non-numeric.";
     }
     # ToDo: put in more validation checks to see if the institution selected actually exists in the system
 
