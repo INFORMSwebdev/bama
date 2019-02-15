@@ -16,11 +16,14 @@ require_once '../../init.php';
 if(isset($_SESSION['registerSuccess']) && is_numeric($_SESSION['registerSuccess'])){
     //ensure session variable containing the pending user information is present
     if(isset($_SESSION['registerInput']) && count($_SESSION['registerInput']) == 5){
-        $userName = $_SESSION['registerInput'][0];
-        $firstName = $_SESSION['registerInput'][1];
-        $lastName = $_SESSION['registerInput'][2];
+        $userName = htmlspecialchars($_SESSION['registerInput'][0]);
+        $firstName = htmlspecialchars($_SESSION['registerInput'][1]);
+        $lastName = htmlspecialchars($_SESSION['registerInput'][2]);
         $instId = $_SESSION['registerInput'][3];
-        $comments = $_SESSION['registerInput'][3];
+        //get the institution name from this id to display
+        $inst = new Institution($instId);
+        $instName = $inst->Attributes['InstitutionName'];
+        $comments = htmlspecialchars($_SESSION['registerInput'][3]);
         $content = <<<EOT
 <div class="row">
     <h1>Thank you, {$firstName}, for requesting access to the Analytic and Operations Research Education Database.</h1>
@@ -28,7 +31,11 @@ if(isset($_SESSION['registerSuccess']) && is_numeric($_SESSION['registerSuccess'
     <p>You will also find the submitted information below for a quick review.</p>
 </div>
 <div class="row">
-    <!-- ToDo: Add in the users' input information here. --> 
+    <p>Username: {$userName}</p>
+    <p>First Name: {$firstName}</p>
+    <p>Last Name: {$lastName}</p>
+    <p>Institution: {$instName}</p>
+    <p>Justification: {$comments}</p>
 </div>
 EOT;
     } else {
