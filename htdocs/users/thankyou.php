@@ -31,6 +31,7 @@ if(isset($_SESSION['registerSuccess']) && is_numeric($_SESSION['registerSuccess'
     <p>You will also find the submitted information below for a quick review.</p>
 </div>
 <div class="row">
+    <h2>Information Submitted:</h2>
     <p>Username: {$userName}</p>
     <p>First Name: {$firstName}</p>
     <p>Last Name: {$lastName}</p>
