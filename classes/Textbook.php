@@ -20,10 +20,16 @@ class Textbook extends AOREducationObject
     );
 
     public function assignToCourse( $CourseId ) {
-
+        $db = new EduDB();
+        $sql = "INSERT IGNORE INTO course_textbooks (CourseId, TextbookId) VALUES (:CourseId, $this->id)";
+        $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
     }
 
     public function unassignFromCourse( $CourseId ) {
-
+        $db = new EduDB();
+        $sql = "DELETE FROM course_textbooks WHERE CourseId = :CourseId AND TextbookId = $this->id";
+        $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
     }
 }
