@@ -24,6 +24,11 @@ class Dataset extends AOREducationObject
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
     );
 
+    /**
+     * add course - dataset association
+     * @param $CourseId int
+     * @returns int number of database rows affected by operation
+     */
     public function assignToCourse( $CourseId ) {
         $db = new EduDB();
         $sql = "INSERT IGNORE INTO course_datasets (CourseId, DatasetId) VALUES (:CourseId, $this->id)";
@@ -31,6 +36,11 @@ class Dataset extends AOREducationObject
         return $db->execSafe( $sql, $params );
     }
 
+    /**
+     * delete course - dataset association
+     * @param $CourseId int
+     * @returns int number of database rows affected by operation
+     */
     public function unassignFromCourse( $CourseId ) {
         $db = new EduDB();
         $sql = "DELETE FROM course_datasets WHERE CourseId = :CourseId AND DatasetId = $this->id";
