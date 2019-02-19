@@ -9,7 +9,7 @@
 require_once( "../../init.php");
 
 $errors = [];
-$login_form = <<<EOT
+$content = <<<EOT
 <div class="container">
 		<div class="row">
 			<h1>INFORMS Admin Login</h1>
@@ -17,7 +17,7 @@ $login_form = <<<EOT
 		<div class="row">
 			<p>Log in with your AA front end (self-service) credentials.</p>
 		</div>
-		<form class="needs-validation" action="../scripts/processAdminLoginForm.php" method="post" novalidate>
+		<form class="needs-validation" action="../scripts/processAdminLoginForm.php" method="post" novalidate id="admin_login_form">
 			<div class="form-row">
 				<label for="validationUsername">Username</label>
 				<input type="text" class="form-control" id="validationUsername" name="username" placeholder="Username" required>
@@ -50,4 +50,21 @@ $login_form = <<<EOT
 
 EOT;
 
+$custom_js = <<<EOT
+$(function() {
+  $('#admin_login_form').submit(function(e) {
+    e.preventDefault();
+    $.post( "../scripts/ajax_processAdminLogin.php", { username: $('#username').val(), password: $('git stat#password').val()}, function( data ) {
+      alert('test');
+    });
+  });
+});
+EOT;
 
+
+$p_params = [];
+$p_params['content'] = $content;
+$p_params['admin'] = TRUE;
+$p_params['js'][] = array( 'text' => $custom_js );
+$wrapper = new wrapperBama($p_params);
+$wrapper->html();
