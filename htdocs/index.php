@@ -1,7 +1,7 @@
 <?php
 //load the init.php file, which has a session_start() and also sets up path constants; not to mention it's autoload
 //lets not forget that there is also the error settings in init.php!
-require_once '../../init.php';
+require_once '../init.php';
 
 # ToDo: remove this testing stuff before actual deployment!
 if (isset($_GET['testing'])) {
@@ -21,7 +21,12 @@ if ((!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] != true) && !isset($
 
 //user is logged in, get their username and info
 //don't want any XSS so we put the variable through the htmlspecialchars() function
-$user = htmlspecialchars($_SESSION['username']);
+$user = '';
+if(isset($_SESSION['username'])){
+    $user = htmlspecialchars($_SESSION['username']);
+} else {
+    $user = 'Username not set...';
+}
 
 //set up utility links?
 # ToDo: Ask Dave what these are

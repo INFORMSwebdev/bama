@@ -25,7 +25,12 @@ if (isset($_GET['testing'])) {
 
 # ToDo: update this to display specific user info from their profile (i.e. stuff in the DB)
 
-$user = htmlspecialchars($_SESSION['username']);
+$user = '';
+if(isset($_SESSION['username'])){
+    $user = htmlspecialchars($_SESSION['username']);
+} else {
+    $user = 'Username not set...';
+}
 
 //set the page content to be displayed by the wrapper class
 $content = <<<EOT

@@ -73,16 +73,6 @@
 					Please enter your password.
 				</div>
 			</div>
-			<div class="form-row">
-				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="" id="rememberMeCheck">
-					<label class="form-check-label" for="rememberMeCheck">Remember my credentials</label>
-					<?php
-						# ToDo: get this check box to set a cookie on the user's computer that will remember their login info (OR ask Dave how this should be approached?)
-						# The check box currently does nothing
-					?>
-				</div>
-			</div>
 			<button class="btn btn-primary" type="submit">Log in</button>
 		</form>
 	</div>

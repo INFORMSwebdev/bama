@@ -32,7 +32,7 @@ class wrapperBama
             'html_path' => $ini['analytics_education_settings']['root_dir'] . $ini['analytics_education_settings']['html_dir'],
             'users_path' => $ini['analytics_education_settings']['root_dir'] . $ini['analytics_education_settings']['html_dir'] . $ini['analytics_education_settings']['user_dir'],
             'scripts_path' => $ini['analytics_education_settings']['root_dir'] . $ini['analytics_education_settings']['html_dir'] . $ini['analytics_education_settings']['scripts_dir'],
-            'images_path' => $ini['analytics_education_settings']['root_dir'] . $ini['analytics_education_settings']['html_dir'] . $ini['analytics_education_settings']['images_dir'],
+            'images_path' => $ini['analytics_education_settings']['html_dir'] . $ini['analytics_education_settings']['images_dir'],
             'settings_path' => $ini['analytics_education_settings']['root_dir'] . $ini['analytics_education_settings']['settings_dir'],
             'log_path' => $ini['analytics_education_settings']['root_dir'] . $ini['analytics_education_settings']['log_dir']
         );
@@ -76,25 +76,25 @@ EOT;
             $navbar = <<<EOT
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="https://www.informs.org" target="_blank">
-				<img src="{$this->params['images_path']}nav/logo_125x30.png" height="30" alt="INFORMS logo" />
+				<img src="https://common.informs.org/images/informs_125x30.jpg" height="30" alt="INFORMS logo" />
 			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon" />
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<div class="navbar-nav">
-					<a class="nav-item nav-link active" href="{$this->params['html_path']}index.php">Home <span class="sr-only">(current)</span></a>
+					<a class="nav-item nav-link active" href="/index.php">Home <span class="sr-only">(current)</span></a>
 					<div class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Users</a>
 						<div class="dropdown-menu">
-							<a class="nav-item nav-link" href="{$this->params['users_path']}index.php">My Profile</a>
-							<a class="nav-item nav-link" href="{$this->params['users_path']}register.php">Register Program Admin</a>
+							<a class="nav-item nav-link" href="/users/profile.php">My Profile</a>
+							<a class="nav-item nav-link" href="/users/register.php">Register Program Admin</a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="navbar-nav">
-				<a class="nav-item btn btn-sm btn-outline-danger" href="{$this->params['users_path']}logout.php" role="button">Log out</a>
+				<a class="nav-item btn btn-sm btn-outline-danger" href="/users/logout.php" role="button">Log out</a>
 			</div>
 		</nav>
 EOT;
@@ -102,26 +102,25 @@ EOT;
             $navbar = <<<EOT
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="https://www.informs.org" target="_blank">
-				<img src="{$this->params['images_path']}nav/logo_125x30.png" height="30" alt="INFORMS logo" />
+				<img src="https://common.informs.org/images/informs_125x30.jpg" height="30" alt="INFORMS logo" />
 			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon" />
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<div class="navbar-nav">
-					<a class="nav-item nav-link" href="{$this->params['html_path']}index.php">Home</a>
-					<a class="nav-item nav-link " href="{$this->params['users_path']}register.php">Register Program Admin</a>
+					<a class="nav-item nav-link" href="../index.php">Home</a>
 					<div class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="sr-only">(current)</span></a>
 						<div class="dropdown-menu">
-							<a class="nav-item nav-link" href="{$this->params['users_path']}index.php">My Profile</a>
-							<a class="nav-item nav-link" href="{$this->params['users_path']}register.php">Register Program Admin</a>
+							<a class="nav-item nav-link" href="profile.php">My Profile</a>
+							<a class="nav-item nav-link" href="register.php">Register Program Admin</a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="navbar-nav">
-				<a class="nav-item btn btn-sm btn-outline-danger" href="/users/logout.php" role="button">Log out</a>
+				<a class="nav-item btn btn-sm btn-outline-danger" href="logout.php" role="button">Log out</a>
 			</div>
 		</nav>
 EOT;
@@ -540,7 +539,7 @@ EOT;
     <script type="text/javascript" src="https://www.informs.org/extension/ezdemo/design/ezdemo/javascript/ezgallerynavigator.js" charset="utf-8"></script>
     <script type="text/javascript" src="https://www.informs.org/extension/ezdemo/design/ezdemo/javascript/ezgallery.js" charset="utf-8"></script>-->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     
     <script type="text/javascript">
