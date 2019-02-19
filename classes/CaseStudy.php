@@ -7,6 +7,7 @@
  */
 
 class CaseStudy extends AOREducationObject {
+
     public static $table = "cases";
     public static $primary_key = "CaseId";
     public static $data_structure = array(
@@ -20,11 +21,28 @@ class CaseStudy extends AOREducationObject {
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
     );
-    public function assignToCourse( $CourseId ) {
 
+    /**
+     * add course - case study association
+     * @param $CourseId int
+     * @returns int number of database rows affected by operation
+     */
+    public function assignToCourse( $CourseId ) {
+        $db = new EduDB();
+        $sql = "INSERT IGNORE INTO course_cases (CourseId, CaseId) VALUES (:CourseId, $this->id)";
+        $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
     }
 
+    /**
+     * delete course - case study association
+     * @param $CourseId int
+     * @returns int number of database rows affected by operation
+     */
     public function unassignFromCourse( $CourseId ) {
-
+        $db = new EduDB();
+        $sql = "DELETE FROM course_cases  WHERE CourseId = :CourseId AND CaseId = $this->id";
+        $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
     }
 }

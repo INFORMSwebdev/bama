@@ -18,11 +18,27 @@ class Software extends AOREducationObject
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
     );
 
+    /**
+     * add course - software association
+     * @param $CourseId int
+     * @returns int number of database rows affected by operation
+     */
     public function assignToCourse( $CourseId ) {
-
+        $db = new EduDB();
+        $sql = "INSERT IGNORE INTO course_softwares (CourseId, SoftwareId) VALUES (:CourseId, $this->id)";
+        $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
     }
 
+    /**
+     * delete course - software association
+     * @param $CourseId int
+     * @returns int number of database rows affected by operation
+     */
     public function unassignFromCourse( $CourseId ) {
-
+        $db = new EduDB();
+        $sql = "DELETE FROM course_softwares WHERE CourseId = :CourseId AND SoftwareId = $this->id";
+        $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
     }
 }

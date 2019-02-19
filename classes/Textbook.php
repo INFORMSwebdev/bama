@@ -19,11 +19,27 @@ class Textbook extends AOREducationObject
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
     );
 
+    /**
+     * add course - textbook association
+     * @param $CourseId int
+     * @returns int number of database rows affected by operation
+     */
     public function assignToCourse( $CourseId ) {
-
+        $db = new EduDB();
+        $sql = "INSERT IGNORE INTO course_textbooks (CourseId, TextbookId) VALUES (:CourseId, $this->id)";
+        $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
     }
 
+    /**
+     * delete course - textbook association
+     * @param $CourseId int
+     * @returns int number of database rows affected by operation
+     */
     public function unassignFromCourse( $CourseId ) {
-
+        $db = new EduDB();
+        $sql = "DELETE FROM course_textbooks WHERE CourseId = :CourseId AND TextbookId = $this->id";
+        $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
     }
 }

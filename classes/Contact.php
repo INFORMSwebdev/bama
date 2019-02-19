@@ -21,6 +21,6 @@ class Contact extends AOREducationObject
     );
 
     public function setInstitutionContact( $InstitutionId ){
-
+      // this can be accomplished by updating the institution object's ContactId attribute so not adding code for this until later
     }
 }
