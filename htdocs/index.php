@@ -53,11 +53,6 @@ $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;
 //$page_params['active_menu_item'] = 'home';
-//$page_params['root_path'] = $ini['analytics_education_settings']['root_dir'];
-//$page_params['users_path'] = $ini['analytics_education_settings']['user_dir'];
-//$page_params['scripts_path'] = $ini['analytics_education_settings']['scripts_dir'];
-//$page_params['images_path'] = $ini['analytics_education_settings']['images_dir'];
-//$page_params['settings_path'] = $ini['analytics_education_settings']['settings_dir'];
 //put custom/extra css files, if used
 //$page_params['css'][] = array("url" => "");
 //put custom/extra JS files, if used

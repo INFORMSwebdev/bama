@@ -2,16 +2,21 @@
 //load the init.php file, which has a session_start() and also sets up path constants; not to mention it's autoload
 //lets not forget that there is also the error settings in init.php!
 require_once '../../init.php';
-	
+
 //check if user is already logged in
-if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
+if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
     //redirect to the regular index page
     header("Location: /index.php");
     //don't want the script to keep executing after a redirect
     die;
 }
 # ToDo: Add in checks for session variables that contain error input from a previously submitted login page!!
-$content = <<<EOT
+if (isset($_SESSION['loginErrors'])) {
+    //process the errors
+    # ToDo: implement the error stuff; there should only be 2 errors: username_err & password_err, and one may not be set
+
+} else {
+    $content = <<<EOT
 <div class="row">
 	<h1>Program Administrator Login</h1>
 </div>
@@ -19,7 +24,7 @@ $content = <<<EOT
 	<p>Log in to administrate your program's information.</p>
 </div>
 <form class="needs-validation" action="../scripts/processLoginForm.php" method="post" novalidate>
-	<div class="form-row">
+	<div class="form-group">
 		<label for="validationUsername">Username</label>
 		<input type="text" class="form-control" id="validationUsername" name="username" placeholder="Username" required>
 		<div class="valid-feedback">
@@ -29,7 +34,7 @@ $content = <<<EOT
 			Please enter your username.
 		</div>
 	</div>
-	<div class="form-row">
+	<div class="form-group">
 		<label for="validationPassword">Password</label>
 		<input type="password" class="form-control" id="validationPassword" name="password" placeholder="Password" required>
 		<div class="valid-feedback">
@@ -39,11 +44,15 @@ $content = <<<EOT
 			Please enter your password.
 		</div>
 	</div>
-	<button class="btn btn-primary" type="submit">Log in</button>
+	<div class="form-group">
+	    <button class="btn btn-primary" type="submit">Log in</button>
+	</div>
 </form>
 EOT;
-$page_params['js']['text'] = <<<EOT
-<script type="text/javascript">
+}
+
+//add custom javascript that disables form submission on required fields being empty
+$customScript = <<<EOT
 	// Example starter JavaScript for disabling form submissions if there are invalid fields; from Bootstrap 4 documentation
 	(function() {
 		'use strict';
@@ -62,10 +71,10 @@ $page_params['js']['text'] = <<<EOT
 			});
 		}, false);
 	})();
-</script>
 EOT;
+$page_params['js'][] = array('text' => $customScript);
 
-//set page parameters up
+//set other page parameters up
 $page_params['loggedIn'] = TRUE;
 $page_params['content'] = $content;
 $page_params['page_title'] = 'Program Administrator Login';

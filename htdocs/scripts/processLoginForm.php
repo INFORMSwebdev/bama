@@ -13,11 +13,8 @@ if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true) {
 
 //process the data when the form is submitted via POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
     validateInput(trim($_POST["username"]), trim($_POST["password"]));
-
 }
-
 
 function validateInput($user, $pass)
 {
@@ -47,30 +44,33 @@ function validateInput($user, $pass)
         if(isset($id) && is_numeric($id) && $id > 0){
             $curUser = new User($id);
             //validate the password passed against the stored value
-            # ToDo: figure out how the password verification works with the User object and finish this section of code
-            //$passVerify = User::validatePassword($password);
-            //if verified:
-            //if valid, user is considered logged in; store user info in session variables
-            if($curUser->validatePassword($password) == true) {
+            if($curUser->checkPassword($password) == true) {
+                //if valid, user is considered logged in; store user info in session variables
                 $_SESSION["loggedIn"] = true;
                 $_SESSION["id"] = $curUser->Attributes['UserId'];
                 $_SESSION["username"] = $username;
             }
-            //ELSE collect error to print out on login page
+            //otherwise, collect errors to print out on login page
             else {
-                $password_err = "The password entered was not valid.";
+                $password_err = "The password entered did not match the password on record.";
+                //set session variables to inform user of errors
+                $_SESSION['loginErrors'] = array( 'usernameErrors' => $username_err, 'passwordErrors' => $password_err);
+                //redirect to login page and inform user the results of the password verification
+                header('Location: ../users/login.php');
+                die;
             }
         } else {
             //username not in system
             $username_err = "No account found with that username.";
-        }
-
-        if(empty($username_err) && empty($password_err)){
-
+            //set session variables to inform user of errors
+            $_SESSION['loginErrors'] = array( 'usernameErrors' => $username_err, 'passwordErrors' => $password_err);
+            //redirect to login page and inform user the results of the username check
+            header('Location: ../users/login.php');
+            die;
         }
     } else {
         //there were errors in the user input
-        $_SESSION['loginErrors'] = array($username_err, $password_err);
+        $_SESSION['loginErrors'] = array('usernameErrors' => $username_err, 'passwordErrors' => $password_err);
         $_SESSION['loginInput'] = array('username' => $user, 'password' => $password);
         //redirect user back to login page to re-input stuff
         header("Location: ../users/login.php");
