@@ -40,7 +40,7 @@ $institutions = Institution::getInstitutions();
 //turn that into an array of name/value pairs to pass to the optionsHTML.php file
 $instListHelper = array();
 foreach($institutions as $inst){
-    $instListHelper[] = array('text' => $inst->Attributes['InstitutionName'], 'value' => $inst->Attributes['InstitutionId']);
+    $instListHelper[] = array('text' => $inst['InstitutionName'], 'value' => $inst['InstitutionId']);
 }
 $instListHelper[] = array('text' => 'Other', 'value' => 'Other');
 //pass the name/value pairs to the file to get the generated HTML for a select list
@@ -113,7 +113,7 @@ $page_params['site_url'] = 'https://bama-dev.informs.org/index.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;
-$page_params['active_menu_item'] = 'home';
+$page_params['active_menu_item'] = 'users';
 //put custom/extra css files, if used
 //$page_params['css'][] = array("url" => "");
 //put custom/extra JS files, if used

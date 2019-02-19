@@ -5,12 +5,9 @@
  * Date: 2/6/2019
  * Time: 3:45 PM
  */
-//display all errors
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-//start the session
-session_start();
+//load the init.php file, which has a session_start() and also sets up path constants; not to mention it's autoload
+//lets not forget that there is also the error settings in init.php!
+require_once '../../init.php';
 
 //check if user is logged in
 # ToDo: remove the GET string from this test before actual use
@@ -26,15 +23,9 @@ if (isset($_GET['testing'])) {
     $_SESSION['loggedIn'] = true;
 }
 
-//get the settings for sites
-//parse the ini file for all site settings
-$ini = parse_ini_file("/common/settings/common.ini", TRUE);
-//autoload common classes, we want that wrapperBama class!
-require_once("/common/classes/autoload.php");
+# ToDo: update this to display specific user info from their profile (i.e. stuff in the DB)
 
 $user = htmlspecialchars($_SESSION['username']);
-
-//
 
 //set the page content to be displayed by the wrapper class
 $content = <<<EOT
@@ -47,3 +38,21 @@ $content = <<<EOT
 	</div>
 EOT;
 
+//set page parameters up
+$page_params['loggedIn'] = TRUE;
+$page_params['content'] = $content;
+$page_params['page_title'] = $page_title;
+$page_params['site_title'] = "Analytics Education Admin";
+$page_params['site_url'] = 'https://bama-dev.informs.org/index.php';
+$page_params['show_title_bar'] = FALSE;
+//do not display the usual header/footer
+$page_params['admin'] = TRUE;
+$page_params['active_menu_item'] = 'register';
+//put custom/extra css files, if used
+//$page_params['css'][] = array("url" => "");
+//put custom/extra JS files, if used
+//$page_params['js'][] = array("url" => "");
+//wrapper class to pass all the content and params to
+$wrapper = new wrapperBama($page_params);
+//display the content
+$wrapper->html();
