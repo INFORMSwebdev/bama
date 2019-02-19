@@ -25,7 +25,7 @@ class User extends AOREducationObject
     /**
      * Add record to institution_admins table for current user and specified inst
      * @param $InstitutionId    int
-     * @returns int (1 on success, 0 on failure)
+     * @return int (1 on success, 0 on failure)
      */
     public function assignToInstitution($InstitutionId)
     {
@@ -90,7 +90,7 @@ class User extends AOREducationObject
      * check if given username already exists, optionally specify a UserId to exclude from the search
      * @param $username string (email)
      * $param $excludeUserId    int optional
-     * @returns int (UserId) for match or null for no match
+     * @return int (UserId) for match or null for no match
      */
     public static function usernameExists($username, $excludeUserId = null)
     {

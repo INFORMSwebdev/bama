@@ -15,9 +15,10 @@ require_once '../../init.php';
  # redirect logged in users to a different location or display something other than the register form.
 if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
     //user is an institution admin who already has a user account
-    header('Location: ' . ROOTDIR . 'index.php');
+    header('Location: ' . ROOTDIR . 'profile.php');
     die;
 }
+# ToDo: Add in checks for session variables that contain error input from a previously submitted login page!!
 //user is either logged in as an INFORMS admin or an anonymous user
 
 # ToDo: set up checks for error session variables and display them appropriately
@@ -109,7 +110,7 @@ $page_params['loggedIn'] = TRUE;
 $page_params['content'] = $content;
 $page_params['page_title'] = $page_title;
 $page_params['site_title'] = "Analytics Education Admin";
-$page_params['site_url'] = 'https://bama-dev.informs.org/index.php';
+$page_params['site_url'] = 'https://bama-dev.informs.org/profile.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;

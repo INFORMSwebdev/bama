@@ -30,7 +30,7 @@ if(isset($_SESSION['username'])){
 
 //set up utility links?
 # ToDo: Ask Dave what these are
-//$util_links = '<a href="/index.php">Home</a>';
+//$util_links = '<a href="/profile.php">Home</a>';
 
 $content = <<<EOT
 	<div class="jumbotron">
@@ -48,7 +48,7 @@ $page_params['loggedIn'] = TRUE;
 $page_params['content'] = $content;
 $page_params['page_title'] = "Program Administrator Dashboard";
 $page_params['site_title'] = "Analytics Education Admin";
-$page_params['site_url'] = 'https://bama-dev.informs.org/index.php';
+$page_params['site_url'] = 'https://bama-dev.informs.org/profile.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;

@@ -13,7 +13,7 @@ require_once '../../init.php';
 # ToDo: remove the GET string from this test before actual use
 if ((!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) && !isset($_GET['testing'])) {
     //redirect to login page so user can log in
-    header("Location: users/index.php");
+    header("Location: login.php");
     //don't want the script to keep executing after a redirect
     die;
 }
@@ -48,7 +48,7 @@ $page_params['loggedIn'] = TRUE;
 $page_params['content'] = $content;
 $page_params['page_title'] = $page_title;
 $page_params['site_title'] = "Analytics Education Admin";
-$page_params['site_url'] = 'https://bama-dev.informs.org/index.php';
+$page_params['site_url'] = 'https://bama-dev.informs.org/profile.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;

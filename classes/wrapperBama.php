@@ -28,6 +28,7 @@ class wrapperBama
             'file' => '',
             'content' => '',
             'active_menu_item' => '',
+            'web_path' => $ini['analytics_education_settings']['web_dir'],
             'root_path' => $ini['analytics_education_settings']['root_dir'],
             'html_path' => $ini['analytics_education_settings']['root_dir'] . $ini['analytics_education_settings']['html_dir'],
             'users_path' => $ini['analytics_education_settings']['root_dir'] . $ini['analytics_education_settings']['html_dir'] . $ini['analytics_education_settings']['user_dir'],
@@ -89,6 +90,7 @@ EOT;
 						<div class="dropdown-menu">
 							<a class="nav-item nav-link" href="/users/profile.php">My Profile</a>
 							<a class="nav-item nav-link" href="/users/register.php">Register Program Admin</a>
+							<a class="nav-item nav-link" href="/users/login.php">Log In</a>
 						</div>
 					</div>
 				</div>
@@ -115,6 +117,7 @@ EOT;
 						<div class="dropdown-menu">
 							<a class="nav-item nav-link" href="profile.php">My Profile</a>
 							<a class="nav-item nav-link" href="register.php">Register Program Admin</a>
+							<a class="nav-item nav-link" href="login.php">Log In</a>
 						</div>
 					</div>
 				</div>
@@ -126,7 +129,34 @@ EOT;
 EOT;
         }
         //add more menu options here
-
+        else {
+            $navbar = <<<EOT
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<a class="navbar-brand" href="https://www.informs.org" target="_blank">
+				<img src="https://common.informs.org/images/informs_125x30.jpg" height="30" alt="INFORMS logo" />
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon" />
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<div class="navbar-nav">
+					<a class="nav-item nav-link" href="index.php">Home</a>
+					<div class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="sr-only">(current)</span></a>
+						<div class="dropdown-menu">
+							<a class="nav-item nav-link" href="../users/profile.php">My Profile</a>
+							<a class="nav-item nav-link" href="../users/register.php">Register Program Admin</a>
+							<a class="nav-item nav-link" href="../users/login.php">Log In</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="navbar-nav">
+				<a class="nav-item btn btn-sm btn-outline-danger" href="logout.php" role="button">Log out</a>
+			</div>
+		</nav>
+EOT;
+        }
 
         $utility_menu = '';
         if ($this->params['custom_utility_menu']) {
