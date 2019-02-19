@@ -9,6 +9,7 @@
 require_once( "../../init.php");
 
 $errors = [];
+$test = WEB_ROOT;
 $content = <<<EOT
 <div class="container">
 		<div class="row">
@@ -47,7 +48,7 @@ $content = <<<EOT
 			<button class="btn btn-primary" type="submit">Log in</button>
 		</form>
 </div>
-
+$test
 EOT;
 
 $custom_js = <<<EOT
