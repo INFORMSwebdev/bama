@@ -37,10 +37,29 @@ class User extends AOREducationObject
 
     public function generateToken() {
         $db = new EduDB();
+        $salt = "I wasn't originally going to get a brain transplant, but then I changed my mind.";
+        $token = md5( $salt . $this->id . time() );
+        return $this->update( 'Token', $token );
+    }
+
+    public static function getUserByToken( $Token, $asObject = TRUE ) {
+        $db = new EduDB();
+        $sql = "SELECT UserId FROM users WHERE Token=:Token";
+        $params = array( array( ":Token", $Token, PDO::PARAM_STR ));
+        $UserId = $db->queryItemSafe( $sql, $params );
+        if ($asObject) return new User( $UserId );
+        else return $UserId;
     }
 
     public function sendInviteEmail() {
         $db = new EduDB();
+        $email = $this->Attributes['Username'];
+        if (filter_var( $email, FILTER_VALIDATE_EMAIL)) {
+            // TODO add code to send email
+        }
+        else {
+            static::log( "Bad email address: $email");
+        }
     }
 
     public function sendPasswordResetEmail() {
@@ -49,6 +68,9 @@ class User extends AOREducationObject
 
     public function unassignFromInstitution( $InstitutionId ){
         $db = new EduDB();
+        $sql = "DELETE FROM institution_admins WHERE InstitutionId = :InstitutionId AND UserId = $this->id";
+        $params = array( array( ":InstitutionId", $InstitutionId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
     }
 
     /**

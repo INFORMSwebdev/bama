@@ -48,6 +48,16 @@ class AOREducationObject {
     $sql = "DELETE FROM ".static::$table." WHERE ".static::$primary_key."=$this->id";
     return $db->exec( $sql );
   }
+
+  public static function log( $text, $filename = "bama.log" ) {
+      $ini = parse_ini_file( "/common/settings/common.ini", TRUE );
+      $aes = $ini['analytics_education_settings'];
+      $path = $aes['root_dir'] . $aes['log_dir'];
+      $fh = fopen( $path . $filename, 'a' );
+      fwrite( $fh, date('Y-m-d H:i:s') ." ================ ".PHP_EOL );
+      fwrite( $fh, $text );
+      fclose( $fh );
+  }
   
   public function update( $key, $value ) {
     $db = new EduDB();
