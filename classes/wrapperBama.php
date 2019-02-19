@@ -28,7 +28,7 @@ class wrapperBama
             'file' => '',
             'content' => '',
             'active_menu_item' => '',
-            'web_path' => $ini['analytics_education_settings']['web_dir'],
+            'web_path' => $ini['analytics_education_settings']['web_root'],
             'root_path' => $ini['analytics_education_settings']['root_dir'],
             'html_path' => $ini['analytics_education_settings']['root_dir'] . $ini['analytics_education_settings']['html_dir'],
             'users_path' => $ini['analytics_education_settings']['root_dir'] . $ini['analytics_education_settings']['html_dir'] . $ini['analytics_education_settings']['user_dir'],
@@ -140,7 +140,7 @@ EOT;
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<div class="navbar-nav">
-					<a class="nav-item nav-link" href="index.php">Home</a>
+					<a class="nav-item nav-link" href="/index.php">Home</a>
 					<div class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="sr-only">(current)</span></a>
 						<div class="dropdown-menu">
@@ -152,7 +152,7 @@ EOT;
 				</div>
 			</div>
 			<div class="navbar-nav">
-				<a class="nav-item btn btn-sm btn-outline-danger" href="logout.php" role="button">Log out</a>
+				<a class="nav-item btn btn-sm btn-outline-danger" href="../users/logout.php" role="button">Log out</a>
 			</div>
 		</nav>
 EOT;
