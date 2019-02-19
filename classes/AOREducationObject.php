@@ -49,13 +49,18 @@ class AOREducationObject {
     return $db->exec( $sql );
   }
 
-  public static function log( $text, $filename = "bama.log" ) {
+    /**
+     * write to application log at root_dir . log_dir
+     * @param $text
+     * @param string $filename
+     */
+    public static function log($text, $filename = "bama.log" ) {
       $ini = parse_ini_file( "/common/settings/common.ini", TRUE );
       $aes = $ini['analytics_education_settings'];
       $path = $aes['root_dir'] . $aes['log_dir'];
       $fh = fopen( $path . $filename, 'a' );
       fwrite( $fh, date('Y-m-d H:i:s') ." ================ ".PHP_EOL );
-      fwrite( $fh, $text );
+      fwrite( $fh, $text . PHP_EOL );
       fclose( $fh );
   }
   

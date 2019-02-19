@@ -8,4 +8,5 @@
 
 require_once( "../init.php");
 $u = new User(1);
-echo $u->assignToInstitution(1);
+echo $u->sendInviteEmail();
+echo "done";

@@ -7,6 +7,7 @@
  */
 
 class CaseStudy extends AOREducationObject {
+
     public static $table = "cases";
     public static $primary_key = "CaseId";
     public static $data_structure = array(
