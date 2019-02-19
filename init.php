@@ -19,4 +19,5 @@ define( "SCRIPTS_DIR", ROOT_DIR . $aes['scripts_dir'] );
 define( "IMAGES_DIR", ROOT_DIR . $aes['images_dir'] );
 define( "SETTINGS_DIR", ROOT_DIR . $aes['settings_dir'] );
 define( "CLASSES_DIR", ROOT_DIR . $aes['classes_dir'] );
+define( "WEB_ROOT", ROOT_DIR . $aes['web_root'] );
 require_once( CLASSES_DIR . "autoload.php");

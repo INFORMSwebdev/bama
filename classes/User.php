@@ -36,6 +36,11 @@ class User extends AOREducationObject
         return $result;
     }
 
+    public function checkPassword( $password ) {
+        $password_hash = $this->Attributes['Password'];
+        return password_verify( $password, $password_hash);
+    }
+
     /**
      * @return mixed
      */
