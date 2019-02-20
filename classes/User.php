@@ -67,6 +67,12 @@ class User extends AOREducationObject
         else return $UserId;
     }
 
+    public function resetPassword() {
+        $this->generateToken();
+        $this->sendPasswordResetEmail();
+        return true;
+    }
+
     public function sendInviteEmail()
     {
         $db = new EduDB();
