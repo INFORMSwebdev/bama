@@ -63,17 +63,11 @@ EOT;
         if ($this->params['show_title_bar'] && !$this->params['admin']) $title_bar = <<<EOT
 		<div class="siteName"><a href="{$this->params['site_url']}">{$this->params['site_title']}</a></div>
 EOT;
-        //this section is to display certain things in the User menu, depending on whether a user is an INFORMS admin, program admin, or
-        /*$userNavSection = '';
-        if($this->params['loggedIn'] == true){
+        //this section is to display certain things in the User menu, depending on whether a user is an INFORMS admin, program admin, or anon user
 
-        }
-        else {
-
-        }*/
-        $navbar = '';
-        //display the appropriate menu item as active based on a page_param
-        if ($this->params['active_menu_item'] == 'home') {
+        //display the appropriate menu item as active based on admin, editor, or anon
+        if (isset($_SESSION['admin']) && $_SESSION['admin'] == true) {
+            //navbar for admins (INFORMS Admins)
             $navbar = <<<EOT
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="https://www.informs.org" target="_blank">
@@ -84,23 +78,23 @@ EOT;
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<div class="navbar-nav">
-					<a class="nav-item nav-link active" href="/index.php">Home <span class="sr-only">(current)</span></a>
+					<a class="nav-item nav-link" href="/index.php">Program Dashboard</a>
 					<div class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Users</a>
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
 						<div class="dropdown-menu">
-							<a class="nav-item nav-link" href="/users/profile.php">My Profile</a>
-							<a class="nav-item nav-link" href="/users/register.php">Register Program Admin</a>
-							<a class="nav-item nav-link" href="/users/login.php">Log In</a>
+							<a class="nav-item nav-link" href="../users/profile.php">My Profile</a>
+							<a class="nav-item nav-link" href="../admin/invite.php">Invite New Administrators</a>
+							<a class="nav-item nav-link" href="../admin/?.php">?</a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="navbar-nav">
-				<a class="nav-item btn btn-sm btn-outline-danger" href="/users/logout.php" role="button">Log out</a>
+				<a class="nav-item btn btn-sm btn-outline-danger" href="../users/logout.php" role="button">Log out</a>
 			</div>
 		</nav>
 EOT;
-        } else if ($this->params['active_menu_item'] == 'users') {
+        } else if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
             $navbar = <<<EOT
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="https://www.informs.org" target="_blank">
@@ -113,23 +107,22 @@ EOT;
 				<div class="navbar-nav">
 					<a class="nav-item nav-link" href="../index.php">Home</a>
 					<div class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="sr-only">(current)</span></a>
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Users</a>
 						<div class="dropdown-menu">
-							<a class="nav-item nav-link" href="profile.php">My Profile</a>
-							<a class="nav-item nav-link" href="register.php">Register Program Admin</a>
-							<a class="nav-item nav-link" href="login.php">Log In</a>
+							<a class="nav-item nav-link" href="../users/profile.php">My Profile</a>
+							<a class="nav-item nav-link" href="../users/register.php">Register Program Admin</a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="navbar-nav">
-				<a class="nav-item btn btn-sm btn-outline-danger" href="logout.php" role="button">Log out</a>
+				<a class="nav-item btn btn-sm btn-outline-danger" href="../users/logout.php" role="button">Log out</a>
 			</div>
 		</nav>
 EOT;
         }
-        //add more menu options here
         else {
+            //anon users navbar
             $navbar = <<<EOT
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="https://www.informs.org" target="_blank">
@@ -140,19 +133,10 @@ EOT;
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<div class="navbar-nav">
-					<a class="nav-item nav-link" href="/index.php">Home</a>
-					<div class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="sr-only">(current)</span></a>
-						<div class="dropdown-menu">
-							<a class="nav-item nav-link" href="../users/profile.php">My Profile</a>
-							<a class="nav-item nav-link" href="../users/register.php">Register Program Admin</a>
-							<a class="nav-item nav-link" href="../users/login.php">Log In</a>
-						</div>
-					</div>
+					<a class="nav-item nav-link" href="/index.php">View Program Listings</a>
+					<a class="nav-item nav-link" href="../users/register.php">Become an Institution Administrator</a>
+					<a class="nav-item nav-link" href="../users/login.php">Log In</a>
 				</div>
-			</div>
-			<div class="navbar-nav">
-				<a class="nav-item btn btn-sm btn-outline-danger" href="../users/logout.php" role="button">Log out</a>
 			</div>
 		</nav>
 EOT;

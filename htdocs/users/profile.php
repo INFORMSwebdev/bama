@@ -18,25 +18,23 @@ if ((!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) && !isset($
     die;
 }
 if (isset($_GET['testing'])) {
-    $_SESSION['username'] = "foo";
-    $_SESSION['id'] = 41;
-    $_SESSION['loggedIn'] = true;
+    $_SESSION['loggedIn'] = 41;
 }
 
 # ToDo: update this to display specific user info from their profile (i.e. stuff in the DB)
 
-$user = '';
-if(isset($_SESSION['username'])){
-    $user = htmlspecialchars($_SESSION['username']);
+if(isset($_SESSION['loggedIn'])){
+    $user = new User($_SESSION['loggedIn']);
+    $userName = $user->Attributes['Username'];
 } else {
-    $user = 'Username not set...';
+    $userName = 'Username not set...';
 }
 
 //set the page content to be displayed by the wrapper class
 $content = <<<EOT
 	<div class="jumbotron">
-		<h1 class="display-4">Welcome $user!</h1>
-		<p class="lead">Message can go here about system</p>
+		<h1 class="display-4">Welcome $userName!</h1>
+		<p class="lead">Profile Info</p>
 		<hr class="my-4" />
 		<a class="btn btn-primary" href="#" role="button">View all programs</a>
 		<a class="btn btn-primary" href="#" role="button">View my programs</a>
@@ -46,13 +44,13 @@ EOT;
 //set page parameters up
 $page_params['loggedIn'] = TRUE;
 $page_params['content'] = $content;
-$page_params['page_title'] = $page_title;
+$page_params['page_title'] = "My Profile";
 $page_params['site_title'] = "Analytics Education Admin";
-$page_params['site_url'] = 'https://bama-dev.informs.org/profile.php';
+$page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;
-$page_params['active_menu_item'] = 'register';
+//$page_params['active_menu_item'] = 'register';
 //put custom/extra css files, if used
 //$page_params['css'][] = array("url" => "");
 //put custom/extra JS files, if used

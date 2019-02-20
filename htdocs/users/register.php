@@ -10,31 +10,27 @@
 //lets not forget that there is also the error settings in init.php!
 require_once '../../init.php';
 
-//check if user is logged in as an institution admin
-# TODO: if a user IS logged in, we only want INFORMS admin to be able to add other requests? If so, we will have to
- # redirect logged in users to a different location or display something other than the register form.
-if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
-    //user is an institution admin who already has a user account
-    header('Location: ' . ROOTDIR . 'profile.php');
-    die;
-}
-# ToDo: Add in checks for session variables that contain error input from a previously submitted login page!!
-//user is either logged in as an INFORMS admin or an anonymous user
-
-# ToDo: set up checks for error session variables and display them appropriately
 //set up variables in case user actually needs them
 $content = '';
 $page_params = array();
-
 # ToDo: remove the testing query string before deploying anywhere
-$registerFormProcessor = '';
+$registerFormProcessor = '../processRegisterForm.php';
 if(isset($_GET['testing'])){
-    $registerFormProcessor = SCRIPTS_DIR . 'processRegisterForm.php?testing';
+    $registerFormProcessor .= '?testing';
     $_SESSION['admin'] = true;
 }
-else{
-    $registerFormProcessor = SCRIPTS_DIR . 'processRegisterForm.php';
+
+//check if user is logged in as an institution admin
+if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
+    if(isset($_SESSION['admin']) && $_SESSION['admin'] == true){
+        //user is an INFORMS admin, let them see the regular page content
+    } else {
+        //user is an institution admin who already has a user account
+        header('Location: profile.php');
+        die;
+    }
 }
+# ToDo: Add in checks for session variables that contain error input from a previously submitted login page!!
 
 //get list of all institutions
 $institutions = Institution::getInstitutions();
@@ -61,6 +57,7 @@ else{
     $commentBoxLabel = 'Justification';
 }
 
+//user is anonymous, show them the Request for Access form
 //set the form that will be displayed to users
 $content = <<<EOT
 <div class="row">
@@ -110,7 +107,7 @@ $page_params['loggedIn'] = TRUE;
 $page_params['content'] = $content;
 $page_params['page_title'] = $page_title;
 $page_params['site_title'] = "Analytics Education Admin";
-$page_params['site_url'] = 'https://bama-dev.informs.org/profile.php';
+$page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;
