@@ -56,7 +56,7 @@ class User extends AOREducationObject
         $db = new EduDB();
         $sql = "SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id";
         $insts = $db->queryColumn( $sql );
-        if ($asObjects  {
+        if ($asObjects)  {
             foreach( $insts as &$inst) $inst = new Institution($inst);
         }
         return $insts;
