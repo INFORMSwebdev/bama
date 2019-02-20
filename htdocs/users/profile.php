@@ -12,8 +12,10 @@ require_once '../../init.php';
 //check if user is logged in
 # ToDo: remove the GET string from this test before actual use
 if ((!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) && !isset($_GET['testing'])) {
+    //set up a message to display on the login page
+    $_SESSION['logoutMessage'] = 'Please log in to view your profile page.';
     //redirect to login page so user can log in
-    header("Location: login.php");
+    header('Location: login.php');
     //don't want the script to keep executing after a redirect
     die;
 }
@@ -21,28 +23,52 @@ if (isset($_GET['testing'])) {
     $_SESSION['loggedIn'] = 41;
 }
 
-# ToDo: update this to display specific user info from their profile (i.e. stuff in the DB)
-
-if(isset($_SESSION['loggedIn'])){
-    $user = new User($_SESSION['loggedIn']);
-    $userName = $user->Attributes['Username'];
-} else {
-    $userName = 'Username not set...';
-}
+$user = new User($_SESSION['loggedIn']);
+$userName = $user->Attributes['Username'];
+$firstName = $user->Attributes['FirstName'];
+$lastName = $user->Attributes['LastName'];
+$joinDate = $user->Attributes['CreateDate'];
+$comments = $user->Attributes['Comments'];
+# ToDo: update this when the method is made
+$instName = 'Inst. Name Placeholder';
 
 //set the page content to be displayed by the wrapper class
 $content = <<<EOT
 	<div class="jumbotron">
-		<h1 class="display-4">Welcome $userName!</h1>
-		<p class="lead">Profile Info</p>
+		<h1 class="display-4">Welcome, $firstName!</h1>
+		<p class="lead">My Profile Info</p>
+		<p class=""
 		<hr class="my-4" />
-		<a class="btn btn-primary" href="#" role="button">View all programs</a>
-		<a class="btn btn-primary" href="#" role="button">View my programs</a>
+		<div class="row">
+        	<form action="">
+        		<div class="form-group">
+        			<label for="Username">Email Address/Username</label>
+        			<input type="text" class="form-control" name="Username" value="{$userName}" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." readonly />
+        		</div>
+        		<div class="form-group">
+        			<label for="FirstName">First Name</label>
+        			<input type="text" class="form-control" name="FirstName" value="{$firstName}" id="FirstName" placeholder="First Name" readonly />
+        		</div>
+        		<div class="form-group">
+        			<label for="LastName">Last Name</label>
+        			<input type="text" class="form-control" name="LastName" value="{$lastName}" id="LastName" placeholder="Last Name" readonly />
+        		</div>
+        		<div class="form-group">
+        		    <label for="Institution">Administrator of Institution</label>
+        		    <!-- ToDo: put a link to view the institution info page in href when it is created -->
+                       <a class="btn btn-info" href="#" id="Institution">$instName</a>
+                </div>
+        		<div class="form-group">
+        		    <input type="hidden" id="Comments" name="Comments" value="{$comments}" />
+        		</div>
+        	</form>
+        </div>
+        <hr class="my-4" />
+        <a class="btn btn-primary" href="editProfile.php" role="button">Edit My Info</a>
 	</div>
 EOT;
 
 //set page parameters up
-$page_params['loggedIn'] = TRUE;
 $page_params['content'] = $content;
 $page_params['page_title'] = "My Profile";
 $page_params['site_title'] = "Analytics Education Admin";

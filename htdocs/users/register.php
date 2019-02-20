@@ -103,7 +103,6 @@ $content = <<<EOT
 EOT;
 
 //set page parameters up
-$page_params['loggedIn'] = TRUE;
 $page_params['content'] = $content;
 $page_params['page_title'] = $page_title;
 $page_params['site_title'] = "Analytics Education Admin";
