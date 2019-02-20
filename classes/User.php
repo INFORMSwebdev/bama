@@ -52,6 +52,20 @@ class User extends AOREducationObject
         return $this->update('Token', $token);
     }
 
+    public function wtf() {
+        echo "test";
+    }
+
+    public function getInstitutionAssignments( $asObjects = FALSE ) {
+        $db = new EduDB();
+        $sql = "SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id";
+        $insts = $db->queryColumn( $sql );
+        if ($asObjects)  {
+            foreach( $insts as &$inst) $inst = new Institution($inst);
+        }
+        return $insts;
+    }
+
     /**
      * @param $Token
      * @param bool $asObject
@@ -65,6 +79,12 @@ class User extends AOREducationObject
         $UserId = $db->queryItemSafe($sql, $params);
         if ($asObject) return new User($UserId);
         else return $UserId;
+    }
+
+    public function resetPassword() {
+        $this->generateToken();
+        $this->sendPasswordResetEmail();
+        return true;
     }
 
     public function sendInviteEmail()
