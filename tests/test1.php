@@ -7,6 +7,6 @@
  */
 
 require_once( "../init.php");
-$u = new User(1);
-echo $u->sendInviteEmail();
+$u = new User(41);
+print_r( $u->getInstitutionAssignments() );
 echo "done";
