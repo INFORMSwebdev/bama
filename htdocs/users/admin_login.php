@@ -9,7 +9,6 @@
 require_once( "../../init.php");
 
 $errors = [];
-$test = WEB_ROOT;
 $content = <<<EOT
 <div class="container">
 		<div class="row">
@@ -21,7 +20,7 @@ $content = <<<EOT
 		<form class="needs-validation" action="../scripts/processAdminLoginForm.php" method="post" novalidate id="admin_login_form">
 			<div class="form-row">
 				<label for="validationUsername">Username</label>
-				<input type="text" class="form-control" id="validationUsername" name="username" placeholder="Username" required>
+				<input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
 				<div class="valid-feedback">
 					Looks good!
 				</div>
@@ -31,7 +30,7 @@ $content = <<<EOT
 			</div>
 			<div class="form-row">
 				<label for="validationPassword">Password</label>
-				<input type="password" class="form-control" id="validationPassword" name="password" placeholder="Password" required>
+				<input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
 				<div class="valid-feedback">
 					Looks good!
 				</div>
@@ -39,25 +38,26 @@ $content = <<<EOT
 					Please enter your password.
 				</div>
 			</div>
-			<div class="form-row">
-				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="" id="rememberMeCheck">
-					<label class="form-check-label" for="rememberMeCheck">Remember my credentials</label>
-									</div>
-			</div>
 			<button class="btn btn-primary" type="submit">Log in</button>
 		</form>
 </div>
-$test
+
 EOT;
 
 $custom_js = <<<EOT
 $(function() {
   $('#admin_login_form').submit(function(e) {
     e.preventDefault();
-    $.post( "../scripts/ajax_processAdminLogin.php", { username: $('#username').val(), password: $('git stat#password').val()}, function( data ) {
-      alert('test');
-    });
+    $.post( "/scripts/ajax_processAdminLogin.php", { username: $('#username').val(), password: $('#password').val()}, function( data ) {
+      if (data.errors.length > 0) { 
+        var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+        for (var i = 0; i < data.errors.length; i++) {
+          msg +=  data.errors[i] + "\\r\\n";
+        }
+        alert( msg );
+      }
+      else if (data.success == 1) window.location.href = "/admin/index.php";
+    }, "json");
   });
 });
 EOT;
