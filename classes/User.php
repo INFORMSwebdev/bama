@@ -52,6 +52,10 @@ class User extends AOREducationObject
         return $this->update('Token', $token);
     }
 
+    public function wtf() {
+        echo "test";
+    }
+
     public function getInstitutionAssignments( $asObjects = FALSE ) {
         $db = new EduDB();
         $sql = "SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id";
