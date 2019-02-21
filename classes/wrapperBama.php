@@ -82,9 +82,9 @@ EOT;
 					<div class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
 						<div class="dropdown-menu">
-							<a class="nav-item nav-link" href="../users/profile.php">My Profile</a>
-							<a class="nav-item nav-link" href="../admin/invite.php">Invite New Administrators</a>
-							<a class="nav-item nav-link" href="../admin/?.php">?</a>
+							<a class="nav-item nav-link" href="/users/profile.php">My Profile</a>
+							<a class="nav-item nav-link" href="/admin/invite.php">Invite New Administrators</a>
+							<a class="nav-item nav-link" href="/admin/?.php">?</a>
 						</div>
 					</div>
 				</div>
