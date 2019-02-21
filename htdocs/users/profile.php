@@ -29,49 +29,50 @@ $firstName = $user->Attributes['FirstName'];
 $lastName = $user->Attributes['LastName'];
 $joinDate = $user->Attributes['CreateDate'];
 $comments = $user->Attributes['Comments'];
-# ToDo: update this when the method is made
-$instName = 'Inst. Name Placeholder';
+$insts = $user->getInstitutionAssignments();
+$instList = '<ul class="list-group list-group-horizontal">';
+foreach($insts as $ins){
+    $helper = new Institution($ins);
+    $instList .= "<li class='list-group-item'><a class='btn btn-info' href='../institutions/display?id=$ins' role='button'>{$helper->Attributes['InstitutionName']}</a></li>";
+}
+$instList .= '</ul>';
 
 //set the page content to be displayed by the wrapper class
 $content = <<<EOT
-	<div class="jumbotron">
-		<h1 class="display-4">Welcome, $firstName!</h1>
-		<p class="lead">My Profile Info</p>
-		<p class=""
-		<hr class="my-4" />
-		<div class="row">
-        	<form action="">
-        		<div class="form-group">
-        			<label for="Username">Email Address/Username</label>
-        			<input type="text" class="form-control" name="Username" value="{$userName}" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." readonly />
-        		</div>
-        		<div class="form-group">
-        			<label for="FirstName">First Name</label>
-        			<input type="text" class="form-control" name="FirstName" value="{$firstName}" id="FirstName" placeholder="First Name" readonly />
-        		</div>
-        		<div class="form-group">
-        			<label for="LastName">Last Name</label>
-        			<input type="text" class="form-control" name="LastName" value="{$lastName}" id="LastName" placeholder="Last Name" readonly />
-        		</div>
-        		<div class="form-group">
-        		    <label for="Institution">Administrator of Institution</label>
-        		    <!-- ToDo: put a link to view the institution info page in href when it is created -->
-                       <a class="btn btn-info" href="#" id="Institution">$instName</a>
-                </div>
-        		<div class="form-group">
-        		    <input type="hidden" id="Comments" name="Comments" value="{$comments}" />
-        		</div>
-        	</form>
-        </div>
-        <hr class="my-4" />
-        <a class="btn btn-primary" href="editProfile.php" role="button">Edit My Info</a>
-	</div>
+<div class="jumbotron">
+	<h1 class="display-4">Welcome, $firstName!</h1>
+	<p class="lead">My Profile Info</p>
+	<p class=""
+	<hr class="my-4" />
+	<div class="row">
+       	<form action="">
+       		<div class="form-group">
+       			<label for="Username">Email Address/Username</label>
+       			<input type="text" class="form-control" name="Username" value="{$userName}" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." readonly />
+       		</div>
+       		<div class="form-group">
+       			<label for="FirstName">First Name</label>
+       			<input type="text" class="form-control" name="FirstName" value="{$firstName}" id="FirstName" placeholder="First Name" readonly />
+       		</div>
+       		<div class="form-group">
+       			<label for="LastName">Last Name</label>
+       			<input type="text" class="form-control" name="LastName" value="{$lastName}" id="LastName" placeholder="Last Name" readonly />
+       		</div>
+       		<div class="form-group">
+       		    <label for="Institution">Administrator of Institution</label>
+       		    $instList
+            </div>
+       	</form>
+    </div>
+    <hr class="my-4" />
+    <a class="btn btn-primary" href="editProfile.php" role="button">Edit My Info</a>
+</div>
 EOT;
 
 //set page parameters up
 $page_params['content'] = $content;
 $page_params['page_title'] = "My Profile";
-$page_params['site_title'] = "Analytics Education Admin";
+$page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer

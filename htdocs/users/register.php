@@ -105,7 +105,7 @@ EOT;
 //set page parameters up
 $page_params['content'] = $content;
 $page_params['page_title'] = $page_title;
-$page_params['site_title'] = "Analytics Education Admin";
+$page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer

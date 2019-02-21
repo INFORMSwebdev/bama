@@ -21,7 +21,6 @@ if(isset($_SESSION['logoutMessage'])){
     //user has just logged out, display the message passed from the logout script
     $messages = <<<EOT
 <div class="alert alert-info" role="alert">
-    <h2>Thanks!</h2>
     <p>{$_SESSION['logoutMessage']}</p>
 </div>
 EOT;
@@ -170,7 +169,7 @@ $page_params['js'][] = array('text' => $customScript);
 //set other page parameters up
 $page_params['content'] = $content;
 $page_params['page_title'] = 'Program Administrator Login';
-$page_params['site_title'] = "Analytics Education Admin";
+$page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
