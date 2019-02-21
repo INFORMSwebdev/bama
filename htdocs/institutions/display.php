@@ -92,7 +92,7 @@ if ($id) {
     <h2>View Another Institution's Info</h2>
     <form action="display.php" method="get">
         <div class="form-group">
-            <label for="Institution">Select a different Institution</label>
+            <label for="Institution">Select an Institution</label>
 		    <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
 		        $instListHTML
             </select>
