@@ -62,6 +62,7 @@ if ($id) {
                 <input type="text" class="form-control" name="InstitutionZip" value="{$zip}" id="InstitutionZip" readonly />
             </div>
         </div>
+        <br />
         <div class="form-row">
             <h3>Contact Info</h3>
         </div>
@@ -75,6 +76,7 @@ if ($id) {
                 <input type="text" class="form-control" name="InstitutionEmail" value="{$email}" id="InstitutionEmail" readonly />
             </div>
         </div>
+        <br />
         <div class="form-row">
             <h3>Other Info</h3>
         </div>
@@ -94,7 +96,7 @@ if ($id) {
 		    <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
 		        $instListHTML
             </select>
-            <p class="text text-muted" id="InstitutionHelp">The list may take a second to load, please be patient after clicking the field.</p>
+            <p class="text text-muted" id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>
         </div>
     </form>
 </div>
@@ -112,7 +114,7 @@ EOT;
 		    <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
 		        $instListHTML
             </select>
-            <p class="text text-muted" id="InstitutionHelp">The list may take a second to load, please be patient after clicking the field.</p>
+            <p class="text text-muted" id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>
         </div>
     </form>
 </div>
