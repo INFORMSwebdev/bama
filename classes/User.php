@@ -66,6 +66,16 @@ class User extends AOREducationObject
         return $insts;
     }
 
+    public static function getUserByEmail($Email, $asObject = TRUE)
+    {
+        $db = new EduDB();
+        $sql = "SELECT UserId FROM users WHERE Username=:Email";
+        $params = array(array(":Email", $Email, PDO::PARAM_STR));
+        $UserId = $db->queryItemSafe($sql, $params);
+        if ($asObject) return new User($UserId);
+        else return $UserId;
+    }
+
     /**
      * @param $Token
      * @param bool $asObject

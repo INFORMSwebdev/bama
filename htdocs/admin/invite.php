@@ -41,14 +41,54 @@ $content = <<<EOT
 			Please enter the editor's last name.
 		</div>
 	  </div>
+	  <div class="form-row">
+        <label for="email">Email Address</label>
+        <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required>
+        <div class="valid-feedback">
+            Looks good!
+        </div>
+        <div class="invalid-feedback">
+			Please enter the editor's email address.
+		</div>
+	  </div>
+	  <div class="form-row">
+	     <div class="col-xs-6 form-group">
+        <label for="inst">Institution</label>
+        <select name="inst" id="inst" class="form-control"></select>
+        </div>
+        	     <div class="col-xs-6 form-group">
+
+        <label for="instFilter">Filter</label>
+        <input type="text" class="form-control"  id="instFilter" />
+        </div>
+	  </div>
+	  <div class="form-row">
+        <input type="submit" class="form-control" name="btn-sendInvite" id="btn-sendInvite" value="Send Invite"/>
+	  </div>
     </form>
 </div>
 EOT;
 
 
 $custom_js = <<<EOT
+function fillInsts( filter ) {
+  $('#inst').empty();
+  $.getJSON( "/scripts/ajax_getInstitutions.php", { 'filter': filter }, function( data ) {
+    for( var i = 0; i < data.insts.length; i++ ) {
+      var opt = $('<option value="'+data.insts[i].InstitutionId+'">'+data.insts[i].InstitutionName+'</option>');
+      $('#inst').append( opt );
+    }
+  });
+}
 $(function() {
-  
+  fillInsts( null );
+  $('#instFilter').on( 'click keyup', function (e) {
+    if ($(this).val().length > 3 ) fillInsts( $(this).val() );
+  });
+  $('#inviteForm').submit(function(e) {
+    e.preventDefault();
+    alert("this doesn't go anywhere yet");
+  });
 });
 EOT;
 
