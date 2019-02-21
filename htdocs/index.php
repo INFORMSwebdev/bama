@@ -82,10 +82,17 @@ $(function() {
         var foo = '<p class="text text-danger">No programs available to display right now, please try again.</p>';
         return foo;
     } else {
-        var html = '';
+        var html = '<h2>Programs</h2><table class="table"><thead><tr><th>Name</th><th>Type</th><th>Delivery Method</th><th>Testing Requirements</th><th>Link</th><th></th></tr></thead>';
         // ToDo: once I figure out the structure of the display, update this to output appropriate HTML 
         for( var i = 0; i < progs.length; i++ ){
-            html += '<p>Program ' + i + '</p>';
+            html += '<tr>';
+            html += '<td>' + progs[i][3] + '</td>';
+            html += '<td>' + progs[i][4] + '</td>';
+            html += '<td>' + progs[i][5] + '</td>';
+            html += '<td>' + progs[i][10] + '</td>';
+            html += '<td>' + progs[i][6] + '</td>';
+            html += '<td><a class="btn btn-primary" href="/programs/display?id=' + progs[i][0] + '">More Detail</a></td>';
+            html += '</tr>';
         }
         return html;
     }
