@@ -39,4 +39,22 @@ class Program extends AOREducationObject
     public function getCourses() {
 
     }
+
+    public static function getAllPrograms( $active = TRUE, $asObjects = FALSE){
+        $programs = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM programs";
+        if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        $progs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $progs as $inst) {
+                $programs[] = new Institution($inst);
+            }
+        }
+        else {
+            $programs = $progs;
+        }
+
+        return $programs;
+    }
 }

@@ -75,7 +75,7 @@ if(isset($_SESSION['loginInput'])) {
 <div class="row">
 	<p>Log in to administrate your program's information.</p>
 </div>
-<form class="needs-validation" action="../scripts/processLoginForm.php" method="post" novalidate>
+<form class="needs-validation" action="../scripts/processLoginForm.php" method="post" novalidate id="login_form">
 	<div class="form-group">
 		<label for="validationUsername">Username</label>
 		<input type="text" class="form-control" id="validationUsername" name="username" placeholder="Username" value="{$prevUsername}" required />

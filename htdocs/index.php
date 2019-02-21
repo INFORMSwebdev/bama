@@ -18,12 +18,12 @@ if ((!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] != true)) {
      # Currently it is a placeholder.
     $content = <<<EOT
 <div class="jumbotron">
-    <h1>Welcome to the Analytics and Operations Research Eduction Program Site!</h1>
+    <h1>Welcome to the Analytics &amp; Operations Research Eduction Program Listing Site!</h1>
     <p class="lead">You will find information on many different Analytics and Operations Research (O.R.) programs offered by universities around the U.S.</p>
     <hr class="my-4" />
-    <a class="btn btn-primary" href="#" name="analytics" role="button">Display All Analytics Programs</a>
-    <a class="btn btn-primary" href="#" name="or" role="button">Display All O.R. Programs</a>
-    <a class="btn btn-primary" href="#" name="all" role="button">Display All Programs</a>
+    <a class="btn btn-primary" href="#" name="analytics" id="analytics" role="button">Display All Analytics Programs</a>
+    <a class="btn btn-primary" href="#" name="or" id="or" role="button">Display All O.R. Programs</a>
+    <a class="btn btn-primary" href="#" name="all" id="all" role="button">Display All Programs</a>
 </div>
 <div class="row" id="programList">
     <!-- program info goes here when returned via ajax. Might have to add d-block to the class to circumvent flex display. -->
@@ -42,16 +42,55 @@ EOT;
 	<h1 class="display-4">Welcome $userName!</h1>
 	<p class="lead">Message can go here about system</p>
 	<hr class="my-4" />
-	<a class="btn btn-primary" href="#" name="mine" role="button">Display my programs</a>
-	<a class="btn btn-primary" href="#" name="analytics" role="button">Display All Analytics programs</a>
-	<a class="btn btn-primary" href="#" name="or" role="button">Display All O.R. programs</a>
-	<a class="btn btn-primary" href="#" name="all" role="button">Display all programs</a>
+	<a class="btn btn-primary" href="#" name="mine" id="mine" role="button">Display my programs</a>
+	<a class="btn btn-primary" href="#" name="analytics" id="analytics" role="button">Display All Analytics programs</a>
+	<a class="btn btn-primary" href="#" name="or" id="or" role="button">Display All O.R. programs</a>
+	<a class="btn btn-primary" href="#" name="all" id="all" role="button">Display all programs</a>
 </div>
 <div class="row" id="programList">
     <!-- program info goes here when returned via ajax. Might have to add d-block to the class to circumvent flex display. -->
 </div>
 EOT;
     # ToDo: figure out how to update page content via ajax and implement the button functionality that way
+    $custom_js = <<<EOT
+$(function() {
+  $('#all').click(function(e) {
+    e.preventDefault();
+    $.get( "/scripts/ajax_displayAllPrograms.php", function( data ) {
+      if (data.errors.length > 0) { 
+        var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+        for (var i = 0; i < data.errors.length; i++) {
+          msg +=  data.errors[i] + "\\r\\n";
+        }
+        alert( msg );
+      }
+      else if (data.success == 1) {
+        //redirect
+        //window.location.href = "/admin/index.php";
+        //process the returned info into HTML
+        var helper = processProgramList(data.programs);
+        //display the returned info in the div
+        $('#programList').html(helper);
+      }
+    }, "json");
+  });
+  
+  function processProgramList(progs){
+    if(progs.length < 1){
+        //there are no programs in the passed list
+        var foo = '<p class="text text-danger">No programs available to display right now, please try again.</p>';
+        return foo;
+    } else {
+        var html = '';
+        // ToDo: once I figure out the structure of the display, update this to output appropriate HTML 
+        for( var i = 0; i < data.progs.length; i++ ){
+            html += '<p>Program ' + i + '</p>';
+        }
+        return html;
+    }
+  }
+});
+EOT;
 }
 
 
@@ -67,6 +106,7 @@ $page_params['content'] = $content;
 $page_params['page_title'] = "Programs Dashboard";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
+$page_params['js'][] = array( 'text' => $custom_js );
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;
