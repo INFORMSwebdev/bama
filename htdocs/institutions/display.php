@@ -38,7 +38,7 @@ if ($id) {
     $phone = $inst->Attributes['InstitutionPhone'];
     $email = $inst->Attributes['InstitutionEmail'];
     $content = <<<EOT
-<h2 class="display-2">{$name}</h2>
+<h2 class="display-3">{$name}</h2>
 <div class="jumbotron">
     <form>
         <div class="form-row">
