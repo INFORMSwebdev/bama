@@ -47,12 +47,13 @@ EOT;
 	<a class="btn btn-primary" href="#" name="or" id="or" role="button">Display All O.R. programs</a>
 	<a class="btn btn-primary" href="#" name="all" id="all" role="button">Display all programs</a>
 </div>
-<div class="row" id="programList">
+<div class="flex-column" id="programList">
     <!-- program info goes here when returned via ajax. Might have to add d-block to the class to circumvent flex display. -->
 </div>
 EOT;
     # ToDo: figure out how to update page content via ajax and implement the button functionality that way
-    $custom_js = <<<EOT
+}
+$custom_js = <<<EOT
 $(function() {
   $('#all').click(function(e) {
     e.preventDefault();
@@ -83,7 +84,7 @@ $(function() {
     } else {
         var html = '';
         // ToDo: once I figure out the structure of the display, update this to output appropriate HTML 
-        for( var i = 0; i < data.progs.length; i++ ){
+        for( var i = 0; i < progs.length; i++ ){
             html += '<p>Program ' + i + '</p>';
         }
         return html;
@@ -91,8 +92,6 @@ $(function() {
   }
 });
 EOT;
-}
-
 
 
 //set up utility links?
