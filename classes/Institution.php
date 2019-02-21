@@ -25,7 +25,10 @@ class Institution extends AOREducationObject {
     );
 
     public function assignAdmin( $UserId ) {
-
+        $db = new EduDb;
+        $sql = "INSERT IGNORE INTO institution_admins (InstitutionId, UserId) VALUES ($this->id, :UserId)";
+        $params = array( array( ":UserId", $UserId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
     }
 
     public function getColleges() {
@@ -52,6 +55,16 @@ class Institution extends AOREducationObject {
 
     public function getPrograms() {
 
+    }
+
+    public function getUserAssignments( $asObjects = FALSE ) {
+        $db = new EduDb;
+        $sql = "SELECT UserID FROM institution_admins WHERE InstitutionId = $this->id";
+        $users = $db->queryColumn( $sql );
+        if ($asObjects)  {
+            foreach( $users as &$user) $user = new User($user);
+        }
+        return $users;
     }
 }
 

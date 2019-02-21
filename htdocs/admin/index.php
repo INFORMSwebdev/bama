@@ -6,4 +6,31 @@
  * Time: 2:14 PM
  */
 
-echo "Here is the admin home page.";
+require_once( "../../init.php");
+if (!isset($_SESSION['admin'])) {
+    header( "Location: /users/admin_login.php" );
+    exit;
+}
+$errors = [];
+$content = <<<EOT
+<div class="container">
+	<div class="row">
+		<h1>Analytics & OR Education Database ADMIN</h1>
+    </div>
+</div>
+
+EOT;
+
+$custom_js = <<<EOT
+$(function() {
+  
+});
+EOT;
+
+
+$p_params = [];
+$p_params['content'] = $content;
+$p_params['admin'] = TRUE;
+$p_params['js'][] = array( 'text' => $custom_js );
+$wrapper = new wrapperBama($p_params);
+$wrapper->html();
