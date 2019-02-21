@@ -48,7 +48,7 @@ class Program extends AOREducationObject
         $progs = $db->query( $sql );
         if ($asObjects) {
             foreach( $progs as $inst) {
-                $programs[] = new Institution($inst);
+                $programs[] = new Program($inst);
             }
         }
         else {
