@@ -90,7 +90,7 @@ EOT;
 				</div>
 			</div>
 			<div class="navbar-nav">
-				<a class="nav-item btn btn-sm btn-outline-danger" href="../users/logout.php" role="button">Log out</a>
+				<a class="nav-item btn btn-sm btn-outline-danger" href="/users/logout.php" role="button">Log out</a>
 			</div>
 		</nav>
 EOT;
@@ -105,18 +105,18 @@ EOT;
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<div class="navbar-nav">
-					<a class="nav-item nav-link" href="../index.php">Home</a>
+					<a class="nav-item nav-link" href="/index.php">Home</a>
 					<div class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Users</a>
 						<div class="dropdown-menu">
-							<a class="nav-item nav-link" href="../users/profile.php">My Profile</a>
-							<a class="nav-item nav-link" href="../users/register.php">Register Program Admin</a>
+							<a class="nav-item nav-link" href="/users/profile.php">My Profile</a>
+							<a class="nav-item nav-link" href="/users/register.php">Register Program Admin</a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="navbar-nav">
-				<a class="nav-item btn btn-sm btn-outline-danger" href="../users/logout.php" role="button">Log out</a>
+				<a class="nav-item btn btn-sm btn-outline-danger" href="/users/logout.php" role="button">Log out</a>
 			</div>
 		</nav>
 EOT;
@@ -134,8 +134,8 @@ EOT;
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<div class="navbar-nav">
 					<a class="nav-item nav-link" href="/index.php">View Program Listings</a>
-					<a class="nav-item nav-link" href="../users/register.php">Become an Institution Administrator</a>
-					<a class="nav-item nav-link" href="../users/login.php">Log In</a>
+					<a class="nav-item nav-link" href="/users/register.php">Become an Institution Administrator</a>
+					<a class="nav-item nav-link" href="/users/login.php">Log In</a>
 				</div>
 			</div>
 		</nav>
