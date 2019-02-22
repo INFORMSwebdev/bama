@@ -40,15 +40,34 @@ class Program extends AOREducationObject
 
     }
 
-    public static function getAllPrograms( $active = TRUE, $asObjects = FALSE){
+    public static function getAllPrograms( $active = TRUE, $asObjects = FALSE ){
         $programs = [];
         $db = new EduDB();
         $sql = "SELECT * FROM programs";
         if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
         $progs = $db->query( $sql );
         if ($asObjects) {
-            foreach( $progs as $inst) {
-                $programs[] = new Program($inst);
+            foreach( $progs as $prog) {
+                $programs[] = new Program($prog);
+            }
+        }
+        else {
+            $programs = $progs;
+        }
+
+        return $programs;
+    }
+
+    public static function getAllProgramsAndInstitutions( $active = TRUE, $asObjects = FALSE ){
+        $programs = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM programs p JOIN institutions i on p.InstitutionId = i.InstitutionId";
+        if ($active !== null) $sql .= " WHERE p.Deleted = " . (($active == TRUE) ? "0" : "1");
+        $sql .= " ORDER BY p.ProgramName, i.InstitutionName";
+        $progs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $progs as $prog) {
+                $programs[] = new Program($prog);
             }
         }
         else {

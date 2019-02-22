@@ -91,7 +91,7 @@ $(function() {
             html += '<td>' + progs[i].DeliveryMethod + '</td>';
             html += '<td>' + progs[i].TestingRequirement + '</td>';
             html += '<td><a target="_blank" href="' + progs[i].ProgramAccess + '">' + progs[i].ProgramAccess + '</a></td>';
-            html += '<td><a class="btn btn-primary" href="/programs/display?id=' + progs[i].ProgramId + '">More Detail</a></td>';
+            html += '<td><a class="btn btn-primary" href="/programs/display.php?id=' + progs[i].ProgramId + '">More Detail</a></td>';
             html += '</tr>';
         }
         return html;
@@ -125,4 +125,3 @@ $page_params['admin'] = TRUE;
 $wrapper = new wrapperBama($page_params);
 //display the content
 $wrapper->html();
-?>
