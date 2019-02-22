@@ -121,6 +121,8 @@ EOT;
 EOT;
 }
 
+# ToDo: change the display from a form to divs or something, but move the form HTML to the edit page!
+
 //set page parameters up
 $page_params['content'] = $content;
 $page_params['page_title'] = "Display Institution Information";

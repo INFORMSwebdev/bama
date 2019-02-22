@@ -133,7 +133,7 @@ EOT;
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<div class="navbar-nav">
-					<a class="nav-item nav-link" href="/index.php">View Program Listings</a>
+					<a class="nav-item nav-link" href="/index.php">Home</a>
 					<a class="nav-item nav-link" href="/users/register.php">Become an Institution Administrator</a>
 					<a class="nav-item nav-link" href="/users/login.php">Log In</a>
 				</div>

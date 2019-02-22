@@ -58,6 +58,61 @@ class Program extends AOREducationObject
         return $programs;
     }
 
+    public static function getAnalyticsPrograms( $active = TRUE, $asObjects = FALSE ){
+        $programs = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM programs";
+        if ($active !== null) $sql .= " WHERE AnalyticsFlag = 1 AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $progs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $progs as $prog) {
+                $programs[] = new Program($prog);
+            }
+        }
+        else {
+            $programs = $progs;
+        }
+
+        return $programs;
+    }
+
+    public static function getORPrograms( $active = TRUE, $asObjects = FALSE ){
+        $programs = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM programs";
+        if ($active !== null) $sql .= " WHERE ORFlag = 1 AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $progs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $progs as $prog) {
+                $programs[] = new Program($prog);
+            }
+        }
+        else {
+            $programs = $progs;
+        }
+
+        return $programs;
+    }
+
+    # ToDo: figure out how to get the programs an editor is in charge of, which will be slightly difficult since they are institution editors?
+    public static function getEditorPrograms( $userId, $active = TRUE, $asObjects = FALSE ){
+        $programs = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM programs";
+        if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        $progs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $progs as $prog) {
+                $programs[] = new Program($prog);
+            }
+        }
+        else {
+            $programs = $progs;
+        }
+
+        return $programs;
+    }
+
     public static function getAllProgramsAndInstitutions( $active = TRUE, $asObjects = FALSE ){
         $programs = [];
         $db = new EduDB();

@@ -43,29 +43,57 @@ EOT;
     } else {
         $accessHTML = <<<EOT
 <label for="ProgramAccess">Access Page</label>
-<input type="text" class="form-control" name="ProgramAccess" id="ProgramAccess" value="No URL provided." readonly />
+<input type="text" class="form-control" name="ProgramAccess" id="ProgramAccess" value="Access information for this program is currently not available." readonly />
 <br />
 EOT;
     }
     $objectives = $prog->Attributes['ProgramObjectives'];
+    if(!isset($objectives) || empty($objectives)){
+        $objectives = 'Objectives for this program are not currently available.';
+    }
     $fullTime = $prog->Attributes['FullTimeDuration'];
+    if(!isset($fullTime) || empty($fullTime)){
+        $fullTime = 'Full time duration for this program is not currently available.';
+    }
     $partTime = $prog->Attributes['PartTimeDuration'];
+    if(!isset($partTime) || empty($partTime)){
+        $partTime = 'Part time duration for this program is not currently available.';
+    }
     $reqs = $prog->Attributes['TestingRequirement'];
+    if(!isset($reqs) || empty($reqs)){
+        $reqs = 'Requirements for this program is not currently available.';
+    }
     $otherReqs = $prog->Attributes['OtherRequirement'];
+    if(!isset($otherReqs) || empty($otherReqs)){
+        $otherReqs = 'Other requirements for this program is not currently available.';
+    }
     $credits = $prog->Attributes['Credits'];
+    if(!isset($credits) || empty($credits)) {
+        $credits = 'Credit total for this program is not currently available.';
+    }
     $year = $prog->Attributes['YearEstablished'];
     if(!isset($year) || empty($year)) {
-      $year = 'Year established is not available at this time.';
+      $year = 'Year established is not currently available.';
     }
     $scholarship = $prog->Attributes['Scholarship'];
     if(!isset($scholarship) || empty($scholarship)) {
-        $scholarship = 'Scholarship information is not available at this time.';
+        $scholarship = 'Scholarship information for this program is not currently available.';
     }
     $res = $prog->Attributes['EstimatedResidentTuition'];
+    if(!isset($res) || empty($res)) {
+        $res = 'Estimated resident tuition information for this program is not currently available.';
+    }
     $nonRes = $prog->Attributes['EstimatedNonresidentTuition'];
+    if(!isset($nonRes) || empty($nonRes)) {
+        $nonRes = 'Estimated non-resident tuition information for this program is not currently available.';
+    }
     $cost = $prog->Attributes['CostPerCredit'];
-    $ops = $prog->Attributes['ORFlag'];
-    $analytics = $prog->Attributes['AnalyticsFlag'];
+    if(!isset($cost) || empty($cost)) {
+        $cost = 'Cost per credit information for this program is not currently available.';
+    }
+    //we only use the flag columns in queries, no need to display info about them on this page
+    //$ops = $prog->Attributes['ORFlag'];
+    //$analytics = $prog->Attributes['AnalyticsFlag'];
     $collegeId = $prog->Attributes['CollegeId'];
 
     //get contact details to display
@@ -76,10 +104,7 @@ EOT;
         $contactPhone = $contact->Attributes['ContactPhone'];
         $contactEmail = $contact->Attributes['ContactEmail'];
     } else {
-        $contactName = '';
-        $contactTitle = '';
-        $contactPhone = '';
-        $contactEmail= '';
+        $contactName = $contactTitle = $contactPhone = $contactEmail = 'Contact information for this program is not currently available';
     }
 
     //get college details to display
@@ -88,7 +113,7 @@ EOT;
         $collegeName = $college->Attributes['CollegeName'];
         $collegeType = $college->Attributes['CollegeType'];
     } else {
-        $collegeName = $collegeType = 'No college information is available at this time.';
+        $collegeName = $collegeType = 'College information for this program is not currently available.';
     }
 
     //get institution details to display
@@ -314,12 +339,14 @@ EOT;
     </form>
 </div>
 EOT;
-
 }
+
+# ToDo: add in another nav menu (maybe on the left rail?) that has the select list so people don't have to scroll to the bottom
+ # of the page to change the program info
+# ToDo: change the display from a form to divs or something, but move the form HTML to the edit page!
 
 //create the parameters to pass to the wrapper
 $page_params = array();
-$page_params['loggedIn'] = TRUE;
 $page_params['content'] = $content;
 $page_params['page_title'] = "Program Details";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
