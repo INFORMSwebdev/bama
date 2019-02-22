@@ -10,9 +10,6 @@ require_once '../../init.php';
 
 //checks for messages?
 
-//check for loggedin?
-# ToDo: confer w/ Dave on whether this page should be locked down by logging in or not. My money is on leave it open.
-
 //get list of all institutions
 $progs = Program::getAllProgramsAndInstitutions();
 //turn that into an array of name/value pairs to pass to the optionsHTML.php file
@@ -301,8 +298,6 @@ EOT;
     </form>
 </div>
 EOT;
-    # ToDo: determine if the appropriate way to handle this is a select list or table again, or redirect back to the dashboard? Should it
-     # be just a repeat of the dashboard page, with a button and ajax to populate the table? Ask Dave what he thinks about it.
 } else {
     //invalid input, either not there or not an integer
     $content = <<<EOT
