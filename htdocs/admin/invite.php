@@ -51,43 +51,73 @@ $content = <<<EOT
 			Please enter the editor's email address.
 		</div>
 	  </div>
-	  <div class="form-row">
+	  <div class="form-row" id="instPickerContainer">
 	     <div class="col-xs-6 form-group">
         <label for="inst">Institution</label>
         <select name="inst" id="inst" class="form-control"></select>
         </div>
-        	     <div class="col-xs-6 form-group">
-
-        <label for="instFilter">Filter</label>
-        <input type="text" class="form-control"  id="instFilter" />
+        <div class="col-xs-6 form-group">
+          <label for="instFilter">Filter</label>
+          <div id="instFilterContainer">
+            <input type="text" class="form-control"  id="instFilter" />
+            <button id="clearFilter" title="clear filter">X</button>
+          </div>
         </div>
 	  </div>
 	  <div class="form-row">
-        <input type="submit" class="form-control" name="btn-sendInvite" id="btn-sendInvite" value="Send Invite"/>
+        <input type="submit" name="btn-sendInvite" id="btn-sendInvite" value="Send Invite"/>
 	  </div>
     </form>
 </div>
 EOT;
 
+$custom_css = <<<EOT
+#instPickerContainer { display: grid; grid-template-columns: auto 250px; }
+#instFilterContainer { position: relative; }
+input#instFilter { padding-right: 25px; width: 100%; }
+button#clearFilter { 
+position:absolute; 
+top:0; 
+right: 0; 
+width:25px; 
+height: calc(2.25rem + 2px);
+color: #f00; 
+display: none;}
+
+EOT;
 
 $custom_js = <<<EOT
 function fillInsts( filter ) {
   $('#inst').empty();
+  $('#inst').append( $('<option>Loading...</option>' ));
+  $('#inst').prop( "disabled", "disabled" );
   $.getJSON( "/scripts/ajax_getInstitutions.php", { 'filter': filter }, function( data ) {
+    $('#inst').empty();
+    $('#inst').append( $('<option valueg="0">(no selection)</option>' ));
     for( var i = 0; i < data.insts.length; i++ ) {
       var opt = $('<option value="'+data.insts[i].InstitutionId+'">'+data.insts[i].InstitutionName+'</option>');
       $('#inst').append( opt );
     }
+    $('#inst').prop( "disabled", false );
   });
 }
 $(function() {
   fillInsts( null );
   $('#instFilter').on( 'click keyup', function (e) {
-    if ($(this).val().length > 3 ) fillInsts( $(this).val() );
+    if ($(this).val().length > 2 ) {
+      fillInsts( $(this).val() );
+      $('#clearFilter').show();
+    }
   });
   $('#inviteForm').submit(function(e) {
     e.preventDefault();
     alert("this doesn't go anywhere yet");
+  });
+  $('#clearFilter').on( 'click keyup', function(e) {
+    e.preventDefault();
+    $('#instFilter').val( null );
+    $('#clearFilter').hide();
+    fillInsts( null );
   });
 });
 EOT;
@@ -95,6 +125,7 @@ EOT;
 $p_params = [];
 $p_params['content'] = $content;
 $p_params['admin'] = TRUE;
+$p_params['css'][] = array( 'text' => $custom_css );
 $p_params['js'][] = array( 'text' => $custom_js );
 $wrapper = new wrapperBama($p_params);
 $wrapper->html();
