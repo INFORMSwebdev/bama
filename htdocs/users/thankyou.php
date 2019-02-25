@@ -45,8 +45,6 @@ EOT;
     }
 }
 //set page parameters up
-# ToDo: is the user truly logged in at this point? I don't think so. Ask Dave what this page parameter is really doing.
-$page_params['loggedIn'] = TRUE;
 $page_params['content'] = $content;
 $page_params['page_title'] = 'Thank You';
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";

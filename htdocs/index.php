@@ -14,45 +14,39 @@ if (isset($_GET['testing'])) {
 # ToDo: remove the GET string from this test before actual use
 if ((!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] != true)) {
     //user is not logged in
-    # ToDo: implement the anon display page here
-     # Currently it is a placeholder.
     $content = <<<EOT
 <div class="jumbotron">
     <h1>Welcome to the Analytics &amp; Operations Research Eduction Program Listing Site!</h1>
     <p class="lead">You will find information on many different Analytics and Operations Research (O.R.) programs offered by universities around the U.S.</p>
     <hr class="my-4" />
+    <a class="btn btn-primary" href="#" name="all" id="all" role="button">Display All Programs</a>
     <a class="btn btn-primary" href="#" name="analytics" id="analytics" role="button">Display All Analytics Programs</a>
     <a class="btn btn-primary" href="#" name="or" id="or" role="button">Display All O.R. Programs</a>
-    <a class="btn btn-primary" href="#" name="all" id="all" role="button">Display All Programs</a>
 </div>
-<div class="row" id="programList">
-    <!-- program info goes here when returned via ajax. Might have to add d-block to the class to circumvent flex display. -->
+<div class="flex-column" id="programList">
+    <!-- program info goes here when returned via ajax. -->
 </div>
 EOT;
-    # ToDo: figure out how to update page content via ajax and implement the button functionality that way
 } else {
     //user is already logged in, get their userID from the session
     $user = new User($_SESSION['loggedIn']);
     $userName = $user->Attributes['Username'];
-
-    # ToDo: implement the logged in display when I figure out what should be displayed.
-     # Currently it is a placeholder.
     $content = <<<EOT
 <div class="jumbotron">
 	<h1 class="display-4">Welcome $userName!</h1>
 	<p class="lead">Message can go here about system</p>
 	<hr class="my-4" />
 	<a class="btn btn-primary" href="#" name="mine" id="mine" role="button">Display my programs</a>
+	<a class="btn btn-primary" href="#" name="all" id="all" role="button">Display All Programs</a>
 	<a class="btn btn-primary" href="#" name="analytics" id="analytics" role="button">Display All Analytics programs</a>
 	<a class="btn btn-primary" href="#" name="or" id="or" role="button">Display All O.R. programs</a>
-	<a class="btn btn-primary" href="#" name="all" id="all" role="button">Display all programs</a>
 </div>
 <div class="flex-column" id="programList">
     <!-- program info goes here when returned via ajax. Might have to add d-block to the class to circumvent flex display. -->
 </div>
 EOT;
-    # ToDo: figure out how to update page content via ajax and implement the button functionality that way
 }
+//ajax related javascript
 $custom_js = <<<EOT
 $(function() {
   $('#all').click(function(e) {
@@ -69,23 +63,107 @@ $(function() {
         //redirect
         //window.location.href = "/admin/index.php";
         //process the returned info into HTML
-        var helper = processProgramList(data.programs);
+        var helper = processProgramList(data.programs, 'all');
         //display the returned info in the div
         $('#programList').html(helper);
       }
     }, "json");
   });
   
-  function processProgramList(progs){
-    if(progs.length < 1){
+  $('#mine').click(function(e) {
+    e.preventDefault();
+    $.get( "/scripts/ajax_displayEditorPrograms.php", function( data ) {
+      if (data.errors.length > 0) { 
+        var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+        for (var i = 0; i < data.errors.length; i++) {
+          msg +=  data.errors[i] + "\\r\\n";
+        }
+        alert( msg );
+      }
+      else if (data.success == 1) {
+        //process the returned info into HTML
+        var helper = processProgramList(data.programs, 'editor');
+        //display the returned info in the div
+        $('#programList').html(helper);
+      }
+    }, "json");
+  });
+  
+  $('#analytics').click(function(e) {
+    e.preventDefault();
+    $.get( "/scripts/ajax_displayAnalyticsPrograms.php", function( data ) {
+      if (data.errors.length > 0) { 
+        var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+        for (var i = 0; i < data.errors.length; i++) {
+          msg +=  data.errors[i] + "\\r\\n";
+        }
+        alert( msg );
+      }
+      else if (data.success == 1) {
+        //process the returned info into HTML
+        var helper = processProgramList(data.programs, 'analytics');
+        //display the returned info in the div
+        $('#programList').html(helper);
+      }
+    }, "json");
+  });
+  
+  $('#or').click(function(e) {
+    e.preventDefault();
+    $.get( "/scripts/ajax_displayORPrograms.php", function( data ) {
+      if (data.errors.length > 0) { 
+        var msg;
+        if(data.errors[0].indexOf('Operations Research') > 0){
+            //only contains the 1 message that there are currently no OR programs, so just display that in the div
+            msg = '<p class="text text-info">' + data.errors[0] + '</p>';
+            $('#programList').html(msg);
+        }
+        else {
+            msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+            for (var i = 0; i < data.errors.length; i++) {
+                msg +=  data.errors[i] + "\\r\\n";
+            }
+            alert( msg );
+        }
+      }
+      else if (data.success == 1) {
+        //process the returned info into HTML
+        var helper = processProgramList(data.programs, 'or');
+        //display the returned info in the div
+        $('#programList').html(helper);
+      }
+    }, "json");
+  });
+  
+  function processProgramList(progs, origin){
+    if(progs.length < 1) {
         //there are no programs in the passed list
-        var foo = '<p class="text text-danger">No programs available to display right now, please try again.</p>';
+        var foo = '<p class="text text-danger">No programs available to display right now, please try again later.</p>';
         return foo;
     } else {
-        var html = '';
-        // ToDo: once I figure out the structure of the display, update this to output appropriate HTML 
+        var html;
+        if(origin == 'or') {
+            html = '<h2>Operations Research Programs</h2>';
+        } else if (origin == 'analytics') {
+            html = '<h2>Analytics Programs</h2>';
+        } else if (origin == 'all') {
+            html = '<h2>All Programs</h2>';
+        } else if (origin == 'mine') {
+            html = '<h2>My Programs</h2>';
+        } else {
+            html = '<h2>Programs</h2>';
+        }
+        html += '<table class="table"><thead><tr><th>Name</th><th>Type</th><th>Institution</th><th>Delivery Method</th><th>Testing Requirements</th><th>Link</th><th>View</th></tr></thead>';
         for( var i = 0; i < progs.length; i++ ){
-            html += '<p>Program ' + i + '</p>';
+            html += '<tr>';
+            html += '<td>' + progs[i].ProgramName + '</td>';
+            html += '<td>' + progs[i].ProgramType + '</td>';
+            html += '<td><a href="/institutions/display.php?id=' + progs[i].InstitutionId + '">' + progs[i].InstitutionName + '</a></td>';
+            html += '<td>' + progs[i].DeliveryMethod + '</td>';
+            html += '<td>' + progs[i].TestingRequirement + '</td>';
+            html += '<td><a target="_blank" href="' + progs[i].ProgramAccess + '">' + progs[i].ProgramAccess + '</a></td>';
+            html += '<td><a class="btn btn-primary" href="/programs/display.php?id=' + progs[i].ProgramId + '">More Detail</a></td>';
+            html += '</tr>';
         }
         return html;
     }
@@ -93,14 +171,8 @@ $(function() {
 });
 EOT;
 
-
-//set up utility links?
-# ToDo: Ask Dave what these are
-//$util_links = '<a href="/profile.php">Home</a>';
-
 //create the parameters to pass to the wrapper
 $page_params = array();
-$page_params['loggedIn'] = TRUE;
 $page_params['content'] = $content;
 $page_params['page_title'] = "Programs Dashboard";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
@@ -118,4 +190,3 @@ $page_params['admin'] = TRUE;
 $wrapper = new wrapperBama($page_params);
 //display the content
 $wrapper->html();
-?>

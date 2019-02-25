@@ -17,7 +17,14 @@ $progs = Program::getAllPrograms();
 
 if($progs){
     $response['success'] = 1;
-    $response['programs'] = $progs;
+    $helper = array();
+    //append institution name to each returned program
+    foreach($progs as $prog){
+        $inst = new Institution($prog['InstitutionId']);
+        $prog['InstitutionName'] = $inst->Attributes['InstitutionName'];
+        $helper[] = $prog;
+    }
+    $response['programs'] = $helper;
 } else {
     $response['errors'][] = 'No programs returned from getAllPrograms';
 }
