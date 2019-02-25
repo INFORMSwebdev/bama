@@ -105,9 +105,10 @@ class User extends AOREducationObject
 
     public function sendPasswordResetEmail()
     {
+        $link = '<a href="' . WEB_ROOT . '/users/setPassword.php?token=' . $this->Attributes['Token'] . '">' . WEB_ROOT . '</a>';
         $msg = <<<EOT
 <p>Please click this link to set a new password:</p>
-<p><a href="{WEB_ROOT}/users/setPassword.php?token={$this->Attributes['Token']}">{WEB_ROOT}/users/setPassword.php?token={$this->Attributes['Token']}</a></p>
+<p>$link</p>
 <p>Note: If you are using a plain-text email reader, you will need to manually copy and paste the full URL into a web browser.</p>
 EOT;
         $e_params['to'] = $this->Attributes['Username'];
