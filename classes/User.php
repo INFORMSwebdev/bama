@@ -112,6 +112,7 @@ class User extends AOREducationObject
 EOT;
         $e_params['to'] = $this->Attributes['Username'];
         $e_params['subject'] = "Analytics and Operations Research Education Database - Password Reset";
+        $e_params['body_html'] = $msg;
         $email = new email( $e_params );
         $email->send();
     }
