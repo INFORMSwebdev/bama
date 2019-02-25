@@ -82,7 +82,7 @@ $(function() {
       }
       else if (data.success == 1) {
         //process the returned info into HTML
-        var helper = processProgramList(data.programs, 'editor');
+        var helper = processProgramList(data.programs, 'mine');
         //display the returned info in the div
         $('#programList').html(helper);
       }
@@ -150,19 +150,24 @@ $(function() {
             html = '<h2>All Programs</h2>';
         } else if (origin == 'mine') {
             html = '<h2>My Programs</h2>';
+            
         } else {
             html = '<h2>Programs</h2>';
         }
-        html += '<table class="table"><thead><tr><th>Name</th><th>Type</th><th>Institution</th><th>Delivery Method</th><th>Testing Requirements</th><th>Link</th><th>View</th></tr></thead>';
+        html += '<table class="table"><thead><tr><th>Name</th><th>Institution</th><th>Type</th><th>Delivery Method</th><th>Testing Requirements</th><th>Link</th><th>View</th></tr></thead>';
         for( var i = 0; i < progs.length; i++ ){
             html += '<tr>';
             html += '<td>' + progs[i].ProgramName + '</td>';
-            html += '<td>' + progs[i].ProgramType + '</td>';
             html += '<td><a href="/institutions/display.php?id=' + progs[i].InstitutionId + '">' + progs[i].InstitutionName + '</a></td>';
+            html += '<td>' + progs[i].ProgramType + '</td>';
             html += '<td>' + progs[i].DeliveryMethod + '</td>';
             html += '<td>' + progs[i].TestingRequirement + '</td>';
             html += '<td><a target="_blank" href="' + progs[i].ProgramAccess + '">' + progs[i].ProgramAccess + '</a></td>';
-            html += '<td><a class="btn btn-primary" href="/programs/display.php?id=' + progs[i].ProgramId + '">More Detail</a></td>';
+            if( origin == 'mine' ){
+                html += '<td><a class="btn btn-info" href="/programs/edit.php?id=' + progs[i].ProgramId + '">Edit</a></td>';
+            } else {
+                html += '<td><a class="btn btn-info" href="/programs/display.php?id=' + progs[i].ProgramId + '">More Details</a></td>';
+            }
             html += '</tr>';
         }
         return html;

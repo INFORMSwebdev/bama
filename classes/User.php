@@ -51,6 +51,17 @@ class User extends AOREducationObject
         return $this->update('Token', $this->Attributes['Token']);
     }
 
+    public function getProgramAssignments( $asObjects = FALSE ) {
+        $db = new EduDB();
+        $sql = "SELECT ProgramId FROM programs WHERE InstitutionId IN 
+          (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id)";
+        $progs = $db->queryColumn( $sql );
+        if($asObjects) {
+            foreach( $progs as &$prog ) $prog = new Program($prog);
+        }
+        return $progs;
+    }
+
     public function getInstitutionAssignments( $asObjects = FALSE ) {
         $db = new EduDB();
         $sql = "SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id";

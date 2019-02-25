@@ -33,19 +33,9 @@ if($id){
     $delivery = $prog->Attributes['DeliveryMethod'];
     $access = $prog->Attributes['ProgramAccess'];
     if(isset($access) && !empty($access)){
-        $accessHTML = <<<EOT
-<label for="ProgramAccess">Access Page</label>
-<a target="_blank" href="{$access}">
-    <input type="text" class="form-control" name="ProgramAccess" id="ProgramAccess" value="{$access}" aria-describedby="ProgramAccessHelp" readonly />
-</a>
-<p class="text text-white">Clicking inside this field will open a new tab to the URL specified.</p>
-EOT;
+        $accessHTML = "<p><a target='_blank' href='$access'>$access</a></p>";
     } else {
-        $accessHTML = <<<EOT
-<label for="ProgramAccess">Access Page</label>
-<input type="text" class="form-control" name="ProgramAccess" id="ProgramAccess" value="Access information for this program is currently not available." readonly />
-<br />
-EOT;
+        $accessHTML = "<p class='text-info'>Access information for this program is currently not available.</p>";
     }
     $objectives = $prog->Attributes['ProgramObjectives'];
     if(!isset($objectives) || empty($objectives)){
@@ -96,6 +86,7 @@ EOT;
     //$analytics = $prog->Attributes['AnalyticsFlag'];
     $collegeId = $prog->Attributes['CollegeId'];
 
+    $contactHTML = '';
     //get contact details to display
     if(is_numeric($contactId)){
         $contact = new Contact($contactId);
@@ -103,17 +94,30 @@ EOT;
         $contactTitle = $contact->Attributes['ContactTitle'];
         $contactPhone = $contact->Attributes['ContactPhone'];
         $contactEmail = $contact->Attributes['ContactEmail'];
+        $contactHTML = <<<EOT
+<h3 class="display3">{$contactName}</h3>
+<p>{$contactTitle}<br />{$contactPhone}<br /><a href="mailto:{$contactEmail}">{$contactEmail}</a></p>
+EOT;
     } else {
         $contactName = $contactTitle = $contactPhone = $contactEmail = 'Contact information for this program is not currently available';
+        $contactHTML = "<p class='text text-info'>$contactName</p>";
     }
 
+    $collegeHTML = '';
     //get college details to display
     if(is_numeric($collegeId)){
         $college = new College($collegeId);
         $collegeName = $college->Attributes['CollegeName'];
         $collegeType = $college->Attributes['CollegeType'];
+        $collegeHTML = <<<EOT
+<h3 class="display3">Name</h3>
+<p>{$collegeName}</p>
+<h3 class="display3">Type</h3>
+<p>{$collegeType}</p>
+EOT;
     } else {
         $collegeName = $collegeType = 'College information for this program is not currently available.';
+        $collegeHTML = "<p class='text text-info'>$collegeName</p>";
     }
 
     //get institution details to display
@@ -128,201 +132,104 @@ EOT;
     $instEmail = $inst->Attributes['InstitutionEmail'];
     $instAccess = $inst->Attributes['InstitutionAccess'];
 
-    # ToDo: implement null checks above and display appropriate information if a field is null
-
     $content = <<<EOT
-<h2 class="display-3">{$name}</h2>
-<h3 class="display-4">{$instName}</h3>
-<div class="jumbotron bg-info text-white">
-    <form>
-        <div class="form-row">
-            <h3>Program Details</h3>
-        </div>
-        <div class="form-row">
-            <div class="col-md-12">
-                <label for="ProgramObjs">Objectives</label>
-                <!--<input type="text" class="form-control text-wrap" name="ProgramObjs" id="ProgramObjs" value="{$objectives}" readonly />-->
-                <textarea class="form-control" name="ProgramObjs" id="ProgramObjs" readonly>{$objectives}</textarea>
+<div class="card">
+    <div class="card-header" id="cardHeader">
+        <h2 class="display2">{$name}</h2>
+        <ul class="nav nav-tabs card-header-tabs" id="cardNav" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="programDetails" href="#tabProgram" data-toggle="tab" aria-selected="true" aria-controls="tabProgram">Program Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="deliveryDetails" href="#tabDelivery" data-toggle="tab" aria-selected="false" aria-controls="tabDelivery">Delivery Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="requirementDetails" href="#tabRequirement" data-toggle="tab" aria-selected="false" aria-controls="tabRequirement">Requirement Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="creditDetails" href="#tabCredit" data-toggle="tab" aria-selected="false" aria-controls="tabCredit">Credit Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="institutionDetails" href="#tabInstitution" data-toggle="tab" aria-selected="false" aria-controls="tabInstitution">Institution Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="collegeDetails" href="#tabCollege" data-toggle="tab" aria-selected="false" aria-controls="tabCollege">College Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="contactDetails" href="#tabContact" data-toggle="tab" aria-selected="false" aria-controls="tabCollege">Contact Details</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content" id="ProgramTabContent">
+        <div class="tab-pane fade show active" id="tabProgram" role="tabpanel" aria-labelledby="programDetails">
+            <div class="card-body">
+                <h3 class="display3">Objectives</h3>
+                <p>{$objectives}</p>
+                <h3 class="display3">Type</h3>
+                <p>{$type}</p>
+                <h3 class="display3">Access Link</h3>
+                {$accessHTML}
+                <h3 class="display3">Year Established</h3>
+                <p>{$year}</p>
             </div>
         </div>
-        <br />
-        <div class="form-row">
-            <div class="col-md-4">
-                <label for="ProgramType">Type</label>
-                <input type="text" class="form-control" name="ProgramType" id="ProgramType" value="{$type}" readonly />
-            </div>
-            <div class="col-md-4">
-                <label for="DeliveryMethod">Delivery Method</label>
-                <input type="text" class="form-control" name="DeliveryMethod" id="DeliveryMethod" value="{$delivery}" readonly />
-            </div>
-            <div class="col-md-4">
-                $accessHTML
+        <div class="tab-pane fade" id="tabDelivery" role="tabpanel" aria-labelledby="deliveryDetails">
+            <div class="card-body">
+                <h3 class="display3">Delivery Method</h3>
+                <p>{$delivery}</p>
+                <h3 class="display3">Duration</h3>
+                <h4 class="display4">Full Time</h4>
+                <p>{$fullTime}</p>
+                <h4 class="display4">Part Time</h4>
+                <p>{$partTime}</p>
             </div>
         </div>
-        <!--<br />-->
-        <div class="form-row">
-            <h3>Delivery Details</h3>
-        </div>
-        <div class="form-row">
-            <div class="col-md-4">
-                <label for="DeliveryMethod">Method</label>
-                <input type="text" class="form-control" name="DeliveryMethod" id="DeliveryMethod" value="{$delivery}" readonly />
-            </div>
-            <div class="col-md-4">
-                <label for="FullTime">Full Time Duration</label>
-                <input type="text" class="form-control" name="FullTime" id="FullTime" value="{$fullTime}" readonly />
-            </div>
-            <div class="col-md-4">
-                <label for="PartTime">Part Time Duration</label>
-                <input type="text" class="form-control" name="PartTime" id="PartTime" value="{$partTime}" readonly />
+        <div class="tab-pane fade" id="tabRequirement" role="tabpanel" aria-labelledby="requirementDetails">
+            <div class="card-body">
+                <h3 class="display3">Testing Requirements</h3>
+                <p>{$reqs}</p>
+                <h3 class="display3">Other Requirements</h3>
+                <p>{$otherReqs}</p>
             </div>
         </div>
-        <br />
-        <div class="form-row">
-            <h3>Requirement Details</h3>
-        </div>
-        <div class="form-row">
-            <div class="col-md-6">
-                <label for="TestingRequirement">Testing Requirements</label>
-                <input type="text" class="form-control" name="TestingRequirement" id="TestingRequirement" value="{$reqs}" readonly />
-            </div>
-            <div class="col-md-6">
-                <label for="OtherRequirement">Other Requirements</label>
-                <input type="text" class="form-control" name="OtherRequirement" id="OtherRequirement" value="{$otherReqs}" readonly />
+        <div class="tab-pane fade" id="tabCredit" role="tabpanel" aria-labelledby="creditDetails">
+            <div class="card-body">
+                <h3 class="display3">Total Credits</h3>
+                <p>{$credits}</p>
+                <h3 class="display3">Cost per Credit</h3>
+                <p>{$cost}</p>
+                <h3 class="display3">Estimated Resident Tuition</h3>
+                <p>{$res}</p>
+                <h3 class="display3">Estimated Non-Resident Tuition</h3>
+                <p>{$nonRes}</p>
             </div>
         </div>
-        <br />
-        <div class="form-row">
-            <h3>Credit Details</h3>
-        </div>
-        <div class="form-row">
-            <div class="col-md-6">
-                <label for="Credits">Credits</label>
-                <input type="text" class="form-control" name="Credits" id="Credits" value="{$credits}" readonly />
-            </div>
-            <div class="col-md-6">
-                <label for="CostPerCredit">Cost per Credit</label>
-                <input type="text" class="form-control" name="CostPerCredit" id="CostPerCredit" value="{$cost}" readonly />
+        <div class="tab-pane fade" id="tabInstitution" role="tabpanel" aria-labelledby="institutionDetails">
+            <div class="card-body">
+                <h3 class="display3">Address</h3>
+                <h4 class="display4">{$instName}</h4>
+                <p>{$instAddr}<br />{$instCity}, {$instState} {$instZip}</p>
+                <h3 class="display3">Region</h3>
+                <p>{$instRegion}</p>
             </div>
         </div>
-        <div class="form-row">
-            <div class="col-md-6">
-                <label for="ResidentTuition">Estimated Resident Tuition</label>
-                <input type="text" class="form-control" name="ResidentTuition" id="ResidentTuition" value="{$res}" readonly />
-            </div>
-            <div class="col-md-6">
-                <label for="NonResident">Estimated Non-Resident Tuition</label>
-                <input type="text" class="form-control" name="NonResident" id="NonResident" value="{$nonRes}" readonly />
+        <div class="tab-pane fade" id="tabCollege" role="tabpanel" aria-labelledby="collegeDetails">
+            <div class="card-body">
+                {$collegeHTML}
             </div>
         </div>
-        <br />
-        <div class="form-row">
-            <h3>Other Program Details</h3>
-        </div>
-        <div class="form-row">
-            <div class="col-md-12">
-                <label for="YearEstablished">Year Established</label>
-                <input type="text" class="form-control" name="YearEstablished" id="YearEstablished" value="{$year}" readonly />
+        <div class="tab-pane fade" id="tabContact" role="tabpanel" aria-labelledby="contactDetails">
+            <div class="card-body">
+                {$contactHTML}
             </div>
         </div>
-        <div class="form-row">
-            <div class="col-md-12">
-                <label for="Scholarship">Scholarships</label>
-                <textarea class="form-control" name="Scholarship" id="Scholarship" readonly>{$scholarship}</textarea>
-            </div>
-        </div>
-        <br />
-        <div class="form-row">
-            <h3>Contact Details</h3>
-        </div>
-        <div class="form-row">
-            <div class="col-md-6">
-                <label for="ContactName">Name</label>
-                <input type="text" class="form-control" name="ContactName" id="ContactName" value="{$contactName}" readonly />
-            </div>
-            <div class="col-md-6">
-                <label for="ContactTitle">Title</label>
-                <input type="text" class="form-control" name="ContactTitle" id="ContactTitle" value="{$contactTitle}" readonly />
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="col-md-6">
-                <label for="ContactPhone">Phone</label>
-                <input type="text" class="form-control" name="ContactPhone" id="ContactPhone" value="{$contactPhone}" readonly />
-            </div>
-            <div class="col-md-6">
-                <label for="ContactEmail">Email</label>
-                <a href="mailto:{$contactEmail}"><input type="text" class="form-control" name="ContactEmail" id="ContactEmail" value="{$contactEmail}" aria-describedby="ContactEmailHelp" readonly /></a>
-                <p class="text text-white" id="ContactEmailHelp">Clicking inside this field will open a new email to the address specified.</p>
-            </div>
-        </div>
-        <!--<br />-->
-        <div class="form-row">
-            <h3>Institution Details</h3>
-        </div>
-        <div class="form-row">
-            <div class="col-md-12">
-                <label for="InstitutionName">Name</label>
-                <input type="text" class="form-control" name="InstitutionName" id="InstitutionName" value="{$instName}" readonly />
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="col-md-12">
-                <label for="InstitutionAddress">Address</label>
-                <input type="text" class="form-control" name="InstitutionAddress" id="InstitutionAddress" value="{$instAddr}" readonly />
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="col-md-4">
-                <label for="InstitutionCity">City</label>
-                <input type="text" class="form-control" name="InstitutionCity" id="InstitutionCity" value="{$instCity}" readonly />
-            </div>
-            <div class="col-md-4">
-                <label for="InstitutionState">State</label>
-                <input type="text" class="form-control" name="InstitutionState" id="InstitutionState" value="{$instState}" readonly />
-            </div>
-            <div class="col-md-4">
-                <label for="InstitutionZip">Zip Code</label>
-                <input type="text" class="form-control" name="InstitutionZip" id="InstitutionZip" value="{$instZip}" readonly />
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="col-md-12">
-                <label for="InstitutionRegion">Region</label>
-                <input type="text" class="form-control" name="InstitutionRegion" id="InstitutionRegion" value="{$instRegion}" readonly />
-            </div>
-        </div>
-        <br />
-        <div class="form-row">
-            <h3>College Details</h3>
-        </div>
-        <div class="form-row">
-            <div class="col-md-12">
-                <label for="CollegeName">Name</label>
-                <input type="text" class="form-control" name="CollegeName" id="CollegeName" value="{$collegeName}" readonly />
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="col-md-12">
-                <label for="CollegeType">Type</label>
-                <input type="text" class="form-control" name="CollegeType" id="CollegeType" value="{$collegeType}" readonly />
-            </div>
-        </div>
-    </form>
-</div>
-<div class="flex-column">
-    <h2>View Another Program's Info</h2>
-    <form action="display.php" method="get">
-        <div class="form-group">
-            <label for="Institution">Select a Program</label>
-		    <select class="form-control" name="" id="" aria-describedby="Help" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
-		        $progListHTML
-            </select>
-            <!--<p class="text text-muted" id="Help">The list may take a second or two to load, please be patient after clicking the field.</p>-->
-        </div>
-    </form>
+    </div>
+    <div class="card-footer" id="cardFooter">
+        
+    </div>
 </div>
 EOT;
+
 } else {
     //invalid input, either not there or not an integer
     $content = <<<EOT

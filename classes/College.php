@@ -18,4 +18,22 @@ class College extends AOREducationObject
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
     );
+
+    public static function getAllColleges( $active = TRUE, $asObjects = FALSE ){
+        $colleges = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM colleges";
+        if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        $colls = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $colls as $col) {
+                $colleges[] = new College($col);
+            }
+        }
+        else {
+            $colleges = $colls;
+        }
+
+        return $colleges;
+    }
 }

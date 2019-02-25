@@ -13,6 +13,7 @@ require_once '../../init.php';
 //set up variables in case user actually needs them
 $content = '';
 $page_params = array();
+
 # ToDo: remove the testing query string before deploying anywhere
 $registerFormProcessor = '../processRegisterForm.php';
 if(isset($_GET['testing'])){

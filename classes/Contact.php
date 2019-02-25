@@ -23,4 +23,22 @@ class Contact extends AOREducationObject
     public function setInstitutionContact( $InstitutionId ){
       // this can be accomplished by updating the institution object's ContactId attribute so not adding code for this until later
     }
+
+    public static function getAllContacts( $active = TRUE, $asObjects = FALSE ){
+        $contacts = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM contacts";
+        if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        $conts = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $conts as $cont) {
+                $contacts[] = new Contact($cont);
+            }
+        }
+        else {
+            $contacts = $conts;
+        }
+
+        return $contacts;
+    }
 }
