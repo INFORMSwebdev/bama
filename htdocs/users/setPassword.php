@@ -31,16 +31,10 @@ $content = <<<EOT
   <div class="form-group">
     <label for="password">Password</label>
 		<input minlength="8" type="password" class="form-control" id="password" name="password" required />
-		<div class="invalid-feedback">
-			Please enter your password.
-		</div>
   </div>
   <div class="form-group">
     <label for="password_confirm">Retype Password to Confirm</label>
 		<input type="password" class="form-control" id="password_confirm" name="password_confirm" required />
-		<div class="invalid-feedback">
-			Please retype your password to confirm.
-		</div>
   </div>
   <div class="form-group">
     <input type="submit" value="Set Password" />
@@ -52,8 +46,6 @@ $custom_js = <<<EOT
 $(function() {
   $('#setPasswordForm').on( 'input', function(e) {
     var pass = $('#password');
-    if (pass.val().length < 8) pass[0].setCustomValidity("Your password must be at least 8 characters long.");
-    else pass[0].setCustomValidity("");
     var pass_confirm = $('#password_confirm');
     if (pass.val() != pass_confirm.val()) pass_confirm[0].setCustomValidity("That did not match the password.");
     else pass_confirm[0].setCustomValidity("");
