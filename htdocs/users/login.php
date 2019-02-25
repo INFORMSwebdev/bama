@@ -137,6 +137,7 @@ else {
 	    <button class="btn btn-primary" type="submit">Log in</button>
 	</div>
 </form>
+<p><a href="/users/resetPassword.php">Forgot password?</a></p>
 EOT;
 }
 
