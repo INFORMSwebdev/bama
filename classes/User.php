@@ -46,14 +46,9 @@ class User extends AOREducationObject
      */
     public function generateToken()
     {
-        $db = new EduDB();
         $salt = "I wasn't originally going to get a brain transplant, but then I changed my mind.";
-        $token = md5($salt . $this->id . time());
-        return $this->update('Token', $token);
-    }
-
-    public function wtf() {
-        echo "test";
+        $this->Attributes['Token'] = md5($salt . $this->id . time());
+        return $this->update('Token', $this->Attributes['Token']);
     }
 
     public function getInstitutionAssignments( $asObjects = FALSE ) {
@@ -110,7 +105,15 @@ class User extends AOREducationObject
 
     public function sendPasswordResetEmail()
     {
-        $db = new EduDB();
+        $msg = <<<EOT
+<p>Please click this link to set a new password:</p>
+<p><a href="{WEB_ROOT}/users/setPassword.php?token={$this->Attributes['Token']}">{WEB_ROOT}/users/setPassword.php?token={$this->Attributes['Token']}</a></p>
+<p>Note: If you are using a plain-text email reader, you will need to manually copy and paste the full URL into a web browser.</p>
+EOT;
+        $e_params['to'] = $this->Attributes['Username'];
+        $e_params['subject'] = "Analytics and Operations Research Education Database - Password Reset";
+        $email = new email( $e_params );
+        $email->send();
     }
 
     public function unassignFromInstitution($InstitutionId)

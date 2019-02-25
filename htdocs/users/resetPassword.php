@@ -38,9 +38,17 @@ $(function() {
   $('#passwordResetForm').submit( function(e) {
     if (!$('#email').val()) return false;
     e.preventDefault();
-    $.post( "/scripts/ajax_passwordReset.php", { }, function(e) {
-    
-    });
+    $.post( "/scripts/ajax_passwordReset.php", { 'email': $('#email').val() }, function( data ) {
+      if (data.errors.length > 0 ) {
+        var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+        for (var i = 0; i < data.errors.length; i++) {
+          msg +=  data.errors[i] + "\\r\\n";
+        }
+        alert( msg );
+      }
+      else if (data.msg) alert( data.msg );
+      else alert( "Something went wrong." );
+    }, "json");
   });
 });
 EOT;

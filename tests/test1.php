@@ -7,7 +7,7 @@
  */
 
 require_once( "../init.php");
-$u = new User(41);
-print_r( $u->getInstitutionAssignments(1));
+$u = User::getUserByEmail('david.wirth@informs.org');
+echo $u->id;
 
-echo "done";
+echo PHP_EOL . "done";
