@@ -53,7 +53,7 @@ class AOREducationObject {
       return $object;
   }
 
-  public function createPendingUpdate( $updateTypeId, $UserId = 'SYSTEM')
+  public function createPendingUpdate( $updateTypeId, $UserId )
   {
       $class = get_class($this);
       $TableId = $class::$tableId;
@@ -63,7 +63,6 @@ class AOREducationObject {
       $params[] = array( ":UpdateTypeId", $updateTypeId, PDO::PARAM_INT );
       $params[] = array( ":TableId", $TableId, PDO::PARAM_INT );
       if ($updateTypeId == UPDATE_TYPE_INSERT) {
-          echo "TEST!@#";
           $params[] = array( ":RecordId", null, PDO::PARAM_NULL );
       }
       else {
@@ -71,8 +70,6 @@ class AOREducationObject {
       }
       $params[] = array( ":UpdateContent", serialize($this->Attributes), PDO::PARAM_STR );
       $params[] = array( ":UserId", $UserId, PDO::PARAM_INT );
-      echo $sql.PHP_EOL;
-      print_r($params);
       return $db->execSafe( $sql, $params );
   }
   

@@ -7,10 +7,9 @@
  */
 require_once( "../init.php");
 $data = array( 'TextbookName' => "Test Textbook", "Authors" => "Smith, John", 'TextbookPublisher'=> 'Prentice Hall');
-
 $x = Textbook::createInstance( $data );
-//$x = new Textbook( 7 );
-$result = $x->createPendingUpdate( UPDATE_TYPE_INSERT, 1);
+$x = new Textbook( 7 );
+$result = $x->createPendingUpdate( UPDATE_TYPE_UPDATE, 1);
 
 
 echo $result;
