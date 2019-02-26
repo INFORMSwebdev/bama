@@ -28,7 +28,7 @@ class Course extends AOREducationObject
     /**
      * add course - case study association
      * @param $CaseId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function assignCaseStudy( $CaseId ) {
         $db = new EduDB();
@@ -40,7 +40,7 @@ class Course extends AOREducationObject
     /**
      * add course - dataset association
      * @param $DatasetId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function assignDataset( $DatasetId ) {
         $db = new EduDB();
@@ -52,7 +52,7 @@ class Course extends AOREducationObject
     /**
      * add course - software association
      * @param $SoftwareId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function assignSoftware( $SoftwareId ) {
         $db = new EduDB();
@@ -64,7 +64,7 @@ class Course extends AOREducationObject
     /**
      * add course - textbook association
      * @param $TextbookId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function assignTextbook( $TextbookId ) {
         $db = new EduDB();
@@ -76,7 +76,7 @@ class Course extends AOREducationObject
     /**
      * delete course - case study association
      * @param $CaseId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function unassignCaseStudy( $CaseId ) {
         $db = new EduDB();
@@ -88,7 +88,7 @@ class Course extends AOREducationObject
     /**
      * deleete course - dataset association
      * @param $DatasetId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function unassignDataset( $DatasetId ) {
         $db = new EduDB();
@@ -100,7 +100,7 @@ class Course extends AOREducationObject
     /**
      * delete course - software association
      * @param $SoftwareId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function unassignSoftware( $SoftwareId ) {
         $db = new EduDB();
@@ -112,7 +112,7 @@ class Course extends AOREducationObject
     /**
      * delete course - textbook association
      * @param $TextbookId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function unassignTextbook( $TextbookId ) {
         $db = new EduDB();

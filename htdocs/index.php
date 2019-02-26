@@ -193,6 +193,8 @@ $(function() {
 });
 EOT;
 
+# ToDo: make sure the access links wrap in the table properly!!
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;

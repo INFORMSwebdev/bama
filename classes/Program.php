@@ -37,6 +37,14 @@ class Program extends AOREducationObject
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
     );
 
+    public function getTextbooks() {
+        $db = new EduDB();
+        $sql = "SELECT DISTINCT t.* FROM textbooks t JOIN course_textbooks ct ON t.TextbookId = ct.TextbookId JOIN program_courses pc ON pc.ProgramId = $this->id WHERE t.Deleted = 0";
+        $books = $db->query( $sql );
+        return $books;
+        # ToDo: fix this, it always returns the same books. Must be a problem in the query itself!
+    }
+
     public function getCourses() {
 
     }

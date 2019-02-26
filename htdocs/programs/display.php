@@ -225,7 +225,13 @@ EOT;
         </div>
     </div>
     <div class="card-footer" id="cardFooter">
-        
+        <div class="btn-group" role="group" aria-label="Other program specific information">
+            <a role="button" class="btn btn-outline-primary" href="/courses/programCourses.php?id={$prog->Attributes['ProgramId']}">Program Courses</a>
+            <a role="button" class="btn btn-outline-primary" href="/instructors/programInstructors.php?id={$prog->Attributes['ProgramId']}">Program Instructors</a>
+            <a role="button" class="btn btn-outline-primary" href="/software/programSoftware.php?id={$prog->Attributes['ProgramId']}">Program Software</a>
+            <a role="button" class="btn btn-outline-primary" href="/textbooks/programTextbooks.php?id={$prog->Attributes['ProgramId']}">Program Text Books</a>
+            <a role="button" class="btn btn-outline-primary" href="/cases/programCases.php?id={$prog->Attributes['ProgramId']}">Program Case Studies</a>
+        </div>
     </div>
 </div>
 EOT;

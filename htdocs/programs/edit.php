@@ -16,7 +16,6 @@ $progId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if ((!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) && !isset($_GET['testing'])) {
     //set up a message to display on the login page
     $_SESSION['logoutMessage'] = 'Please log in to edit your program\'s information.';
-    # ToDo: ask Dave how we would return the user to the page after we make them log in
     //redirect to login page so user can log in
     header('Location: login.php');
     //don't want the script to keep executing after a redirect
@@ -36,12 +35,13 @@ if (is_numeric($_SESSION['loggedIn'])) {
     $userProgs = $user->getProgramAssignments();
     //if the programId passed via the query string is NOT in this list, the user does NOT have permission to edit this page
     if (!in_array($progId, $userProgs)) {
-        $_SESSION['logoutMessage'] = 'You do not have permission to edit the specified program\'s information.';
-        //redirect back to this page?
-        # ToDo: ask Dave how this would work, and if ajax would be better?
-         # Basically, figure out where to redirect the user to in order for them to select a program they have permission to edit,
-         # whether that be a select list on this page or a different page.
-        $content = '<h1>Placeholder</h1>';
+        //set up the message to be red
+        $_SESSION['editMessage']['success'] = false;
+        $_SESSION['editMessage']['text'] = 'You do not have permission to edit the specified program\'s information.';
+
+        //redirect to index
+        header('Location: /index.php');
+        die;
     } else {
         //get all the details about the requested program to display
         $prog = new Program($progId);
@@ -114,7 +114,9 @@ EOT;
         $colleges = College::getAllColleges();
         $collegeHelper = array();
         foreach($colleges as $co){
-            $collegeHelper[] = array ('text' => $co['CollegeName'], 'value' => $co['CollegeId']);
+            //get institution name so editors can select the appropriate college tied to the institution
+            $foo = new Institution($co['InstitutionId']);
+            $collegeHelper[] = array ('text' => $co['CollegeName'] . ' (' . $foo->Attributes['InstitutionName'] . ')', 'value' => $co['CollegeId']);
         }
         $collegeListHTML = optionsHTML($collegeHelper);
         if(isset($collegeId)){
@@ -273,6 +275,10 @@ EOT;
             <input type="hidden" id="programId" name="programId" value="{$progId}" />
             <button class="btn btn-warning mr-2" type="submit" name="edit" value="edit">Submit changes</button>
             <button class="btn btn-danger" type="submit" name="delete" value="delete">Delete This Program</button>
+        </div>
+        <!--<br />-->
+        <div class="form-row">
+            <p class="lead">These changes will not take effect until they have been approved by an administrator.</p>
         </div>
     </form>
 </div>

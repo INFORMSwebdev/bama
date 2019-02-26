@@ -28,7 +28,7 @@ class Dataset extends AOREducationObject
     /**
      * add course - dataset association
      * @param $CourseId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function assignToCourse( $CourseId ) {
         $db = new EduDB();
@@ -40,7 +40,7 @@ class Dataset extends AOREducationObject
     /**
      * delete course - dataset association
      * @param $CourseId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function unassignFromCourse( $CourseId ) {
         $db = new EduDB();

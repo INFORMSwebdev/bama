@@ -22,7 +22,7 @@ class Software extends AOREducationObject
     /**
      * add course - software association
      * @param $CourseId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function assignToCourse( $CourseId ) {
         $db = new EduDB();
@@ -34,7 +34,7 @@ class Software extends AOREducationObject
     /**
      * delete course - software association
      * @param $CourseId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function unassignFromCourse( $CourseId ) {
         $db = new EduDB();

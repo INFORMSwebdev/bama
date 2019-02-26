@@ -26,7 +26,7 @@ class CaseStudy extends AOREducationObject {
     /**
      * add course - case study association
      * @param $CourseId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function assignToCourse( $CourseId ) {
         $db = new EduDB();
@@ -38,7 +38,7 @@ class CaseStudy extends AOREducationObject {
     /**
      * delete course - case study association
      * @param $CourseId int
-     * @returns int number of database rows affected by operation
+     * @return int number of database rows affected by operation
      */
     public function unassignFromCourse( $CourseId ) {
         $db = new EduDB();
