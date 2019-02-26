@@ -10,6 +10,7 @@ class Textbook extends AOREducationObject
 {
     public static $table = "textbooks";
     public static $primary_key = "TextbookId";
+    public static $tableId = 23;
     public static $data_structure = array(
         'TextbookId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
         'TextbookName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),

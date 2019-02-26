@@ -10,6 +10,7 @@ class College extends AOREducationObject
 {
     public static $table = "colleges";
     public static $primary_key = "CollegeId";
+    public static $tableId = 5;
     public static $data_structure = array(
         'CollegeId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
         'InstitutionId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),

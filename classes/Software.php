@@ -10,6 +10,7 @@ class Software extends AOREducationObject
 {
     public static $table = "softwares";
     public static $primary_key = "SoftwareId";
+    public static $tableId = 20;
     public static $data_structure = array(
         'SoftwareId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
         'SoftwareName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),

@@ -9,6 +9,7 @@ class Course extends AOREducationObject
 {
     public static $table = "courses";
     public static $primary_key = "CourseId";
+    public static $tableId = 11;
     public static $data_structure = array(
         'CourseId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
         'InstructorId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT ),
