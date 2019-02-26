@@ -5,7 +5,6 @@
  * Date: 2/25/2019
  * Time: 4:15 PM
  */
-# ToDo: Implement this for when a user submits the form on the programs/edit.php page.
 //require the init file
 require_once '../../init.php';
 
@@ -71,13 +70,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $prog->Attributes['AnalyticsFlag'] = $analyticsFlag;
     $prog->Attributes['CollegeId'] = $collegeId;
 
-    //put the updates in the pending_updates table
-    # ToDo: when Dave finishes the function he is making, call it to add the info to the pending_updates table
+    //get the users Id to put in the table
+    if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
+        $user = new User($_SESSION['loggedIn']);
+    } else {
+        //I can't think of why this case would ever happen, but just in case set the user to default ADMIN/system record
+        $user = new User(1);
+    }
 
-    //set message to show user
-    $_SESSION['editMessage']['success'] = true;
-    $_SESSION['editMessage']['text'] = 'Program update successfully submitted and is awaiting approval for posting.';
+    //put the updates in the pending_updates table
+    $result = $prog->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
+
+    if($result == true) {
+        //set message to show user
+        $_SESSION['editMessage']['success'] = true;
+        $_SESSION['editMessage']['text'] = 'Program update successfully submitted and is awaiting approval for posting.';
+    }
+    else {
+        $_SESSION['editMessage']['success'] = false;
+        $_SESSION['editMessage']['text'] = "Program update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+    }
 }
-# ToDo: Figure out the behavior for successful/unsuccessful inserts
-//redirect user to ?
+//redirect user to index?
 header('Location: /index.php');
+die;

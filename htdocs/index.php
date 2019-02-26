@@ -8,6 +8,8 @@ if (isset($_GET['testing'])) {
     $_SESSION['loggedIn'] = 41;
 }
 
+$content = '';
+
 # ToDo: add in check for messages to display that come from other pages/scripts
 if(isset($_SESSION['editMessage'])){
     //set up the alert color
