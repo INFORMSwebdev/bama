@@ -13,7 +13,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 $content = <<<EOT
-<div class="container">
+
 	<div class="row">
 		<h1>Analytics & OR Education Database ADMIN</h1>
     </div>
@@ -68,7 +68,7 @@ $content = <<<EOT
         <input type="submit" name="btn-sendInvite" id="btn-sendInvite" value="Send Invite"/>
 	  </div>
     </form>
-</div>
+
 EOT;
 
 $custom_css = <<<EOT
