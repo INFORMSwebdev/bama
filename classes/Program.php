@@ -94,7 +94,6 @@ class Program extends AOREducationObject
         return $programs;
     }
 
-    # ToDo: figure out how to get the programs an editor is in charge of, which will be slightly difficult since they are institution editors?
     public static function getEditorPrograms( $userId, $active = TRUE, $asObjects = FALSE ){
         $programs = [];
         $db = new EduDB();

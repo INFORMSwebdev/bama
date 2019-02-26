@@ -63,8 +63,36 @@ if (is_numeric($_SESSION['loggedIn'])) {
         $nonRes = $prog->Attributes['EstimatedNonresidentTuition'];
         $cost = $prog->Attributes['CostPerCredit'];
         //we only use the flag columns in queries, no need to display info about them on this page
-        //$ops = $prog->Attributes['ORFlag'];
-        //$analytics = $prog->Attributes['AnalyticsFlag'];
+        $ops = $prog->Attributes['ORFlag'];
+        $opsHTML = <<<EOT
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" id="ORFlag" name="ORFlag" value="0" />
+    <label class="ml-1" for="ORFlag">Operations Research Program</label>
+</div>
+EOT;
+        if($ops == true){
+            $opsHTML = <<<EOT
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" id="ORFlag" name="ORFlag" value="1" checked />
+    <label for="ORFlag">Operations Research Program</label>
+</div>
+EOT;
+        }
+        $analytics = $prog->Attributes['AnalyticsFlag'];
+        $analyticsHTML = <<<EOT
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" id="AnalyticsFlag" name="AnalyticsFlag" value="0" />
+    <label class="form-check-label" for="AnalyticsFlag">Analytics Program</label>
+</div>
+EOT;
+        if($analytics == true){
+            $analyticsHTML = <<<EOT
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" id="AnalyticsFlag" name="AnalyticsFlag" value="1" checked />
+    <label class="form-check-label" for="AnalyticsFlag">Analytics Program</label>
+</div>
+EOT;
+        }
         $collegeId = $prog->Attributes['CollegeId'];
 
         //include file that creates the option lists function
@@ -89,7 +117,6 @@ if (is_numeric($_SESSION['loggedIn'])) {
             $collegeHelper[] = array ('text' => $co['CollegeName'], 'value' => $co['CollegeId']);
         }
         $collegeListHTML = optionsHTML($collegeHelper);
-        # ToDo: change this to a null/blank check? is that this check
         if(isset($collegeId)){
             $collegeListHTML = str_replace('<option value="' . $collegeId . '">', '<option value="' . $collegeId . '" selected>', $collegeListHTML);
         }
@@ -126,7 +153,7 @@ if (is_numeric($_SESSION['loggedIn'])) {
         //user DOES have permission to edit this page, display the form
         $content = <<<EOT
 <div class="jumbotron bg-info text-white">
-    <form action="../scripts/processProgramEdit.php" method="POST">
+    <form action="../scripts/processProgramEditForm.php" method="POST">
         <div class="form-row">
             <h3>Program Details</h3>
         </div>
@@ -134,10 +161,20 @@ if (is_numeric($_SESSION['loggedIn'])) {
             <label for="programName">Program Name</label>
             <input type="text" class="form-control" name="programName" id="programName" value="{$name}" placeholder="Program Name" required />
         </div>
+        <br />
+        <div class="form-row">
+            <label for="AnalyticsFlag">Program Classification</label>
+        </div>
+        <div class="form-row">
+            {$analyticsHTML}
+        </div>
+        <div class="form-row">
+            {$opsHTML}
+        </div>
         <div class="form-row">
             <label for="institutionName">Institution</label>
             <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required>
-		        $instListHTML
+		        {$instListHTML}
             </select>
             <p id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>
         </div>
@@ -215,8 +252,8 @@ if (is_numeric($_SESSION['loggedIn'])) {
         </div>
         <div class="form-row">
             <label for="ContactId">Contact</label>
-            <select class="form-control" id="ContactId" name="ContactId" aria-describedby="ContactHelp" required>
-		        $contactListHTML
+            <select class="form-control" id="ContactId" name="ContactId" aria-describedby="ContactHelp">
+		        {$contactListHTML}
             </select>
             <!--<p id="ContactHelp">The list may take a second or two to load, please be patient after clicking the field.</p>-->
         </div>
@@ -226,14 +263,16 @@ if (is_numeric($_SESSION['loggedIn'])) {
         </div>
         <div class="form-row">
             <label for="CollegeId">College</label>
-            <select class="form-control" id="CollegeId" name="CollegeId" aria-describedby="CollegeHelp" required>
-		        $collegeListHTML
+            <select class="form-control" id="CollegeId" name="CollegeId" aria-describedby="CollegeHelp">
+		        {$collegeListHTML}
             </select>
             <!--<p id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>-->
         </div>
         <br />
         <div class="form-row">
-            <button class="btn btn-warning" type="submit">Submit changes</button>
+            <input type="hidden" id="programId" name="programId" value="{$progId}" />
+            <button class="btn btn-warning mr-2" type="submit" name="edit" value="edit">Submit changes</button>
+            <button class="btn btn-danger" type="submit" name="delete" value="delete">Delete This Program</button>
         </div>
     </form>
 </div>

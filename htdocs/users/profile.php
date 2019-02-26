@@ -37,10 +37,20 @@ foreach($insts as $ins){
 }
 $instList .= '</ul>';
 
+$content = '';
+
+//check for messages to display
+if(isset($_SESSION['registerMessage'])){
+    //add message to content
+    $content = "<div class='alert alert-info'><p>{$_SESSION['registerMessage']}</p></div>";
+    //clear out session variable after it is used
+    $_SESSION['registerMessage'] = null;
+}
+
 //set the page content to be displayed by the wrapper class
-$content = <<<EOT
+$content .= <<<EOT
 <div class="jumbotron">
-	<h1 class="display-4">Welcome, $firstName!</h1>
+	<h1 class="display-4">Welcome, {$firstName}!</h1>
 	<p class="lead">My Profile Info</p>
 	<p class=""
 	<hr class="my-4" />
@@ -60,7 +70,7 @@ $content = <<<EOT
        		</div>
        		<div class="form-group">
        		    <label for="Institution">Administrator of Institution</label>
-       		    $instList
+       		    {$instList}
             </div>
        	</form>
     </div>

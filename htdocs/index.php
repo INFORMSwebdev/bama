@@ -9,12 +9,27 @@ if (isset($_GET['testing'])) {
 }
 
 # ToDo: add in check for messages to display that come from other pages/scripts
+if(isset($_SESSION['editMessage'])){
+    //set up the alert color
+    if($_SESSION['editMessage']['success'] == true){
+        //successful insert into pending_updates table
+        $content = '<div class="alert alert-success">';
+    } else {
+        //unsuccessful insert
+        $content = '<div class="alert alert-danger">';
+    }
+    //add message to alert
+    $content .= "<p>{$_SESSION['editMessage']['text']}</p></div>";
+
+    //clear out the session variable after its' use
+    $_SESSION['editMessage'] = null;
+}
 
 //check if user is logged in, if not then redirect them to the login page; GET string is only used for testing purposes
 # ToDo: remove the GET string from this test before actual use
 if ((!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] != true)) {
     //user is not logged in
-    $content = <<<EOT
+    $content .= <<<EOT
 <div class="jumbotron">
     <h1>Welcome to the Analytics &amp; Operations Research Eduction Program Listing Site!</h1>
     <p class="lead">You will find information on many different Analytics and Operations Research (O.R.) programs offered by universities around the U.S.</p>
@@ -31,7 +46,7 @@ EOT;
     //user is already logged in, get their userID from the session
     $user = new User($_SESSION['loggedIn']);
     $userName = $user->Attributes['Username'];
-    $content = <<<EOT
+    $content .= <<<EOT
 <div class="jumbotron">
 	<h1 class="display-4">Welcome $userName!</h1>
 	<p class="lead">Message can go here about system</p>

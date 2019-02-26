@@ -27,6 +27,7 @@ if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
         //user is an INFORMS admin, let them see the regular page content
     } else {
         //user is an institution admin who already has a user account
+        $_SESSION['registerMessage'] = 'You already have an account, you don\'t need to register again.';
         header('Location: profile.php');
         die;
     }
