@@ -10,6 +10,7 @@ class User extends AOREducationObject
 {
     public static $table = "users";
     public static $primary_key = "UserId";
+    public static $tableId = 25;
     public static $data_structure = array(
         'UserId' => array('required' => TRUE, 'datatype' => PDO::PARAM_INT),
         'Username' => array('required' => TRUE, 'datatype' => PDO::PARAM_STR),

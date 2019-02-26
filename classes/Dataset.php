@@ -10,6 +10,7 @@ class Dataset extends AOREducationObject
 {
     public static $table = "datasets";
     public static $primary_key = "DatasetId";
+    public static $tableId = 12;
     public static $data_structure = array(
         'DatasetId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
         'DatasetName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),

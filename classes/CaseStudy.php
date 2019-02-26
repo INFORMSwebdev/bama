@@ -10,6 +10,7 @@ class CaseStudy extends AOREducationObject {
 
     public static $table = "cases";
     public static $primary_key = "CaseId";
+    public static $tableId = 4;
     public static $data_structure = array(
         'CaseId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
         'CaseTitle' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),

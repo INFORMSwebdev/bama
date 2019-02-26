@@ -111,7 +111,9 @@ $(function() {
   });
   $('#inviteForm').submit(function(e) {
     e.preventDefault();
-    alert("this doesn't go anywhere yet");
+    $.post( "/scripts/ajax_processInvite.php", $(this).serialize(), function(data) {
+      alert(data);
+    });
   });
   $('#clearFilter').on( 'click keyup', function(e) {
     e.preventDefault();

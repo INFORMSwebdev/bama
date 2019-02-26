@@ -10,6 +10,7 @@ class Program extends AOREducationObject
 {
     public static $table = "programs";
     public static $primary_key = "ProgramId";
+    public static $tableId = 19;
     public static $data_structure = array(
         'ProgramId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
         'InstitutionId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),

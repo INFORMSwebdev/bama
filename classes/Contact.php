@@ -10,6 +10,7 @@ class Contact extends AOREducationObject
 {
     public static $table = "contacts";
     public static $primary_key = "ContactId";
+    public static $tableId = 6;
     public static $data_structure = array(
         'ContactId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
         'ContactName' => array( 'required' => TRUE, 'datatype'=> PDO::PARAM_STR ),

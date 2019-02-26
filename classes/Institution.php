@@ -9,6 +9,7 @@
 class Institution extends AOREducationObject {
     public static $table = "institutions";
     public static $primary_key = "InstitutionId";
+    public static $tableId = 14;
     public static $data_structure = array(
         'InstitutionId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
         'InstitutionName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),

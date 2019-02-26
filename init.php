@@ -20,4 +20,8 @@ define( "IMAGES_DIR", ROOT_DIR . $aes['images_dir'] );
 define( "SETTINGS_DIR", ROOT_DIR . $aes['settings_dir'] );
 define( "CLASSES_DIR", ROOT_DIR . $aes['classes_dir'] );
 define( "WEB_ROOT", $aes['web_root'] );
+
+define( "UPDATE_TYPE_INSERT", $aes['updateTypeInsert']);
+define( "UPDATE_TYPE_UPDATE", $aes['updateTypeUpdate']);
+define( "UPDATE_TYPE_DELETE", $aes['updateTypeDelete']);
 require_once( CLASSES_DIR . "autoload.php");

@@ -9,14 +9,16 @@ class AOREducationObject {
   public static $data_structure;
   public $valid = FALSE;
 
-  public function __construct( $id ) {
-    $this->id = $id;
-    $db = new EduDB();
-    $sql = "SELECT * FROM ".static::$table." WHERE ".static::$primary_key."=:primary_key";
-    $params = array( array( ":primary_key", $id, PDO::PARAM_INT ) );
-    $row = $db->queryRowSafe( $sql, $params );
-    foreach( $row as $key => $value ) $this->Attributes[$key] = $value;
-    $this->valid = (count($row)) ? TRUE : FALSE;
+  public function __construct( $id = null) {
+      if ($id) {
+          $this->id = $id;
+          $db = new EduDB();
+          $sql = "SELECT * FROM ".static::$table." WHERE ".static::$primary_key."=:primary_key";
+          $params = array( array( ":primary_key", $id, PDO::PARAM_INT ) );
+          $row = $db->queryRowSafe( $sql, $params );
+          foreach( $row as $key => $value ) $this->Attributes[$key] = $value;
+          $this->valid = (count($row)) ? TRUE : FALSE;
+      }
   }
   
   public static function clean_input_array( $input_array, $structure ) {
@@ -41,6 +43,34 @@ class AOREducationObject {
     if (!$result) die( "Something went wrong" );
     $sql = "SELECT LAST_INSERT_ID()";
     return $db->queryItem( $sql );
+  }
+
+  public static function createInstance( $params ) {
+      $object = new static();
+      $params = self::clean_input_array( $params, static::$data_structure );
+      $object->Attributes = $params;
+      $object->valid = TRUE;
+      return $object;
+  }
+
+  public function createPendingUpdate( $updateTypeId, $UserId )
+  {
+      $class = get_class($this);
+      $TableId = $class::$tableId;
+      $db = new EduDB();
+      $sql = "INSERT INTO pending_updates (UpdateTypeId, TableId, RecordId, UpdateContent, UserId ) VALUES (:UpdateTypeId, :TableId, :RecordId, :UpdateContent, :UserId)";
+      $params = [];
+      $params[] = array( ":UpdateTypeId", $updateTypeId, PDO::PARAM_INT );
+      $params[] = array( ":TableId", $TableId, PDO::PARAM_INT );
+      if ($updateTypeId == UPDATE_TYPE_INSERT) {
+          $params[] = array( ":RecordId", null, PDO::PARAM_NULL );
+      }
+      else {
+          $params[] = array( ":RecordId", $this->Attributes[static::$primary_key], PDO::PARAM_INT );
+      }
+      $params[] = array( ":UpdateContent", serialize($this->Attributes), PDO::PARAM_STR );
+      $params[] = array( ":UserId", $UserId, PDO::PARAM_INT );
+      return $db->execSafe( $sql, $params );
   }
   
   public function delete() {
