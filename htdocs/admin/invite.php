@@ -112,8 +112,16 @@ $(function() {
   $('#inviteForm').submit(function(e) {
     e.preventDefault();
     $.post( "/scripts/ajax_processInvite.php", $(this).serialize(), function(data) {
-      alert(data);
-    });
+      if (data.errors.length > 0 ) {
+        var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+        for (var i = 0; i < data.errors.length; i++) {
+          msg +=  data.errors[i] + "\\r\\n";
+        }
+        alert( msg );
+      }
+      else if (data.msg) alert( data.msg );
+      else alert( "Something went wrong." );
+    }, "json");
   });
   $('#clearFilter').on( 'click keyup', function(e) {
     e.preventDefault();
