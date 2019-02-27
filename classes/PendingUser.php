@@ -21,4 +21,25 @@ class PendingUser extends AOREducationObject
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR )
     );
+
+    public function approvalAction( $action ) {
+      if ($action === APPROVAL_TYPE_APPROVE) {
+
+      }
+      else {
+
+      }
+    }
+
+    public function approve() {
+        return $this->approvalAction( APPROVAL_TYPE_APPROVE );
+    }
+
+    public function deny() {
+        return $this->approvalAction( APPROVAL_TYPE_REJECT );
+    }
+
+    public function reject() {
+        return $this->approvalAction( APPROVAL_TYPE_REJECT );
+    }
 }
