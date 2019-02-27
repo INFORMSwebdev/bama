@@ -30,14 +30,12 @@ $content = <<<EOT
 EOT;
 
 $custom_css = <<<EOT
-.btn-approve, .btn-deny {
-  width: 80px;
-}
+
 EOT;
 
 $custom_js = <<<EOT
 $(function() {
-  $('#usersTable').DataTable({
+  var usersTable = $('#usersTable').DataTable({
     "ajax": {
       "url": "/scripts/ajax_getPendingUsers.php",
       "dataSrc":""
@@ -74,12 +72,30 @@ $(function() {
         "data": "PendingUserId",
         "className": "ctrl-col",
         "render": function ( data, type, row, meta ) {
-          var btn_edit = '<button class="btn-approve" id="id_'+data+'">Approve</button>';
-          var btn_del = '<button class="btn-deny" id="id_'+data+'">Deny</button>';
+          var btn_edit = '<button class="btn btn-primary btn-approve btn-block" id="id_'+data+'">Approve</button>';
+          var btn_del = '<button class="btn btn-secondary btn-reject btn-block" id="id_'+data+'">Reject</button>';
           return btn_edit + btn_del;
         }
       }
     ]
+  });
+  $(document).on( 'click keyup', '.btn-approve,.btn-reject', function(e) {
+    var id = $(this).attr('id').substring(3);
+    var action = $(this).hasClass('btn-approve') ? 2 : 3;
+    $.post( '/scripts/ajax_approveUser.php', { 'PendingUserId': id, 'action': action }, function(data) {
+      if (data.errors.length > 0 ) {
+        var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+        for (var i = 0; i < data.errors.length; i++) {
+          msg +=  data.errors[i] + "\\r\\n";
+        }
+        alert( msg );
+      }
+      else if (data.msg) {
+        alert( data.msg );
+        usersTable.ajax.reload();
+      }
+      else alert( "Something went wrong." );
+    }, 'json');
   });
 });
 EOT;

@@ -79,7 +79,8 @@ class User extends AOREducationObject
         $sql = "SELECT UserId FROM users WHERE Username=:Email";
         $params = array(array(":Email", $Email, PDO::PARAM_STR));
         $UserId = $db->queryItemSafe($sql, $params);
-        if ($asObject) return new User($UserId);
+        if (!$UserId) return FALSE;
+        elseif ($asObject) return new User($UserId);
         else return $UserId;
     }
 
