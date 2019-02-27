@@ -17,7 +17,7 @@ $content = <<<EOT
 		<div class="row">
 			<p>Log in with your AA front end (self-service) credentials.</p>
 		</div>
-		<form class="needs-validation" action="../scripts/processAdminLoginForm.php" method="post" novalidate id="admin_login_form">
+		<form class="needs-validation" method="post" novalidate id="admin_login_form">
 			<div class="form-row">
 				<label for="validationUsername">Username</label>
 				<input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
