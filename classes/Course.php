@@ -120,4 +120,25 @@ class Course extends AOREducationObject
         $params = array( array( ":TextbookId", $TextbookId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
     }
+
+
+    /**
+     * Get list of books tied to this course
+     */
+    public function getBooks( $active = TRUE, $asObjects = FALSE ){
+        $booksOut = [];
+        $db = new EduDB();
+        $sql = "SELECT TextbookId FROM course_textbooks WHERE CourseId = $this->id";
+        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $books = $db->query( $sql );
+        if($asObjects){
+            foreach($books as $book){
+                $booksOut[] = new Book($book);
+            }
+        }
+        else {
+            $booksOut = $books;
+        }
+        return $booksOut;
+    }
 }

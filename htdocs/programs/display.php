@@ -229,7 +229,7 @@ EOT;
             <a role="button" class="btn btn-outline-primary" href="/courses/programCourses.php?id={$prog->Attributes['ProgramId']}">Program Courses</a>
             <a role="button" class="btn btn-outline-primary" href="/instructors/programInstructors.php?id={$prog->Attributes['ProgramId']}">Program Instructors</a>
             <a role="button" class="btn btn-outline-primary" href="/software/programSoftware.php?id={$prog->Attributes['ProgramId']}">Program Software</a>
-            <a role="button" class="btn btn-outline-primary" href="/textbooks/programTextbooks.php?id={$prog->Attributes['ProgramId']}">Program Text Books</a>
+            <a role="button" class="btn btn-outline-primary" href="/textbooks/programTextbooks.php?progId={$prog->Attributes['ProgramId']}">Program Text Books</a>
             <a role="button" class="btn btn-outline-primary" href="/cases/programCases.php?id={$prog->Attributes['ProgramId']}">Program Case Studies</a>
         </div>
     </div>
@@ -243,8 +243,8 @@ EOT;
     <h2>View Program Details</h2>
     <form action="display.php" method="get">
         <div class="form-group">
-            <label for="Institution">Select a Program</label>
-		    <select class="form-control" name="" id="" aria-describedby="Help" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
+            <label for="Program">Select a Program</label>
+		    <select class="form-control" name="Program" id="Program" aria-describedby="Help" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
 		        $progListHTML
             </select>
             <!--<p class="text text-muted" id="Help">The list may take a second or two to load, please be patient after clicking the field.</p>-->

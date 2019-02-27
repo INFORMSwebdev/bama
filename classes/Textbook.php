@@ -43,4 +43,22 @@ class Textbook extends AOREducationObject
         $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
     }
+
+    public static function getBooks( $active = TRUE, $asObjects = FALSE ){
+        $books = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM textbooks";
+        if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        $bookList = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $bookList as $book) {
+                $books[] = new Textbook($book);
+            }
+        }
+        else {
+            $books = $bookList;
+        }
+
+        return $books;
+    }
 }

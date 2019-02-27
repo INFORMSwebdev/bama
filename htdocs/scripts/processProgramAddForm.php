@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'ORFlag' => $orFlag,
         'AnalyticsFlag' => $analyticsFlag,
         'CollegeId' => $collegeId
-        );
+    );
     //make a not-yet-existent Program record
     $x = Program::createInstance( $data );
     //add record to pending_updates

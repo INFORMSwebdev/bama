@@ -69,6 +69,7 @@ EOT;
         //display the appropriate menu item as active based on admin, editor, or anon
         if (isset($_SESSION['admin']) && $_SESSION['admin'] == true) {
             //navbar for admins (INFORMS Admins)
+            # ToDo: add in more links to the nav bar
             $navbar = <<<EOT
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="https://www.informs.org" target="_blank">
@@ -97,6 +98,7 @@ EOT;
 		</nav>
 EOT;
         } else if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+            # ToDo: add in more links to the nav bar
             $navbar = <<<EOT
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="https://www.informs.org" target="_blank">

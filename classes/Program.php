@@ -37,15 +37,38 @@ class Program extends AOREducationObject
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
     );
 
-    public function getTextbooks() {
+    public function getTextbooks( $active = TRUE, $asObjects = FALSE ) {
+        $booksOut = [];
         $db = new EduDB();
-        $sql = "select t.* from textbooks t inner join course_textbooks ct on t.TextbookId = ct.TextbookId inner join program_courses pc on pc.CourseId = ct.CourseId where pc.ProgramId = $this->id AND t.Deleted = 0";
+        $sql = "SELECT t.* FROM textbooks t INNER JOIN course_textbooks ct ON t.TextbookId = ct.TextbookId INNER JOIN program_courses pc ON pc.CourseId = ct.CourseId WHERE pc.ProgramId = $this->id";
+        if ($active !== null) $sql .= " AND t.Deleted = " . (($active == TRUE) ? "0" : "1");
         $books = $db->query( $sql );
-        return $books;
+        if ($asObjects) {
+            foreach( $books as $book) {
+                $booksOut[] = new Textbook($book);
+            }
+        }
+        else {
+            $booksOut = $books;
+        }
+        return $booksOut;
     }
 
-    public function getCourses() {
-
+    public function getCourses( $active = TRUE, $asObjects = FALSE ) {
+        $coursesOut = [];
+        $db = new EduDB();
+        $sql = "SELECT CourseId FROM program_courses WHERE ProgramId = $this->id";
+        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $courses = $db->query( $sql );
+        if($asObjects){
+            foreach($courses as $course){
+                $coursesOut[] = new Course($course);
+            }
+        }
+        else {
+            $coursesOut = $courses;
+        }
+        return $coursesOut;
     }
 
     public static function getAllPrograms( $active = TRUE, $asObjects = FALSE ){

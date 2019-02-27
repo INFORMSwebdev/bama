@@ -1,11 +1,4 @@
 <?php
-//todo Don't forget to update the production servers /common/settings/common.ini file's analytics_education section
-# This page is for anonymous users to request access to the system
-# so an INFORMS admin will be notified of the request and have to
-# approve or deny it. If approved, the user will be added to the
-# users table and the UserId will be assigned to the requested
-# institutions' AdminId column
-
 //load the init.php file, which has a session_start() and also sets up path constants; not to mention it's autoload
 //lets not forget that there is also the error settings in init.php!
 require_once '../../init.php';
@@ -49,15 +42,9 @@ $instListHTML = optionsHTML($instListHelper);
 $page_title = '';
 $commentBoxLabel = 'Comments';
 
-if((isset($_SESSION['admin']) && $_SESSION['admin'] != TRUE) || isset($_GET['testing'])){
-    //user is an INFORMS admin OR the system is being tested
-    $page_title = 'Create a new Institution Administrator';
-}
-else{
-    //user is anonymous
-    $page_title = 'Become an Institution Administrator';
-    $commentBoxLabel = 'Justification';
-}
+//user is anonymous
+$page_title = 'Become an Institution Administrator';
+$commentBoxLabel = 'Justification';
 
 //user is anonymous, show them the Request for Access form
 //set the form that will be displayed to users

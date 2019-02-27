@@ -9,21 +9,47 @@
 require_once '../../init.php';
 
 //get the ProgramId to find out which textbooks to display
-$progId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$progId = filter_input(INPUT_GET, 'progId', FILTER_VALIDATE_INT);
 
 $content = '';
 
 if ($progId) {
+    # ToDo: fix this up so that it displays a list of courses in this program w/ textbooks & display the textbook info
+     # under each course that has a textbook
+
+    # ToDo: FIX THIS MESS!!
     //get the textbooks in this program
     $prog = new Program($progId);
     $progName = $prog->Attributes['ProgramName'];
     $inst = new Institution($prog->Attributes['InstitutionId']);
     $instName = $inst->Attributes['InstitutionName'];
-    $progBooks = $prog->getTextbooks();
-    $tableRows = '';
-    if ($progBooks == true) {
-        foreach ($progBooks as $book) {
-            $tableRows .= <<<EOT
+
+    $cards = '';
+
+    //get courses in this program
+    $courses = $prog->getCourses();
+
+    //check to make sure courses were returned
+    if($courses){
+        //for each course, get list of textbooks
+        foreach($courses as $course){
+            $courseObj = new Course($course);
+            $courseBooks = $courseObj->getBooks();
+
+            //set up the card header w/ the course name
+            $cards .= <<<EOT
+<div class="card"><!-- Card Start -->
+    <div class="card-header"><!-- Card Header Start -->
+        {$course->Attributes['CourseName']}
+    </div><!-- Card Header Close -->
+    <div class="card-body"><!-- Card Body Start -->
+EOT;
+
+            //check to make sure books were returned
+            if($courseBooks){
+                $tableRows = '';
+                foreach ($courseBooks as $book) {
+                    $tableRows .= <<<EOT
 <tr>
     <td>{$book['TextbookName']}</td>
     <td>{$book['Authors']}</td>
@@ -31,13 +57,8 @@ if ($progId) {
     <td><a type="button" class="btn btn-info" href="/textbooks/edit.php?id={$book['TextbookId']}">Edit</a></td>
 </tr>
 EOT;
-        }
-
-        //if content is returned (i.e. at least one course of this program has associated textbooks)
-        $content = <<<EOT
-<div class="flex-column">
-    <h2>Textbooks for: {$progName} ({$instName})</h2>
-</div>
+                }
+                $cards .= <<<EOT
 <table class="table" id="textbookTable">
     <thead>
         <tr>
@@ -51,16 +72,31 @@ EOT;
         {$tableRows}
     </tbody>
 </table>
-<br />
 EOT;
-    } else {
-        //display that there are no textbooks associated with this program
-        $content = <<<EOT
-<div class="alert alert-warning">
-    <p>There are no textbooks in any courses associated with the program {$progName} ({$instName})</p>
+            }
+            else {
+                $courseId = $course->Attributes['CourseId'];
+                $cards .= '<p>No textbooks are currently available for this course.</p>';
+                $cards .= "<a class='btn btn-primary btn-block' href='../textbooks/add.php?courseId=$courseId'>Add Textbook to This Course</a>";
+            }
+            //close the card divs
+            $cards .= <<<EOT
+    </div><!-- Card Body Close -->
+</div><!-- Card Close -->
+EOT;
+        }
+    }
+    else {
+        $cards .= <<<EOT
+<div class="alert alert-info">
+    <p>There are currently no courses associated with this program.</p>
+    <a class="btn btn-primary btn-block" href="../courses/add.php?progId={$prog->Attributes['ProgramId']}">Add Course to This Program</a>
 </div>
 EOT;
+
     }
+
+
     $content .= <<<EOT
 <div class="row">
     <a class="btn btn-primary btn-block" href="add.php?progId={$progId}">Add a textbook to this program</a>

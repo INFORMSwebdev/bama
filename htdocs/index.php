@@ -83,7 +83,7 @@ $(function() {
         var foo = '<p class="text text-danger">No programs available to display right now, please try again later.</p>';
         return foo;
     } else {
-        var html= '<h2>My Programs</h2><table class="table" id="usersTable"><thead><tr><th>Name</th><th>Institution</th><th>Type</th><th>Delivery Method</th><th>Testing Requirements</th><th>Link</th><th>View</th></tr></thead><tbody>';
+        var html= '<h2>My Programs</h2><table class="table" id="usersTable"><thead><tr><th>Name</th><th>Institution</th><th>Type</th><th>Delivery Method</th><th>Testing Requirements</th><th>Link</th><th></th></tr></thead><tbody>';
         for( var i = 0; i < progs.length; i++ ){
             html += '<tr>';
             html += '<td>' + progs[i].ProgramName + '</td>';
@@ -92,7 +92,7 @@ $(function() {
             html += '<td>' + progs[i].DeliveryMethod + '</td>';
             html += '<td>' + progs[i].TestingRequirement + '</td>';
             html += '<td><a target="_blank" class="text-wrap" href="' + progs[i].ProgramAccess + '">' + progs[i].ProgramAccess + '</a></td>';
-            html += '<td><a class="btn btn-info" href="/programs/edit.php?id=' + progs[i].ProgramId + '">Edit</a></td>';
+            html += '<td><a class="btn btn-primary" href="/programs/display.php?id=' + progs[i].ProgramId + '">Details</a><a class="btn btn-info" href="/programs/edit.php?id=' + progs[i].ProgramId + '">Edit</a></td>';
             html += '</tr>';
         }
         html += '</tbody></table>';

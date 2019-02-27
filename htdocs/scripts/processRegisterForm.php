@@ -25,58 +25,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die;
     }
 
-    //check session variables to see what kind of register form was submitted
-    if ((isset($_SESSION['admin']) && $_SESSION['admin'] == TRUE) || isset($_GET['testing'])) {
-        //INFORMS admin has attempted to set up a new user account
-        //go ahead and make it and associate the new account as the admin of the specified institution
-        # required inputs = Email (Username), First Name, Last Name, Institution
-        # optional inputs = Comments
+    //anonymous user has requested to become and institution admin
+    # required inputs = Email (Username), First Name, Last Name, Institution
+    # optional inputs = Justification (Comments)
 
-        $newUserId = User::create( array( 'Username' => $user, 'FirstName' => $firstName, 'LastName' => $lastName,
-            'Comments' => $instId ) );
-        $newUser = new User($newUserId);
-        $newUser->assignToInstitution($instId);
+    //add record to pending_users table
+    $pendingUserId = PendingUser::create( array( 'Username' => trim($_POST['Username']),
+        'FirstName' => trim($_POST['FirstName']),
+        'LastName' => trim($_POST['LastName']),
+        'InstitutionId' => trim($_POST['Institution']),
+        'Comments' => trim($_POST['Comments']) ) );
 
-        //report successful user creation and institution assignment via session variable
-        //make sure the registerErrors session variable gets reset
-        unset($_SESSION['registerErrors']);
-        //since the account was successfully created, we don't want the user to have to clear out the fields themselves
-        unset($_SESSION['registerInput']);
+    //notify INFORMS admin a user requested access
+    # ToDo: figure out how to send a notification and what is needed for it
+    # from, to, subject, body?
 
-        //set a new session variable up
-        $_SESSION['registerSuccess'] = $newUserId;
+    //make sure we aren't passing unwanted session variables around
+    unset($_SESSION['registerErrors']);
 
-        //redirect back to register page so admin can add more users if desired
-        header('Location: ' . USER_DIR . 'register.php' );
-        die;
-    } else {
-        //anonymous user has requested to become and institution admin
-        # required inputs = Email (Username), First Name, Last Name, Institution
-        # optional inputs = Justification (Comments)
+    //indicate successful pending user creation
+    $_SESSION['registerSuccess'] = $pendingUserId;
+    //pass the user input to the thank you page, which will decide what to display
+    $_SESSION['registerInput'] = array( $user, $firstName, $lastName, $instId, $comments );
 
-        //add record to pending_users table
-        $pendingUserId = PendingUser::create( array( 'Username' => trim($_POST['Username']),
-            'FirstName' => trim($_POST['FirstName']),
-            'LastName' => trim($_POST['LastName']),
-            'InstitutionId' => trim($_POST['Institution']),
-            'Comments' => trim($_POST['Comments']) ) );
-
-        //notify INFORMS admin a user requested access
-        # ToDo: figure out how to send a notification and what is needed for it
-         # from, to, subject, body?
-
-        //make sure we aren't passing unwanted session variables around
-        unset($_SESSION['registerErrors']);
-
-        //indicate successful pending user creation
-        $_SESSION['registerSuccess'] = $pendingUserId;
-        //pass the user input to the thank you page, which will decide what to display
-        $_SESSION['registerInput'] = array( $user, $firstName, $lastName, $instId, $comments );
-
-        //redirect anon user to a Thank You For Registering Page
-        header('Location: ' . USER_DIR . 'thankyou.php' );
-        die;
-    }
+    //redirect anon user to a Thank You For Registering Page
+    header('Location: ' . USER_DIR . 'thankyou.php' );
+    die;
 }
 
 /**
