@@ -106,13 +106,29 @@ class User extends AOREducationObject
 
     public function sendInviteEmail()
     {
-        $db = new EduDB();
         $email = $this->Attributes['Username'];
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            // TODO add code to send email
+            $this->generateToken();
+            $path = WEB_ROOT . 'users/setPassword.php?token=' . $this->Attributes['Token'];
+            $link = '<a href="'.$path.'">'.$path.'</a>';
+            $msg = <<<EOT
+<p>Welcome to the INFORMS Analytics &amp; OR Education Database management system. We have 
+created an account for you.</p>
+<p>Your username: {$this->Attributes['Username']}</p>
+<p>Please click this link to set a password:</p>
+<p>$link</p>
+<p>Note: If you are using a plain-text email reader, you will need to manually copy and paste the full URL into a web browser.</p>
+EOT;
+            $e_params['to'] = $this->Attributes['Username'];
+            $e_params['subject'] = "Analytics and Operations Research Education Database - Welcome";
+            $e_params['body_html'] = $msg;
+            $email = new email( $e_params );
+            $success = $email->send();
+            return $success;
         } else {
             static::log("Bad email address: $email");
         }
+        return false;
     }
 
     public function sendPasswordResetEmail()

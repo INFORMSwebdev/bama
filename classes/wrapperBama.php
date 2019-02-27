@@ -65,6 +65,7 @@ EOT;
 EOT;
         //this section is to display certain things in the User menu, depending on whether a user is an INFORMS admin, program admin, or anon user
 
+        $admin_login_link = (isset($_COOKIE['aes_admin'])) ? $admin_login_link = '<a class="nav-item nav-link" href="/users/admin_login.php">Admin Log In</a>' : '';
         //display the appropriate menu item as active based on admin, editor, or anon
         if (isset($_SESSION['admin']) && $_SESSION['admin'] == true) {
             //navbar for admins (INFORMS Admins)
@@ -82,9 +83,10 @@ EOT;
 					<div class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
 						<div class="dropdown-menu">
-							<a class="nav-item nav-link" href="/users/profile.php">My Profile</a>
-							<a class="nav-item nav-link" href="/admin/invite.php">Invite New Administrators</a>
-							<a class="nav-item nav-link" href="/admin/?.php">?</a>
+							<a class="nav-item nav-link" href="/admin/invite.php">Invite Institution Editor</a>
+							<a class="nav-item nav-link" href="/admin/pendingUsers.php">Pending Users</a>
+							<a class="nav-item nav-link" href="/admin/Users.php">Users</a>
+							<a class="nav-item nav-link" href="/admin/pendingUsers.php">Pending Updates</a>
 						</div>
 					</div>
 				</div>
@@ -111,6 +113,7 @@ EOT;
 						<div class="dropdown-menu">
 							<a class="nav-item nav-link" href="/users/profile.php">My Profile</a>
 							<a class="nav-item nav-link" href="/users/register.php">Register Program Admin</a>
+							$admin_login_link
 						</div>
 					</div>
 				</div>
@@ -136,6 +139,7 @@ EOT;
 					<a class="nav-item nav-link" href="/index.php">Home</a>
 					<a class="nav-item nav-link" href="/users/register.php">Become an Institution Administrator</a>
 					<a class="nav-item nav-link" href="/users/login.php">Log In</a>
+					$admin_login_link
 				</div>
 			</div>
 		</nav>

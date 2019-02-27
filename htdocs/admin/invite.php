@@ -13,7 +13,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 $content = <<<EOT
-<div class="container">
+
 	<div class="row">
 		<h1>Analytics & OR Education Database ADMIN</h1>
     </div>
@@ -68,7 +68,7 @@ $content = <<<EOT
         <input type="submit" name="btn-sendInvite" id="btn-sendInvite" value="Send Invite"/>
 	  </div>
     </form>
-</div>
+
 EOT;
 
 $custom_css = <<<EOT
@@ -112,8 +112,16 @@ $(function() {
   $('#inviteForm').submit(function(e) {
     e.preventDefault();
     $.post( "/scripts/ajax_processInvite.php", $(this).serialize(), function(data) {
-      alert(data);
-    });
+      if (data.errors.length > 0 ) {
+        var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+        for (var i = 0; i < data.errors.length; i++) {
+          msg +=  data.errors[i] + "\\r\\n";
+        }
+        alert( msg );
+      }
+      else if (data.msg) alert( data.msg );
+      else alert( "Something went wrong." );
+    }, "json");
   });
   $('#clearFilter').on( 'click keyup', function(e) {
     e.preventDefault();

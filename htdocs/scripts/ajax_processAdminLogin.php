@@ -36,6 +36,7 @@ else $response['errors'][] = "The password entered was incorrect";
 if ($is_admin) {
     $response['success'] = 1;
     $_SESSION['admin'] = 1;
+    setcookie("aes_admin", 1, time()+(60*60*24*180), "/");
 }
 
 echo json_encode( $response );
