@@ -135,7 +135,7 @@ EOT;
     $content = <<<EOT
 <div class="card">
     <div class="card-header" id="cardHeader">
-        <h2 class="display2">{$name}</h2>
+        <h2 class="display2">{$name} - {$instName}</h2>
         <ul class="nav nav-tabs card-header-tabs" id="cardNav" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="programDetails" href="#tabProgram" data-toggle="tab" aria-selected="true" aria-controls="tabProgram">Program Details</a>

@@ -45,10 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //set a new session variable up
         $_SESSION['registerSuccess'] = $newUserId;
-        # ToDo: figure out what I want to pass back to the register page (if anything) to display to the INFORMS admin
-         # current ideas: newUserId (definitely), FirstName? LastName? Comments? InstitutionId?
-         # We don't need to pass back the input since it was already accepted and processed through, but would we
-         # want to pass anything back to display?
 
         //redirect back to register page so admin can add more users if desired
         header('Location: ' . USER_DIR . 'register.php' );
@@ -74,7 +70,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //indicate successful pending user creation
         $_SESSION['registerSuccess'] = $pendingUserId;
-        # ToDo: do we want to display the users' entered info on this thank you page? Some info? Confer w/ Dave
         //pass the user input to the thank you page, which will decide what to display
         $_SESSION['registerInput'] = array( $user, $firstName, $lastName, $instId, $comments );
 
@@ -125,7 +120,6 @@ function validateInputs($email, $firstName, $lastName, $inst){
     } else if( !is_numeric($inst)){
         $institution_err = "Valid institution must be selected. InstitutionId passed was non-numeric.";
     }
-    # ToDo: put in more validation checks to see if the institution selected actually exists in the system
 
     //check to see if we have any errors in the inputs
     if(empty($username_err) && empty($firstName_err) && empty($lastName_err) && empty($institution_err)){

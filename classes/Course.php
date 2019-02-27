@@ -86,7 +86,7 @@ class Course extends AOREducationObject
     }
 
     /**
-     * deleete course - dataset association
+     * delete course - dataset association
      * @param $DatasetId int
      * @return int number of database rows affected by operation
      */

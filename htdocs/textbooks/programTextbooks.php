@@ -28,7 +28,7 @@ if ($progId) {
     <td>{$book['TextbookName']}</td>
     <td>{$book['Authors']}</td>
     <td>{$book['TextbookPublisher']}</td>
-    <td><button type="button" class="btn btn-info">Placeholder</button></td>
+    <td><a type="button" class="btn btn-info" href="/textbooks/edit.php?id={$book['TextbookId']}">Edit</a></td>
 </tr>
 EOT;
         }
@@ -38,7 +38,7 @@ EOT;
 <div class="flex-column">
     <h2>Textbooks for: {$progName} ({$instName})</h2>
 </div>
-<table class="table">
+<table class="table" id="textbookTable">
     <thead>
         <tr>
             <th>Name</th>
@@ -51,6 +51,7 @@ EOT;
         {$tableRows}
     </tbody>
 </table>
+<br />
 EOT;
     } else {
         //display that there are no textbooks associated with this program
@@ -60,6 +61,12 @@ EOT;
 </div>
 EOT;
     }
+    $content .= <<<EOT
+<div class="row">
+    <a class="btn btn-primary btn-block" href="add.php?progId={$progId}">Add a textbook to this program</a>
+</div>
+EOT;
+
 } else {
     //programId was not in query string or was not an integer, display a select list for the user to select the program
 
@@ -91,6 +98,12 @@ EOT;
 </div>
 EOT;
 }
+$customJS = <<<EOT
+$(function() {
+    $('#textbookTable').DataTable();
+});
+EOT;
+
 
 //create the parameters to pass to the wrapper
 $page_params = array();
@@ -98,6 +111,9 @@ $page_params['content'] = $content;
 $page_params['page_title'] = "View Program Textbooks";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
+$page_params['css'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css' );
+$page_params['js'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js' );
+$page_params['js'][] = array( 'text' => $customJS );
 //$page_params['js'][] = array( 'text' => $custom_js );
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer

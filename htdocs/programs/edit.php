@@ -149,9 +149,6 @@ EOT;
         //make the currently assigned institution be the selected value
         $instListHTML = str_replace('<option value="' . $instId . '">', '<option value="' . $instId . '" selected>', $instListHTML);
 
-        # ToDo: add currently selected option (if selected at all) to select list for college & contact like w/ institution.
-         # we will also need pages to add new colleges
-
         //user DOES have permission to edit this page, display the form
         $content = <<<EOT
 <div class="jumbotron bg-info text-white">
@@ -176,6 +173,7 @@ EOT;
         <div class="form-row">
             <label for="institutionName">Institution</label>
             <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required>
+                <!-- ToDo: make this into ajax and add a filter like Dave's stuff has? -->
 		        {$instListHTML}
             </select>
             <p id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>
@@ -190,7 +188,7 @@ EOT;
         </div>
         <div class="form-row">
             <label for="ProgramAccess">Access Link</label>
-            <input type="text" class="form-control" name="ProgramAccess" id="ProgramAccess" value="{$access}" placeholder="URL to external program page." />
+            <input type="text" class="form-control" name="ProgramAccess" id="ProgramAccess" value="{$access}" placeholder="URL to external program page" />
         </div>
         <div class="form-row">
             <label for="YearEstablished">Year Established</label>
@@ -278,7 +276,7 @@ EOT;
         </div>
         <!--<br />-->
         <div class="form-row">
-            <p class="lead">These changes will not take effect until they have been approved by an administrator.</p>
+            <p class="lead">These changes will not take effect until they have been approved by an INFORMS administrator.</p>
         </div>
     </form>
 </div>
