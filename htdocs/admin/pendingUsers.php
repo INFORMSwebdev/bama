@@ -22,7 +22,7 @@ $content = <<<EOT
 <div class="row" id="userTableContainer">
   <table id="usersTable">
     <thead>
-      <tr><th>First Name</th><th>Last Name</th><th>Username</th><th>Created</th><th>InstitutionId</th></tr>
+      <tr><th>First Name</th><th>Last Name</th><th>Username</th><th>Created</th><th>Institution</th><th>Comments</th><th>Approval</th></tr>
     </thead>
     <tbody></tbody>
   </table>
@@ -30,7 +30,9 @@ $content = <<<EOT
 EOT;
 
 $custom_css = <<<EOT
-
+.btn-approve, .btn-deny {
+  width: 80px;
+}
 EOT;
 
 $custom_js = <<<EOT
@@ -40,10 +42,7 @@ $(function() {
       "url": "/scripts/ajax_getPendingUsers.php",
       "dataSrc":""
     },
-    "language": {
-        "infoEmpty":     "My Custom Message On Empty Table"
-    },
-    "order": [[ 1, 'asc' ], [ 0, 'asc' ]],
+    "order": [[3, 'desc'],[ 1, 'asc' ], [ 0, 'asc' ]],
     "columnDefs": [
       {
         "targets": 0,
@@ -63,16 +62,20 @@ $(function() {
       },
       {
         "targets": 4,
-        "data": "InstitutionId"
+        "data": "Institution"
+      },
+      {
+        "targets": 5,
+        "data": "Comments"
       },
       { 
-        "targets": 5,
+        "targets": 6,
         "orderable": false, 
         "data": "PendingUserId",
         "className": "ctrl-col",
         "render": function ( data, type, row, meta ) {
-          var btn_edit = '<input class="btn-edit" type="image" src="/images/icon-edit.png" id="id_'+data+'" />';
-          var btn_del = '<input class="btn-delete" type="image" src="/images/icon-delete.png" id="id_'+data+'" />';
+          var btn_edit = '<button class="btn-approve" id="id_'+data+'">Approve</button>';
+          var btn_del = '<button class="btn-deny" id="id_'+data+'">Deny</button>';
           return btn_edit + btn_del;
         }
       }
@@ -86,8 +89,8 @@ $p_params = [];
 $p_params['content'] = $content;
 $p_params['admin'] = TRUE;
 $p_params['css'][] = array( 'text' => $custom_css );
-$p_params['css'][] = array( 'url' => 'https://common.informs.org/js/DataTables-1.9.4/media/css/jquery.dataTables.css' );
+$p_params['css'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css' );
 $p_params['js'][] = array( 'text' => $custom_js );
-$p_params['js'][] = array( 'url' => 'https://common.informs.org/js/DataTables-1.9.4/media/js/jquery.dataTables.min.js' );
+$p_params['js'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js' );
 $wrapper = new wrapperBama($p_params);
 $wrapper->html();
