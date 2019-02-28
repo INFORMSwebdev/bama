@@ -174,4 +174,16 @@ EOT;
         $matchedUserId = $db->queryItemSafe($sql, $params);
         return $matchedUserId;
     }
+
+    public function getCourses(){
+        $db = new EduDb();
+        $sql = "SELECT CourseId FROM program_courses pc INNER JOIN program p ON pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id)";
+        return $db->queryColumn( $sql );
+    }
+
+    public function getBookAssignments(){
+        $db = new EduDb();
+        $sql = "SELECT ct.TextbookId FROM course_textbooks ct INNER JOIN program_courses pc ON ct.CourseId = pc.CourseId INNER JOIN programs p ON pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id)";
+        return $db->queryColumn( $sql );
+    }
 }

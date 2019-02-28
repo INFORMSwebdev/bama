@@ -14,10 +14,6 @@ $progId = filter_input(INPUT_GET, 'progId', FILTER_VALIDATE_INT);
 $content = '';
 
 if ($progId) {
-    # ToDo: fix this up so that it displays a list of courses in this program w/ textbooks & display the textbook info
-     # under each course that has a textbook
-
-    # ToDo: FIX THIS MESS!!
     //get the textbooks in this program
     $prog = new Program($progId);
     $progName = $prog->Attributes['ProgramName'];
@@ -31,6 +27,8 @@ if ($progId) {
 
     //check to make sure courses were returned
     if($courses){
+        $cards = '<div class="card-columns"><!-- Card Deck Start -->';
+
         //for each course, get list of textbooks
         foreach($courses as $course){
             $courseObj = new Course($course);
@@ -49,12 +47,13 @@ EOT;
             if($courseBooks){
                 $tableRows = '';
                 foreach ($courseBooks as $book) {
+                    $bookHelp = new Textbook($book);
                     $tableRows .= <<<EOT
 <tr>
-    <td>{$book['TextbookName']}</td>
-    <td>{$book['Authors']}</td>
-    <td>{$book['TextbookPublisher']}</td>
-    <td><a type="button" class="btn btn-info" href="/textbooks/edit.php?id={$book['TextbookId']}">Edit</a></td>
+    <td>{$bookHelp->Attributes['TextbookName']}</td>
+    <td>{$bookHelp->Attributes['Authors']}</td>
+    <td>{$bookHelp->Attributes['TextbookPublisher']}</td>
+    <td><a type="button" class="btn btn-info" href="/textbooks/edit.php?id={$bookHelp->Attributes['TextbookId']}">Edit</a></td>
 </tr>
 EOT;
                 }
@@ -96,7 +95,7 @@ EOT;
 
     }
 
-
+    $cards .= '</div><!-- Card Deck Close -->';
     $content .= <<<EOT
 {$cards}
 <br />

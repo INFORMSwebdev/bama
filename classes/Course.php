@@ -142,4 +142,73 @@ class Course extends AOREducationObject
         }
         return $booksOut;
     }
+
+    public function getSoftware( $active = TRUE, $asObjects = FALSE ){
+        $softOut = [];
+        $db = new EduDB();
+        $sql = "SELECT SoftwareId FROM course_softwares WHERE CourseId = $this->id";
+        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $softs = $db->queryColumn( $sql );
+        if($asObjects){
+            foreach($softs as $soft){
+                $softOut[] = new Software($soft);
+            }
+        }
+        else {
+            $softOut = $softs;
+        }
+        return $softOut;
+    }
+
+    public function getDatasets( $active = TRUE, $asObjects = FALSE ){
+        $dataOut = [];
+        $db = new EduDB();
+        $sql = "SELECT DatasetId FROM course_datasets WHERE CourseId = $this->id";
+        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $sets = $db->queryColumn( $sql );
+        if($asObjects){
+            foreach($sets as $set){
+                $dataOut[] = new Dataset($set);
+            }
+        }
+        else {
+            $dataOut = $sets;
+        }
+        return $dataOut;
+    }
+
+    public function getCases( $active = TRUE, $asObjects = FALSE ){
+        $casesOut = [];
+        $db = new EduDB();
+        $sql = "SELECT CaseId FROM course_cases WHERE CourseId = $this->id";
+        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $cases = $db->queryColumn( $sql );
+        if($asObjects){
+            foreach($cases as $case){
+                $casesOut[] = new CaseStudy($case);
+            }
+        }
+        else {
+            $casesOut = $cases;
+        }
+        return $casesOut;
+    }
+
+    public static function getAllCourses( $active = TRUE, $asObjects = FALSE){
+        $courses = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM courses";
+        if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        $courseList = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $courseList as $course) {
+                $courses[] = new Course($course);
+            }
+        }
+        else {
+            $courses = $courseList;
+        }
+
+        return $courses;
+    }
 }
