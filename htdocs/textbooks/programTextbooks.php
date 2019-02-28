@@ -40,7 +40,7 @@ if ($progId) {
             $cards .= <<<EOT
 <div class="card"><!-- Card Start -->
     <div class="card-header"><!-- Card Header Start -->
-        {$course->Attributes['CourseName']}
+        {$courseObj->Attributes['CourseTitle']}
     </div><!-- Card Header Close -->
     <div class="card-body"><!-- Card Body Start -->
 EOT;
@@ -75,7 +75,7 @@ EOT;
 EOT;
             }
             else {
-                $courseId = $course->Attributes['CourseId'];
+                $courseId = $courseObj->Attributes['CourseId'];
                 $cards .= '<p>No textbooks are currently available for this course.</p>';
                 $cards .= "<a class='btn btn-primary btn-block' href='../textbooks/add.php?courseId=$courseId'>Add Textbook to This Course</a>";
             }
@@ -98,6 +98,8 @@ EOT;
 
 
     $content .= <<<EOT
+{$cards}
+<br />
 <div class="row">
     <a class="btn btn-primary btn-block" href="add.php?progId={$progId}">Add a textbook to this program</a>
 </div>

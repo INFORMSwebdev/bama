@@ -59,7 +59,7 @@ class Program extends AOREducationObject
         $db = new EduDB();
         $sql = "SELECT CourseId FROM program_courses WHERE ProgramId = $this->id";
         if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
-        $courses = $db->query( $sql );
+        $courses = $db->queryColumn( $sql );
         if($asObjects){
             foreach($courses as $course){
                 $coursesOut[] = new Course($course);

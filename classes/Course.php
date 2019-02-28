@@ -13,16 +13,17 @@ class Course extends AOREducationObject
     public static $data_structure = array(
         'CourseId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
         'InstructorId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT ),
-        'CourseNumber' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'CourseTitle' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'DeliveryMethod' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'HasCapstoneProject' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'SyllabusFile' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_LOB ),
+        'CourseNumber' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
+        'CourseTitle' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
+        'DeliveryMethod' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
+        'HasCapstoneProject' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
+        'CourseText' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR),
+        'SyllabusFile' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_LOB ),
         'SyllabusFilesize' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT ),
-        'AnalyticTag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'BusinessTag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
+        'AnalyticTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
+        'BusinessTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
+        'CreateDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
+        'Deleted' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT )
     );
 
     /**
@@ -130,10 +131,10 @@ class Course extends AOREducationObject
         $db = new EduDB();
         $sql = "SELECT TextbookId FROM course_textbooks WHERE CourseId = $this->id";
         if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
-        $books = $db->query( $sql );
+        $books = $db->queryColumn( $sql );
         if($asObjects){
             foreach($books as $book){
-                $booksOut[] = new Book($book);
+                $booksOut[] = new Textbook($book);
             }
         }
         else {
