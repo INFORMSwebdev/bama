@@ -86,7 +86,7 @@ EOT;
 						<div class="dropdown-menu">
 							<a class="nav-item nav-link" href="/admin/invite.php">Invite Institution Editor</a>
 							<a class="nav-item nav-link" href="/admin/pendingUsers.php">Pending Users</a>
-							<a class="nav-item nav-link" href="/admin/Users.php">Users</a>
+							<a class="nav-item nav-link" href="/admin/users.php">Users</a>
 							<a class="nav-item nav-link" href="/admin/pendingUsers.php">Pending Updates</a>
 						</div>
 					</div>

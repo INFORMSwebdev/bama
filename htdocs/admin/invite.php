@@ -133,6 +133,7 @@ $(function() {
 EOT;
 
 $p_params = [];
+$p_params['page_title'] = "INFORMS Analytics &amp; OR Education Database - ADMIN - Invite User";
 $p_params['content'] = $content;
 $p_params['admin'] = TRUE;
 $p_params['css'][] = array( 'text' => $custom_css );
