@@ -20,4 +20,22 @@ class Instructor extends AOREducationObject
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
     );
+
+    public static function getInstructors( $active = TRUE, $asObjects = FALSE ){
+        $instructors = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM instructors";
+        if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        $insts = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $insts as $inst) {
+                $instructors[] = new Instructor($inst);
+            }
+        }
+        else {
+            $instructors = $insts;
+        }
+
+        return $instructors;
+    }
 }

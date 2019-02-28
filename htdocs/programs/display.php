@@ -156,7 +156,7 @@ EOT;
                 <a class="nav-link" id="collegeDetails" href="#tabCollege" data-toggle="tab" aria-selected="false" aria-controls="tabCollege">College Details</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="contactDetails" href="#tabContact" data-toggle="tab" aria-selected="false" aria-controls="tabCollege">Contact Details</a>
+                <a class="nav-link" id="contactDetails" href="#tabContact" data-toggle="tab" aria-selected="false" aria-controls="tabContact">Contact Details</a>
             </li>
         </ul>
     </div>
