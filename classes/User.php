@@ -186,4 +186,10 @@ EOT;
         $sql = "SELECT ct.TextbookId FROM course_textbooks ct INNER JOIN program_courses pc ON ct.CourseId = pc.CourseId INNER JOIN programs p ON pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id)";
         return $db->queryColumn( $sql );
     }
+
+    public function getDatasets(){
+        $db = new EduDb();
+        $sql = "SELECT DatasetId FROM course_datasets cd INNER JOIN courses c ON cd.CourseId = c.CourseId INNER JOIN program_courses pc ON c.CourseId = pc.CourseId INNER JOIN programs p on pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id);";
+        return $db->queryColumn( $sql );
+    }
 }

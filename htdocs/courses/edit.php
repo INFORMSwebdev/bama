@@ -122,7 +122,6 @@ if($courseId){
     </form>
 </div>
 EOT;
-
 }
 else {
     //course id either not an integer or not present in query string

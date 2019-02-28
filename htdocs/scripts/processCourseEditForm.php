@@ -9,6 +9,16 @@
 require_once '../../init.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    //check which button was pushed
+    if (isset($_POST['edit'])) {
+        //edit button clicked, make sure Deleted flag is 0
+        $courseDeleted = 0;
+    } else if (isset($_POST['delete'])) {
+        //delete button was clicked, set the Deleted flag to 1
+        $courseDeleted = 1;
+    }
+
     //gather form data
     $title = filter_input(INPUT_POST, 'courseTitle', FILTER_SANITIZE_STRING);
     $instructorId = filter_input(INPUT_POST, 'instructor', FILTER_VALIDATE_INT);
@@ -47,6 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $course->Attributes['SyllabusFilesize'] = $sylSize;
     $course->Attributes['AnalyticTag'] = $analytics;
     $course->Attributes['BusinessTag'] = $business;
+    $course->Attributes['Deleted'] = $courseDeleted;
 
     //put the updates in the pending_updates table
     $result = $course->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);

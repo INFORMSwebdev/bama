@@ -11,8 +11,6 @@ require_once '../../init.php';
 //get the courseId
 $courseId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-//make
-
 $content = '';
 
 //check to make sure we have an Id to work with
