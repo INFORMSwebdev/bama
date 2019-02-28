@@ -409,7 +409,7 @@ EOT;
     
     <title>{$this->params['page_title']}</title>
     
-    <link rel="icon" type="image/png" href="https://common.informs.org/images/favicon.png" />
+    <link rel="icon" type="image/png" href="https://common.informs.org/images/favicon-16x16.png" />
     <link rel="image_src" href="https://www.informs.org/design/user_inform/images/informsbutton.jpg" />
     <!--<link rel="stylesheet" type="text/css" href="https://www.informs.org/design/user_inform_v2/stylesheets/core.css" />
     <link rel="stylesheet" type="text/css" href="https://www.informs.org/design/standard/stylesheets/debug.css" />
