@@ -177,7 +177,7 @@ EOT;
 
     public function getCourses(){
         $db = new EduDb();
-        $sql = "SELECT CourseId FROM program_courses pc INNER JOIN program p ON pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id)";
+        $sql = "SELECT CourseId FROM program_courses pc INNER JOIN programs p ON pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id)";
         return $db->queryColumn( $sql );
     }
 

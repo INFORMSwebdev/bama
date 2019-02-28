@@ -65,10 +65,6 @@ if($bookId){
         </div>
         <br />
         <div class="form-row">
-            <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Textbook</button>
-        </div>
-        <br />
-        <div class="form-row">
             <input type="hidden" id="bookId" name="bookId" value="{$bookId}" />
             <button class="btn btn-warning mr-2" type="submit" name="edit" value="edit">Submit changes</button>
             <button class="btn btn-danger" type="submit" name="delete" value="delete">Delete This Textbook</button>
@@ -105,8 +101,25 @@ EOT;
     </form>
 </div>
 EOT;
-
 }
-
+//create the parameters to pass to the wrapper
+$page_params = array();
+$page_params['content'] = $content;
+$page_params['page_title'] = "Edit Textbook";
+$page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
+$page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
+//$page_params['js'][] = array( 'text' => $custom_js );
+$page_params['show_title_bar'] = FALSE;
+//do not display the usual header/footer
+$page_params['admin'] = TRUE;
+//$page_params['active_menu_item'] = 'home';
+//put custom/extra css files, if used
+//$page_params['css'][] = array("url" => "");
+//put custom/extra JS files, if used
+//$page_params['js'][] = array("url" => "");
+//wrapper class to pass all the content and params to
+$wrapper = new wrapperBama($page_params);
+//display the content
+$wrapper->html();
 
 
