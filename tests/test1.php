@@ -6,10 +6,13 @@
  * Time: 11:54 AM
  */
 require_once( "../init.php");
+/*
 $data = array( 'TextbookName' => "Test Textbook", "Authors" => "Smith, John", 'TextbookPublisher'=> 'Prentice Hall');
 $x = Textbook::createInstance( $data );
 $x = new Textbook( 7 );
 $result = $x->createPendingUpdate( UPDATE_TYPE_UPDATE, 1);
+*/
+$Program = new Program(1);
+print_r($Program->getCourses());
 
-
-echo $result;
+//echo $result;
