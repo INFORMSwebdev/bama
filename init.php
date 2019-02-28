@@ -24,4 +24,8 @@ define( "WEB_ROOT", $aes['web_root'] );
 define( "UPDATE_TYPE_INSERT", $aes['updateTypeInsert']);
 define( "UPDATE_TYPE_UPDATE", $aes['updateTypeUpdate']);
 define( "UPDATE_TYPE_DELETE", $aes['updateTypeDelete']);
+
+define( "APPROVAL_TYPE_NEW", $aes['approvalTypeNew']);
+define( "APPROVAL_TYPE_APPROVE", $aes['approvalTypeApprove']);
+define( "APPROVAL_TYPE_REJECT", $aes['approvalTypeReject']);
 require_once( CLASSES_DIR . "autoload.php");
