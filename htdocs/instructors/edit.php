@@ -30,7 +30,7 @@ $userInsts = $user->getInstructors();
 //check to make sure we have a valid instructorId
 if($instId){
     //check if user has permission to edit this instructor
-    if (!in_array($instId, $userInsts)) {
+    if (!in_array($instId, $userInsts) && !isset($_SESSION['admin'])) {
         //set up the message to be red
         $_SESSION['editMessage']['success'] = false;
         $_SESSION['editMessage']['text'] = 'You do not have permission to edit the specified instructor\'s information.';

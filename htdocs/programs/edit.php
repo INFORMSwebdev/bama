@@ -32,7 +32,7 @@ if (is_numeric($_SESSION['loggedIn'])) {
     //make sure we actually have an Id to work with
     if (isset($progId)) {
         //if the programId passed via the query string is NOT in this list, the user does NOT have permission to edit this page
-        if (!in_array($progId, $userProgs)) {
+        if (!in_array($progId, $userProgs) && !isset($_SESSION['admin'])) {
             //set up the message to be red
             $_SESSION['editMessage']['success'] = false;
             $_SESSION['editMessage']['text'] = 'You do not have permission to edit the specified program\'s information.';

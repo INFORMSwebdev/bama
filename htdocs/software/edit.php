@@ -26,7 +26,7 @@ $userSoft = $user->getSoftware();
 
 if($softId){
     //make sure user has permission to edit this software
-    if (!in_array($softId, $userSoft)) {
+    if (!in_array($softId, $userSoft) && !isset($_SESSION['admin'])) {
         //set up the message to be red
         $_SESSION['editMessage']['success'] = false;
         $_SESSION['editMessage']['text'] = 'You do not have permission to edit the specified software\'s information.';

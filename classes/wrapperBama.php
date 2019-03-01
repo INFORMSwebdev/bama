@@ -98,7 +98,6 @@ EOT;
 		</nav>
 EOT;
         } else if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
-            # ToDo: add in more links to the nav bar
             $navbar = <<<EOT
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="https://www.informs.org" target="_blank">

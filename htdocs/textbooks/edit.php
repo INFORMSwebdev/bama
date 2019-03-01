@@ -26,7 +26,7 @@ $userBooks = $user->getBookAssignments();
 
 if($bookId){
     //if the bookId passed via the query string is NOT in this list, the user does NOT have permission to edit this page
-    if (!in_array($bookId, $userBooks)) {
+    if (!in_array($bookId, $userBooks) && !isset($_SESSION['admin'])) {
         //set up the message to be red
         $_SESSION['editMessage']['success'] = false;
         $_SESSION['editMessage']['text'] = 'You do not have permission to edit the specified textbook\'s information.';

@@ -30,7 +30,7 @@ include_once('/common/classes/optionsHTML.php');
 
 if($caseId){
     //check if user has permission to edit this course
-    if (!in_array($caseId, $userCases)) {
+    if (!in_array($caseId, $userCases) && !isset($_SESSION['admin'])) {
         //set up the message to be red
         $_SESSION['editMessage']['success'] = false;
         $_SESSION['editMessage']['text'] = 'You do not have permission to edit the specified case study information.';

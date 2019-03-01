@@ -31,9 +31,8 @@ include_once('/common/classes/optionsHTML.php');
 if($datasetId){
     //valid Id was passed via query string
 
-    # ToDo: if needed during testing, just comment this out
     //make sure user has permission to edit this dataset
-    if (!in_array($datasetId, $userSets)) {
+    if (!in_array($datasetId, $userSets) && !isset($_SESSION['admin'])) {
         //set up the message to be red
         $_SESSION['editMessage']['success'] = false;
         $_SESSION['editMessage']['text'] = 'You do not have permission to edit the specified dataset\'s information.';

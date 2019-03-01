@@ -32,7 +32,7 @@ include_once('/common/classes/optionsHTML.php');
 
 if($courseId){
     //check if user has permission to edit this course
-    if (!in_array($courseId, $userCourses)) {
+    if (!in_array($courseId, $userCourses) && !isset($_SESSION['admin'])) {
         //set up the message to be red
         $_SESSION['editMessage']['success'] = false;
         $_SESSION['editMessage']['text'] = 'You do not have permission to edit the specified course\'s information.';

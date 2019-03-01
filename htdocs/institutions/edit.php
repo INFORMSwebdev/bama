@@ -32,7 +32,7 @@ include_once('/common/classes/optionsHTML.php');
 
 if($instId){
     //check if user has permission to edit this institution
-    if (!in_array($instId, $userInsts)) {
+    if (!in_array($instId, $userInsts) && !isset($_SESSION['admin'])) {
         //set up the message to be red
         $_SESSION['editMessage']['success'] = false;
         $_SESSION['editMessage']['text'] = 'You do not have permission to edit the specified institution\'s information.';
