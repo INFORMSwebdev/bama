@@ -2,37 +2,37 @@
 /**
  * Created by PhpStorm.
  * User: dherold
- * Date: 2/27/2019
- * Time: 10:30 AM
+ * Date: 3/1/2019
+ * Time: 7:58 AM
  */
 //require the init file
 require_once '../../init.php';
 
 //get the caseId
-$instructorId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$softwareId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 $content = '';
 
 //check to make sure we have an Id to work with
-if(empty($instructorId)) {
-    //get list of instructor to display
-    $instructors = Instructor::getInstructors();
-    $instListHelper = array();
-    foreach($instructors as $s){
-        $instListHelper[] = array('text' => $s['InstructorFirstName'] . ' ' . $s['InstructorLastName'], 'value' => $s['InstructorId']);
+if(empty($softwareId)) {
+    //get list of software to display
+    $softwares = Software::getAllSoftware();
+    $softListHelper = array();
+    foreach($softwares as $s){
+        $softListHelper[] = array('text' => $s['SoftwareName'], 'value' => $s['SoftwareId']);
     }
     //pass the name/value pairs to the file to get the generated HTML for a select list
     include_once('/common/classes/optionsHTML.php');
-    $instListHTML = optionsHTML($instListHelper);
+    $softListHTML = optionsHTML($softListHelper);
 
     $content = <<<EOT
 <div class="flex-column">
-    <h2>View Instructor Details</h2>
+    <h2>View Software Details</h2>
     <form action="display.php" method="get">
         <div class="form-group">
-            <label for="course">Select an Instructor</label>
+            <label for="course">Select Software</label>
 		    <select class="form-control" name="dataset" id="dataset" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
-		        {$instListHTML}
+		        {$softListHTML}
             </select>
         </div>
     </form>
@@ -40,32 +40,22 @@ if(empty($instructorId)) {
 EOT;
 }
 else {
-    # ToDo: determine if we want to display more info about the instructor on this page, like which institution/college/whatever they instruct at
-    //display info about the specified instructor
-    $instruc = new Instructor($instructorId);
-    $firstName = $instruc->Attributes['InstructorFirstName'];
-    $lastName = $instruc->Attributes['InstructorLastName'];
-    $prefix = $instruc->Attributes['InstructorPrefix'];
-    if(!isset($prefix) || empty($prefix)){
-        $prefix = '';
-    }
-    $email = $instruc->Attributes['InstructorEmail'];
-    $emailHTML = '';
-    if(!isset($email) || empty($email)){
-        $emailHTML = '<p>No email address on record for this instructor.</p>';
-    }
-    else {
-        $emailHTML = "<p><a href='mailto:$email'>$email</a></p>";
+    //display info about the specified software
+    $soft = new Software($softwareId);
+    $name = $soft->Attributes['SoftwareName'];
+    $pub = $soft->Attributes['SoftwarePublisher'];
+    if(!isset($pub) || empty($pub)){
+        $pub = 'No publisher information currently available for this software.';
     }
 
     $content = <<<EOT
 <div class="card">
-    <div class="card-header"> 
-        <h2 class="display2">{$prefix} {$firstName} {$lastName}</h2>
+    <div class="card-header">
+        <h2 class="display2">{$name}</h2>
     </div>
     <div class="card-body"> 
-        <h3>Email</h3>
-        {$emailHTML}
+        <h3>Publisher</h3>
+        <p>{$pub}</p>
     </div>
 </div>
 EOT;
@@ -74,7 +64,7 @@ EOT;
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
-$page_params['page_title'] = "View Instructor Details";
+$page_params['page_title'] = "View Software Details";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
 //$page_params['css'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css' );

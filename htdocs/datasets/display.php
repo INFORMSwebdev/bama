@@ -20,7 +20,7 @@ if(empty($dataId)) {
     $sets = Dataset::getAllDatasets();
     $dataListHelper = array();
     foreach($sets as $s){
-        $dataListHelper[] = array('text' => $s['DatasetName'], 'value' => $s['CourseId']);
+        $dataListHelper[] = array('text' => $s['DatasetName'], 'value' => $s['DatasetId']);
     }
     //pass the name/value pairs to the file to get the generated HTML for a select list
     include_once('/common/classes/optionsHTML.php');
@@ -33,11 +33,10 @@ if(empty($dataId)) {
         <div class="form-group">
             <label for="course">Select a Dataset</label>
 		    <select class="form-control" name="dataset" id="dataset" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
-		        $setListHTML
+		        {$setListHTML}
             </select>
         </div>
     </form>
-</div>
 </div>
 EOT;
 }
@@ -62,7 +61,7 @@ else {
     $content = <<<EOT
 <div class="card">
     <div class="card-header">   
-        {$name}
+        <h2 class="display2">{$name}</h2>
     </div>
     <div class="card-body">     
         <h3>Type</h3>

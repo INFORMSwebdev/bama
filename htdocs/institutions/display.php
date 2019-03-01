@@ -10,8 +10,7 @@ require_once '../../init.php';
 
 //checks for messages?
 
-//check for loggedin?
-# ToDo: confer w/ Dave on whether this page should be locked down by logging in or not. My money is on leave it open.
+# ToDo: make the institution select list ajax powered so it doesn't make the rest of the page load slower (optional, but would be nice)
 
 //get list of all institutions
 $institutions = Institution::getInstitutions();
@@ -35,84 +34,50 @@ if ($id) {
     $city = $inst->Attributes['InstitutionCity'];
     $state = $inst->Attributes['InstitutionState'];
     $region = $inst->Attributes['InstitutionRegion'];
+    if(!isset($region) || empty($region)){
+        $region = 'Region information is not currently available for this institution.';
+    }
     $phone = $inst->Attributes['InstitutionPhone'];
+    if(!isset($phone) || empty($phone)){
+        $phone = 'Phone number not currently available for this institution.';
+    }
     $email = $inst->Attributes['InstitutionEmail'];
+    if(!isset($email) || empty($email)){
+        $email = 'Email address not currently available for this institution.';
+    }
+    else {
+        $email = "<a href='mailto:$email'>$email</a>";
+    }
+
     $content = <<<EOT
-<h2 class="display-3">{$name}</h2>
-<div class="jumbotron">
-    <form>
-        <div class="form-row">
-            <h3>Address Info</h3>
-        </div>
-        <div class="form-row">
-            <div class="col-md-3">
-                <label for="InstitutionAddress">Address</label>
-                <input type="text" class="form-control" name="InstitutionAddress" value="{$addr}" id="InstitutionAddress" readonly />
-            </div>
-            <div class="col-md-3">
-                <label for="InstitutionCity">City</label>
-                <input type="text" class="form-control" name="InstitutionCity" value="{$city}" id="InstitutionCity" readonly />
-            </div>
-            <div class="col-md-3">
-                <label for="InstitutionState">State</label>
-                <input type="text" class="form-control" name="InstitutionState" value="{$state}" id="InstitutionState" readonly />
-            </div>
-            <div class="col-md-3">
-                <label for="InstitutionZip">Zip Code</label>
-                <input type="text" class="form-control" name="InstitutionZip" value="{$zip}" id="InstitutionZip" readonly />
-            </div>
-        </div>
-        <br />
-        <div class="form-row">
-            <h3>Contact Info</h3>
-        </div>
-        <div class="form-row">
-            <div class="col-md-6">
-                <label for="InstitutionPhone">Phone</label>
-                <input type="text" class="form-control" name="InstitutionPhone" value="{$phone}" id="InstitutionPhone" readonly />
-            </div>
-            <div class="col-md-6">
-                <label for="InstitutionEmail">Email</label>
-                <input type="text" class="form-control" name="InstitutionEmail" value="{$email}" id="InstitutionEmail" readonly />
-            </div>
-        </div>
-        <br />
-        <div class="form-row">
-            <h3>Other Info</h3>
-        </div>
-        <div class="form-row">
-            <div class="col-md-12">
-                <label for="InstitutionRegion">Region</label>
-                <input type="text" class="form-control" name="InstitutionRegion" value="{$region}" id="InstitutionRegion" readonly />
-            </div>
-        </div>
-    </form>
-</div>
-<div class="row d-block">
-    <h2>View Another Institution's Info</h2>
-    <form action="display.php" method="get">
-        <div class="form-group">
-            <label for="Institution">Select an Institution</label>
-		    <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
-		        $instListHTML
-            </select>
-            <p class="text text-muted" id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>
-        </div>
-    </form>
+<div class="card">
+    <div class="card-header">
+        <h2 class="display2">{$name}</h2>
+    </div>
+    <div class="card-body"> 
+        <h3>Address</h3>
+        <p>{$addr}</p>
+        <p>{$city}, {$state} {$zip}</p>
+        <h3>Contact Information</h3>
+        <h4>Phone Number</h4>
+        <p>{$phone}</p>
+        <h4>Email</h4>
+        <p>{$email}</p>
+        <h3>Region</h3>
+        <p>{$region}</p>
+    </div>
 </div>
 EOT;
 } else {
     //error parsing query string for integer value in id variable
     $content = <<<EOT
-<div class="row">
-    <p>Please select an institution from the list:</p>
-</div>
-<div class="row">
+<div class="flex-column">
+    <h2>View Institution Details</h2>
     <form action="display.php" method="get">
         <div class="form-group">
             <label for="Institution">Institution (select one)</label>
 		    <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
-		        $instListHTML
+		        {$instListHTML}
             </select>
             <p class="text text-muted" id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>
         </div>
@@ -120,8 +85,6 @@ EOT;
 </div>
 EOT;
 }
-
-# ToDo: change the display from a form to divs or something, but move the form HTML to the edit page!
 
 //set page parameters up
 $page_params['content'] = $content;

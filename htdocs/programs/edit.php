@@ -12,18 +12,13 @@ require_once '../../init.php';
 $progId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 //check if user is logged in
-# ToDo: remove the GET string from this test before actual use
-if ((!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) && !isset($_GET['testing'])) {
+if (!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) {
     //set up a message to display on the login page
     $_SESSION['logoutMessage'] = 'Please log in to edit your program\'s information.';
     //redirect to login page so user can log in
     header('Location: login.php');
     //don't want the script to keep executing after a redirect
     die;
-}
-
-if(isset($_GET['testing'])){
-    $_SESSION['loggedIn'] = 41;
 }
 
 $content = '';
@@ -33,124 +28,127 @@ if (is_numeric($_SESSION['loggedIn'])) {
     $user = new User($_SESSION['loggedIn']);
 
     $userProgs = $user->getProgramAssignments();
-    //if the programId passed via the query string is NOT in this list, the user does NOT have permission to edit this page
-    if (!in_array($progId, $userProgs)) {
-        //set up the message to be red
-        $_SESSION['editMessage']['success'] = false;
-        $_SESSION['editMessage']['text'] = 'You do not have permission to edit the specified program\'s information.';
 
-        //redirect to index
-        header('Location: /index.php');
-        die;
-    } else {
-        //get all the details about the requested program to display
-        $prog = new Program($progId);
-        $instId = $prog->Attributes['InstitutionId'];
-        $contactId = $prog->Attributes['ContactId'];
-        $name = $prog->Attributes['ProgramName'];
-        $type = $prog->Attributes['ProgramType'];
-        $delivery = $prog->Attributes['DeliveryMethod'];
-        $access = $prog->Attributes['ProgramAccess'];
-        $objectives = $prog->Attributes['ProgramObjectives'];
-        $fullTime = $prog->Attributes['FullTimeDuration'];
-        $partTime = $prog->Attributes['PartTimeDuration'];
-        $reqs = $prog->Attributes['TestingRequirement'];
-        $otherReqs = $prog->Attributes['OtherRequirement'];
-        $credits = $prog->Attributes['Credits'];
-        $year = $prog->Attributes['YearEstablished'];
-        $scholarship = $prog->Attributes['Scholarship'];
-        $res = $prog->Attributes['EstimatedResidentTuition'];
-        $nonRes = $prog->Attributes['EstimatedNonresidentTuition'];
-        $cost = $prog->Attributes['CostPerCredit'];
-        //we only use the flag columns in queries, no need to display info about them on this page
-        $ops = $prog->Attributes['ORFlag'];
-        $opsHTML = <<<EOT
+    //make sure we actually have an Id to work with
+    if (isset($progId)) {
+        //if the programId passed via the query string is NOT in this list, the user does NOT have permission to edit this page
+        if (!in_array($progId, $userProgs)) {
+            //set up the message to be red
+            $_SESSION['editMessage']['success'] = false;
+            $_SESSION['editMessage']['text'] = 'You do not have permission to edit the specified program\'s information.';
+
+            //redirect to index
+            header('Location: /index.php');
+            die;
+        } else {
+            //get all the details about the requested program to display
+            $prog = new Program($progId);
+            $instId = $prog->Attributes['InstitutionId'];
+            $contactId = $prog->Attributes['ContactId'];
+            $name = $prog->Attributes['ProgramName'];
+            $type = $prog->Attributes['ProgramType'];
+            $delivery = $prog->Attributes['DeliveryMethod'];
+            $access = $prog->Attributes['ProgramAccess'];
+            $objectives = $prog->Attributes['ProgramObjectives'];
+            $fullTime = $prog->Attributes['FullTimeDuration'];
+            $partTime = $prog->Attributes['PartTimeDuration'];
+            $reqs = $prog->Attributes['TestingRequirement'];
+            $otherReqs = $prog->Attributes['OtherRequirement'];
+            $credits = $prog->Attributes['Credits'];
+            $year = $prog->Attributes['YearEstablished'];
+            $scholarship = $prog->Attributes['Scholarship'];
+            $res = $prog->Attributes['EstimatedResidentTuition'];
+            $nonRes = $prog->Attributes['EstimatedNonresidentTuition'];
+            $cost = $prog->Attributes['CostPerCredit'];
+            //we only use the flag columns in queries, no need to display info about them on this page
+            $ops = $prog->Attributes['ORFlag'];
+            $opsHTML = <<<EOT
 <div class="form-check">
     <input class="form-check-input" type="checkbox" id="ORFlag" name="ORFlag" value="0" />
     <label class="ml-1" for="ORFlag">Operations Research Program</label>
 </div>
 EOT;
-        if($ops == true){
-            $opsHTML = <<<EOT
+            if ($ops == true) {
+                $opsHTML = <<<EOT
 <div class="form-check">
     <input class="form-check-input" type="checkbox" id="ORFlag" name="ORFlag" value="1" checked />
     <label for="ORFlag">Operations Research Program</label>
 </div>
 EOT;
-        }
-        $analytics = $prog->Attributes['AnalyticsFlag'];
-        $analyticsHTML = <<<EOT
+            }
+            $analytics = $prog->Attributes['AnalyticsFlag'];
+            $analyticsHTML = <<<EOT
 <div class="form-check">
     <input class="form-check-input" type="checkbox" id="AnalyticsFlag" name="AnalyticsFlag" value="0" />
     <label class="form-check-label" for="AnalyticsFlag">Analytics Program</label>
 </div>
 EOT;
-        if($analytics == true){
-            $analyticsHTML = <<<EOT
+            if ($analytics == true) {
+                $analyticsHTML = <<<EOT
 <div class="form-check">
     <input class="form-check-input" type="checkbox" id="AnalyticsFlag" name="AnalyticsFlag" value="1" checked />
     <label class="form-check-label" for="AnalyticsFlag">Analytics Program</label>
 </div>
 EOT;
-        }
-        $collegeId = $prog->Attributes['CollegeId'];
+            }
+            $collegeId = $prog->Attributes['CollegeId'];
 
-        //include file that creates the option lists function
-        include_once('/common/classes/optionsHTML.php');
+            //include file that creates the option lists function
+            include_once('/common/classes/optionsHTML.php');
 
-        //get contact details
-        //get list of contacts and turn it into a select list
-        $contacts = Contact::getAllContacts();
-        $contactListHelper = array();
-        foreach($contacts as $c){
-            $contactListHelper[] = array ('text' => $c['ContactName'], 'value' => $c['ContactId']);
-        }
-        $contactListHTML = optionsHTML($contactListHelper);
-        if(isset($contactId)){
-            $contactListHTML = str_replace('<option value="' . $contactId . '">', '<option value="' . $contactId . '" selected>', $contactListHTML);
-        }
+            //get contact details
+            //get list of contacts and turn it into a select list
+            $contacts = Contact::getAllContacts();
+            $contactListHelper = array();
+            foreach ($contacts as $c) {
+                $contactListHelper[] = array('text' => $c['ContactName'], 'value' => $c['ContactId']);
+            }
+            $contactListHTML = optionsHTML($contactListHelper);
+            if (isset($contactId)) {
+                $contactListHTML = str_replace('<option value="' . $contactId . '">', '<option value="' . $contactId . '" selected>', $contactListHTML);
+            }
 
-        //get list of colleges and set the currently selected option to assigned college
-        $colleges = College::getAllColleges();
-        $collegeHelper = array();
-        foreach($colleges as $co){
-            //get institution name so editors can select the appropriate college tied to the institution
-            $foo = new Institution($co['InstitutionId']);
-            $collegeHelper[] = array ('text' => $co['CollegeName'] . ' (' . $foo->Attributes['InstitutionName'] . ')', 'value' => $co['CollegeId']);
-        }
-        $collegeListHTML = optionsHTML($collegeHelper);
-        if(isset($collegeId)){
-            $collegeListHTML = str_replace('<option value="' . $collegeId . '">', '<option value="' . $collegeId . '" selected>', $collegeListHTML);
-        }
+            //get list of colleges and set the currently selected option to assigned college
+            $colleges = College::getAllColleges();
+            $collegeHelper = array();
+            foreach ($colleges as $co) {
+                //get institution name so editors can select the appropriate college tied to the institution
+                $foo = new Institution($co['InstitutionId']);
+                $collegeHelper[] = array('text' => $co['CollegeName'] . ' (' . $foo->Attributes['InstitutionName'] . ')', 'value' => $co['CollegeId']);
+            }
+            $collegeListHTML = optionsHTML($collegeHelper);
+            if (isset($collegeId)) {
+                $collegeListHTML = str_replace('<option value="' . $collegeId . '">', '<option value="' . $collegeId . '" selected>', $collegeListHTML);
+            }
 
-        //get institution details
-        $inst = new Institution($instId);
-        $instName = $inst->Attributes['InstitutionName'];
-        $instAddr = $inst->Attributes['InstitutionAddress'];
-        $instCity = $inst->Attributes['InstitutionCity'];
-        $instState = $inst->Attributes['InstitutionState'];
-        $instZip = $inst->Attributes['InstitutionZip'];
-        $instRegion = $inst->Attributes['InstitutionRegion'];
-        $instPhone = $inst->Attributes['InstitutionPhone'];
-        $instEmail = $inst->Attributes['InstitutionEmail'];
-        $instAccess = $inst->Attributes['InstitutionAccess'];
+            //get institution details
+            $inst = new Institution($instId);
+            $instName = $inst->Attributes['InstitutionName'];
+            $instAddr = $inst->Attributes['InstitutionAddress'];
+            $instCity = $inst->Attributes['InstitutionCity'];
+            $instState = $inst->Attributes['InstitutionState'];
+            $instZip = $inst->Attributes['InstitutionZip'];
+            $instRegion = $inst->Attributes['InstitutionRegion'];
+            $instPhone = $inst->Attributes['InstitutionPhone'];
+            $instEmail = $inst->Attributes['InstitutionEmail'];
+            $instAccess = $inst->Attributes['InstitutionAccess'];
 
-        //get list of institutions for editor to select from
-        //get list of all institutions
-        $institutions = Institution::getInstitutions();
-        //turn that into an array of name/value pairs to pass to the optionsHTML.php file
-        $instListHelper = array();
-        foreach($institutions as $inst){
-            $instListHelper[] = array('text' => $inst['InstitutionName'], 'value' => $inst['InstitutionId']);
-        }
-        $instListHelper[] = array('text' => 'Other', 'value' => 'Other');
-        //pass the name/value pairs to the file to get the generated HTML for a select list
-        $instListHTML = optionsHTML($instListHelper);
-        //make the currently assigned institution be the selected value
-        $instListHTML = str_replace('<option value="' . $instId . '">', '<option value="' . $instId . '" selected>', $instListHTML);
+            //get list of institutions for editor to select from
+            //get list of all institutions
+            $institutions = Institution::getInstitutions();
+            //turn that into an array of name/value pairs to pass to the optionsHTML.php file
+            $instListHelper = array();
+            foreach ($institutions as $inst) {
+                $instListHelper[] = array('text' => $inst['InstitutionName'], 'value' => $inst['InstitutionId']);
+            }
+            $instListHelper[] = array('text' => 'Other', 'value' => 'Other');
+            //pass the name/value pairs to the file to get the generated HTML for a select list
+            $instListHTML = optionsHTML($instListHelper);
+            //make the currently assigned institution be the selected value
+            $instListHTML = str_replace('<option value="' . $instId . '">', '<option value="' . $instId . '" selected>', $instListHTML);
 
-        //user DOES have permission to edit this page, display the form
-        $content = <<<EOT
+            //user DOES have permission to edit this page, display the form
+            $content = <<<EOT
 <div class="jumbotron bg-info text-white">
     <form action="../scripts/processProgramEditForm.php" method="POST">
         <div class="form-row">
@@ -281,8 +279,36 @@ EOT;
     </form>
 </div>
 EOT;
+        }
+    }
+    else {
+        //display a list of programs user has permission to edit
+        $progListHelper = array();
+        foreach($userProgs as $uProgId){
+            $tProg = new Program($uProgId);
+            $progListHelper[] = array('text' => $tProg->Attributes['ProgramName'], 'value' => $tProg->Attributes['ProgramId']);
+        }
+        //get the options maker, its gonna be needed
+        include_once('/common/classes/optionsHTML.php');
+        //pass the name/value pairs to the file to get the generated HTML for a select list
+        $progListHTML = optionsHTML($progListHelper);
+
+        $content = <<<EOT
+<div class="flex-column">
+    <h2>Edit Program Details</h2>
+    <form action="display.php" method="get">
+        <div class="form-group">
+            <label for="Course">Select a Program to edit</label>
+		    <select class="form-control" name="Program" id="Program" onchange="self.location='edit.php?id='+this.options[this.selectedIndex].value">
+		        $progListHTML
+            </select>
+        </div>
+    </form>
+</div>
+EOT;
     }
 }
+
 
 //create the parameters to pass to the wrapper
 $page_params = array();

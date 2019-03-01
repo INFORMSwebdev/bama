@@ -34,11 +34,10 @@ if(empty($courseId)){
         <div class="form-group">
             <label for="course">Select a Course</label>
 		    <select class="form-control" name="course" id="course" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
-		        $courseListHTML
+		        {$courseListHTML}
             </select>
         </div>
     </form>
-</div>
 </div>
 EOT;
 }
@@ -217,7 +216,7 @@ EOT;
             $datasetHTML .= <<<EOT
 <div class="card"><!-- card start -->
     <div class="card-header"><!-- card header start -->
-        {$data->Attributes['DatasetName']}
+        <h2 class="display2">{$data->Attributes['DatasetName']}</h2>
     </div><!-- card header end -->
     <div class="card-body"> <!-- card body start -->
         <h3>Type</h3>
@@ -258,7 +257,7 @@ EOT;
             $caseHTML .= <<<EOT
 <div class="card"><!-- card start -->
     <div class="card-header"><!-- card header start -->
-        {$c->Attributes['CaseTitle']}
+        <h2 class="display2">{$c->Attributes['CaseTitle']}</h2>
     </div><!-- card header end -->
     <div class="card-body"> <!-- card body start -->
         <h3>Type</h3>

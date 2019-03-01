@@ -77,7 +77,7 @@ $content = <<<EOT
         </div>
         <br />
         <div class="form-row">
-            <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Course</button>
+            <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Dataset</button>
         </div>
         <!--<br />-->
         <div class="form-row">

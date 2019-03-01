@@ -245,7 +245,7 @@ EOT;
         <div class="form-group">
             <label for="Program">Select a Program</label>
 		    <select class="form-control" name="Program" id="Program" aria-describedby="Help" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
-		        $progListHTML
+		        {$progListHTML}
             </select>
             <!--<p class="text text-muted" id="Help">The list may take a second or two to load, please be patient after clicking the field.</p>-->
         </div>

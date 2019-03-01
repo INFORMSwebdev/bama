@@ -48,4 +48,28 @@ class Dataset extends AOREducationObject
         $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
     }
+
+
+    /**
+     * @param bool $active true = records not marked as Deleted, false = records marked as Deleted
+     * @param bool $asObjects true = array of dataset objects, false = associative array of dataset records
+     * @return array DatasetId's if asObjects = false | Dataset objects if asObjects = true
+     */
+    public static function getAllDatasets($active = TRUE, $asObjects = FALSE ){
+        $datasets = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM datasets";
+        if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        $sets = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $sets as $set) {
+                $datasets[] = new Dataset($set);
+            }
+        }
+        else {
+            $datasets = $sets;
+        }
+
+        return $datasets;
+    }
 }

@@ -46,4 +46,22 @@ class CaseStudy extends AOREducationObject {
         $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
     }
+
+    public static function getCaseStudies( $active = TRUE, $asObjects = FALSE ){
+        $casesOut = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM cases";
+        if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        $cases = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $cases as $case) {
+                $casesOut[] = new CaseStudy($case);
+            }
+        }
+        else {
+            $casesOut = $cases;
+        }
+
+        return $casesOut;
+    }
 }

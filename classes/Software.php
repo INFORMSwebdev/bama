@@ -42,4 +42,22 @@ class Software extends AOREducationObject
         $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
     }
+
+    public static function getAllSoftware($active = TRUE, $asObjects = FALSE ){
+        $softwares = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM softwares";
+        if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        $softs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $softs as $set) {
+                $softwares[] = new Software($set);
+            }
+        }
+        else {
+            $softwares = $softs;
+        }
+
+        return $softwares;
+    }
 }

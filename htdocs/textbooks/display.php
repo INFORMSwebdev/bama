@@ -54,7 +54,7 @@ EOT;
         <div class="form-group">
             <label for="Textbook">Select a Textbook</label>
 		    <select class="form-control" name="Textbook" id="Textbook" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
-		        $bookListHTML
+		        {$bookListHTML}
             </select>
         </div>
     </form>
