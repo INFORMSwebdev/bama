@@ -104,7 +104,7 @@ EOT;
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
-$page_params['page_title'] = "Add New Textbook";
+$page_params['page_title'] = "Add New Course";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
 //$page_params['js'][] = array( 'text' => $custom_js );

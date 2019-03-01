@@ -142,7 +142,7 @@ else {
         <div class="form-group">
             <label for="Course">Select a Course to edit</label>
 		    <select class="form-control" name="Course" id="Course" onchange="self.location='edit.php?id='+this.options[this.selectedIndex].value">
-		        $courseListHTML
+		        {$courseListHTML}
             </select>
         </div>
     </form>

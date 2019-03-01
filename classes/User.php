@@ -189,7 +189,36 @@ EOT;
 
     public function getDatasets(){
         $db = new EduDb();
-        $sql = "SELECT DatasetId FROM course_datasets cd INNER JOIN courses c ON cd.CourseId = c.CourseId INNER JOIN program_courses pc ON c.CourseId = pc.CourseId INNER JOIN programs p on pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id);";
+        $sql = "SELECT DatasetId FROM course_datasets cd INNER JOIN program_courses pc ON cd.CourseId = pc.CourseId INNER JOIN programs p on pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id);";
         return $db->queryColumn( $sql );
+    }
+
+    public function getCases(){
+        $db = new EduDB();
+        $sql = "SELECT CaseId FROM course_cases cc INNER JOIN program_courses pc ON cc.CourseId = pc.CourseId INNER JOIN programs p on pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id);";
+        return $db->queryColumn( $sql );
+    }
+
+    public function getInstructors(){
+        $db = new EduDB();
+        $sql = "SELECT DISTINCT InstructorId from courses c INNER JOIN program_courses pc on c.CourseId = pc.CourseId INNER JOIN programs p on pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id) AND c.InstructorId IS NOT NULL";
+        return $db->queryColumn( $sql );
+    }
+
+    public function getSoftware(){
+        $db = new EduDB();
+        $sql = "SELECT DISTINCT SoftwareId from course_softwares cs INNER JOIN program_courses pc on cs.CourseId = pc.CourseId INNER JOIN programs p on pc.ProgramId = p.ProgramID WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id)";
+        return $db->queryColumn( $sql );
+    }
+
+    /**
+     * This is just a method that will get all the states and abbreviations from the states table. I needed a place to get these so I threw this function in here
+     * @return array of state abbreviations and state names
+     */
+    public static function getStateList(){
+        $db = new EduDB();
+        $sql = "SELECT * FROM states";
+        $states = $db->query( $sql );
+        return $states;
     }
 }

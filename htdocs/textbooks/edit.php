@@ -34,7 +34,8 @@ if($bookId){
         //redirect to index
         header('Location: /index.php');
         die;
-    } else {
+    }
+    else {
         //get book info to put in form
         $book = new Textbook($bookId);
         $name = $book->Attributes['TextbookName'];
@@ -95,13 +96,14 @@ EOT;
         <div class="form-group">
             <label for="Textbook">Select a Textbook to edit</label>
 		    <select class="form-control" name="Textbook" id="Textbook" onchange="self.location='edit.php?id='+this.options[this.selectedIndex].value">
-		        $bookListHTML
+		        {$bookListHTML}
             </select>
         </div>
     </form>
 </div>
 EOT;
 }
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
