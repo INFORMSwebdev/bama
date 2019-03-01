@@ -69,7 +69,6 @@ EOT;
         //display the appropriate menu item as active based on admin, editor, or anon
         if (isset($_SESSION['admin']) && $_SESSION['admin'] == true) {
             //navbar for admins (INFORMS Admins)
-            # ToDo: add in more links to the nav bar
             $navbar = <<<EOT
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="https://www.informs.org" target="_blank">
@@ -81,6 +80,70 @@ EOT;
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<div class="navbar-nav">
 					<a class="nav-item nav-link" href="/index.php">Program Dashboard</a>
+					<div class="nav-item dropdown">
+					    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Institutions</a>
+					    <div class="dropdown-menu">
+					        <a class="nav-item nav-link" href="/institutions/add.php">Add</a>
+					        <a class="nav-item nav-link" href="/institutions/display.php">Display</a>
+					        <a class="nav-item nav-link" href="/institutions/edit.php">Edit</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+					    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Programs</a>
+					    <div class="dropdown-menu">
+					        <a class="nav-item nav-link" href="/programs/add.php">Add</a>
+					        <a class="nav-item nav-link" href="/programs/display.php">Display</a>
+					        <a class="nav-item nav-link" href="/programs/edit.php">Edit</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+					    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Instructors</a>
+					    <div class="dropdown-menu">
+					        <a class="nav-item nav-link" href="/instructors/add.php">Add</a>
+					        <a class="nav-item nav-link" href="/instructors/display.php">Display</a>
+					        <a class="nav-item nav-link" href="/instructors/edit.php">Edit</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+					    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Courses</a>
+					    <div class="dropdown-menu">
+					        <a class="nav-item nav-link" href="/courses/add.php">Add</a>
+					        <a class="nav-item nav-link" href="/courses/display.php">Display</a>
+					        <a class="nav-item nav-link" href="/courses/edit.php">Edit</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+					    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Textbooks</a>
+					    <div class="dropdown-menu">
+					        <a class="nav-item nav-link" href="/textbooks/add.php">Add</a>
+					        <a class="nav-item nav-link" href="/textbooks/display.php">Display</a>
+					        <a class="nav-item nav-link" href="/textbooks/edit.php">Edit</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+					    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Software</a>
+					    <div class="dropdown-menu">
+					        <a class="nav-item nav-link" href="/software/add.php">Add</a>
+					        <a class="nav-item nav-link" href="/software/display.php">Display</a>
+					        <a class="nav-item nav-link" href="/software/edit.php">Edit</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+					    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Case Studies</a>
+					    <div class="dropdown-menu">
+					        <a class="nav-item nav-link" href="/cases/add.php">Add</a>
+					        <a class="nav-item nav-link" href="/cases/display.php">Display</a>
+					        <a class="nav-item nav-link" href="/cases/edit.php">Edit</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+					    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Datasets</a>
+					    <div class="dropdown-menu">
+					        <a class="nav-item nav-link" href="/datasets/add.php">Add</a>
+					        <a class="nav-item nav-link" href="/datasets/display.php">Display</a>
+					        <a class="nav-item nav-link" href="/datasets/edit.php">Edit</a>
+                        </div>
+                    </div>
 					<div class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
 						<div class="dropdown-menu">
