@@ -9,7 +9,7 @@
 require_once( "../../init.php" );
 $response = [];
 $response['errors'] = [];
-$username = filter_input( INPUT_POST, 'username' );
+$username = trim( filter_input( INPUT_POST, 'username' ) );
 $password = filter_input( INPUT_POST, 'password' );
 $is_admin = FALSE;
 if (isset($aes['sso_enabled']) && $aes['sso_enabled']==1) {

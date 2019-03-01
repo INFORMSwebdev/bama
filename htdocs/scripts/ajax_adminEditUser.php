@@ -14,8 +14,8 @@ $errors = [];
 $success = 0;
 
 $UserId = filter_input( INPUT_POST, 'UserId', FILTER_SANITIZE_NUMBER_INT );
-$FirstName = filter_input( INPUT_POST, 'FirstName', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES );
-$LastName = filter_input( INPUT_POST, 'LastName', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES );
+$FirstName = trim(filter_input( INPUT_POST, 'FirstName', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES ));
+$LastName = trim(filter_input( INPUT_POST, 'LastName', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES ));
 $Username = filter_input( INPUT_POST, 'Username', FILTER_SANITIZE_EMAIL );
 $Comments = filter_input( INPUT_POST, 'Comments', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 
@@ -26,7 +26,7 @@ if (!$Username) $errors[] = "The Username / Email Address field is required.";
 
 if (!count($errors)) {
     $User = new User( $UserId );
-    $exists = User::usernameExists( $Username, $User->Attributes['Username'] );
+    $exists = User::usernameExists( $Username, $UserId );
     if ($exists) $errors[] = "That Username / Email Address is already in use.";
     else {
         $User->update( 'FirstName', $FirstName );

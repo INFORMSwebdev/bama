@@ -40,7 +40,7 @@ $content = <<<EOT
 	   </div>
 	   <div class="form-row">
           <label for="Username">Username / Email Address</label>
-          <input type="text" class="form-control" name="Username" id="Username" placeholder="Email Address" required value="{$Username}" />
+          <input type="email" class="form-control" name="Username" id="Username" placeholder="Email Address" required value="{$Username}" />
 	   </div>
 	   <div class="form-row">
           <label for="Comments">Comments</label>
