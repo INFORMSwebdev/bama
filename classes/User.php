@@ -168,7 +168,7 @@ EOT;
         $sql = "SELECT UserId FROM users WHERE Username=:Username";
         $params = array(array(':Username', $username, PDO::PARAM_STR));
         if ($excludeUserId) {
-            $sql .= " WHERE UserId != :UserId";
+            $sql .= " AND UserId != :UserId";
             $params[] = array(":UserId", $excludeUserId, PDO::PARAM_INT);
         }
         $matchedUserId = $db->queryItemSafe($sql, $params);

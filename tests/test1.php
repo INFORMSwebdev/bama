@@ -12,7 +12,9 @@ $x = Textbook::createInstance( $data );
 $x = new Textbook( 7 );
 $result = $x->createPendingUpdate( UPDATE_TYPE_UPDATE, 1);
 */
-$Program = new Program(1);
-print_r($Program->getCourses());
+$Username = "foo2";
+$UserId = 8;
+$exists = User::usernameExists( $Username, $UserId );
+echo 'exists: ' . $exists;
 
 //echo $result;
