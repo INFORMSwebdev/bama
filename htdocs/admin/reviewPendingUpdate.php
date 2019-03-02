@@ -25,14 +25,19 @@ $UpdateTypes = [
 $UpdateType = $UpdateTypes[$Update->Attributes['UpdateTypeId']];
 
 $data = unserialize( $Update->Attributes['UpdateContent'] );
-$data_html = print_r($data,1);
+$data_html = '';
+// TODO:  we really should make the column names have friendly descriptions, and columns holding foreign keys should  have their values translated into friendly values
+foreach( $data as $key => $value ) {
+    if (!$value) $value = '&nbsp;';
+    $data_html .= '<div class="row data_row">';
+    $data_html .= '<div class="data_label">' . $key . '</div>';
+    $data_html .= '<div class="data_value">' . $value . '</div>';
+    $data_html .= '</div>';
+}
 
 $content = <<<EOT
 <div class="row">
   <h1>Review Pending Update</h1>
-</div>
-<div class="row">
-  <p>Update Type: <b>$UpdateType</b></p>
 </div>
 $data_html
 <div class="row btn-toolbar">
@@ -44,13 +49,36 @@ EOT;
 $custom_css = <<<EOT
 .btn-toolbar { margin-top: 20px; }
 .btn {width: 125px; margin: 0 10px; }
+.data_row { margin: 8px 0; }
+.data_label, .data_value { display: block; width: 100%; }
+.data_label { font-weight: bold; }
+.data_value { padding: 0 10px; }
 EOT;
 
+$approve = APPROVAL_TYPE_APPROVE;
+$reject = APPROVAL_TYPE_REJECT;
 $custom_js = <<<EOT
-
+$(function() {
+  $('#btn-Approve, #btn-Reject').on( 'click keyup', function(e) {
+    var action = ($(this).hasClass('btn-Approve')) ? $approve : $reject;
+    $.post( '/scripts/ajax_ApprovalAction.php', { 'action': action, 'UpdateId': $UpdateId }, function(data) {
+      alert(data);
+      if (data.errors.length > 0 ) {
+        var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+        for (var i = 0; i < data.errors.length; i++) {
+          msg +=  data.errors[i] + "\\r\\n";
+        }
+        alert( msg );
+      }
+      else if (data.msg) {
+        alert( data.msg );
+        window.location.href="/admin/pendingUpdates.php";
+      }
+      else alert( "Something went wrong." );
+    }/*, "json"*/);
+  });
+});
 EOT;
-
-
 
 $p_params = [];
 $p_params['page_title'] = "INFORMS Analytics &amp; OR Education Database - ADMIN - Review Pending Update";
