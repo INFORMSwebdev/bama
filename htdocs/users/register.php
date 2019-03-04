@@ -66,7 +66,7 @@ $content = <<<EOT
 		<div class="form-group">
 		    <label for="Institution">Institution (select one)</label>
 		    <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required>
-		        $instListHTML
+		        {$instListHTML}
             </select>
             <small id="InstitutionHelp" class="form-text text-muted">Select the institution that you wish to be an administrator for.</small>
             <small id="InstitutionOther" class="form-text text-warning">If you do not see your institution in the list, please select the 'Other' option and specify your institution in the Justification box below.</small>
