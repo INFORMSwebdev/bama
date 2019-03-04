@@ -172,7 +172,7 @@ $page_params['js'][] = array('text' => $customScript);
 $page_params['content'] = $content;
 $page_params['page_title'] = 'Program Administrator Login';
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
-$page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
+$page_params['site_url'] = WEB_ROOT . 'index.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;

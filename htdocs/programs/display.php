@@ -224,7 +224,7 @@ EOT;
             </div>
         </div>
     </div>
-    <div class="card-footer" id="cardFooter">
+    <!--<div class="card-footer" id="cardFooter">
         <div class="btn-group" role="group" aria-label="Other program specific information">
             <a role="button" class="btn btn-outline-primary" href="/courses/programCourses.php?id={$prog->Attributes['ProgramId']}">Program Courses</a>
             <a role="button" class="btn btn-outline-primary" href="/instructors/programInstructors.php?id={$prog->Attributes['ProgramId']}">Program Instructors</a>
@@ -232,11 +232,11 @@ EOT;
             <a role="button" class="btn btn-outline-primary" href="/textbooks/programTextbooks.php?progId={$prog->Attributes['ProgramId']}">Program Text Books</a>
             <a role="button" class="btn btn-outline-primary" href="/cases/programCases.php?id={$prog->Attributes['ProgramId']}">Program Case Studies</a>
         </div>
-    </div>
+    </div>-->
 </div>
 EOT;
-
-} else {
+}
+else {
     //invalid input, either not there or not an integer
     $content = <<<EOT
 <div class="flex-column">
@@ -263,7 +263,7 @@ $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "Program Details";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
-$page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
+$page_params['site_url'] = WEB_ROOT . 'index.php';
 //$page_params['js'][] = array( 'text' => $custom_js );
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer

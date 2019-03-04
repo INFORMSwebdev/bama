@@ -54,6 +54,14 @@ class Institution extends AOREducationObject {
         return $institutions;
     }
 
+    public static function getInstitutionIds($active = TRUE){
+        $db = new EduDB();
+        $sql = "SELECT InstitutionId FROM institutions";
+        if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        return $db->query( $sql );
+
+    }
+
     public function getPrograms() {
 
     }

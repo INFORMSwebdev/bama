@@ -30,15 +30,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     # optional inputs = Justification (Comments)
 
     //add record to pending_users table
-    $pendingUserId = PendingUser::create( array( 'Username' => trim($_POST['Username']),
-        'FirstName' => trim($_POST['FirstName']),
-        'LastName' => trim($_POST['LastName']),
-        'InstitutionId' => trim($_POST['Institution']),
-        'Comments' => trim($_POST['Comments']) ) );
-
-    //notify INFORMS admin a user requested access
-    # ToDo: figure out how to send a notification and what is needed for it
-    # from, to, subject, body?
+    $pendingUserId = PendingUser::create(
+        array(
+            'Username' => trim($_POST['Username']),
+            'FirstName' => trim($_POST['FirstName']),
+            'LastName' => trim($_POST['LastName']),
+            'InstitutionId' => trim($_POST['Institution']),
+            'Comments' => trim($_POST['Comments'])
+        )
+    );
 
     //make sure we aren't passing unwanted session variables around
     unset($_SESSION['registerErrors']);

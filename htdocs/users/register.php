@@ -7,12 +7,7 @@ require_once '../../init.php';
 $content = '';
 $page_params = array();
 
-# ToDo: remove the testing query string before deploying anywhere
 $registerFormProcessor = '../processRegisterForm.php';
-if(isset($_GET['testing'])){
-    $registerFormProcessor .= '?testing';
-    $_SESSION['admin'] = true;
-}
 
 //check if user is logged in as an institution admin
 if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
@@ -25,7 +20,6 @@ if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
         die;
     }
 }
-# ToDo: Add in checks for session variables that contain error input from a previously submitted login page!!
 
 //get list of all institutions
 $institutions = Institution::getInstitutions();
@@ -95,7 +89,7 @@ EOT;
 $page_params['content'] = $content;
 $page_params['page_title'] = $page_title;
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
-$page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
+$page_params['site_url'] = WEB_ROOT . 'index.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;

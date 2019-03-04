@@ -26,6 +26,13 @@ $lastName = $user->Attributes['LastName'];
 $comments = $user->Attributes['Comments'];
 $inst = new Institution();
 $instName = $inst->Attributes['InstitutionName'];
+$insts = $user->getInstitutionAssignments();
+$instList = '<ul class="list-group list-group-horizontal">';
+foreach($insts as $ins){
+    $helper = new Institution($ins);
+    $instList .= "<li class='list-group-item'><a class='' href='../institutions/display.php?id=$ins' role='button'>{$helper->Attributes['InstitutionName']}</a></li>";
+}
+$instList .= '</ul>';
 
 //set up the form with user info for display only (i.e. with readonly attribute)
 $content = <<<EOT
@@ -33,7 +40,7 @@ $content = <<<EOT
 	<p>My Profile Information</p>
 </div>
 <div class="row">
-	<form action="">
+	<form action="../scripts/processProfileEditForm.php" method="POST">
 		<div class="form-group">
 			<label for="Username">Email Address/Username</label>
 			<input type="text" class="form-control" name="Username" value="{$userName}" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." required />
@@ -47,18 +54,15 @@ $content = <<<EOT
 			<input type="text" class="form-control" name="LastName" value="{$lastName}" id="LastName" placeholder="Last Name" required />
 		</div>
 		<div class="form-group">
-		    <label for="Institution">Administrator of Institution</label>
-		    <!-- ToDo: put a link to view the institution info page in href when it is created -->
-		     <!-- also, figure out how to display this info in a good way, the profile page uses a button -->
-		    <a href="#" id="Institution">$instName</a>
-            <small id="InstitutionHelp" class="form-text text-muted">Select the institution that you wish to be an administrator for.</small>
-            <small id="InstitutionOther" class="form-text text-warning">If you do not see your institution in the list, please select the 'Other' option and specify your institution in the Justification box below.</small>
-        </div>
-		<div class="form-group">
-		    <input type="hidden" id="Comments" name="Comments" value="{$comments}" />
+		    <input type="hidden" id="userId" name="userId" value="{$user->id}" />
 			<button type="submit" class="btn btn-primary" value="Submit">Submit</button>
+			<button class="btn btn-danger" type="submit" name="delete" value="delete">Delete My Account</button>
 		</div>
 	</form>
+</div>
+<div class="flex-column">
+    <h3>Administrator of Institution</h3>
+    {$instList}
 </div>
 EOT;
 
@@ -66,7 +70,7 @@ EOT;
 $page_params['content'] = $content;
 $page_params['page_title'] = "Edit Profile";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
-$page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
+$page_params['site_url'] = WEB_ROOT . 'index.php';
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;

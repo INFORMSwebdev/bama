@@ -19,6 +19,13 @@ if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true){
 //get current user
 $user = new User($_SESSION['loggedIn']);
 
+//check if there's a given courseId to associate the new instructor w/
+$courseId = filter_input(INPUT_GET, 'courseId', FILTER_VALIDATE_INT);
+$courseInputHTML = '';
+if($courseId){
+    $courseInputHTML = "<input type='hidden' id='courseId' name='courseId' value='$courseId' />";
+}
+
 //display the form for adding institution info to the user
 $content = <<<EOT
 <div class="jumbotron bg-info text-white">
@@ -48,6 +55,7 @@ $content = <<<EOT
         </div>
         <!--<br />-->
         <div class="form-row">
+            {$courseInputHTML}
             <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Instructor</button>
         </div>
         <!--<br />-->
@@ -63,7 +71,7 @@ $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "Add New Instructor";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
-$page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
+$page_params['site_url'] = WEB_ROOT . 'index.php';
 //$page_params['js'][] = array( 'text' => $custom_js );
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
