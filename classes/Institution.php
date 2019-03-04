@@ -22,7 +22,9 @@ class Institution extends AOREducationObject {
         'InstitutionEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'InstitutionAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
+        'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT ),
+        'Expired' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT )
     );
 
     public function assignAdmin( $UserId ) {

@@ -18,6 +18,11 @@ $content = <<<EOT
 		<h1>Analytics & OR Education Database ADMIN</h1>
     </div>
 </div>
+<p><a href="/admin/users.php">List Users</a></p>
+<p><a href="/admin/invite.php">Invite User</a></p>
+<p><a href="/admin/pendingUsers.php">Pending Users</a></p>
+<p><a href="/admin/pendingUpdates.php">Pending Updates</a></p>
+<p><a href="/admin/addInstitution.php">Add Institution</a></p>
 
 EOT;
 

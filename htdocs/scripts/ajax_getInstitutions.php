@@ -13,12 +13,15 @@ if (!isset($_SESSION['admin'])) {
 }
 
 $ok_crits = [
-  'deleted' => 'Deleted = 1',
-  'expired' => 'Expired = 1'
+    'deleted' => 'Deleted = 1',
+    'expired' => 'Expired = 1',
+    'not-deleted' => 'Deleted = 0',
+    'not-expired' => 'Expired = 0',
 ];
 
 $filter = filter_input( INPUT_GET, 'filter' );
-$crits = filter_input( INPUT_GET, 'crit', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+$crits = filter_input( INPUT_GET, 'crits', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
 $addl_params = '';
 if (count($crits)) {
     foreach( $crits as $crit ) {
