@@ -26,11 +26,12 @@ if(isset($_SESSION['registerSuccess']) && is_numeric($_SESSION['registerSuccess'
         $comments = htmlspecialchars($_SESSION['registerInput'][3]);
         $content = <<<EOT
 <div class="row">
-    <h1>Thank you, {$firstName}, for requesting access to the Analytic and Operations Research Education Database.</h1>
+    <h1>INFORMS Analytics &amp; OR Education Database</h1>
+    <p>Thank you, {$firstName}, for requesting access to the Analytic and Operations Research Education Database.</p>
     <p>Your request has been sent to the INFORMS administrators and is pending approval. You should receive an email containing the submitted information soon, if you haven't already received it.</p>
     <p>You will also find the submitted information below for a quick review.</p>
 </div>
-<div class="row">
+<div class="row d-block">
     <h2>Information Submitted:</h2>
     <p>Username: {$userName}</p>
     <p>First Name: {$firstName}</p>
