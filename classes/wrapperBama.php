@@ -150,6 +150,7 @@ EOT;
 							<a class="nav-item nav-link" href="/admin/invite.php">Invite User</a>
 							<a class="nav-item nav-link" href="/admin/pendingUsers.php">Pending Users</a>
 							<a class="nav-item nav-link" href="/admin/pendingUpdates.php">Pending Updates</a>
+							<a class="nav-item nav-link" href="/admin/addInstitution.php">Add Institution</a>
 						</div>
 					</div>
 				</div>
