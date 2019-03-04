@@ -18,7 +18,7 @@ $content = <<<EOT
 		<h1>Analytics & OR Education Database ADMIN</h1>
     </div>
     <div class="row">
-		<h2>Invite Institution Editor</h2>
+		<h2>Invite User</h2>
     </div>
     <form id="inviteForm">
       <div class="form-row">
@@ -91,7 +91,7 @@ function fillInsts( filter ) {
   $('#inst').empty();
   $('#inst').append( $('<option>Loading...</option>' ));
   $('#inst').prop( "disabled", "disabled" );
-  $.getJSON( "/scripts/ajax_getInstitutions.php", { 'filter': filter }, function( data ) {
+  $.getJSON( "/scripts/ajax_getInstitutions.php", { 'filter': filter, 'crits': ['not-deleted','not-expired'] }, function( data ) {
     $('#inst').empty();
     $('#inst').append( $('<option valueg="0">(no selection)</option>' ));
     for( var i = 0; i < data.insts.length; i++ ) {

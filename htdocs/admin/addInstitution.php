@@ -13,19 +13,78 @@ if (!isset($_SESSION['admin'])) {
 }
 $errors = [];
 
+$state_options = '';
+$db = new EduDB();
+$sql = "SELECT * FROM states ORDER BY name";
+$states = $db->query( $sql );
+foreach( $states as $state ) {
+    $state_options .= '<option value="'.$state['abbr'].'">'. $state['name'] .'</option>';
+}
+
 $content = <<<EOT
 <div class="row">
     <h1>Analytics & OR Education Database ADMIN</h1>
 </div>
-<div class="row">
-    <h2>Add Institution</h2>
-</div>
-<div class="row">
+<div class="row d-block">
   <p>Before adding an institution, you might want to check to make sure the 
   institution is not already in our database but is not being publicly displayed 
   because it has been marked "expired" or "deleted."</p>
-  <p>Expired Institutions: <select id="expiredInsts"></select></p>
-  <p>Deleted Institutions: <select id="deletedInsts"></select></p>
+  <p>Expired Institutions: <select id="expiredInsts" disabled></select>
+  <button id="btn-unexpire" class="btn btn-primary btn-sm" disabled>Unexpire</button></p>
+  <p>Deleted Institutions: <select id="deletedInsts" disabled></select>
+  <button id="btn-undelete" class="btn btn-primary btn-sm" disabled>Undelete</button></p>
+</div>
+<div class="row">
+    <h2>Add Institution</h2>
+</div>
+<div class="row d-block">
+  <form id="form-addInstitution">
+    <div class="form-group">
+      <label for="InstitutionName">Institution Name</label>
+      <input type="text" class="form-control" id="InstitutionName" name="InstitutionName" placeholder="Institution Name" required/>
+    </div>
+    <div class="form-group">
+      <label for="InstitutionAddress">Street Address</label>
+      <input type="text" class="form-control" id="InstitutionAddress" name="InstitutionAddress" placeholder="Street Address"/>
+    </div>
+    <div class="form-group">
+      <label for="InstitutionCity">City</label>
+      <input type="text" class="form-control" id="InstitutionCity" name="InstitutionCity" placeholder="City"/>
+    </div>
+    <div class="form-group">
+      <label for="InstitutionState">State</label>
+      <select class="form-control" id="InstitutionState" name="InstitutionState">$state_options</select>
+    </div>
+    <div class="form-group">
+      <label for="InstitutionZip">Postal Code</label>
+      <input type="text" class="form-control" id="InstitutionZip" name="InstitutionZip" placeholder="Institution Zip"/>
+    </div>
+    <div class="form-group">
+      <label for="InstitutionRegion">Region</label>
+      <select class="form-control" id="InstitutionRegion" name="InstitutionRegion" placeholder="Region">
+        <option>South</option>
+        <option>Northeast</option>
+        <option>Midwest</option>
+        <option>West</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="InstitutionName">Institution Contact Phone</label>
+      <input type="text" class="form-control" id="InstitutionPhone" name="InstitutionPhone" placeholder="Institution Contact Phone"/>
+    </div>
+    <div class="form-group">
+      <label for="InstitutionEmail">Institution Contact Email</label>
+      <input type="email" class="form-control" id="InstitutionEmail" name="InstitutionEmail" placeholder="Institution Contact Email"/>
+    </div>
+    <div class="form-group">
+      <label for="InstitutionAccess">Institution Website</label>
+      <input type="text" class="form-control" id="InstitutionAccess" name="InstitutionAccess" placeholder="Institution Website"/>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-primary" id="btn-submitAddForm">Add Institution</button>
+    </div>
+  </form>
 </div>
 EOT;
 
@@ -34,12 +93,25 @@ $custom_css = <<<EOT
 EOT;
 
 $custom_js = <<<EOT
-function fillInsts( selectID, filter, crit ) {
+function ajaxResponseHandler( data ) {
+  if (data.errors.length > 0 ) {
+    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+    for (var i = 0; i < data.errors.length; i++) {
+      msg +=  data.errors[i] + "\\r\\n";
+    }
+    alert( msg );
+  }
+  else if (data.msg) {
+    alert( data.msg );
+  }
+  else alert( "Something went wrong." );
+}
+function fillInsts( selectID, filter, crits ) {
   var select = $('#'+selectID);
   select.empty();
   select.append( $('<option>Loading...</option>' ));
   select.prop( "disabled", "disabled" );
-  $.getJSON( "/scripts/ajax_getInstitutions.php", { 'filter': filter, 'crit': crit }, function( data ) {
+  $.getJSON( "/scripts/ajax_getInstitutions.php", { 'filter': filter, 'crits': crits }, function( data ) {
     select.empty();
     select.append( $('<option valueg="0">(no selection)</option>' ));
     for( var i = 0; i < data.insts.length; i++ ) {
@@ -50,7 +122,34 @@ function fillInsts( selectID, filter, crit ) {
   });
 }
 $(function() {
-  fillInsts( 'expiredInsts', null, ['deleted'] );
+  fillInsts( 'expiredInsts', null, ['expired'] );
+  fillInsts( 'deletedInsts', null, ['deleted'] );
+  $('#expiredInsts').on( 'change', function(e) {
+    $('#btn-unexpire').attr( 'disabled', this.selectedIndex == 0 );
+  });
+  $('#deletedInsts').on( 'change', function(e) {
+    $('#btn-undelete').attr( 'disabled', this.selectedIndex == 0 );
+  });
+  $('#btn-unexpire').on( 'click keyup', function(e) {
+    var id = $('#expiredInsts').val();
+    $.post( '/scripts/ajax_expire.php', { 'InstitutionId': id, 'Value': 0 }, function(data) {
+      ajaxResponseHandler( data );
+      if (data.msg) fillInsts( 'expiredInsts', null, ['expired'] );
+    }, "json");
+  });
+  $('#btn-undelete').on( 'click keyup', function(e) {
+    var id = $('#deletedInsts').val();
+    $.post( '/scripts/ajax_delete.php', { 'InstitutionId': id, 'Value': 0 }, function(data) {
+      ajaxResponseHandler( data );
+      if (data.msg) fillInsts( 'deletedInsts', null, ['deleted'] );
+    }, "json");
+  });
+  $('#form-addInstitution').submit( function(e) {
+    e.preventDefault();
+    $.post( "/scripts/ajax_addInstitution.php", $(this).serialize(), function(data) {
+      ajaxResponseHandler( data );
+    }, "json");
+  });
 });
 EOT;
 
