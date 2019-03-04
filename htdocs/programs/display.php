@@ -256,7 +256,6 @@ EOT;
 
 # ToDo: add in another nav menu (maybe on the left rail?) that has the select list so people don't have to scroll to the bottom
  # of the page to change the program info
-# ToDo: change the display from a form to divs or something, but move the form HTML to the edit page!
 
 //create the parameters to pass to the wrapper
 $page_params = array();

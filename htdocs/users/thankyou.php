@@ -9,8 +9,7 @@
 //load the init script
 require_once '../../init.php';
 
-# ToDo: add in stuff for this page to display info returned from the processRegisterForm
- # this will only be redirected to on a successful anon registration attempt
+$content = '';
 
 //check if the session variable indicating a successful request for access
 if(isset($_SESSION['registerSuccess']) && is_numeric($_SESSION['registerSuccess'])){
@@ -25,12 +24,12 @@ if(isset($_SESSION['registerSuccess']) && is_numeric($_SESSION['registerSuccess'
         $instName = $inst->Attributes['InstitutionName'];
         $comments = htmlspecialchars($_SESSION['registerInput'][3]);
         $content = <<<EOT
-<div class="row">
+<div class="flex-column">
     <h1>Thank you, {$firstName}, for requesting access to the Analytic and Operations Research Education Database.</h1>
     <p>Your request has been sent to the INFORMS administrators and is pending approval. You should receive an email containing the submitted information soon, if you haven't already received it.</p>
     <p>You will also find the submitted information below for a quick review.</p>
 </div>
-<div class="row">
+<div class="flex-column">
     <h2>Information Submitted:</h2>
     <p>Username: {$userName}</p>
     <p>First Name: {$firstName}</p>
@@ -41,20 +40,29 @@ if(isset($_SESSION['registerSuccess']) && is_numeric($_SESSION['registerSuccess'
 EOT;
     } else {
         //expected session variable not set
-        # ToDo: Redirect to error page? Ask Dave how he usually handles errors like this & implement something.
+        $content = <<<EOT
+<div class="flex-column">
+    <div class="alert alert-danger" role="alert"> 
+        <p>Something unexpected went wrong. Please contact <a href="mailto:webdev@mail.informs.org">webdev@mail.informs.org</a>.</p>
+    </div>
+</div>
+EOT;
     }
 }
+else {
+    //redirect to index
+    header('Location: /index.php');
+    die;
+}
+
 //set page parameters up
 $page_params['content'] = $content;
 $page_params['page_title'] = 'Thank You';
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
 $page_params['show_title_bar'] = FALSE;
-# ToDo: figure out the best way to use this admin parameter, maybe change up the bamaWrapper class some? Maybe it's OK
- # for right now. OPTIONAL!
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;
-$page_params['active_menu_item'] = 'home';
 //put custom/extra css files, if used
 //$page_params['css'][] = array("url" => "");
 //put custom/extra JS files, if used

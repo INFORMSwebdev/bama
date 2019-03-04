@@ -11,7 +11,8 @@ if(isset($_SESSION['editMessage'])){
     if($_SESSION['editMessage']['success'] == true){
         //successful insert into pending_updates table
         $content = '<div class="alert alert-success">';
-    } else {
+    }
+    else {
         //unsuccessful insert
         $content = '<div class="alert alert-danger">';
     }
@@ -44,6 +45,9 @@ EOT;
 	<h1 class="display-4">Welcome $userName!</h1>
 	<p class="lead">Below are the programs you are an administrator of.</p>
 	<p>Please give the list a couple seconds to load.</p>
+	<h3>Editing Advice</h3>
+	<p>If you know you want to update a specific course entry under your institution, you go to the Programs->Edit link in the navbar and then select the specific program from the list. You will only see programs that you can edit appear in the list.</p>
+	<p>This works for all types of records listed in the navbar.</p>
 </div>
 <div class="container-fluid" id="programList">
     <!-- program info goes here when returned via ajax -->
