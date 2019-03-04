@@ -75,7 +75,7 @@ $(function() {
         window.location.href="/admin/pendingUpdates.php";
       }
       else alert( "Something went wrong." );
-    }/*, "json"*/);
+    }, "json");
   });
 });
 EOT;

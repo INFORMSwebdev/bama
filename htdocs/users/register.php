@@ -8,7 +8,7 @@ $content = '';
 $page_params = array();
 
 # ToDo: remove the testing query string before deploying anywhere
-$registerFormProcessor = '../processRegisterForm.php';
+$registerFormProcessor = '/scripts/processRegisterForm.php';
 if(isset($_GET['testing'])){
     $registerFormProcessor .= '?testing';
     $_SESSION['admin'] = true;
