@@ -149,6 +149,10 @@ else {
 
     $content = <<<EOT
 <div class="flex-column">
+    <h2>My Institutions</h2>
+    <p>Inside the list below are all the institutions you have permissions to edit.</p>
+</div>
+<div class="flex-column">
     <h2>Edit Institution Details</h2>
     <form action="display.php" method="get">
         <div class="form-group">
@@ -166,7 +170,7 @@ $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "Edit Institution";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
-$page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
+$page_params['site_url'] = WEB_ROOT . 'index.php';
 //$page_params['js'][] = array( 'text' => $custom_js );
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer

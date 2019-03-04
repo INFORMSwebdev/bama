@@ -3,15 +3,9 @@
 //lets not forget that there is also the error settings in init.php!
 require_once '../init.php';
 
-# ToDo: remove this testing stuff before actual deployment!
-if (isset($_GET['testing'])) {
-    $_SESSION['loggedIn'] = 41;
-}
-
 $content = '';
 $custom_js = '';
 
-# ToDo: add in check for messages to display that come from other pages/scripts
 if(isset($_SESSION['editMessage'])){
     //set up the alert color
     if($_SESSION['editMessage']['success'] == true){
@@ -112,7 +106,7 @@ $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "Programs Dashboard";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
-$page_params['site_url'] = 'https://bama-dan.informs.org/index.php';
+$page_params['site_url'] = WEB_ROOT . 'index.php';
 $page_params['js'][] = array( 'text' => $custom_js );
 $page_params['css'][] = array( 'text' => $custom_css );
 //$page_params['css'][] = array( 'url' => 'https://common.informs.org/js/DataTables-1.9.4/media/css/jquery.dataTables.css' );

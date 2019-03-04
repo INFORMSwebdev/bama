@@ -83,7 +83,6 @@ EOT;
 					<div class="nav-item dropdown">
 					    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Institutions</a>
 					    <div class="dropdown-menu">
-					        <a class="nav-item nav-link" href="/institutions/add.php">Add</a>
 					        <a class="nav-item nav-link" href="/institutions/display.php">Display</a>
 					        <a class="nav-item nav-link" href="/institutions/edit.php">Edit</a>
                         </div>
@@ -175,7 +174,6 @@ EOT;
 					<div class="nav-item dropdown">
 					    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Institutions</a>
 					    <div class="dropdown-menu">
-					        <a class="nav-item nav-link" href="/institutions/add.php">Add</a>
 					        <a class="nav-item nav-link" href="/institutions/display.php">Display</a>
 					        <a class="nav-item nav-link" href="/institutions/edit.php">Edit</a>
                         </div>

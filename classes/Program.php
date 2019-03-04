@@ -131,6 +131,10 @@ class Program extends AOREducationObject
         $subQuery = "SELECT InstitutionId FROM institution_admins WHERE UserId = $userId";
         $sql = "SELECT * FROM programs WHERE InstitutionId IN ($subQuery)";
         if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        if($userId == 1){
+            $sql = "SELECT * FROM programs";
+            if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        }
         $progs = $db->query( $sql );
         if ($asObjects) {
             foreach( $progs as $prog) {

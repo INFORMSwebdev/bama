@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lName = filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_STRING);
     $prefix = filter_input(INPUT_POST, 'prefix', FILTER_SANITIZE_STRING);
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    $courseId = filter_input(INPUT_POST, 'courseId', FILTER_VALIDATE_INT);
 
     //get user info
     if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
