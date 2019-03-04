@@ -40,6 +40,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         )
     );
 
+    if ($pendingUserId) {
+        //notify INFORMS admin a user requested access
+        $InstitutionName = '(not specified)'; // default value
+        if ($instId) {
+            $Institution = new Institution( $instId);
+            if ($Institution->valid) $InstitutionName = $Institution->Attributes['InstitutionName'];
+        }
+        $link = WEB_ROOT."admin/pendingUsers.php";
+        $e_params = [];
+        $e_params['to'] = ADMIN_EMAIL;
+        $e_params['subject'] = "Analytics and Operations Research Education Database - New User Request";
+        $e_params['body_html'] = <<<EOT
+<p>The Analytics &amp; OR Education Database system has received a new user request.</p>
+<>First Name: $firstName<br/>
+Last Name: $lastName<br/>
+Username (Email Address): $user<br/>
+Comments: $comments<br/>
+Institution: $InstitutionName</p>
+<p>You can review this request at <a href="$link">$link</a>.</p>
+EOT;
+        $email = new email($e_params);
+        $email->send();
+    }
+
+    $pendingUserId = PendingUser::create(
+        array(
+            'Username' => trim($_POST['Username']),
+            'FirstName' => trim($_POST['FirstName']),
+            'LastName' => trim($_POST['LastName']),
+            'InstitutionId' => trim($_POST['Institution']),
+            'Comments' => trim($_POST['Comments'])
+        )
+    );
+
     //make sure we aren't passing unwanted session variables around
     unset($_SESSION['registerErrors']);
 
