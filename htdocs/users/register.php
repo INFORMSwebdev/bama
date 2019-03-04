@@ -7,7 +7,7 @@ require_once '../../init.php';
 $content = '';
 $page_params = array();
 
-$registerFormProcessor = '../processRegisterForm.php';
+$registerFormProcessor = '/scripts/processRegisterForm.php';
 
 //check if user is logged in as an institution admin
 if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
@@ -32,9 +32,6 @@ $instListHelper[] = array('text' => 'Other', 'value' => 'Other');
 //pass the name/value pairs to the file to get the generated HTML for a select list
 include_once('/common/classes/optionsHTML.php');
 $instListHTML = optionsHTML($instListHelper);
-
-$page_title = '';
-$commentBoxLabel = 'Comments';
 
 //user is anonymous
 $page_title = 'Become an Institution Administrator';

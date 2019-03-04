@@ -70,7 +70,26 @@ class AOREducationObject {
       }
       $params[] = array( ":UpdateContent", serialize($this->Attributes), PDO::PARAM_STR );
       $params[] = array( ":UserId", $UserId, PDO::PARAM_INT );
-      return $db->execSafe( $sql, $params );
+      $result = $db->execSafe( $sql, $params );
+      if ($result) {
+          $link = WEB_ROOT."admin/pendingUpdates.php";
+          $details = '<div style="margin: 10px 0">';
+          foreach( $this->Attributes as $key => $value ) {
+              $details .= $key . ": " . filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS)."<br/>";
+          }
+          $details .= '</div>';
+          $e_params = [];
+          $e_params['to'] = ADMIN_EMAIL;
+          $e_params['subject'] = "Analytics and Operations Research Education Database - Pending Update Request";
+          $e_params['body_html'] = <<<EOT
+<p>The Analytics &amp; OR Education Database system has received a new content update request.</p>
+$details
+<p>You can review this request at <a href="$link">$link</a>.</p>
+EOT;
+          $email = new email($e_params);
+          $email->send();
+      }
+      return $result;
   }
   
   public function delete() {

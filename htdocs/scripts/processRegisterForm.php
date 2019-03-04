@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['registerInput'] = array( $user, $firstName, $lastName, $instId, $comments );
 
         //redirect to the register page
-        header('Location: ' . USER_DIR . 'register.php' );
+        header('Location: /users/register.php' );
         die;
     }
 
@@ -83,7 +83,7 @@ EOT;
     $_SESSION['registerInput'] = array( $user, $firstName, $lastName, $instId, $comments );
 
     //redirect anon user to a Thank You For Registering Page
-    header('Location: ' . USER_DIR . 'thankyou.php' );
+    header('Location: /users/thankyou.php' );
     die;
 }
 

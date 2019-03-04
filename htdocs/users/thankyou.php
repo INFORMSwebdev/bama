@@ -22,10 +22,11 @@ if(isset($_SESSION['registerSuccess']) && is_numeric($_SESSION['registerSuccess'
         //get the institution name from this id to display
         $inst = new Institution($instId);
         $instName = $inst->Attributes['InstitutionName'];
-        $comments = htmlspecialchars($_SESSION['registerInput'][3]);
+        $comments = htmlspecialchars($_SESSION['registerInput'][4]);
         $content = <<<EOT
 <div class="flex-column">
-    <h1>Thank you, {$firstName}, for requesting access to the Analytic and Operations Research Education Database.</h1>
+    <h1>INFORMS Analytics &amp; OR Education Database</h1>
+    <p>Thank you, {$firstName}, for requesting access to the Analytic and Operations Research Education Database.</p>
     <p>Your request has been sent to the INFORMS administrators and is pending approval. You should receive an email containing the submitted information soon, if you haven't already received it.</p>
     <p>You will also find the submitted information below for a quick review.</p>
 </div>
