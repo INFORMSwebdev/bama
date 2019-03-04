@@ -27,7 +27,12 @@ $content = '';
 if (is_numeric($_SESSION['loggedIn'])) {
     $user = new User($_SESSION['loggedIn']);
 
-    $userProgs = $user->getProgramAssignments();
+    if(isset($_SESSION['admin']) && $_SESSION['admin'] == true){
+        $userProgs = Program::getAllPrograms();
+    }
+    else {
+        $userProgs = $user->getProgramAssignments();
+    }
 
     //make sure we actually have an Id to work with
     if (isset($progId)) {
@@ -285,8 +290,15 @@ EOT;
         //display a list of programs user has permission to edit
         $progListHelper = array();
         foreach($userProgs as $uProgId){
-            $tProg = new Program($uProgId);
-            $progListHelper[] = array('text' => $tProg->Attributes['ProgramName'], 'value' => $tProg->Attributes['ProgramId']);
+            if(isset($_SESSION['admin'])){
+                $instHelp = new Institution($uProgId['InstitutionId']);
+                $progListHelper[] = array('text' => $uProgId['ProgramName'] . ' - ' . $instHelp->Attributes['InstitutionName'], 'value' => $uProgId['ProgramId']);
+            }
+            else {
+                $tProg = new Program($uProgId);
+                $instHelp = new Institution($tProg['Attributes']['InstitutionId']);
+                $progListHelper[] = array('text' => $tProg->Attributes['ProgramName'] . ' - ' . $instHelp->Attributes['InstitutionName'], 'value' => $tProg->Attributes['ProgramId']);
+            }
         }
         //get the options maker, its gonna be needed
         include_once('/common/classes/optionsHTML.php');

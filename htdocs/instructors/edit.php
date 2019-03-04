@@ -25,7 +25,12 @@ $user = new User($_SESSION['loggedIn']);
 $instId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 //get the instructors this user can edit
-$userInsts = $user->getInstructors();
+if(isset($_SESSION['admin']) && $_SESSION['admin'] == true){
+    $userInsts = Instructor::getInstructors();
+}
+else {
+    $userInsts = $user->getInstructors();
+}
 
 //check to make sure we have a valid instructorId
 if($instId){
@@ -94,8 +99,13 @@ else {
     //display a list of instructors to the user for them to select from THAT THEY HAVE PERMISSION TO EDIT
     $instListHelper = array();
     foreach($userInsts as $foo){
-        $inst = new Instructor($foo);
-        $instListHelper[] = array('text' => $inst->Attributes['InstructorFirstName'] . ' ' . $inst->Attributes['InstructorLastName'], 'value' => $inst->Attributes['InstructorId']);
+        if(isset($_SESSION['admin'])){
+            $instListHelper[] = array('text' => $foo['InstructorFirstName'] . ' ' . $foo['InstructorLastName'], 'value' => $foo['InstructorId']);
+        }
+        else {
+            $inst = new Instructor($foo);
+            $instListHelper[] = array('text' => $inst->Attributes['InstructorFirstName'] . ' ' . $inst->Attributes['InstructorLastName'], 'value' => $inst->Attributes['InstructorId']);
+        }
     }
     //pass the name/value pairs to the file to get the generated HTML for a select list
     $instListHTML = optionsHTML($instListHelper);

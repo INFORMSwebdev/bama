@@ -22,7 +22,13 @@ $user = new User($_SESSION['loggedIn']);
 //get the software id
 $softId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-$userSoft = $user->getSoftware();
+if(isset($_SESSION['admin']) && $_SESSION['admin'] == true){
+    $userSoft = Software::getAllSoftware();
+}
+else {
+    $userSoft = $user->getSoftware();
+}
+
 
 if($softId){
     //make sure user has permission to edit this software
@@ -75,8 +81,13 @@ else {
     //display list of software the user has permission to edit
     $softListHelper = array();
     foreach($userSoft as $s){
-        $so = new Software($s);
-        $softListHelper[] = array('text' => $so->Attributes['SoftwareName'], 'value' => $so->Attributes['SoftwareId']);
+        if(isset($_SESSION['admin'])){
+            $softListHelper[] = array('text' => $s['SoftwareName'], 'value' => $s['SoftwareId']);
+        }
+        else {
+            $so = new Software($s);
+            $softListHelper[] = array('text' => $so->Attributes['SoftwareName'], 'value' => $so->Attributes['SoftwareId']);
+        }
     }
     //pass the name/value pairs to the file to get the generated HTML for a select list
     include_once('/common/classes/optionsHTML.php');

@@ -23,7 +23,12 @@ $caseId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $user = new User($_SESSION['loggedIn']);
 
 //get courses user has permission to edit
-$userCases = $user->getCases();
+if(isset($_SESSION['admin']) && $_SESSION['admin'] == true){
+    $userCases = CaseStudy::getCaseStudies();
+}
+else {
+    $userCases = $user->getCases();
+}
 
 //get the options maker, its gonna be needed
 include_once('/common/classes/optionsHTML.php');
@@ -105,8 +110,13 @@ else {
     //display a list of case studies to the user for them to select from THAT THEY HAVE PERMISSION TO EDIT
     $caeListHelper = array();
     foreach($userCases as $caseFoo){
-        $case = new CaseStudy($caseFoo);
-        $caeListHelper[] = array('text' => $case->Attributes['CaseTitle'], 'value' => $case->Attributes['CaseId']);
+        if(isset($_SESSION['admin'])){
+            $caeListHelper[] = array('text' => $caseFoo['CaseTitle'], 'value' => $caseFoo['CaseId']);
+        }
+        else {
+            $case = new CaseStudy($caseFoo);
+            $caeListHelper[] = array('text' => $case->Attributes['CaseTitle'], 'value' => $case->Attributes['CaseId']);
+        }
     }
     //pass the name/value pairs to the file to get the generated HTML for a select list
     $caseListHTML = optionsHTML($caeListHelper);

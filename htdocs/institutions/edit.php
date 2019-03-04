@@ -25,7 +25,12 @@ $user = new User($_SESSION['loggedIn']);
 $instId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 //get the institutions this user has permission to edit
-$userInsts = $user->getInstitutionAssignments();
+if(isset($_SESSION['admin']) && $_SESSION['admin'] == true){
+    $userInsts = Institution::getInstitutions();
+}
+else {
+    $userInsts = $user->getInstitutionAssignments();
+}
 
 //get the options maker, its gonna be needed
 include_once('/common/classes/optionsHTML.php');
@@ -141,8 +146,13 @@ else {
     //display a list of institutions to the user for them to select from THAT THEY HAVE PERMISSION TO EDIT
     $instListHelper = array();
     foreach($userInsts as $foo){
-        $inst = new Institution($foo);
-        $instListHelper[] = array('text' => $inst->Attributes['InstitutionName'], 'value' => $inst->Attributes['InstitutionId']);
+        if(isset($_SESSION['admin'])){
+            $instListHelper[] = array('text' => $foo['InstitutionName'], 'value' => $foo['InstitutionId']);
+        }
+        else {
+            $inst = new Institution($foo);
+            $instListHelper[] = array('text' => $inst->Attributes['InstitutionName'], 'value' => $inst->Attributes['InstitutionId']);
+        }
     }
     //pass the name/value pairs to the file to get the generated HTML for a select list
     $instListHTML = optionsHTML($instListHelper);

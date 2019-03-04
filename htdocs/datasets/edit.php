@@ -23,7 +23,12 @@ $datasetId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $user = new User($_SESSION['loggedIn']);
 
 //get datasets user has permission to edit
-$userSets = $user->getDatasets();
+if(isset($_SESSION['admin']) && $_SESSION['admin'] == true){
+    $userSets = Dataset::getAllDatasets();
+}
+else {
+    $userSets = $user->getDatasets();
+}
 
 //get the options maker, its gonna be needed
 include_once('/common/classes/optionsHTML.php');
@@ -112,8 +117,13 @@ else {
     //display a list of datasets to the user for them to select from THAT THEY HAVE PERMISSION TO EDIT
     $datasetListHelper = array();
     foreach($userSets as $dataId){
-        $dSet = new Dataset($dataId);
-        $datasetListHelper[] = array('text' => $dSet->Attributes['CourseTitle'], 'value' => $dSet->Attributes['CourseId']);
+        if(isset($_SESSION['admin'])){
+            $datasetListHelper[] = array('text' => $dataId['DatasetName'], 'value' => $dataId['DatasetId']);
+        }
+        else {
+            $dSet = new Dataset($dataId);
+            $datasetListHelper[] = array('text' => $dSet->Attributes['DatasetName'], 'value' => $dSet->Attributes['DatasetId']);
+        }
     }
     //pass the name/value pairs to the file to get the generated HTML for a select list
     $datasetListHTML = optionsHTML($datasetListHelper);
@@ -125,7 +135,7 @@ else {
         <div class="form-group">
             <label for="Course">Select a Dataset to edit</label>
 		    <select class="form-control" name="Dataset" id="Dataset" onchange="self.location='edit.php?id='+this.options[this.selectedIndex].value">
-		        $datasetListHTML
+		        {$datasetListHTML}
             </select>
         </div>
     </form>

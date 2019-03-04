@@ -22,7 +22,13 @@ if (!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) {
 $bookId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 $user = new User($_SESSION['loggedIn']);
-$userBooks = $user->getBookAssignments();
+
+if(isset($_SESSION['admin']) && $_SESSION['admin'] == true){
+    $userBooks = Textbook::getBooks();
+}
+else {
+    $userBooks = $user->getBookAssignments();
+}
 
 if($bookId){
     //if the bookId passed via the query string is NOT in this list, the user does NOT have permission to edit this page
@@ -77,9 +83,9 @@ if($bookId){
     </form>
 </div>
 EOT;
-
     }
-} else {
+}
+else {
     //display a list of books to the user for them to select from THAT THEY HAVE PERMISSION TO EDIT
     $bookListHelper = array();
     foreach($userBooks as $prog){

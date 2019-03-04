@@ -25,7 +25,12 @@ $courseId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $user = new User($_SESSION['loggedIn']);
 
 //get courses user has permission to edit
-$userCourses = $user->getCourses();
+if(isset($_SESSION['admin']) && $_SESSION['admin'] == true){
+    $userCourses = Course::getAllCourses();
+}
+else {
+    $userCourses = $user->getCourses();
+}
 
 //get the options maker, its gonna be needed
 include_once('/common/classes/optionsHTML.php');
@@ -129,8 +134,13 @@ else {
     //display a list of courses to the user for them to select from THAT THEY HAVE PERMISSION TO EDIT
     $courseListHelper = array();
     foreach($userCourses as $courseFoo){
-        $course = new Course($courseFoo);
-        $courseListHelper[] = array('text' => $course->Attributes['CourseTitle'], 'value' => $course->Attributes['CourseId']);
+        if(isset($_SESSION['admin'])){
+            $courseListHelper[] = array('text' => $courseFoo['CourseTitle'], 'value' => $courseFoo['CourseId']);
+        }
+        else {
+            $course = new Course($courseFoo);
+            $courseListHelper[] = array('text' => $course->Attributes['CourseTitle'], 'value' => $course->Attributes['CourseId']);
+        }
     }
     //pass the name/value pairs to the file to get the generated HTML for a select list
     $courseListHTML = optionsHTML($courseListHelper);
