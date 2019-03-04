@@ -7,7 +7,7 @@ require_once '../../init.php';
 $content = '';
 $page_params = array();
 
-$registerFormProcessor = '../processRegisterForm.php';
+$registerFormProcessor = '/scripts/processRegisterForm.php';
 
 //check if user is logged in as an institution admin
 if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
@@ -32,9 +32,6 @@ $instListHelper[] = array('text' => 'Other', 'value' => 'Other');
 //pass the name/value pairs to the file to get the generated HTML for a select list
 include_once('/common/classes/optionsHTML.php');
 $instListHTML = optionsHTML($instListHelper);
-
-$page_title = '';
-$commentBoxLabel = 'Comments';
 
 //user is anonymous
 $page_title = 'Become an Institution Administrator';
@@ -69,7 +66,7 @@ $content = <<<EOT
 		<div class="form-group">
 		    <label for="Institution">Institution (select one)</label>
 		    <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required>
-		        $instListHTML
+		        {$instListHTML}
             </select>
             <small id="InstitutionHelp" class="form-text text-muted">Select the institution that you wish to be an administrator for.</small>
             <small id="InstitutionOther" class="form-text text-warning">If you do not see your institution in the list, please select the 'Other' option and specify your institution in the Justification box below.</small>

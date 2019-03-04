@@ -5,8 +5,7 @@ require_once '../../init.php';
 //check if user is already logged in (first checking if the session variable is set, then if it is true)
 if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true) {
     //redirect user to their institution admin dashboard
-    # ToDo: add in message about already being logged in
-    header("Location: ../index.php");
+    header("Location: /index.php");
     //stop execution of this script after redirect
     die;
 }
@@ -14,7 +13,6 @@ if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true) {
 //process the data when the form is submitted via POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     validateInput(trim($_POST["username"]), trim($_POST["password"]));
-    # ToDo: determine if the filter_input function should be used instead
 }
 
 function validateInput($user, $pass)
@@ -52,7 +50,7 @@ function validateInput($user, $pass)
                 unset($_SESSION['loginInput']);
 
                 //send user to the dashboard
-                header('Location: ../index.php');
+                header('Location: /index.php');
                 die;
             }
             //otherwise, collect errors to print out on login page

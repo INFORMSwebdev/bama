@@ -5,7 +5,8 @@ require_once '../../init.php';
 
 //check if user is already logged in
 if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
-    # ToDo: add in a message here that they are already logged in
+    $_SESSION['editMessage']['success'] = false;
+    $_SESSION['editMessage']['text'] = 'You are already logged in. Please log out if you want to re-login.';
     //redirect to the regular index page
     header("Location: /index.php");
     //don't want the script to keep executing after a redirect
@@ -66,7 +67,6 @@ if(isset($_SESSION['loginInput'])) {
     //we are done with that session variable, clear it out
     $_SESSION['loginInput'] = null;
 
-    # ToDo: figure out how to get the previously input username into the form
     //define the form HTML
     $form = <<<EOT
 <div class="row">
