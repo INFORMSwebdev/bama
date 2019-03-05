@@ -18,13 +18,13 @@ $appStatusRejected = APPROVAL_TYPE_REJECT;
 
 $content = <<<EOT
 
-<div class="row">
+<div class="flex-column">
     <h1>Analytics & OR Education Database ADMIN</h1>
 </div>
-<div class="row">
+<div class="flex-column">
     <h2>Pending Updates</h2>
 </div>
-<div class="row form-group" id="statusFilterContainer"> 
+<div class="flex-column form-group" id="statusFilterContainer"> 
     <span class="filter-label">Status Filter:</span>
     <div class="form-check-inline">
       <label class="form-check-label" for="cb-New">
@@ -42,6 +42,7 @@ $content = <<<EOT
       </label>
     </div>
 </div>
+<div class="container-fluid">
 <table id="pendingUpdatesTable">
   <thead> 
     <tr><th>Username</th><th>Category</th><th>Update Type</th><th>Created</th><th>Status</th><th>Action</th></tr>
@@ -49,7 +50,7 @@ $content = <<<EOT
   <tbody> 
   </tbody>
 </table>
-
+</div>
 EOT;
 
 $custom_css = <<<EOT

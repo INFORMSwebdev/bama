@@ -113,8 +113,6 @@ $page_params['site_title'] = "Analytics & Operations Research Education Program 
 $page_params['site_url'] = WEB_ROOT . 'index.php';
 $page_params['js'][] = array( 'text' => $custom_js );
 $page_params['css'][] = array( 'text' => $custom_css );
-//$page_params['css'][] = array( 'url' => 'https://common.informs.org/js/DataTables-1.9.4/media/css/jquery.dataTables.css' );
-//$page_params['js'][] = array( 'url' => 'https://common.informs.org/js/DataTables-1.9.4/media/js/jquery.dataTables.min.js' );
 $page_params['css'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css' );
 $page_params['js'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js' );
 $page_params['show_title_bar'] = FALSE;

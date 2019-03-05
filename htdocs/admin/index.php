@@ -14,7 +14,7 @@ if (!isset($_SESSION['admin'])) {
 $errors = [];
 $content = <<<EOT
 <div class="container">
-	<div class="row">
+	<div class="flex-column">
 		<h1>Analytics & OR Education Database ADMIN</h1>
     </div>
 </div>

@@ -13,13 +13,13 @@ if (!isset($_SESSION['admin'])) {
 }
 
 $content = <<<EOT
-<div class="row">
+<div class="flex-column">
     <h1>Analytics & OR Education Database ADMIN</h1>
 </div>
-<div class="row">
+<div class="flex-column">
     <h2>Pending Users</h2>
 </div>
-<div class="row" id="userTableContainer">
+<div class="flex-column" id="userTableContainer">
   <table id="usersTable">
     <thead>
       <tr><th>First Name</th><th>Last Name</th><th>Username</th><th>Created</th><th>Institution</th><th>Comments</th><th>Approval</th></tr>
