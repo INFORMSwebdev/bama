@@ -19,13 +19,8 @@ $content = <<<EOT
 <div class="flex-column">
     <h2>Pending Users</h2>
 </div>
-<<<<<<< HEAD
-<div class="row" id="userTableContainer">
-  <table id="usersTable" class="table-striped">
-=======
-<div class="flex-column" id="userTableContainer">
+<div class="flex-column" id="userTableContainer"  class="table-striped">
   <table id="usersTable">
->>>>>>> 169c7e0e1c155683cd76a7ee857a7e8a01adabf2
     <thead>
       <tr><th>First Name</th><th>Last Name</th><th>Username</th><th>Created</th><th>Institution</th><th>Comments</th><th>Approval</th></tr>
     </thead>
