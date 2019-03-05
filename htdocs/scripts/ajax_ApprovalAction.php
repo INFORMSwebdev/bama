@@ -21,7 +21,8 @@ if (!$UpdateId) die( "missing required parameter: UpdateId" );
 $PendingUpdate = new PendingUpdate( $UpdateId );
 try {
     $result = $PendingUpdate->approvalAction( $action );
-    $msg = "Update approved.";
+    $actionDesc = ($action == APPROVAL_TYPE_APPROVE) ? "approved" : "rejected";
+    $msg = "Update $actionDesc.";
 }
 catch (Exception $e) {
     $errors[] = $e->getMessage();
