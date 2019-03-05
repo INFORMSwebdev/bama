@@ -36,13 +36,15 @@ foreach( $data as $key => $value ) {
 }
 
 $content = <<<EOT
-<div class="row">
+<div class="flex-column">
   <h1>Review Pending Update</h1>
 </div>
-$data_html
-<div class="row btn-toolbar">
-    <button class="btn btn-primary btn-Approve" id="btn-Approve">Approve</button>
-    <button class="btn btn-secondary btn-Reject" id="btn-Reject">Reject</button>
+<div class="container-fluid">
+    $data_html
+    <div class="row btn-toolbar">
+        <button class="btn btn-primary btn-Approve" id="btn-Approve">Approve</button>
+        <button class="btn btn-secondary btn-Reject" id="btn-Reject">Reject</button>
+    </div>
 </div>
 EOT;
 

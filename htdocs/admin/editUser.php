@@ -21,13 +21,13 @@ foreach( $User->Attributes as $key => $value ) {
 }
 
 $content = <<<EOT
-<div class="row">
+<div class="flex-column">
     <h1>Analytics & OR Education Database ADMIN</h1>
 </div>
-<div class="row">
+<div class="flex-column">
     <h2>Edit User</h2>
 </div>
-<div id="editorPane">
+<div id="editorPane" class="container-fluid">
   <form id="userEditForm"> 
     <input type="hidden" name="UserId" value="{$UserId}"/>
       <div class="form-row">

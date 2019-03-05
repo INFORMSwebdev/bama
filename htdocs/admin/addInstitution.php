@@ -22,10 +22,10 @@ foreach( $states as $state ) {
 }
 
 $content = <<<EOT
-<div class="row">
+<div class="flex-column">
     <h1>Analytics & OR Education Database ADMIN</h1>
 </div>
-<div class="row d-block">
+<div class="flex-column">
   <p>Before adding an institution, you might want to check to make sure the 
   institution is not already in our database but is not being publicly displayed 
   because it has been marked "expired" or "deleted."</p>
@@ -34,10 +34,10 @@ $content = <<<EOT
   <p>Deleted Institutions: <select id="deletedInsts" disabled></select>
   <button id="btn-undelete" class="btn btn-primary btn-sm" disabled>Undelete</button></p>
 </div>
-<div class="row">
+<div class="flex-column">
     <h2>Add Institution</h2>
 </div>
-<div class="row d-block">
+<div class="flex-column">
   <form id="form-addInstitution">
     <div class="form-group">
       <label for="InstitutionName">Institution Name</label>

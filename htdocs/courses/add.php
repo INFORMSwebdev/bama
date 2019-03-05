@@ -41,7 +41,7 @@ $instructorListHTML = optionsHTML($instructorListHelper);
 
 //display the form for adding course info to the user
 $content = <<<EOT
-<div class="jumbotron bg-info text-white">
+<!--<div class="jumbotron bg-info text-white">-->
     <form action="../scripts/processCourseAddForm.php" method="POST">
         <div class="form-row">
             <h3>Course Details</h3>
@@ -98,7 +98,7 @@ $content = <<<EOT
             <p class="lead">This course will not be added to the system until the changes are approved by an INFORMS administrator.</p>
         </div>
     </form>
-</div>
+<!--</div>-->
 EOT;
 
 //create the parameters to pass to the wrapper
