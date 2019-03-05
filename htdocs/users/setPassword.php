@@ -71,6 +71,7 @@ $(function() {
         }
         else alert(data);
       }, "json");
+      return false;
     }
     else {
       e.preventDefault();
