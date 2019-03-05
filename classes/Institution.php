@@ -77,6 +77,10 @@ class Institution extends AOREducationObject {
         }
         return $users;
     }
+
+    public function sendExpirationNotice() {
+
+    }
 }
 
 
