@@ -71,7 +71,17 @@ $(function() {
         var helper = processProgramList(data.programs, 'all');
         //display the returned info in the div
         $('#programList').html(helper);
-        $('#usersTable').DataTable();
+        $('#usersTable').DataTable({
+            //set the table to be responsive
+            responsive: true,
+            //set the access column to the custom CSS class that makes text wrap appropriately
+            columnDefs: [
+                {
+                    "targets": 5,
+                    "className": "responsiveCol"
+                }
+            ]
+        });
       }
     }, "json");
   
@@ -81,7 +91,7 @@ $(function() {
         var foo = '<p class="text text-danger">No programs available to display right now, please try again later.</p>';
         return foo;
     } else {
-        var html= '<h2>My Programs</h2><table class="table" id="usersTable"><thead><tr><th>Name</th><th>Institution</th><th>Type</th><th>Delivery Method</th><th>Testing Requirements</th><th>Link</th><th></th></tr></thead><tbody>';
+        var html= '<h2>My Programs</h2><table class="table-responsive table-striped" id="usersTable"><thead><tr><th>Name</th><th>Institution</th><th>Type</th><th>Delivery Method</th><th>Testing Requirements</th><th>Link</th><th></th></tr></thead><tbody>';
         for( var i = 0; i < progs.length; i++ ){
             html += '<tr>';
             html += '<td>' + progs[i].ProgramName + '</td>';
@@ -90,7 +100,7 @@ $(function() {
             html += '<td>' + progs[i].DeliveryMethod + '</td>';
             html += '<td>' + progs[i].TestingRequirement + '</td>';
             html += '<td><a target="_blank" class="text-wrap" href="' + progs[i].ProgramAccess + '">' + progs[i].ProgramAccess + '</a></td>';
-            html += '<td><a class="btn btn-primary" href="/programs/display.php?id=' + progs[i].ProgramId + '">Details</a><a class="btn btn-info" href="/programs/edit.php?id=' + progs[i].ProgramId + '">Edit</a></td>';
+            html += '<td><a class="btn btn-primary btn-block" href="/programs/display.php?id=' + progs[i].ProgramId + '">Details</a><a class="btn btn-info btn-block" href="/programs/edit.php?id=' + progs[i].ProgramId + '">Edit</a></td>';
             html += '</tr>';
         }
         html += '</tbody></table>';
@@ -102,7 +112,10 @@ EOT;
 }
 
 $custom_css = <<<EOT
-
+td.responsiveCol {
+    overflow-wrap: break-word;
+    max-width: 250px;
+}
 EOT;
 
 //create the parameters to pass to the wrapper
@@ -112,9 +125,10 @@ $page_params['page_title'] = "Programs Dashboard";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
 $page_params['js'][] = array( 'text' => $custom_js );
-$page_params['css'][] = array( 'text' => $custom_css );
 $page_params['css'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css' );
+$page_params['css'][] = array( 'text' => $custom_css );
 $page_params['js'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js' );
+//$page_params['js'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js');
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
 $page_params['admin'] = TRUE;
