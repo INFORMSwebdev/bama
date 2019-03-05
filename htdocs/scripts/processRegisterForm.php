@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $e_params['subject'] = "Analytics and Operations Research Education Database - New User Request";
         $e_params['body_html'] = <<<EOT
 <p>The Analytics &amp; OR Education Database system has received a new user request.</p>
-<>First Name: $firstName<br/>
+First Name: $firstName<br/>
 Last Name: $lastName<br/>
 Username (Email Address): $user<br/>
 Comments: $comments<br/>
