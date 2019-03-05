@@ -8,7 +8,18 @@
 
 require_once( "../init.php");
 
+echo date('m/d/Y h:i:s a', time()) . " : Beginning expiration notice." . PHP_EOL;
+
+$exp = $aes['data_expiration'];
+$notice_window = $aes['notice_days'];
+$target_date = $exp - $notice_window;
 $db = new EduDB();
-$sql = "SELECT InstitutionId FROM institutions WHERE LastModifiedDate = DATE_ADD(NOW(), INTERVAL -10 DAY);";
-$rows = $db->query( $sql );
-print_r($rows);
+$sql = "SELECT InstitutionId FROM institutions WHERE DATE(LastModifiedDate) = DATE(DATE_ADD(NOW(), INTERVAL -$target_date DAY));";
+$insts = $db->queryColumn( $sql );
+foreach($insts as $inst) {
+    $Institution = new Institution( $inst );
+    //$Institution->update( 'Deleted', 1 );
+    $Institution->sendExpirationNotice();
+    echo "sending notice to contact(s) for InstitutionId = $inst" . PHP_EOL;
+}
+echo date('m/d/Y h:i:s a', time()) . " : Expiration notice check complete.". PHP_EOL;
