@@ -42,7 +42,7 @@ $content = <<<EOT
       </label>
     </div>
 </div>
-<table id="pendingUpdatesTable">
+<table id="pendingUpdatesTable" class="table-striped">
   <thead> 
     <tr><th>Username</th><th>Category</th><th>Update Type</th><th>Created</th><th>Status</th><th>Action</th></tr>
   </thead>

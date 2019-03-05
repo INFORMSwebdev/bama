@@ -20,7 +20,7 @@ $content = <<<EOT
     <h2>Pending Users</h2>
 </div>
 <div class="row" id="userTableContainer">
-  <table id="usersTable">
+  <table id="usersTable" class="table-striped">
     <thead>
       <tr><th>First Name</th><th>Last Name</th><th>Username</th><th>Created</th><th>Institution</th><th>Comments</th><th>Approval</th></tr>
     </thead>
