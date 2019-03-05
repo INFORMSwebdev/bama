@@ -94,6 +94,7 @@ EOT;
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Users</a>
     <div class="dropdown-menu">
         <a class="nav-item nav-link" href="/users/profile.php">My Profile</a>
+        <a class="nav-item nav-link" href="/users/resetPassword.php">Reset Password</a>
         $admin_login_link
     </div>
 </div>
