@@ -40,13 +40,13 @@ $commentBoxLabel = 'Justification';
 //user is anonymous, show them the Request for Access form
 //set the form that will be displayed to users
 $content = <<<EOT
-<div class="row">
+<div class="flex-column">
 	<h1>Request for Program Administrator</h1>
 </div>
-<div class="row">
+<div class="flex-column">
 	<p>Please fill this form to submit a request to become an Institution Administrator.</p>
 </div>
-<div class="row">
+<div class="container-fluid">
 	<form action="{$registerFormProcessor}" method="post">
 		<div class="form-group">
 			<label for="Username">Email Address</label>

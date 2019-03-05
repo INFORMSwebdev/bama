@@ -37,6 +37,17 @@ class User extends AOREducationObject
         return $result;
     }
 
+    public function checkActiveStatus(){
+        if($this->Attributes['Deleted'] == false){
+            //the flag is set to 0, this is an active account (i.e. Deleted = false)
+            return true;
+        }
+        else {
+            //the flag is set to 1, this is an inactive account (i.e. Deleted = true)
+            return false;
+        }
+    }
+
     public function checkPassword( $password ) {
         $password_hash = $this->Attributes['Password'];
         return password_verify( $password, $password_hash);

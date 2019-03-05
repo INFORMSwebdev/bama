@@ -15,10 +15,10 @@ $User = User::getUserByToken( $Token );
 $_SESSION["password_set_for"] = $User->id;
 
 $content = <<<EOT
-<div class="row">
+<div class="flex-column">
 	<h1>Set New Password</h1>
 </div>
-<div class="row">
+<div class="flex-column">
 	<p>Password rules:</p>
 	<ul>
 	  <li>Minimum length: 8 characters.</li>
@@ -26,20 +26,21 @@ $content = <<<EOT
 	  <li>Your password does not have to include a mix of upper- and lower-case letters, numbers, and special characters, but it is highly recommended that you do so.</li>
 	</ul>
 </div>
-
-<form id="setPasswordForm" method="POST">
-  <div class="form-group">
-    <label for="password">Password</label>
-		<input minlength="8" type="password" class="form-control" id="password" name="password" required />
-  </div>
-  <div class="form-group">
-    <label for="password_confirm">Retype Password to Confirm</label>
-		<input type="password" class="form-control" id="password_confirm" name="password_confirm" required />
-  </div>
-  <div class="form-group">
-    <input type="submit" value="Set Password" />
-  </div>
-</form>
+<div class="container-fluid">
+    <form id="setPasswordForm" method="POST">
+      <div class="form-group">
+        <label for="password">Password</label>
+    		<input minlength="8" type="password" class="form-control" id="password" name="password" required />
+      </div>
+      <div class="form-group">
+        <label for="password_confirm">Retype Password to Confirm</label>
+    		<input type="password" class="form-control" id="password_confirm" name="password_confirm" required />
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Set Password" />
+      </div>
+    </form>
+</div>
 EOT;
 
 $custom_js = <<<EOT

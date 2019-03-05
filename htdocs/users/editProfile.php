@@ -36,10 +36,10 @@ $instList .= '</ul>';
 
 //set up the form with user info for display only (i.e. with readonly attribute)
 $content = <<<EOT
-<div class="row">
-	<p>My Profile Information</p>
+<div class="flex-column">
+	<h2>My Profile Information</h2>
 </div>
-<div class="row">
+<div class="contianer-fluid">
 	<form action="../scripts/processProfileEditForm.php" method="POST">
 		<div class="form-group">
 			<label for="Username">Email Address/Username</label>
@@ -56,7 +56,7 @@ $content = <<<EOT
 		<div class="form-group">
 		    <input type="hidden" id="userId" name="userId" value="{$user->id}" />
 			<button type="submit" class="btn btn-primary" value="Submit">Submit</button>
-			<button class="btn btn-danger" type="submit" name="delete" value="delete">Delete My Account</button>
+			<!--<button class="btn btn-danger" type="submit" id="delete" name="delete" value="delete">Delete My Account</button>-->
 		</div>
 	</form>
 </div>
@@ -65,6 +65,19 @@ $content = <<<EOT
     {$instList}
 </div>
 EOT;
+
+$customJS = <<<EOT
+$(function() {
+    $('#delete').on( "click", function(e) {
+        var conf = confirm( "Are you sure you want to delete your account?" );
+        if( conf ){
+            //actually delete the account
+        }
+        //otherwise do nothing
+    });
+});
+EOT;
+
 
 //set page parameters up
 $page_params['content'] = $content;

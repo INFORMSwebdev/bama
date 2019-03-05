@@ -69,10 +69,10 @@ if(isset($_SESSION['loginInput'])) {
 
     //define the form HTML
     $form = <<<EOT
-<div class="row">
+<div class="flex-column">
 	<h1>Institution Administrator Login</h1>
 </div>
-<div class="row">
+<div class="flex-column">
 	<p>Log in to administrate your program's information.</p>
 </div>
 <form class="needs-validation" action="../scripts/processLoginForm.php" method="post" novalidate id="login_form">
@@ -100,44 +100,46 @@ if(isset($_SESSION['loginInput'])) {
 	    <button class="btn btn-primary" type="submit">Log in</button>
 	</div>
 </form>
-<p><a href="/users/resetPassword.php">Forgot password?</a></p>
+<p><a class="btn btn-info" href="/users/resetPassword.php">Forgot password?</a></p>
 EOT;
 }
 else {
     //create an empty form
     $form = <<<EOT
-<div class="row">
+<div class="flex-column">
 	<h1>Institution Administrator Login</h1>
 </div>
-<div class="row">
+<div class="flex-column">
 	<p>Log in to administrate your program's information.</p>
 </div>
-<form class="needs-validation" action="../scripts/processLoginForm.php" method="post" novalidate>
-	<div class="form-group">
-		<label for="validationUsername">Username</label>
-		<input type="text" class="form-control" id="validationUsername" name="username" placeholder="Username" required />
-		<div class="valid-feedback">
-			Looks good!
-		</div>
-		<div class="invalid-feedback">
-			Please enter your username.
-		</div>
-	</div>
-	<div class="form-group">
-		<label for="validationPassword">Password</label>
-		<input type="password" class="form-control" id="validationPassword" name="password" placeholder="Password" required />
-		<div class="valid-feedback">
-			Looks good!
-		</div>
-		<div class="invalid-feedback">
-			Please enter your password.
-		</div>
-	</div>
-	<div class="form-group">
-	    <button class="btn btn-primary" type="submit">Log in</button>
-	</div>
-</form>
-<p><a href="/users/resetPassword.php">Forgot password?</a></p>
+<div class="container-fluid">
+    <form class="needs-validation" action="../scripts/processLoginForm.php" method="post" novalidate>
+    	<div class="form-group">
+    		<label for="validationUsername">Username</label>
+    		<input type="text" class="form-control" id="validationUsername" name="username" placeholder="Username" required />
+    		<div class="valid-feedback">
+    			Looks good!
+    		</div>
+    		<div class="invalid-feedback">
+    			Please enter your username.
+    		</div>
+    	</div>
+    	<div class="form-group">
+    		<label for="validationPassword">Password</label>
+    		<input type="password" class="form-control" id="validationPassword" name="password" placeholder="Password" required />
+    		<div class="valid-feedback">
+    			Looks good!
+    		</div>
+    		<div class="invalid-feedback">
+    			Please enter your password.
+    		</div>
+    	</div>
+    	<div class="form-group">
+    	    <button class="btn btn-primary" type="submit">Log in</button>
+    	</div>
+    </form>
+</div>
+<p><a class="btn btn-info" href="/users/resetPassword.php">Forgot password?</a></p>
 EOT;
 }
 

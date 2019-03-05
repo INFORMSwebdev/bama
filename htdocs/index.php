@@ -36,7 +36,11 @@ if ((!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] != true)) {
     <!-- program info goes here when returned via ajax. -->
 </div>
 EOT;
-} else {
+}
+else {
+    if(isset($_SESSION['admin'])){
+
+    }
     //user is already logged in, get their userID from the session
     $user = new User($_SESSION['loggedIn']);
     $userName = $user->Attributes['Username'];
@@ -91,7 +95,7 @@ $(function() {
         var foo = '<p class="text text-danger">No programs available to display right now, please try again later.</p>';
         return foo;
     } else {
-        var html= '<h2>My Programs</h2><table class="table-responsive table-striped" id="usersTable"><thead><tr><th>Name</th><th>Institution</th><th>Type</th><th>Delivery Method</th><th>Testing Requirements</th><th>Link</th><th></th></tr></thead><tbody>';
+        var html= '<h2>My Programs</h2><table class="table table-striped" id="usersTable"><thead><tr><th>Name</th><th>Institution</th><th>Type</th><th>Delivery Method</th><th>Testing Requirements</th><th>Link</th><th></th></tr></thead><tbody>';
         for( var i = 0; i < progs.length; i++ ){
             html += '<tr>';
             html += '<td>' + progs[i].ProgramName + '</td>';

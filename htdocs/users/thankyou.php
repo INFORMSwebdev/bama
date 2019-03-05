@@ -39,7 +39,8 @@ if(isset($_SESSION['registerSuccess']) && is_numeric($_SESSION['registerSuccess'
     <p>Justification: {$comments}</p>
 </div>
 EOT;
-    } else {
+    }
+    else {
         //expected session variable not set
         $content = <<<EOT
 <div class="flex-column">

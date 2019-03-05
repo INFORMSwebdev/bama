@@ -42,6 +42,17 @@ function validateInput($user, $pass)
         $id = User::usernameExists($username);
         if(isset($id) && is_numeric($id) && $id > 0){
             $curUser = new User($id);
+
+            //check if user account is active or not
+            $active = $curUser->checkActiveStatus();
+            if(!$active){
+                $_SESSION['logoutMessage'] = "The account you are attempting to use is marked as inactive and cannot be logged into. If this is a mistake, please contact <a href='mailto:webdev@mail.informs.org'>webdev#mail.informs.org</a>.";
+                unset($_SESSION['loginInput']);
+                unset($_SESSION['loginErrors']);
+                header('Location: /users/login.php');
+                die;
+            }
+
             //validate the password passed against the stored value
             if($curUser->checkPassword($password) == true) {
                 //if valid, user is considered logged in; store user ID in session variable
