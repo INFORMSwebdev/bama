@@ -22,7 +22,8 @@ if (!isset($_SESSION["password_set_for"])) $errors[] = "There is a system proble
 
 if (!count($errors)) {
   $User = new User( $_SESSION["password_set_for"] );
-  $result = $User->update( "Password", password_hash( $password, PASSWORD_DEFAULT ));
+  $User->update( "Password", password_hash( $password, PASSWORD_DEFAULT ));
+  $result = 1;
   $_SESSION["password_set_for"] = NULL;
 }
 
