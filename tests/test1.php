@@ -12,9 +12,9 @@ $x = Textbook::createInstance( $data );
 $x = new Textbook( 7 );
 $result = $x->createPendingUpdate( UPDATE_TYPE_UPDATE, 1);
 */
-$Username = "foo2";
-$UserId = 8;
-$exists = User::usernameExists( $Username, $UserId );
-echo 'exists: ' . $exists;
+$id = 7967;
+$Institution = new Institution( $id );
+print_r($Institution);
+$Institution->sendExpirationNotice();
 
 //echo $result;

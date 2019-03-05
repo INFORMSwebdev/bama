@@ -34,8 +34,16 @@ class Institution extends AOREducationObject {
         return $db->execSafe( $sql, $params );
     }
 
-    public function getColleges() {
-
+    public function getColleges( $asObjects = TRUE ) {
+        $db = new EduDB();
+        $sql = "SELECT CollegeId FROM colleges WHERE InstitutionId=$this->id";
+        $CollegeIds = $db->queryColumn( $sql );
+        if ($asObjects) {
+            $Colleges = [];
+            foreach( $CollegeIds as $CollegeId ) $Colleges[] = new College( $CollegeId );
+            return $Colleges;
+        }
+        else return $CollegeIds;
     }
 
     public static function getInstitutions( $active = TRUE, $asObjects = FALSE) {
@@ -64,8 +72,19 @@ class Institution extends AOREducationObject {
 
     }
 
-    public function getPrograms() {
-
+    public function getPrograms( $asObjects = TRUE ) {
+        $db = new EduDB;
+        $Programs = [];
+        $sql = "SELECT ProgramId FROM programs WHERE InstitutionId=$this->id";
+        $ProgramIds = $db->queryColumn( $sql );
+        if ($asObjects) {
+            $Programs = [];
+            foreach( $ProgramIds as $ProgramId ) $Programs[] = new Program( $ProgramId );
+            return $Programs;
+        }
+        else {
+            return $ProgramIds;
+        }
     }
 
     public function getUserAssignments( $asObjects = FALSE ) {
@@ -79,7 +98,56 @@ class Institution extends AOREducationObject {
     }
 
     public function sendExpirationNotice() {
+      $recipients = [];
 
+      // add to recipient list the Institution Email value if set and valid
+      $inst_email = $this->Attributes['InstitutionEmail'];
+      if (filter_var( $inst_email, FILTER_VALIDATE_EMAIL )) $recipients[] = $inst_email;
+
+      // add to recipient list the contact email associated with any programs under this inst
+      $Programs = $this->getPrograms();
+      foreach( $Programs as $Program ) {
+          if ($Program->Attributes['ContactId']) {
+              $Contact = new Contact( $Program->Attributes['ContactId'] );
+              if ($Contact->valid && filter_var( $Contact->Attributes['ContactEmail'], FILTER_VALIDATE_EMAIL )) $recipients[] = $Contact->Attributes['ContactEmail'];
+          }
+      }
+
+      // add to recipient list any editors associated with this institution
+      $Users = $this->getUserAssignments( TRUE );
+      foreach ($Users as $User) {
+          if (filter_var( $User->Attributes['Username'], FILTER_VALIDATE_EMAIL)) {
+              $recipients[] = $User->Attributes['Username'];
+          }
+      }
+
+      if (count($recipients)) {
+          $sameLink = '';
+          $editLink = '';
+          $e_params = [];
+          $e_params['to'] = implode( ",", $recipients );
+          $e_params['subject'] = "INFORMS Analytics & OR Education Database - Data Expiration Notice";
+          $e_params['body_html'] = <<<EOT
+<p>To help ensure the quality of the data in the INFORMS Analytics &amp; 
+OR Education Database, we hope our institutional contacts will keep the data 
+up to date. According to the information we have, data was last updated for 
+{$this->Attributes['InstitutionName']} almost three years ago. You have three 
+options:</p>
+<ul>
+<li>Click this link to verify that the data in our database is up to date: $sameLink</li>
+<li>Click this link to log in and verify your institutional data and make updates 
+where applicable: $editLink</li>
+<li>If you do nothing within 30 days, we will de-list your institution in our database.</li>
+</ul>
+<p>Please refer any questions to <a href="mailto:onestopshop@mail.informs.org">onestopshop@mail.informs.org</a>.</p>
+EOT;
+          $email = new email( $e_params );
+          $email->send();
+          return TRUE;
+      }
+      else {
+          return FALSE;
+      }
     }
 }
 

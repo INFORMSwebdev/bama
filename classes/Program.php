@@ -37,6 +37,11 @@ class Program extends AOREducationObject
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
     );
 
+    public function getContact( $asObject = TRUE ) {
+        $Contact = new Contact( $this->Attributes['ContactId'] );
+        return $Contact;
+    }
+
     public function getTextbooks( $active = TRUE, $asObjects = FALSE ) {
         $booksOut = [];
         $db = new EduDB();
