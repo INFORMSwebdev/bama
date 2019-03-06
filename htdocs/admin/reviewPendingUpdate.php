@@ -24,13 +24,16 @@ $UpdateTypes = [
 
 $UpdateType = $UpdateTypes[$Update->Attributes['UpdateTypeId']];
 
+$Table = new Table( $Update->Attributes['TableId'] );
+$Class = $Table->Attributes['ClassName'];
+
 $data = unserialize( $Update->Attributes['UpdateContent'] );
 $data_html = '';
 // TODO:  we really should make the column names have friendly descriptions, and columns holding foreign keys should  have their values translated into friendly values
 foreach( $data as $key => $value ) {
     if (!$value) $value = '&nbsp;';
     $data_html .= '<div class="row data_row">';
-    $data_html .= '<div class="data_label">' . $key . '</div>';
+    $data_html .= '<div class="data_label">' . $Class::$data_structure[$key]['label'] . '</div>';
     $data_html .= '<div class="data_value">' . $value . '</div>';
     $data_html .= '</div>';
 }
