@@ -53,7 +53,7 @@ EOT;
     //ajax related javascript
     $custom_js = <<<EOT
 $(function() {
-    $.get( "/scripts/ajax_displayEditorInstitutions.php", function( data ) {
+    $.getJSON( "/scripts/ajax_displayEditorInstitutions.php", function( data ) {
       if (data.errors.length > 0) { 
         var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
         for (var i = 0; i < data.errors.length; i++) {
@@ -80,7 +80,7 @@ $(function() {
             ]
         });
       }
-    }, "json");
+    });
   
   function processProgramList(progs){
     if(progs.length < 1) {

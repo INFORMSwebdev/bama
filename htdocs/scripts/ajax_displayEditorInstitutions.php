@@ -28,20 +28,20 @@ else {
         $helper = [];
         //check for and update the the response for null fields
         foreach($insts as $foo){
-            if(empty($foo->Attributes['InstitutionRegion'])){
-                $foo->Attributes['InstitutionRegion'] = 'Region information not set.';
+            if(empty($foo['InstitutionRegion'])){
+                $foo['InstitutionRegion'] = 'Region information not set.';
             }
 
-            if(empty($foo->Attributes['InstitutionPhone'])){
-                $foo->Attributes['InstitutionPhone'] = 'Phone number not set.';
+            if(empty($foo['InstitutionPhone'])){
+                $foo['InstitutionPhone'] = 'Phone number not set.';
             }
 
-            if(empty($foo->Attributes['InstitutionEmail'])){
-                $foo->Attributes['InstitutionEmail'] = 'Email not set.';
+            if(empty($foo['InstitutionEmail'])){
+                $foo['InstitutionEmail'] = 'Email not set.';
             }
 
-            if(empty($foo->Attributes['InstitutionAccess'])){
-                $foo->Attributes['InstitutionAccess'] = 'Access link not set.';
+            if(empty($foo['InstitutionAccess'])){
+                $foo['InstitutionAccess'] = 'Access link not set.';
             }
             $helper[] = $foo;
         }
