@@ -11,20 +11,20 @@ class Institution extends AOREducationObject {
     public static $primary_key = "InstitutionId";
     public static $tableId = 14;
     public static $data_structure = array(
-        'InstitutionId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
-        'InstitutionName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
-        'InstitutionAddress' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'InstitutionCity' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'InstitutionState' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'InstitutionZip' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'InstitutionRegion' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'InstitutionPhone' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'InstitutionEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'InstitutionAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT ),
-        'Expired' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT )
+        'InstitutionId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Institution ID', 'editable' => FALSE  ),
+        'InstitutionName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR, 'label' => 'Institution Name', 'editable' => TRUE  ),
+        'InstitutionAddress' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Street Address', 'editable' => TRUE  ),
+        'InstitutionCity' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'City', 'editable' => TRUE  ),
+        'InstitutionState' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'State', 'editable' => TRUE  ),
+        'InstitutionZip' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Postal Code', 'editable' => TRUE  ),
+        'InstitutionRegion' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Region', 'editable' => TRUE  ),
+        'InstitutionPhone' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Phone', 'editable' => TRUE  ),
+        'InstitutionEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Email', 'editable' => TRUE  ),
+        'InstitutionAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Website', 'editable' => TRUE  ),
+        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
+        'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified', 'editable' => FALSE ),
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  ),
+        'Expired' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Expired', 'editable' => FALSE  )
     );
 
     public function assignAdmin( $UserId ) {
@@ -70,6 +70,20 @@ class Institution extends AOREducationObject {
         if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
         return $db->query( $sql );
 
+    }
+
+    public function hasColleges() {
+        $db = new EduDB;
+        $sql = "SELECT CollegeId FROM colleges WHERE InstitutionId = $this->id AND Deleted = 0";
+        $Ids = $db->query( $sql );
+        return (count($Ids)) ? TRUE : FALSE;
+    }
+
+    public function hasPrograms() {
+        $db = new EduDB;
+        $sql = "SELECT ProgramId FROM programs WHERE InstitutionId = $this->id AND Deleted = 0";
+        $Ids = $db->query( $sql );
+        return (count($Ids)) ? TRUE : FALSE;
     }
 
     public function getPrograms( $asObjects = TRUE ) {

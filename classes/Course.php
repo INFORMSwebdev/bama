@@ -11,19 +11,19 @@ class Course extends AOREducationObject
     public static $primary_key = "CourseId";
     public static $tableId = 11;
     public static $data_structure = array(
-        'CourseId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
-        'InstructorId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT ),
-        'CourseNumber' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
-        'CourseTitle' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
-        'DeliveryMethod' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
-        'HasCapstoneProject' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
-        'CourseText' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR),
-        'SyllabusFile' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_LOB ),
-        'SyllabusFilesize' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT ),
-        'AnalyticTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
-        'BusinessTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
-        'CreateDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR ),
-        'Deleted' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT )
+        'CourseId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Course ID', 'editable' => FALSE  ),
+        'InstructorId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'InstructorID', 'editable' => TRUE  ),
+        'CourseNumber' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Course Number', 'editable' => TRUE  ),
+        'CourseTitle' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR, 'label' => 'Course Title', 'editable' => TRUE  ),
+        'DeliveryMethod' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Delivery Method', 'editable' => TRUE  ),
+        'HasCapstoneProject' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Has Capstone Project', 'editable' => TRUE  ),
+        'CourseText' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Course Text', 'editable' => TRUE ),
+        'SyllabusFile' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_LOB, 'label' => 'Syllabus File', 'editable' => TRUE  ),
+        'SyllabusFilesize' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Syllabus File Size', 'editable' => TRUE  ),
+        'AnalyticTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Analytic Tag', 'editable' => TRUE  ),
+        'BusinessTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Business Tag', 'editable' => TRUE  ),
+        'CreateDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE  ),
+        'Deleted' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  )
     );
 
     /**
@@ -72,6 +72,49 @@ class Course extends AOREducationObject
         $sql = "INSERT IGNORE INTO course_textbooks (CourseId, TextbookId) VALUES ($this->id, :TextbookId)";
         $params = array( array( ":TextbookId", $TextbookId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
+    }
+
+    public function getInstructor() {
+        if (!$this->hasInstructor()) return FALSE;
+        $Instructor = new Instructor( $this->Attributes['InstructorId']);
+        return $Instructor;
+    }
+
+    public function hasCases() {
+        $db = new EduDB;
+        $sql = "SELECT CaseId FROM course_cases WHERE CourseId = $this->id AND Deleted = 0";
+        $Ids = $db->query( $sql );
+        return (count($Ids)) ? TRUE : FALSE;
+    }
+
+    public function hasDatasets() {
+        $db = new EduDB;
+        $sql = "SELECT DatasetId FROM course_datasets WHERE CourseId = $this->id AND Deleted = 0";
+        $Ids = $db->query( $sql );
+        return (count($Ids)) ? TRUE : FALSE;
+    }
+
+    public function hasInstructor() {
+        $hasInstructor = FALSE;
+        if ($this->Attributes['InstructorId']) {
+            $Instructor = new Instructor( $this->Attributes['InstructorId'] );
+            if ($Instructor->valid && !$Instructor->Attributes['Deleted']) $hasInstructor = TRUE;
+        }
+        return $hasInstructor;
+    }
+
+    public function hasSoftwares() {
+        $db = new EduDB;
+        $sql = "SELECT SoftwareId FROM course_softwares WHERE CourseId = $this->id AND Deleted = 0";
+        $Ids = $db->query( $sql );
+        return (count($Ids)) ? TRUE : FALSE;
+    }
+
+    public function hasTextbooks() {
+        $db = new EduDB;
+        $sql = "SELECT TextbookId FROM course_textbooks WHERE CourseId = $this->id AND Deleted = 0";
+        $Ids = $db->query( $sql );
+        return (count($Ids)) ? TRUE : FALSE;
     }
 
     /**
