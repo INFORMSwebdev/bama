@@ -12,13 +12,13 @@ class Instructor extends AOREducationObject
     public static $primary_key = "InstructorId";
     public static $tableId = 15;
     public static $data_structure = array(
-        'InstructorId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
-        'InstructorLastName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
-        'InstructorFirstName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'InstructorPrefix' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'InstructorEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
+        'InstructorId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'InstructorId', 'editable' => FALSE ),
+        'InstructorLastName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR, 'label' => 'Instructor Last Name', 'editable' => TRUE ),
+        'InstructorFirstName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Instructor First Name', 'editable' => TRUE ),
+        'InstructorPrefix' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Instructor Prefix', 'editable' => TRUE ),
+        'InstructorEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Instructor Email', 'editable' => TRUE ),
+        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE )
     );
 
     public static function getInstructors( $active = TRUE, $asObjects = FALSE ){

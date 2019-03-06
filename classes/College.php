@@ -12,12 +12,12 @@ class College extends AOREducationObject
     public static $primary_key = "CollegeId";
     public static $tableId = 5;
     public static $data_structure = array(
-        'CollegeId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
-        'InstitutionId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
-        'CollegeName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'CollegeType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
+        'CollegeId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'College ID', 'editable' => FALSE ),
+        'InstitutionId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Institution ID', 'editable' => FALSE ),
+        'CollegeName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'College Name', 'editable' => TRUE ),
+        'CollegeType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'College Type', 'editable' => TRUE ),
+        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Delete', 'editable' => FALSE )
     );
 
     public static function getAllColleges( $active = TRUE, $asObjects = FALSE ){
@@ -36,5 +36,12 @@ class College extends AOREducationObject
         }
 
         return $colleges;
+    }
+
+    public function hasPrograms() {
+        $db = new EduDB;
+        $sql = "SELECT ProgramId FROM programs WHERE CollegeId = $this->id";
+        $ProgramIds = $db->query( $sql );
+        return (count($ProgramIds)) ? TRUE : FALSE;
     }
 }

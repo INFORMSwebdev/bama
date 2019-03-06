@@ -12,9 +12,9 @@ class Table extends AOREducationObject
     public static $primary_key = "TableId";
     public static $tableId = 22;
     public static $data_structure = array(
-        'TableId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
-        'TableName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
-        'TableDescription' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'ClassName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR )
+        'TableId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Table ID', 'editable' => FALSE ),
+        'TableName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR, 'label' => 'Table Name', 'editable' => FALSE ),
+        'TableDescription' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Table Description', 'editable' => FALSE ),
+        'ClassName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Associated PHP Classname', 'editable' => FALSE )
     );
 }

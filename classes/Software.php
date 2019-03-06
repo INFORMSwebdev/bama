@@ -12,11 +12,11 @@ class Software extends AOREducationObject
     public static $primary_key = "SoftwareId";
     public static $tableId = 20;
     public static $data_structure = array(
-        'SoftwareId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
-        'SoftwareName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
-        'SoftwarePublisher' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
+        'SoftwareId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Software ID', 'editable' => FALSE ),
+        'SoftwareName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR, 'label' => 'Software Name', 'editable' => TRUE ),
+        'SoftwarePublisher' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Software Publisher', 'editable' => TRUE ),
+        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE )
     );
 
     /**

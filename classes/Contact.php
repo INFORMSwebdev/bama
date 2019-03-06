@@ -12,13 +12,13 @@ class Contact extends AOREducationObject
     public static $primary_key = "ContactId";
     public static $tableId = 6;
     public static $data_structure = array(
-        'ContactId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
-        'ContactName' => array( 'required' => TRUE, 'datatype'=> PDO::PARAM_STR ),
-        'ContactTitle' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'ContactPhone' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'ContactEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
+        'ContactId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Contact ID', 'editable' => FALSE  ),
+        'ContactName' => array( 'required' => TRUE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Contact Name', 'editable' => TRUE  ),
+        'ContactTitle' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Contact Title', 'editable' => TRUE  ),
+        'ContactPhone' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Contact Phone', 'editable' => TRUE  ),
+        'ContactEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Contact Email', 'editable' => TRUE  ),
+        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE  ),
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  )
     );
 
     public function setInstitutionContact( $InstitutionId ){

@@ -12,15 +12,15 @@ class CaseStudy extends AOREducationObject {
     public static $primary_key = "CaseId";
     public static $tableId = 4;
     public static $data_structure = array(
-        'CaseId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
-        'CaseTitle' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
-        'CaseType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'CaseUseDescription' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'CaseAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'AnalyticTag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'BusinessTag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
+        'CaseId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Case Study ID', 'editable' => FALSE ),
+        'CaseTitle' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR, 'label' => 'Case Study Title', 'editable' => TRUE ),
+        'CaseType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Case Study Type', 'editable' => TRUE ),
+        'CaseUseDescription' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Case Study Use Description', 'editable' => TRUE  ),
+        'CaseAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Case Study Access', 'editable' => TRUE  ),
+        'AnalyticTag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Analytic Tag', 'editable' => TRUE  ),
+        'BusinessTag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Business Tag', 'editable' => TRUE  ),
+        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE  ),
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  )
     );
 
     /**
