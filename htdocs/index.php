@@ -38,9 +38,6 @@ if ((!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] != true)) {
 EOT;
 }
 else {
-    if(isset($_SESSION['admin'])){
-
-    }
     //user is already logged in, get their userID from the session
     $user = new User($_SESSION['loggedIn']);
     $userName = $user->Attributes['Username'];
@@ -48,10 +45,6 @@ else {
 <div class="jumbotron">
 	<h1 class="display-4">Welcome $userName!</h1>
 	<p class="lead">Below are the programs you are an administrator of.</p>
-	<p>Please give the list a couple seconds to load.</p>
-	<h3>Editing Advice</h3>
-	<p>If you know you want to update a specific course entry under your institution, you go to the Programs->Edit link in the navbar and then select the specific program from the list. You will only see programs that you can edit appear in the list.</p>
-	<p>This works for all types of records listed in the navbar.</p>
 </div>
 <div class="container-fluid" id="programList">
     <!-- program info goes here when returned via ajax -->
@@ -60,7 +53,7 @@ EOT;
     //ajax related javascript
     $custom_js = <<<EOT
 $(function() {
-    $.get( "/scripts/ajax_displayEditorPrograms.php", function( data ) {
+    $.get( "/scripts/ajax_displayEditorInstitutions.php", function( data ) {
       if (data.errors.length > 0) { 
         var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
         for (var i = 0; i < data.errors.length; i++) {
@@ -72,7 +65,7 @@ $(function() {
         //redirect
         //window.location.href = "/admin/index.php";
         //process the returned info into HTML
-        var helper = processProgramList(data.programs, 'all');
+        var helper = processProgramList(data.institutions);
         //display the returned info in the div
         $('#programList').html(helper);
         $('#usersTable').DataTable({
@@ -89,22 +82,57 @@ $(function() {
       }
     }, "json");
   
-  function processProgramList(progs, origin){
+  function processProgramList(progs){
     if(progs.length < 1) {
         //there are no programs in the passed list
-        var foo = '<p class="text text-danger">No programs available to display right now, please try again later.</p>';
+        var foo = '<p class="text text-danger">No institutions available to display right now, please try again later.</p>';
         return foo;
-    } else {
-        var html= '<h2>My Programs</h2><table class="table table-striped" id="usersTable"><thead><tr><th>Name</th><th>Institution</th><th>Type</th><th>Delivery Method</th><th>Testing Requirements</th><th>Link</th><th></th></tr></thead><tbody>';
+    } 
+    else if (progs.length == 1) {
+        var html = '<div class="card">';
+        html += '<div class="card-header"><h2 class="display2">progs[0].InstitutionName</h2></div>';
+        html += '<div class="card-body">';
+        html += '<h3>Address</h3>';
+        html += '<p>' + progs[0].InstitutionAddress + '</p>';
+        html += '<p>' + progs[0].InstitutionCity + ', ' + progs[0].InstitutionState + ' ' + progs[0].InstitutionZip + '</p>';
+        html += '<h3>Region</h3>';
+        html += '<p>' + progs[0].InstitutionRegion + '</p>';
+        html += '<h3>Contact Information</h3>';
+        html += '<h3>Phone Number</h3>';
+        html += '<p>' + progs[0].InstitutionPhone + '</p>';
+        html += '<h4>Email</h4>';
+        if(progs[0].InstitutionEmail.indexOf("@") < 0){
+            html += '<p>' + progs[0].InstitutionEmail + '</p>';
+        }
+        else {
+            html += '<p><a href="mailto:' + progs[0].InstitutionEmail + '">' + progs[0].InstitutionEmail + '</a></p>';
+        }
+        html += '<h4>Access</h4>';
+        if(progs[0].InstitutionAccess.indexOf("www") < 0){
+            html += '<p>' + progs[0].InstitutionAccess + '</p>';
+        }
+        else{
+            html += '<p><a href="' + progs[0].InstitutionAccess + '" target="_blank">' + progs[0].InstitutionAccess + '</a></p>';
+        }
+        html += '<h3>Last Modified</h3>';
+        html += '<p>' + progs[0].LastModifiedDate + '</p>';
+        html += '</div>';
+        html += '<div class="card-footer">';
+        html += '<p>Buttons go here</p>';
+        html += '</div>';
+        html += '</div>';
+        return html;
+    }
+    else {
+    //update this stuff to be institution display info instead of program
+        var html = '<h2>Institutions</h2><table class="table table-striped" id="usersTable"><thead><tr><th>Name</th><th>City</th><th>State</th><th>Deleted?</th><th></th></tr></thead><tbody>';
         for( var i = 0; i < progs.length; i++ ){
             html += '<tr>';
-            html += '<td>' + progs[i].ProgramName + '</td>';
-            html += '<td><a href="/institutions/display.php?id=' + progs[i].InstitutionId + '">' + progs[i].InstitutionName + '</a></td>';
-            html += '<td>' + progs[i].ProgramType + '</td>';
-            html += '<td>' + progs[i].DeliveryMethod + '</td>';
-            html += '<td>' + progs[i].TestingRequirement + '</td>';
-            html += '<td><a target="_blank" class="text-wrap" href="' + progs[i].ProgramAccess + '">' + progs[i].ProgramAccess + '</a></td>';
-            html += '<td><a class="btn btn-primary btn-block" href="/programs/display.php?id=' + progs[i].ProgramId + '">Details</a><a class="btn btn-info btn-block" href="/programs/edit.php?id=' + progs[i].ProgramId + '">Edit</a></td>';
+            html += '<td>' + progs[i].InstitutionName + '</td>';
+            html += '<td>' + progs[i].InstitutionCity + '</td>';
+            html += '<td>' + progs[i].InstitutionState + '</td>';
+            html += '<td>' + progs[i].Deleted + '</td>';
+            html += '<td><a class="btn btn-primary btn-block" href="/institutions/display.php?id=' + progs[i].InstitutionId + '">Details</a><a class="btn btn-info btn-block" href="/institutions/edit.php?id=' + progs[i].InstitutionId + '">Edit</a></td>';
             html += '</tr>';
         }
         html += '</tbody></table>';

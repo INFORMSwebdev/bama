@@ -76,12 +76,46 @@ class User extends AOREducationObject
 
     public function getInstitutionAssignments( $asObjects = FALSE ) {
         $db = new EduDB();
-        $sql = "SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id";
+        //if INFORMS admin, get all institutions
+        if($this->id == 1){
+            $sql = "SELECT InstitutionId from institutions";
+        }
+        else {
+            $sql = "SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id";
+        }
+
         $insts = $db->queryColumn( $sql );
         if ($asObjects)  {
             foreach( $insts as &$inst) $inst = new Institution($inst);
         }
         return $insts;
+    }
+
+    public function getInstitutions( $active = TRUE, $asObjects = FALSE ){
+        $instOut = [];
+        $db = new EduDb();
+        if($this->id == 1){
+            //get all institutions
+            $sql = "SELECT * FROM institutions";
+            if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        }
+        else {
+            $sql = "SELECT * FROM institutions i INNER JOIN institution_admins a ON i.InstitutionId = a.InstitutionId WHERE a.UserId = $this->id";
+            if ($active !== null) $sql .= " AND i.Deleted = " . (($active == TRUE) ? "0" : "1");
+        }
+
+        $insts = $db->query( $sql );
+
+        if($asObjects){
+            foreach($insts as $inst){
+                $instOut[] = new Institution($inst);
+            }
+        }
+        else {
+            $instOut = $insts;
+        }
+
+        return $instOut;
     }
 
     public static function getUserByEmail($Email, $asObject = TRUE)

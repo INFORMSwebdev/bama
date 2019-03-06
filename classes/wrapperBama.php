@@ -103,6 +103,27 @@ EOT;
 
         //check if we should display the logged in (either admin or editor) or anon navbar
         if(isset($_SESSION['admin']) || isset($_SESSION['loggedIn'])) {
+            //get the user record
+            $user = new User($_SESSION['loggedIn']);
+
+            $institutionsNav = '';
+            $programsNav = '';
+            $instructorsNav = '';
+            $textbooxNav = '';
+            $coursesNav = '';
+            $softwareNav = '';
+            $caseNav = '';
+            $datasetNav = '';
+            $userInstitutes = $user->getInstitutionAssignments();
+            $userPrograms = $user->getProgramAssignments();
+            $userInstructors = $user->getInstructors();
+            $userTextbooks = $user->getBookAssignments();
+            $userSoftware = $user->getSoftware();
+            $userCases = $user->getCases();
+            $userCourses = $user->getCourses();
+            $userDatasets = $user->getDatasets();
+
+            // ToDo: update the wrapper nav items if user has no items to edit in them, will depend on how things get changed up a bit
             $navbar = <<<EOT
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="https://www.informs.org" target="_blank">
