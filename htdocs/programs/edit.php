@@ -296,7 +296,7 @@ EOT;
             }
             else {
                 $tProg = new Program($uProgId);
-                $instHelp = new Institution($tProg['Attributes']['InstitutionId']);
+                $instHelp = new Institution($tProg->Attributes['InstitutionId']);
                 $progListHelper[] = array('text' => $tProg->Attributes['ProgramName'] . ' - ' . $instHelp->Attributes['InstitutionName'], 'value' => $tProg->Attributes['ProgramId']);
             }
         }
@@ -316,7 +316,7 @@ EOT;
         <div class="form-group">
             <label for="Course">Select a Program to edit</label>
 		    <select class="form-control" name="Program" id="Program" onchange="self.location='edit.php?id='+this.options[this.selectedIndex].value">
-		        $progListHTML
+		        {$progListHTML}
             </select>
         </div>
     </form>
