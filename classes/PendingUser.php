@@ -12,14 +12,14 @@ class PendingUser extends AOREducationObject
     public static $primary_key = "PendingUserId";
     public static $tableId = 17;
     public static $data_structure = array(
-        'PendingUserId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
-        'Username' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
-        'FirstName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'LastName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'InstitutionId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT ),
-        'Comments' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT ),
-        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR )
+        'PendingUserId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Pending User ID', 'editable' => FALSE ),
+        'Username' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR, 'label' => 'Username / Email Address', 'editable' => FALSE ),
+        'FirstName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'First Name', 'editable' => FALSE ),
+        'LastName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Last Name', 'editable' => FALSE ),
+        'InstitutionId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Institution ID', 'editable' => FALSE ),
+        'Comments' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Comments', 'editable' => FALSE ),
+        'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Approval Status', 'editable' => TRUE ),
+        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE )
     );
 
     public function approvalAction( $action ) {
