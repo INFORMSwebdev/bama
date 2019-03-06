@@ -22,9 +22,6 @@ else {
     //get info for all institutions this user is an editor of
     $insts = $user->getInstitutions();
 
-    # ToDo: add the following stuff to what gets returned here
-     # , ,
-
     if ($insts) {
         $response['success'] = 1;
 
@@ -48,156 +45,163 @@ else {
             }
 
             if($user->id > 1){
-                $progs = $user->getProgramAssignments(TRUE);
-                $prog = $progs[0];
-                $foo['ProgramName'] = $prog->Attributes['ProgramName'];
-                $foo['ProgramType'] = $prog->Attributes['ProgramType'];
-                $foo['ProgramDelivery'] = $prog->Attributes['DeliveryMethod'];
+                $instHelp = new Institution($foo['InstitutionId']);
+                $instProgs = $instHelp->getPrograms(TRUE);
+                $programHelper = [];
+                if($instProgs) {
+                    foreach ($instProgs as $ip) {
+                        $helperHelp = [];
 
-                if(empty($prog->Attributes['ProgramAccess'])){
-                    $foo['ProgramAccess'] = 'Access information not set.';
-                }
-                else {
-                    $foo['ProgramAccess'] = "<a href='{$prog->Attributes['ProgramAccess']}' target='_blank'>{$prog->Attributes['ProgramAccess']}</a>";
-                }
+                        $helperHelp['ProgramId'] = $ip->id;
+                        $helperHelp['ProgramName'] = $ip->Attributes['ProgramName'];
+                        $helperHelp['ProgramType'] = $ip->Attributes['ProgramType'];
+                        $helperHelp['ProgramDelivery'] = $ip->Attributes['DeliveryMethod'];
 
-                if(empty($prog->Attributes['ProgramObjectives'])){
-                    $foo['ProgramObjectives'] = 'Objectives not set.';
-                }
-                else {
-                    $foo['ProgramObjectives'] = $prog->Attributes['ProgramObjectives'];
-                }
+                        if (empty($ip->Attributes['ProgramAccess'])) {
+                            $helperHelp['ProgramAccess'] = 'Access information not set.';
+                        } else {
+                            $helperHelp['ProgramAccess'] = "<a href='{$ip->Attributes['ProgramAccess']}' target='_blank'>{$ip->Attributes['ProgramAccess']}</a>";
+                        }
 
-                if(empty($prog->Attributes['FullTimeDuration'])){
-                    $foo['ProgramFullTime'] = 'Full time duration not set.';
-                }
-                else {
-                    $foo['ProgramFullTime'] = $prog->Attributes['FullTimeDuration'];
-                }
+                        if (empty($ip->Attributes['ProgramObjectives'])) {
+                            $helperHelp['ProgramObjectives'] = 'Objectives not set.';
+                        } else {
+                            $helperHelp['ProgramObjectives'] = $ip->Attributes['ProgramObjectives'];
+                        }
 
-                if(empty($prog->Attributes['PartTimeDuration'])){
-                    $foo['ProgramPartTime'] = 'Part time duration not set.';
-                }
-                else {
-                    $foo['ProgramPartTime'] = $prog->Attributes['PartTimeDuration'];
-                }
+                        if (empty($ip->Attributes['FullTimeDuration'])) {
+                            $helperHelp['ProgramFullTime'] = 'Full time duration not set.';
+                        } else {
+                            $helperHelp['ProgramFullTime'] = $ip->Attributes['FullTimeDuration'];
+                        }
 
-                if(empty($prog->Attributes['TestingRequirements'])){
-                    $foo['ProgramTestingRequirements'] = 'Testing requirements not set.';
-                }
-                else {
-                    $foo['ProgramTestingRequirements'] = $prog->Attributes['TestingRequirements'];
-                }
+                        if (empty($ip->Attributes['PartTimeDuration'])) {
+                            $helperHelp['ProgramPartTime'] = 'Part time duration not set.';
+                        } else {
+                            $helperHelp['ProgramPartTime'] = $ip->Attributes['PartTimeDuration'];
+                        }
 
-                if(empty($prog->Attributes['OtherRequirements'])){
-                    $foo['ProgramOtherRequirements'] = 'Other requirements not set.';
-                }
-                else {
-                    $foo['ProgramOtherRequirements'] = $prog->Attributes['OtherRequirements'];
-                }
+                        if (empty($ip->Attributes['TestingRequirements'])) {
+                            $helperHelp['ProgramTestingRequirements'] = 'Testing requirements not set.';
+                        } else {
+                            $helperHelp['ProgramTestingRequirements'] = $ip->Attributes['TestingRequirements'];
+                        }
 
-                if(empty($prog->Attributes['Credits'])){
-                    $foo['ProgramCredits'] = 'Credits not set.';
-                }
-                else {
-                    $foo['ProgramCredits'] = $prog->Attributes['Credits'];
-                }
+                        if (empty($ip->Attributes['OtherRequirements'])) {
+                            $helperHelp['ProgramOtherRequirements'] = 'Other requirements not set.';
+                        } else {
+                            $helperHelp['ProgramOtherRequirements'] = $ip->Attributes['OtherRequirements'];
+                        }
 
-                if(empty($prog->Attributes['YearEstablished'])){
-                    $foo['ProgramEstablished'] = 'Year established not set.';
-                }
-                else {
-                    $foo['ProgramEstablished'] = $prog->Attributes['YearEstablished'];
-                }
+                        if (empty($ip->Attributes['Credits'])) {
+                            $helperHelp['ProgramCredits'] = 'Credits not set.';
+                        } else {
+                            $helperHelp['ProgramCredits'] = $ip->Attributes['Credits'];
+                        }
 
-                if(empty($prog->Attributes['Scholarship'])){
-                    $foo['ProgramScholarship'] = 'Scholarship not set.';
-                }
-                else {
-                    $foo['ProgramScholarship'] = $prog->Attributes['Scholarship'];
-                }
+                        if (empty($ip->Attributes['YearEstablished'])) {
+                            $helperHelp['ProgramEstablished'] = 'Year established not set.';
+                        } else {
+                            $helperHelp['ProgramEstablished'] = $ip->Attributes['YearEstablished'];
+                        }
 
-                if(empty($prog->Attributes['EstimatedResidentTuition'])){
-                    $foo['ProgramResidentTuition'] = 'Estimated resident tuition not set.';
-                }
-                else {
-                    $foo['ProgramResidentTuition'] = $prog->Attributes['EstimatedResidentTuition'];
-                }
+                        if (empty($ip->Attributes['Scholarship'])) {
+                            $helperHelp['ProgramScholarship'] = 'Scholarship not set.';
+                        } else {
+                            $helperHelp['ProgramScholarship'] = $ip->Attributes['Scholarship'];
+                        }
 
-                if(empty($prog->Attributes['EstimatedNonResidentTuition'])){
-                    $foo['ProgramNonResidentTuition'] = 'Estimated non-resident tuition not set.';
-                }
-                else {
-                    $foo['ProgramNonResidentTuition'] = $prog->Attributes['EstimatedNonResidentTuition'];
-                }
+                        if (empty($ip->Attributes['EstimatedResidentTuition'])) {
+                            $helperHelp['ProgramResidentTuition'] = 'Estimated resident tuition not set.';
+                        } else {
+                            $helperHelp['ProgramResidentTuition'] = $ip->Attributes['EstimatedResidentTuition'];
+                        }
 
-                if(empty($prog->Attributes['CostPerCredit'])){
-                    $foo['ProgramCostPerCredit'] = 'Cost per credit not set.';
-                }
-                else {
-                    $foo['ProgramCostPerCredit'] = $prog->Attributes['CostPerCredit'];
-                }
+                        if (empty($ip->Attributes['EstimatedNonResidentTuition'])) {
+                            $helperHelp['ProgramNonResidentTuition'] = 'Estimated non-resident tuition not set.';
+                        } else {
+                            $helperHelp['ProgramNonResidentTuition'] = $ip->Attributes['EstimatedNonResidentTuition'];
+                        }
 
-                //set up the appropriate message based on flags
-                $analFlag = $prog->Attributes['AnalyticsFlag'];
-                $orFlag = $prog->Attributes['ORFlag'];
-                if($analFlag == 1 && $orFlag == 1){
-                    $foo['ProgramAnalyticsOR'] = 'Both Analytics and O.R.';
-                }
-                else if($analFlag == 0 && $orFlag == 1){
-                    $foo['ProgramAnalyticsOR'] = 'O.R.';
-                }
-                else if($analFlag == 1 && $orFlag == 0){
-                    $foo['ProgramAnalyticsOR'] = 'Analytics';
-                }
-                else {
-                    $foo['ProgramAnalyticsOR'] = 'Neither Analytics nor O.R.';
-                }
+                        if (empty($ip->Attributes['CostPerCredit'])) {
+                            $helperHelp['ProgramCostPerCredit'] = 'Cost per credit not set.';
+                        } else {
+                            $helperHelp['ProgramCostPerCredit'] = $ip->Attributes['CostPerCredit'];
+                        }
 
-                $foo['ProgramCreated'] = $prog->Attributes['CreateDate'];
+                        //set up the appropriate message based on flags
+                        $analFlag = $ip->Attributes['AnalyticsFlag'];
+                        $orFlag = $ip->Attributes['ORFlag'];
+                        if ($analFlag == 1 && $orFlag == 1) {
+                            $helperHelp['ProgramAnalyticsOR'] = 'Both Analytics and O.R.';
+                        } else if ($analFlag == 0 && $orFlag == 1) {
+                            $helperHelp['ProgramAnalyticsOR'] = 'O.R.';
+                        } else if ($analFlag == 1 && $orFlag == 0) {
+                            $helperHelp['ProgramAnalyticsOR'] = 'Analytics';
+                        } else {
+                            $helperHelp['ProgramAnalyticsOR'] = 'Neither Analytics nor O.R.';
+                        }
 
-                //need to pull more info for the last 2 things
-                if(empty($prog->Attributes['ContactId'])){
-                    $foo['ContactName'] = $foo['ContactTitle'] = $foo['ContactPhone'] = $foo['ContactEmail'] = 'Contact details not set.';
-                }
-                else {
-                    $progContact = new Contact($prog->Attributes['ContactId']);
+                        $helperHelp['ProgramCreated'] = $ip->Attributes['CreateDate'];
 
-                    $foo['ContactName'] = $progContact->Attributes['ContactName'];
+                        //need to pull more info for the last 2 things
+                        if (empty($ip->Attributes['ContactId'])) {
+                            $helperHelp['ContactName'] = $helperHelp['ContactTitle'] = $helperHelp['ContactPhone'] = $helperHelp['ContactEmail'] = 'Contact details not set.';
+                        } else {
+                            $progContact = new Contact($ip->Attributes['ContactId']);
 
-                    if(empty($progContact->Attributes['ContactTitle'])){
-                        $foo['ContactTitle'] = 'Title not set.';
+                            $helperHelp['ContactName'] = $progContact->Attributes['ContactName'];
+
+                            if (empty($progContact->Attributes['ContactTitle'])) {
+                                $helperHelp['ContactTitle'] = 'Title not set.';
+                            } else {
+                                $helperHelp['ContactTitle'] = $progContact->Attributes['ContactTitle'];
+                            }
+
+                            if (empty($progContact->Attributes['ContactPhone'])) {
+                                $helperHelp['ContactPhone'] = 'Phone not set.';
+                            } else {
+                                $helperHelp['ContactPhone'] = $progContact->Attributes['ContactPhone'];
+                            }
+
+                            if (empty($progContact->Attributes['ContactEmail'])) {
+                                $helperHelp['ContactEmail'] = 'Email not set.';
+                            } else {
+                                $helperHelp['ContactEmail'] = "<a href='{$progContact->Attributes['ContactEmail']}' target='_blank'>{$progContact->Attributes['ContactEmail']}</a>";
+                            }
+                        }
+                        //add record to the array
+                        $programHelper[] = $helperHelp;
                     }
-                    else {
-                        $foo['ContactTitle'] = $progContact->Attributes['ContactTitle'];
-                    }
-
-                    if(empty($progContact->Attributes['ContactPhone'])){
-                        $foo['ContactPhone'] = 'Phone not set.';
-                    }
-                    else {
-                        $foo['ContactPhone'] = $progContact->Attributes['ContactPhone'];
-                    }
-
-                    if(empty($progContact->Attributes['ContactEmail'])){
-                        $foo['ContactEmail'] = 'Email not set.';
-                    }
-                    else {
-                        $foo['ContactEmail'] = "<a href='{$progContact->Attributes['ContactEmail']}' target='_blank'>{$progContact->Attributes['ContactEmail']}</a>";
-                    }
-                }
-
-                if(empty($prog->Attributes['CollegeId'])){
-                    $foo['CollegeName'] = $foo['CollegeType'] = $foo['CollegeCreated'] = 'College details not set.';
+                    //add array of program info to what's getting passed back to the ajax script
+                    $foo['programs'] = $programHelper;
                 }
                 else {
-                    $prodCollege = new College($prod->Attributes['CollegeId']);
-                    $foo['CollegeName'] = $prodCollege->Attributes['CollegeName'];
-                    $foo['CollegeType'] = $prodCollege->Attributes['CollegeType'];
-                    $foo['CollegeCreated'] = $prodCollege->Attributes['CreateDate'];
+                    $foo['programs'] = 'No programs associated with the institution.';
+                }
+
+                //get array of colleges
+                $instColleges = $instHelp->getColleges(TRUE);
+                $collegeHelper = [];
+                if($instColleges){
+                    foreach($instColleges as $col){
+                        $fooHelper = [];
+                        $fooHelper['CollegeId'] = $col->id;
+                        $fooHelper['CollegeName'] = $col->Attributes['CollegeName'];
+                        $fooHelper['CollegeType'] = $col->Attributes['CollegeType'];
+                        $fooHelper['CollegeCreated'] = $col->Attributes['CreateDate'];
+                        //add college info to array of colleges
+                        $collegeHelper[] = $fooHelper;
+                    }
+                    //add array of colleges to what's getting passed back to the ajax script
+                    $foo['colleges'] = $collegeHelper;
+                }
+                else {
+                    $foo['colleges'] = 'No colleges associated with the institution.';
                 }
             }
 
+            //add the info to the response array
             $helper[] = $foo;
         }
 

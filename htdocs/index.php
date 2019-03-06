@@ -75,13 +75,33 @@ $(function() {
         //display the returned info in the div
         $('#programList').html(helper);
         $('#usersTable').DataTable();
-        $('#delete').on( "click", function(e) {
+        $('#instDelete').on( "click", function(e) {
             e.preventDefault();
             e.stopPropagation();
             var conf = confirm( "Are you sure you want to delete this institution? This will deleted everything under the institution as well." );
             if( conf ){
                 //let the form submit to the processor
-                $('#deleteForm').submit();
+                $('#instDeleteForm').submit();
+            }
+            //otherwise do nothing
+        });
+        $('#programDelete').on( "click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var conf = confirm( "Are you sure you want to delete this program? This will deleted everything under the program as well." );
+            if( conf ){
+                //let the form submit to the processor
+                $('#progDeleteForm').submit();
+            }
+            //otherwise do nothing
+        });
+        $('#collegeDelete').on( "click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var conf = confirm( "Are you sure you want to delete this college? This will deleted everything under the college as well." );
+            if( conf ){
+                //let the form submit to the processor
+                $('#collegeDeleteForm').submit();
             }
             //otherwise do nothing
         });
@@ -141,70 +161,114 @@ $(function() {
         html += '<p>' + progs[0].LastModifiedDate + '</p>';
         html += '<div class="btn-group">';
         html += '<a role="button" class="btn btn-warning mr-3" href="/institutions/edit.php?id=' + progs[0].InstitutionId + '">Edit this Institution</a>';
-        html += '<form action="/scripts/processInstitutionDeleteButton.php" method="POST" id="deleteForm"><input type="hidden" name="id" id="id" value="' + progs[0].InstitutionId + '" /><button id="delete" name="delete" type="submit" class="btn btn-danger">Delete this Institution</button></form>';
+        html += '<form action="/scripts/processInstitutionDeleteButton.php" method="POST" id="instDeleteForm"><input type="hidden" name="id" id="id" value="' + progs[0].InstitutionId + '" /><button id="instDelete" name="instDelete" type="submit" class="btn btn-danger">Delete this Institution</button></form>';
         html += '</div>';
         html += '</div>';
         html += '</div>';
-        //colleges tab
+        
+        //programs tab
         html += '<div class="tab-pane fade" id="tabProgram" role="tabpanel" aria-labelledby="programDetails">';
         html += '<div class="card-body">';
-        html += '<h3>Program Details</h3>';
-        html += '<h4>Name</h4>';
-        html += '<p>' + progs[0].ProgramName + '</p>';
-        html += '<h4>Type</h4>';
-        html += '<p>' + progs[0].ProgramType + '</p>';
-        html += '<h4>Delivery Method</h4>';
-        html += '<p>' + progs[0].ProgramDelivery + '</p>';
-        html += '<h4>Access</h4>';
-        html += '<p>' + progs[0].ProgramAccess + '</p>';
-        html += '<h4>Objectives</h4>';
-        html += '<p>' + progs[0].ProgramObjectives + '</p>';
-        html += '<h4>Full Time Duration</h4>';
-        html += '<p>' + progs[0].ProgramFullTime + '</p>';
-        html += '<h4>Part Time Duration</h4>';
-        html += '<p>' + progs[0].ProgramPartTime + '</p>';
-        html += '<h4>Testing Requirements</h4>';
-        html += '<p>' + progs[0].ProgramTestingRequirements + '</p>';
-        html += '<h4>Other Requirements</h4>';
-        html += '<p>' + progs[0].ProgramOtherRequirements + '</p>';
-        html += '<h4>Year Established</h4>';
-        html += '<p>' + progs[0].ProgramEstablished + '</p>';
-        html += '<h4>Scholarship</h4>';
-        html += '<p>' + progs[0].ProgramScholarship + '</p>';
-        html += '<h4>Credits</h4>';
-        html += '<p>' + progs[0].ProgramCredits + '</p>';
-        html += '<h4>Estimated Resident Tuition</h4>';
-        html += '<p>' + progs[0].ProgramResidentTuition + '</p>';
-        html += '<h4>Estimated Non-Resident Tuition</h4>';
-        html += '<p>' + progs[0].ProgramNonResidentTuition + '</p>';
-        html += '<h4>Cost Per Credit</h4>';
-        html += '<p>' + progs[0].ProgramCostPerCredit + '</p>';
-        html += '<h4>Analytics or O.R. Program</h4>';
-        html += '<p>' + progs[0].ProgramAnalyticsOR + '</p>';
-        html += '<h4>This Record Created On</h4>';
-        html += '<p>' + progs[0].ProgramCreated + '</p>';
-        html += '<h3>Contact Details</h3>';
-        html += '<h4>Name</h4>';
-        html += '<p>' + progs[0].ContactName + '</p>';
-        html += '<h4>Title</h4>';
-        html += '<p>' + progs[0].ContactTitle + '</p>';
-        html += '<h4>Phone</h4>';
-        html += '<p>' + progs[0].ContactPhone + '</p>';
-        html += '<h4>Email</h4>';
-        html += '<p>' + progs[0].ContactEmail + '</p>';
+        for(var x = 0; x < progs.length; x++){
+            //there is either only 1 program returned or a message that no programs available
+            if(progs[x].programs[0].length == 1){
+                //no programs for this institution
+                html += '<p>No programs are currently assigned to this institution.</p>';
+            }
+            else {
+                html += '<div class="card-deck">';
+                for(var i = 0; i < progs[x].programs.length; i++){
+                    html += '<div class="card">';
+                    html += '<div class="card-header">';
+                    html += '<h3>' + progs[x].programs[i].ProgramName + '</h3>';
+                    html += '</div>';
+                    html += '<div class="card-body">';
+                    html += '<h4>Type</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramType + '</p>';
+                    html += '<h4>Delivery Method</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramDelivery + '</p>';
+                    html += '<h4>Access</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramAccess + '</p>';
+                    html += '<h4>Objectives</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramObjectives + '</p>';
+                    html += '<h4>Full Time Duration</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramFullTime + '</p>';
+                    html += '<h4>Part Time Duration</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramPartTime + '</p>';
+                    html += '<h4>Testing Requirements</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramTestingRequirements + '</p>';
+                    html += '<h4>Other Requirements</h4>';
+                    html += '<p>' + progs[x].programs.ProgramOtherRequirements + '</p>';
+                    html += '<h4>Year Established</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramEstablished + '</p>';
+                    html += '<h4>Scholarship</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramScholarship + '</p>';
+                    html += '<h4>Credits</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramCredits + '</p>';
+                    html += '<h4>Estimated Resident Tuition</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramResidentTuition + '</p>';
+                    html += '<h4>Estimated Non-Resident Tuition</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramNonResidentTuition + '</p>';
+                    html += '<h4>Cost Per Credit</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramCostPerCredit + '</p>';
+                    html += '<h4>Analytics or O.R. Program</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramAnalyticsOR + '</p>';
+                    html += '<h4>This Record Created On</h4>';
+                    html += '<p>' + progs[x].programs[i].ProgramCreated + '</p>';
+                    html += '<h3>Contact Details</h3>';
+                    html += '<h4>Name</h4>';
+                    html += '<p>' + progs[x].programs[i].ContactName + '</p>';
+                    html += '<h4>Title</h4>';
+                    html += '<p>' + progs[x].programs[i].ContactTitle + '</p>';
+                    html += '<h4>Phone</h4>';
+                    html += '<p>' + progs[x].programs[i].ContactPhone + '</p>';
+                    html += '<h4>Email</h4>';
+                    html += '<p>' + progs[x].programs[i].ContactEmail + '</p>';
+                    html += '<div class="btn-group">';
+                    html += '<a role="button" class="btn btn-warning mr-3" href="/programs/edit.php?id=' + progs[x].programs[i].ProgramId + '">Edit this Program</a>';
+                    html += '<form action="/scripts/processProgramDeleteButton.php" method="POST" id="progDeleteForm"><input type="hidden" name="id" id="id" value="' + progs[x].colleges[i].ProgramId + '" /><button id="programDelete" name="programDelete" type="submit" class="btn btn-danger">Delete this College</button></form>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+        }
         html += '</div>';
         html += '</div>';
-        //programs tab
+        
+        //college tab
         html += '<div class="tab-pane fade" id="tabCollege" role="tabpanel" aria-labelledby="collegeDetails">';
         html += '<div class="card-body">';
-        html += '<h3>Name</h3>';
-        html += '<p>' + progs[0].CollegeName + '</p>';
-        html += '<h3>Type</h3>';
-        html += '<p>' + progs[0].CollegeType + '</p>';
-        html += '<h3>Created</h3>';
-        html += '<p>' + progs[0].CollegeCreated + '</p>';
+        for( var x = 0; x < progs.length; x++){
+            if(progs[x].colleges[0].length == 1){
+                html += '<p>No colleges are currently assigned to this institution.</p>';
+            }
+            else {
+                html += '<div class="card-deck">';
+                for(var i = 0; i < progs[x].colleges.length; i++){
+                    html += '<div class="card">';
+                    html += '<div class="card-header">';
+                    html += '<h3>'+ progs[x].colleges[i].CollegeName + '</h3>';
+                    html += '</div>';
+                    html += '<div class="card-body">';
+                    html += '<h4>Type</h4>';
+                    html += '<p>' + progs[x].colleges[i].CollegeType + '</p>';
+                    html += '<h4>Created</h4>';
+                    html += '<p>' + progs[x].colleges[i].CollegeCreated + '</p>';
+                    html += '<div class="btn-group">';
+                    html += '<a role="button" class="btn btn-warning mr-3" href="/colleges/edit.php?id=' + progs[x].colleges[i].CollegeId + '">Edit this College</a>';
+                    html += '<form action="/scripts/processCollegeDeleteButton.php" method="POST" id="collegeDeleteForm"><input type="hidden" name="id" id="id" value="' + progs[x].colleges[i].CollegeId + '" /><button id="collegeDelete" name="collegeDelete" type="submit" class="btn btn-danger">Delete this College</button></form>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+        }
         html += '</div>';
         html += '</div>';
+        
         //footer
         html += '<div class="card-footer">';
         html += '<div class="btn-group mr-3" role="group" aria-label="Add colleges or programs to this institution">';
