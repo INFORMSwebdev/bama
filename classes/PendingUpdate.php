@@ -28,13 +28,35 @@ class PendingUpdate extends AOREducationObject
         $Class = $Table->Attributes['ClassName'];
         if (!$Class) throw new Exception( "Table class not found." );
         if ( $action === APPROVAL_TYPE_APPROVE ) {
+            $updateContent = unserialize($this->Attributes['UpdateContent']);
+            // TODO: Add code such that contact updates contained in program updates and
+            //  instructor updates contained in courses get written, or else they will
+            //  get thrown out during the insert/update process
             switch ($this->Attributes['UpdateTypeId']) {
                 case UPDATE_TYPE_INSERT:
-                    $Class::create( unserialize($this->Attributes['UpdateContent']) );
+                    $NewId = $Class::create( $updateContent );
+                    if ($Class == 'Program') {
+                         $ContactId = Contact::create( $updateContent );
+                        $Program = new Program( $NewId );
+                         $Program->update( 'ContactId', $ContactId );
+                    }
+                    elseif ($Class == 'Course') {
+                        $InstructorId = Instructor::create( $updateContent );
+                        $Course = new Course( $NewId );
+                        $Course->update( 'InstructorId', $InstructorId );
+                    }
                     break;
                 case UPDATE_TYPE_UPDATE:
                     $Obj = new $Table->Attributes['ClassName']( $this->Attributes['RecordId'] );
-                    $Obj->updateMultiple( unserialize($this->Attributes['UpdateContent']) );
+                    $Obj->updateMultiple( $updateContent );
+                    /*if ($Class == 'Program') {
+                        $Contact = new Contact( $Obj->Attributes['ContactId']);
+                        $Contact->updateMultiple( $updateContent );
+                    }
+                    elseif ($Class == 'Course') {
+                        $Course = new Course( $Obj->Attributes['InstructorId'] );
+                        $Course->updateMultiple( $updateContent );
+                    }*/
                     break;
                 case UPDATE_TYPE_DELETE:
                     $Obj = new $Table->Attributes['ClassName']( $this->Attributes['RecordId'] );
