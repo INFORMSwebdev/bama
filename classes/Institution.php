@@ -46,6 +46,23 @@ class Institution extends AOREducationObject {
         else return $CollegeIds;
     }
 
+    public static function getInstitutionByToken ( $Token ) {
+        $Institution = null;
+        if (!$Token) throw new Exception("Missing required parameter: $Token" );
+        else {
+            $db = new EduDB;
+            $sql = "SELECT InstitutionId FROM institutions WHERE Token = :Token ";
+            $params = [[":Token", $Token, PDO::PARAM_STR]];
+            $InstitutionId = $db->queryItemSafe( $sql, $params );
+            if ($InstitutionId) {
+                $Institution = new Institution( $InstitutionId );
+                return $Institution;
+            }
+            else throw new Exception( "Token not valid" );
+        }
+        return $Institution;
+    }
+
     public static function getInstitutions( $active = TRUE, $asObjects = FALSE) {
         $institutions = [];
         $db = new EduDB();
@@ -136,8 +153,14 @@ class Institution extends AOREducationObject {
       }
 
       if (count($recipients)) {
-          $sameLink = '';
-          $editLink = '';
+          $Token = $this->Attributes['Token'];
+          if (!$Token) {
+              $salt = "Time is a great teacher, but unfortunately it kills all its pupils";
+              $Token = md5( $salt . time() . $this->id );
+              $this->update( 'Token', $Token );
+          }
+          $sameLink = WEB_ROOT . "/users/updateLastModified.php?Token=$Token";
+          $editLink = WEB_ROOT . "/users/login.php";
           $e_params = [];
           $e_params['to'] = implode( ",", $recipients );
           $e_params['subject'] = "INFORMS Analytics & OR Education Database - Data Expiration Notice";
