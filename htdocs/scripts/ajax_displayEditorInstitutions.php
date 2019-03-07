@@ -50,7 +50,45 @@ else {
                 $programHelper = [];
                 if($instProgs) {
                     foreach ($instProgs as $ip) {
+                        //get each program's info
                         $helperHelp = [];
+
+                        //get the courses under each program
+                        $programCourses = $ip->getCourses(TRUE, TRUE);
+                        $courseHelper = [];
+                        foreach($programCourses as $course){
+                            //this is only to display on the index page, we don't need all the fields from the DB
+                            $courseBuilder = [];
+                            $courseBuilder['CourseId'] = $course->id;
+                            $courseBuilder['CourseTitle'] = $course->Attributes['CourseTitle'];
+                            //null/empty checks
+                            if(empty($course->Attributes['CourseNumber'])){
+                                $courseBuilder['CourseNumber'] = 'Not set';
+                            }
+                            else {
+                                $courseBuilder['CourseNumber'] = $course->Attributes['CourseNumber'];
+                            }
+
+                            //instructor info, if applicable
+                            $instructorHelp = [];
+                            if(empty($course->Attributes['InstructorId'])){
+                                //no instructor set
+                                $instructorHelp['InstructorName'] = 'No instructor for this course.';
+                            }
+                            else {
+                                $instructFoo = new Instructor($course->Attributes['InstructorId']);
+                                $instructorHelp['InstructorId'] = $instructFoo->id;
+                                $instructorHelp['InstructorName'] = $instructFoo->Attributes['InstructorFirstName'] . ' ' . $instructFoo->Attributes['InstructorLastName'];
+                            }
+
+                            $courseBuilder['instructor'] = $instructorHelp;
+
+                            //add course info to courseHelper
+                            $courseHelper[] = $courseBuilder;
+                        }
+
+                        //add the course info to the array
+                        $helperHelp['courses'] = $courseHelper;
 
                         $helperHelp['ProgramId'] = $ip->id;
                         $helperHelp['ProgramName'] = $ip->Attributes['ProgramName'];
