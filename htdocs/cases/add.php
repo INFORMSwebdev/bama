@@ -20,7 +20,7 @@ if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true){
 $user = new User($_SESSION['loggedIn']);
 
 $content = <<<EOT
-<div class="jumbotron bg-info text-white">
+<div class="container-fluid">
     <form action="../scripts/processCaseAddForm.php" method="POST">
         <div class="form-row">
             <h3>Case Study Details</h3>

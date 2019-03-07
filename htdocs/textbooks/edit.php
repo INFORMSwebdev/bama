@@ -50,7 +50,7 @@ if($bookId){
 
         //display form w/ info about the book
         $content = <<<EOT
-<div class="jumbotron bg-info text-white">
+<div class="container-fluid">
     <form action="../scripts/processTextbookEditForm.php" method="POST">
         <div class="form-row">
             <h3>Textbook Details</h3>

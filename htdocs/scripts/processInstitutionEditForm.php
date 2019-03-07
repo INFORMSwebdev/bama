@@ -12,6 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //check which button was pushed
     # ToDo: go through other editForm processors and update the delete functionality to be this way
+     # Also, make sure the datasets, instructors, textbooks, etc. have stuff relating to courseId in query string
     if (isset($_POST['delete'])) {
         //delete button was clicked, create pending update
         $instId = filter_input(INPUT_POST, 'instId', FILTER_VALIDATE_INT);

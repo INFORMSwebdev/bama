@@ -154,7 +154,7 @@ EOT;
 
             //user DOES have permission to edit this page, display the form
             $content = <<<EOT
-<div class="jumbotron bg-info text-white">
+<div class="container-fluid">
     <form action="../scripts/processProgramEditForm.php" method="POST">
         <div class="form-row">
             <h3>Program Details</h3>

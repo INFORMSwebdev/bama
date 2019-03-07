@@ -54,7 +54,7 @@ if($instId){
 
     //display form to user
     $content = <<<EOT
-<div class="jumbotron bg-info text-white">
+<div class="container-fluid">
     <form action="../scripts/processInstructorAddForm.php" method="POST">
         <div class="form-row">
             <h3>Instructor Details</h3>

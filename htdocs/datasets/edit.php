@@ -50,7 +50,7 @@ if($datasetId){
     $dataset = new Dataset($datasetId);
 
     $content = <<<EOT
-<div class="jumbotron bg-info text-white">
+<div class="container-fluid">
     <form action="../scripts/processDatasetEditForm.php" method="POST">
         <div class="form-row">
             <h3>Dataset Details</h3>

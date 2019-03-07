@@ -55,7 +55,7 @@ if($caseId){
     $business = $c->Attributes['BusinessTag'];
 
     $content = <<<EOT
-<div class="jumbotron bg-info text-white">
+<div class="container-fluid">
     <form action="../scripts/processCaseEditForm.php" method="POST">
         <div class="form-row">
             <h3>Case Study Details</h3>

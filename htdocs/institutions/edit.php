@@ -73,7 +73,7 @@ if($instId){
 
     //display form w/ the specified institution info
     $content = <<<EOT
-<div class="jumbotron bg-info text-white">
+<div class="container-fluid">
     <form action="../scripts/processInstitutionEditForm.php" method="POST">
         <div class="form-row">
             <h3>Institution Details</h3>

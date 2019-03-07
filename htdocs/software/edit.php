@@ -49,7 +49,7 @@ if($softId){
 
     //display the form for adding institution info to the user
     $content = <<<EOT
-<div class="jumbotron bg-info text-white">
+<div class="container-fluid">
     <form action="../scripts/processSoftwareEditForm.php" method="POST">
         <div class="form-row">
             <h3>Software Details</h3>

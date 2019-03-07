@@ -18,7 +18,7 @@ if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true){
 
 //display the form for adding textbook info to the user
 $content = <<<EOT
-<div class="jumbotron bg-info text-white">
+<div class="container-fluid">
     <form action="../scripts/processTextbookAddForm.php" method="POST">
         <div class="form-row">
             <h3>Textbook Details</h3>

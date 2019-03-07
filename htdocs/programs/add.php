@@ -50,7 +50,7 @@ $instListHTML = optionsHTML($instListHelper);
 
 //user is logged in, let them add a program
 $content = <<<EOT
-<div class="jumbotron bg-info text-white">
+<div class="container-fluid">
     <form action="../scripts/processProgramAddForm.php" method="POST">
         <div class="form-row">
             <h3>Program Details</h3>

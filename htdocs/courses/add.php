@@ -41,7 +41,7 @@ $instructorListHTML = optionsHTML($instructorListHelper);
 
 //display the form for adding course info to the user
 $content = <<<EOT
-<!--<div class="jumbotron bg-info text-white">-->
+<!--<div class="container-fluid">-->
     <form action="../scripts/processCourseAddForm.php" method="POST">
         <div class="form-row">
             <h3>Course Details</h3>
