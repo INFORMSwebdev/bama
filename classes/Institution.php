@@ -24,7 +24,8 @@ class Institution extends AOREducationObject {
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
         'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified', 'editable' => FALSE ),
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  ),
-        'Expired' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Expired', 'editable' => FALSE  )
+        'Expired' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Expired', 'editable' => FALSE  ),
+        'Token' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Token', 'editable' => FALSE ),
     );
 
     public function assignAdmin( $UserId ) {
@@ -44,6 +45,23 @@ class Institution extends AOREducationObject {
             return $Colleges;
         }
         else return $CollegeIds;
+    }
+
+    public static function getInstitutionByToken ( $Token ) {
+        $Institution = null;
+        if (!$Token) throw new Exception("Missing required parameter: $Token" );
+        else {
+            $db = new EduDB;
+            $sql = "SELECT InstitutionId FROM institutions WHERE Token = :Token ";
+            $params = [[":Token", $Token, PDO::PARAM_STR]];
+            $InstitutionId = $db->queryItemSafe( $sql, $params );
+            if ($InstitutionId) {
+                $Institution = new Institution( $InstitutionId );
+                return $Institution;
+            }
+            else throw new Exception( "Token not valid" );
+        }
+        return $Institution;
     }
 
     public static function getInstitutions( $active = TRUE, $asObjects = FALSE) {
@@ -136,8 +154,14 @@ class Institution extends AOREducationObject {
       }
 
       if (count($recipients)) {
-          $sameLink = '';
-          $editLink = '';
+          $Token = $this->Attributes['Token'];
+          if (!$Token) {
+              $salt = "Time is a great teacher, but unfortunately it kills all its pupils";
+              $Token = md5( $salt . time() . $this->id );
+              $this->update( 'Token', $Token );
+          }
+          $sameLink = WEB_ROOT . "/users/updateLastModified.php?Token=$Token";
+          $editLink = WEB_ROOT . "/users/login.php";
           $e_params = [];
           $e_params['to'] = implode( ",", $recipients );
           $e_params['subject'] = "INFORMS Analytics & OR Education Database - Data Expiration Notice";
