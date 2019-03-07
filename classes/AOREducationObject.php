@@ -112,6 +112,15 @@ EOT;
       fwrite( $fh, $text . PHP_EOL );
       fclose( $fh );
   }
+
+  public function save() {
+        if ($this->id) {
+            $this->updateMultiple( $this->Attributes );
+        }
+        else {
+            static::create( $this->Attributes );
+        }
+  }
   
   public function update( $key, $value ) {
     $db = new EduDB();
