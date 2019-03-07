@@ -181,7 +181,17 @@ $(function() {
                     html += '<div class="card">';
                     html += '<div class="card-header">';
                     html += '<h3>' + progs[x].programs[i].ProgramName + '</h3>';
+                    html += '<ul class="nav nav-tabs card-header-tabs" id="progCardNav" role="tablist">';
+                    html += '<li class="nav-item">';
+                    html += '<a class="nav-link active" id="progDetails' + i +'" href="#tabPrograms' + i + '" data-toggle="tab" aria-selected="true" aria-controls="tabPrograms' + i + '">Program Details</a>';
+                    html += '</li>';
+                    html += '<li class="nav-item">';
+                    html += '<a class="nav-link" id="courseDetails' + i + '" href="#tabCourse' + i + '" data-toggle="tab" aria-selected="false" aria-controls="tabCourse' + i + '">Courses</a>';
+                    html += '</li>';
+                    html += '</ul>';                
                     html += '</div>';
+                    html += '<div class="tab-content" id="tabProgramsDerp' + i + '">';
+                    html += '<div class="tab-pane fade show active" id="tabPrograms' + i + '" role="tabpanel" aria-labelledby="progDetails' + i +'">';
                     html += '<div class="card-body">';
                     html += '<h4>Type</h4>';
                     html += '<p>' + progs[x].programs[i].ProgramType + '</p>';
@@ -226,10 +236,19 @@ $(function() {
                     html += '<p>' + progs[x].programs[i].ContactEmail + '</p>';
                     html += '<div class="btn-group">';
                     html += '<a role="button" class="btn btn-warning mr-3" href="/programs/edit.php?id=' + progs[x].programs[i].ProgramId + '">Edit this Program</a>';
-                    html += '<form action="/scripts/processProgramDeleteButton.php" method="POST" id="progDeleteForm"><input type="hidden" name="id" id="id" value="' + progs[x].colleges[i].ProgramId + '" /><button id="programDelete" name="programDelete" type="submit" class="btn btn-danger">Delete this College</button></form>';
-                    html += '</div>';
-                    html += '</div>';
-                    html += '</div>';
+                    html += '<form action="/scripts/processProgramDeleteButton.php" method="POST" id="progDeleteForm"><input type="hidden" name="id" id="id" value="' + progs[x].colleges[i].ProgramId + '" /><button id="programDelete" name="programDelete" type="submit" class="btn btn-danger">Delete this Program</button></form>';
+                    html += '</div>'; //button-group
+                    html += '</div>'; //body
+                    html += '</div>'; //tab-pane
+                    
+                    //courses tab
+                    html += '<div class="tab-pane fade" id="tabCourse' + i + '" role="tabpanel" aria-labelledby="courseDetails' + i + '">';
+                    html += '<div class="card-body">';
+                    
+                    html += '</div>'; //card-body
+                    html += '</div>' //tab-pane;
+                    html += '</div>'; //tab-content
+                    html += '</div>'; //card
                 }
                 html += '</div>';
             }
