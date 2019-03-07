@@ -24,7 +24,8 @@ class Institution extends AOREducationObject {
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
         'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified', 'editable' => FALSE ),
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  ),
-        'Expired' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Expired', 'editable' => FALSE  )
+        'Expired' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Expired', 'editable' => FALSE  ),
+        'Token' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Token', 'editable' => FALSE ),
     );
 
     public function assignAdmin( $UserId ) {

@@ -20,7 +20,6 @@ $sql = "SELECT InstitutionId FROM institutions WHERE DATE(LastModifiedDate) = DA
 $insts = $db->queryColumn( $sql );
 foreach($insts as $inst) {
     $Institution = new Institution( $inst );
-    //$Institution->update( 'Deleted', 1 );
     $Institution->sendExpirationNotice();
     echo "sending notice to contact(s) for InstitutionId = $inst" . PHP_EOL;
 }
