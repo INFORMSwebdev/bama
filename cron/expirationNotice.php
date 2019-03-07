@@ -10,7 +10,7 @@ require_once( "../init.php");
 
 $exp = $aes['data_expiration'];
 $notice_window = $aes['notice_days'];
-$days = $exp - $notice_window;
+$days = $exp + $notice_window;
 $target_date = new DateTime('now');
 $target_date->modify( "-$days day");
 echo date('m/d/Y h:i:s a', time()) . " : Beginning expiration notice for last modified = ".$target_date->format('Y-m-d' ) . PHP_EOL;
