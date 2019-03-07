@@ -13,7 +13,7 @@ $notice_window = $aes['notice_days'];
 $days = $exp - $notice_window;
 $target_date = new DateTime('now');
 $target_date->modify( "-$days day");
-echo date('m/d/Y h:i:s a', time()) . " : Beginning expiration notice for last modified = ".$target_date->format('Y-m-d' )." . PHP_EOL;
+echo date('m/d/Y h:i:s a', time()) . " : Beginning expiration notice for last modified = ".$target_date->format('Y-m-d' ) . PHP_EOL;
 
 $db = new EduDB();
 $sql = "SELECT InstitutionId FROM institutions WHERE DATE(LastModifiedDate) = DATE(DATE_ADD(NOW(), INTERVAL -$days DAY));";
