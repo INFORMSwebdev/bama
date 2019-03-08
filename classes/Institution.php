@@ -226,6 +226,8 @@ EOT;
         $db = new EduDB;
         $sql = "UPDATE institution_admins SET InstitutionId = $this->id WHERE InstitutionId = $OldId ";
         $db->exec( $sql );
+        $sql = "UPDATE programs SET InstitutionId = $this->id WHERE InstitutionId = $OldId";
+        $db->exec( $sql );
         return TRUE;
     }
 }

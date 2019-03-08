@@ -46,4 +46,11 @@ class College extends AOREducationObject
         $ProgramIds = $db->query( $sql );
         return (count($ProgramIds)) ? TRUE : FALSE;
     }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE programs SET CollegeId = $this->id WHERE CollegeId = $OldId";
+        $db->exec( $sql );
+        return TRUE;
+    }
 }

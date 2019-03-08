@@ -37,9 +37,9 @@ class PendingUpdate extends AOREducationObject
                 case UPDATE_TYPE_UPDATE:
                     $newObj = new $Class( $this->Attributes['UpdateRecordId'] );
                     $newObj->update( 'ApprovalStatusId', APPROVAL_TYPE_APPROVE );
-                    $newObj->swapId( $OldId );
                     $oldObj = new $Class( $this->Attributes['RecordId'] );
                     $oldObj->update( 'ApprovalStatusId', APPROVAL_TYPE_RETIRED );
+                    $newObj->swapId( $oldObj->id );
                     break;
                 case UPDATE_TYPE_DELETE:
                     $Obj = new $class( $this->Attributes['RecordId'] );
