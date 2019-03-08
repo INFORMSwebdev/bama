@@ -16,6 +16,7 @@ class PendingUpdate extends AOREducationObject
         'UpdateTypeId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Update Type', 'editable' => FALSE ),
         'TableId' => array( 'required' => TRUE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Table ID', 'editable' => FALSE ),
         'RecordId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Record ID', 'editable' => FALSE ),
+        'UpdateRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Update Record ID', 'editable' => FALSE ),
         'UpdateContent' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Update Content', 'editable' => FALSE ),
         'UserId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'User ID', 'editable' => FALSE ),
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Approval Status', 'editable' => TRUE ),

@@ -58,7 +58,7 @@ class AOREducationObject {
       $class = get_class($this);
       $TableId = $class::$tableId;
       $db = new EduDB();
-      $sql = "INSERT INTO pending_updates (UpdateTypeId, TableId, RecordId, UpdateContent, UserId ) VALUES (:UpdateTypeId, :TableId, :RecordId, :UpdateContent, :UserId)";
+      $sql = "INSERT INTO pending_updates (UpdateTypeId, TableId, RecordId, UpdateRecordId, UpdateContent, UserId ) VALUES (:UpdateTypeId, :TableId, :RecordId, :UpdateRecorId, :UpdateContent, :UserId)";
       $params = [];
       $params[] = array( ":UpdateTypeId", $updateTypeId, PDO::PARAM_INT );
       $params[] = array( ":TableId", $TableId, PDO::PARAM_INT );
