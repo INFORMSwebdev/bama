@@ -50,6 +50,13 @@ class Course extends AOREducationObject
         return $db->execSafe( $sql, $params );
     }
 
+    public function assignInstructor( $InstructorId ) {
+        $db = new EduDB();
+        $sql = "INSERT IGNORE INTO course_instructors (CourseId, InstructorId) VALUES ($this->id, :InstructorId)";
+        $params = array( array( ":InstructorId", $InstructorId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
+    }
+
     /**
      * add course - software association
      * @param $SoftwareId int

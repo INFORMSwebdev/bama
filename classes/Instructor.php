@@ -21,6 +21,13 @@ class Instructor extends AOREducationObject
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE )
     );
 
+    public function assignToCourse( $CourseId ) {
+        $db = new EduDB();
+        $sql = "INSERT IGNORE INTO course_instructors (CourseId, InstructorId) VALUES (:CourseId, $this->id)";
+        $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
+    }
+
     public static function getInstructors( $active = TRUE, $asObjects = FALSE ){
         $instructors = [];
         $db = new EduDB();
