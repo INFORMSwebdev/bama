@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //gather form data
     $title = filter_input(INPUT_POST, 'courseTitle', FILTER_SANITIZE_STRING);
+
     $instructorId = filter_input(INPUT_POST, 'instructor', FILTER_VALIDATE_INT);
     if (empty($instructorId)) {
         $instructorId = null;
@@ -65,11 +66,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if($result == true) {
         //set message to show user
         $_SESSION['editMessage']['success'] = true;
-        $_SESSION['editMessage']['text'] = 'Textbook update successfully submitted and is awaiting approval for posting.';
+        $_SESSION['editMessage']['text'] = 'Course update successfully submitted and is awaiting approval for posting.';
     }
     else {
         $_SESSION['editMessage']['success'] = false;
-        $_SESSION['editMessage']['text'] = "Textbook update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+        $_SESSION['editMessage']['text'] = "Course update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
     }
 }
 

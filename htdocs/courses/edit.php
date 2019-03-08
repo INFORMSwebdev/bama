@@ -35,6 +35,8 @@ else {
 //get the options maker, its gonna be needed
 include_once('/common/classes/optionsHTML.php');
 
+$customJS = '';
+
 if($courseId){
     //check if user has permission to edit this course
     if (!in_array($courseId, $userCourses) && !isset($_SESSION['admin'])) {
@@ -51,11 +53,13 @@ if($courseId){
     $co = new Course($courseId);
 
     $instructorId = $co->Attributes['InstructorId'];
+
     //get list of instructors
-    $instructors = Instructor::getInstructors();
+    $instructors = $user->getInstructors(TRUE);
     $instructorListHelper = array();
-    foreach($instructors as $inst){
-        $instructorListHelper[] = array('text' => $inst['InstructorFirstName'] . ' ' . $inst['InstructorLastName'], 'value' => $inst['InstructorId']);
+    foreach($instructors as $instr){
+        $inst = new Instructor($instr);
+        $instructorListHelper[] = array('text' => $inst->Attributes['InstructorFirstName'] . ' ' . $inst->Attributes['InstructorLastName'], 'value' => $inst->Attributes['InstructorId']);
     }
     //pass the name/value pairs to the file to get the generated HTML for a select list
     $instructorListHTML = optionsHTML($instructorListHelper);
@@ -63,6 +67,8 @@ if($courseId){
     if(isset($instructorId)){
         $instructorListHTML = str_replace('<option value="' . $instructorId . '">', '<option value="' . $instructorId . '" selected>', $instructorListHTML);
     }
+
+    # ToDo: figure out what to do about the instructor field in this form
 
     //set up the form to serve on the page
     $content = <<<EOT
@@ -81,11 +87,22 @@ if($courseId){
             <input type="text" class="form-control" name="courseNumber" id="courseNumber" value="{$co->Attributes['CourseNumber']}" placeholder="Number of course" aria-describedby="numberHelp" />
             <p id="numberHelp">Any alphanumeric characters are allowed.</p>
         </div>
-        <div class="form-row">
-            <label for="instructor">Select an Instructor</label>
-		    <select class="form-control" name="instructor" id="instructor">
-		        $instructorListHTML
+        <div class="form-row"> 
+            <p>Use the list below to select an instructor <strong>that already exists within the institution this course is a part of,</strong> or click the button below the list to create a new instructor.</p>
+            <p><strong>Note: if you create a new instructor, you will have to wait for the addition to be approved by an INFORMS admin before the instructor will appear in the list below.</strong></p>
+        </div>
+        <div class="form-row" id="instructorSelectList">
+            <label for="instructor">Select an Existing Instructor</label>
+		    <select class="form-control" name="instructor" id="instructor" aria-describedby="instructorHelp">
+		        {$instructorListHTML}
             </select>
+        </div>
+        <!--<br/>-->
+        <div class="form-row">
+            <button class="btn btn-primary btn-addInstructor mt-1" role="button">Create New Instructor</button>
+        </div>
+        <div class="d-hidden" id="message"> 
+            <!-- AJAX messages go here -->
         </div>
         <br />
         <div class="form-row"> 
@@ -101,7 +118,7 @@ if($courseId){
         <!--<br />-->
         <div class="form-row"> 
             <label for="courseText">Course Text</label>
-            <textarea class="form-control" name="courseText" id="courseText" value="{$co->Attributes['CourseText']}" aria-describedby="textHelp"></textarea>
+            <textarea class="form-control" name="courseText" id="courseText" aria-describedby="textHelp">{$co->Attributes['CourseText']}</textarea>
             <p id="textHelp">You can copy-paste the contents of a syllabus in this field.</p>
         </div>
         <!--<br />-->
@@ -126,6 +143,101 @@ if($courseId){
         </div>
     </form>
 </div>
+
+<div class="modal fade" id="instructorModal" tabindex="-1" role="form" aria-labelledby="instructorModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="form">
+        <div class="modal-content">
+            <div class="modal-header"> 
+                <div class="modal-title" id="instructorModalTitle">Add New Instructor</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"> 
+                <form id="instructorAddForm">
+                    <div class="form-row">
+                        <h3>Instructor Details</h3>
+                    </div>
+                    <div class="form-row"> 
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control" name="firstName" id="firstName" placeholder="First name of instructor" required />
+                    </div>
+                    <br />
+                    <div class="form-row"> 
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last name/surname of instructor" required />
+                    </div>
+                    <br />
+                    <div class="form-row">
+                        <label for="prefix">Prefix</label>
+		                <input type="text" class="form-control" name="prefix" id="prefix" placeholder="e.g. Mister, Mr., Professor, Doctor, etc." />
+                    </div>
+                    <br />
+                    <div class="form-row"> 
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" name="email" id="email" placeholder="Email address of instructor" aria-describedby="emailHelp" />
+                        <p id="emailHelp">Only valid email addresses will be accepted (e.g. name@organization.com)</p>
+                    </div>
+                    <!--<br />-->
+                    <div class="form-row">
+                        <input type="hidden" id="courseId" name="courseId" value="{$co->id}" />
+                        <button class="btn btn-warning" type="submit" name="addInstructor" id="instructorSubmit" value="addInstructor">Submit New Instructor</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer"> 
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+EOT;
+
+    $customJs = <<<EOT
+$(function() {
+    $(document).on( 'click', '.btn-addInstructor', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $('#instructorModal').modal('toggle');
+    });
+    $(document).on( 'click', '#instructorSubmit', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        //get form info
+        var firstName = $('#firstName').val();
+        var lastName = $('#lastName').val();
+        var prefix = $('#prefix').val();
+        var email = $('#email').val();
+        $.post( "/scripts/ajax_addInstructorFromCourse.php", { 'FirstName': firstName, 'LastName': lastName, 'Prefix': prefix, 'Email': email }, function(data) {
+            //close the modal
+            $('#instructorModal').modal('toggle');
+            //alert( data );
+            if (data.errors.length > 0 ) {
+                var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                for (var i = 0; i < data.errors.length; i++) {
+                    msg +=  data.errors[i] + "\\r\\n";
+                }
+                //alert( msg );
+                //$('#message').html('<p>' + msg + '</p>').removeClass('d-hidden').addClass('alert alert-danger');
+                $('#message').html('<p>' + msg + '</p>');
+                $('#message').addClass('alert alert-danger');
+                $('#message').show();
+            }
+            else if (data.msg) {
+                //alert( data.msg );
+                $('#message').html('<p>' + data.msg + '</p>');
+                if(data.msg.includes('submitted')){
+                    $('#message').addClass('alert alert-success');
+                }
+                else {
+                    $('#message').addClass('alert alert-danger');
+                }
+                $('#message').show();
+            }
+        }, "json"); //, "json"
+    });
+});
 EOT;
 }
 else {
@@ -170,10 +282,7 @@ $page_params['content'] = $content;
 $page_params['page_title'] = "Edit Course";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
-//$page_params['js'][] = array( 'text' => $custom_js );
-$page_params['show_title_bar'] = FALSE;
-//do not display the usual header/footer
-$page_params['admin'] = TRUE;
+$page_params['js'][] = array( 'text' => $customJs );
 //$page_params['active_menu_item'] = 'home';
 //put custom/extra css files, if used
 //$page_params['css'][] = array("url" => "");

@@ -46,8 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['editMessage']['success'] = false;
         $_SESSION['editMessage']['text'] = "New college was not added to the system. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
     }
-
-    //redirect user to index
-    header('Location: /index.php');
-    die;
 }
+
+//redirect user to index
+header('Location: /index.php');
+die;
