@@ -51,7 +51,7 @@ class Institution extends AOREducationObject {
         $Programs = $this->getPrograms();
         $Courses = [];
         foreach( $Programs as $Program ) {
-            $ProgramCourses = $Program->getCourses();
+            $ProgramCourses = $Program->getCourses( TRUE, TRUE);
             foreach( $ProgramCourses as $ProgramCourse) {
                 if($asObjects) {
                     $Courses[] = $ProgramCourse;
