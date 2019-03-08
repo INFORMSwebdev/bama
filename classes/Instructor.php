@@ -18,7 +18,9 @@ class Instructor extends AOREducationObject
         'InstructorPrefix' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Instructor Prefix', 'editable' => TRUE ),
         'InstructorEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Instructor Email', 'editable' => TRUE ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE )
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE ),
+        'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
+        'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
 
     public function assignToCourse( $CourseId ) {

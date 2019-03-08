@@ -22,7 +22,9 @@ class Dataset extends AOREducationObject
         'AnalyticTag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'BusinessTag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT )
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT ),
+        'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
+        'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
 
     /**
