@@ -47,6 +47,21 @@ class Institution extends AOREducationObject {
         else return $CollegeIds;
     }
 
+    public function getCourses( $asObjects = TRUE ) {
+        $Programs = $this->getPrograms();
+        $Courses = [];
+        foreach( $Programs as $Program ) {
+            $ProgramCourses = $Program->getCourses();
+            foreach( $ProgramCourses as $ProgramCourse) {
+                if($asObjects) {
+                    $Courses[] = $ProgramCourse;
+                }
+                $Courses[] = $ProgramCourse->Attributes;
+            }
+        }
+        return $Courses;
+    }
+
     public static function getInstitutionByToken ( $Token ) {
         $Institution = null;
         if (!$Token) throw new Exception("Missing required parameter: $Token" );
@@ -90,18 +105,21 @@ class Institution extends AOREducationObject {
 
     }
 
-    public function hasColleges() {
-        $db = new EduDB;
-        $sql = "SELECT CollegeId FROM colleges WHERE InstitutionId = $this->id AND Deleted = 0";
-        $Ids = $db->query( $sql );
-        return (count($Ids)) ? TRUE : FALSE;
-    }
-
-    public function hasPrograms() {
-        $db = new EduDB;
-        $sql = "SELECT ProgramId FROM programs WHERE InstitutionId = $this->id AND Deleted = 0";
-        $Ids = $db->query( $sql );
-        return (count($Ids)) ? TRUE : FALSE;
+    public  function getInstructors( $asObjects = TRUE ) {
+        $Courses = $this->getCourses();
+        $Instructors = [];
+        foreach( $Courses as $Course ) {
+            $CourseInstructors = $Course->getInstructors();
+            foreach( $CourseInstructors as $CourseInstructor ) {
+                if ($asObjects) {
+                    $Instructors[] = $CourseInstructor;
+                }
+                else {
+                    $Instructors[] = $CourseInstructor->Attributes;
+                }
+            }
+        }
+        return $Instructors;
     }
 
     public function getPrograms( $asObjects = TRUE ) {
@@ -127,6 +145,20 @@ class Institution extends AOREducationObject {
             foreach( $users as &$user) $user = new User($user);
         }
         return $users;
+    }
+
+    public function hasColleges() {
+        $db = new EduDB;
+        $sql = "SELECT CollegeId FROM colleges WHERE InstitutionId = $this->id AND Deleted = 0";
+        $Ids = $db->query( $sql );
+        return (count($Ids)) ? TRUE : FALSE;
+    }
+
+    public function hasPrograms() {
+        $db = new EduDB;
+        $sql = "SELECT ProgramId FROM programs WHERE InstitutionId = $this->id AND Deleted = 0";
+        $Ids = $db->query( $sql );
+        return (count($Ids)) ? TRUE : FALSE;
     }
 
     public function sendExpirationNotice() {
