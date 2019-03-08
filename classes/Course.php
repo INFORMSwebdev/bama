@@ -136,6 +136,22 @@ class Course extends AOREducationObject
         return (count($Ids)) ? TRUE : FALSE;
     }
 
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE course_cases SET CourseId = $this->id WHERE CourseId = $OldId ";
+        $db->exec( $sql );
+        $sql = "UPDATE course_datasets SET CourseId = $this->id WHERE CourseId = $OldId ";
+        $db->exec( $sql );
+        $sql = "UPDATE course_instructors SET CourseId = $this->id WHERE CourseId = $OldId ";
+        $db->exec( $sql );
+        $sql = "UPDATE course_softwares SET CourseId = $this->id WHERE CourseId = $OldId ";
+        $db->exec( $sql );
+        $sql = "UPDATE course_textbooks SET CourseId = $this->id WHERE CourseId = $OldId ";
+        $db->exec( $sql );
+        $sql = "UPDATE program_courses SET CourseId = $this->id WHERE CourseId = $OldId";
+        return TRUE;
+    }
+
     /**
      * delete course - case study association
      * @param $CaseId int

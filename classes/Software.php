@@ -60,4 +60,11 @@ class Software extends AOREducationObject
 
         return $softwares;
     }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE course_softwares SET SoftwareId = $this->id WHERE SoftwareId = $OldId ";
+        $db->exec( $sql );
+        return TRUE;
+    }
 }

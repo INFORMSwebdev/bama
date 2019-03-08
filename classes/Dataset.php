@@ -72,4 +72,11 @@ class Dataset extends AOREducationObject
 
         return $datasets;
     }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE course_datasets SET DatasetId = $this->id WHERE DatasetId = $OldId ";
+        $db->exec( $sql );
+        return TRUE;
+    }
 }

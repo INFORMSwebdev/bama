@@ -38,4 +38,11 @@ class Instructor extends AOREducationObject
 
         return $instructors;
     }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE course_instructors SET InstructorId = $this->id WHERE InstructorId = $OldId ";
+        $db->exec( $sql );
+        return TRUE;
+    }
 }

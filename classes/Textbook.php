@@ -61,4 +61,11 @@ class Textbook extends AOREducationObject
 
         return $books;
     }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE course_textbooks SET TextbookId = $this->id WHERE TextbookId = $OldId ";
+        $db->exec( $sql );
+        return TRUE;
+    }
 }

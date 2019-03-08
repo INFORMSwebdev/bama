@@ -187,4 +187,13 @@ class Program extends AOREducationObject
         $Ids = $db->query( $sql );
         return (count($Ids)) ? TRUE : FALSE;
     }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE program_contacts SET ProgramId = $this->id WHERE ProgramId = $OldId ";
+        $db->exec( $sql );
+        $sql = "UPDATE program_courses SET ProgramId = $this->id WHERE ProgramId = $OldId";
+        $db->exec( $sql );
+        return TRUE;
+    }
 }

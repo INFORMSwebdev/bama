@@ -42,4 +42,11 @@ class Contact extends AOREducationObject
 
         return $contacts;
     }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE program_contacts SET ContactId = $this->id WHERE ContactId = $OldId ";
+        $db->exec( $sql );
+        return TRUE;
+    }
 }

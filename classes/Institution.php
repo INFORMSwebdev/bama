@@ -219,6 +219,13 @@ EOT;
           return FALSE;
       }
     }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE institution_admins SET InstitutionId = $this->id WHERE InstitutionId = $OldId ";
+        $db->exec( $sql );
+        return TRUE;
+    }
 }
 
 
