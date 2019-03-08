@@ -57,39 +57,43 @@ class AOREducationObject {
   {
       $class = get_class($this);
       $TableId = $class::$tableId;
-      $db = new EduDB();
-      $sql = "INSERT INTO pending_updates (UpdateTypeId, TableId, RecordId, UpdateContent, UserId ) VALUES (:UpdateTypeId, :TableId, :RecordId, :UpdateContent, :UserId)";
-      $params = [];
-      $params[] = array( ":UpdateTypeId", $updateTypeId, PDO::PARAM_INT );
-      $params[] = array( ":TableId", $TableId, PDO::PARAM_INT );
-      if ($updateTypeId == UPDATE_TYPE_INSERT) {
-          $params[] = array( ":RecordId", null, PDO::PARAM_NULL );
+      $PendingUpdateId = PendingUpdate::create( ['UpdateTypeId'=>$updateTypeId, 'TableId'=>$TableId, 'UpdateContent'=>serialize($this->Attributes),'UserId'=>$UserId] );
+      $PendingUpdate = new PendingUpdate( $PendingUpdateId );
+      switch( $updateTypeId ) {
+          case UPDATE_TYPE_INSERT:
+              $this->id = $this->save();
+              $PendingUpdate->update( 'UpdateRecordId', $this->id );
+              break;
+          case UPDATE_TYPE_UPDATE:
+              $PendingUpdate->update( 'RecordId', $this->id );
+              $this->id = null;
+              $this->id = $this->save(); // save current object attributes into new row
+              $PendingUpdate->update( 'UpdateRecordId', $this->id );
+              break;
+          case UPDATE_TYPE_DELETE:
+              $PendingUpdate->update( 'RecordId', $this->id );
+              break;
       }
-      else {
-          $params[] = array( ":RecordId", $this->Attributes[static::$primary_key], PDO::PARAM_INT );
+
+
+      $link = WEB_ROOT."admin/pendingUpdates.php";
+      $details = '<div style="margin: 10px 0">';
+      foreach( $this->Attributes as $key => $value ) {
+          $details .= $key . ": " . filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS)."<br/>";
       }
-      $params[] = array( ":UpdateContent", serialize($this->Attributes), PDO::PARAM_STR );
-      $params[] = array( ":UserId", $UserId, PDO::PARAM_INT );
-      $result = $db->execSafe( $sql, $params );
-      if ($result) {
-          $link = WEB_ROOT."admin/pendingUpdates.php";
-          $details = '<div style="margin: 10px 0">';
-          foreach( $this->Attributes as $key => $value ) {
-              $details .= $key . ": " . filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS)."<br/>";
-          }
-          $details .= '</div>';
-          $e_params = [];
-          $e_params['to'] = ADMIN_EMAIL;
-          $e_params['subject'] = "Analytics and Operations Research Education Database - Pending Update Request";
-          $e_params['body_html'] = <<<EOT
+      $details .= '</div>';
+      $e_params = [];
+      $e_params['to'] = ADMIN_EMAIL;
+      $e_params['subject'] = "Analytics and Operations Research Education Database - Pending Update Request";
+      $e_params['body_html'] = <<<EOT
 <p>The Analytics &amp; OR Education Database system has received a new content update request.</p>
 $details
 <p>You can review this request at <a href="$link">$link</a>.</p>
 EOT;
-          $email = new email($e_params);
-          $email->send();
-      }
-      return $result;
+      $email = new email($e_params);
+      $email->send();
+
+      return $PendingUpdateId;
   }
   
   public function delete() {
@@ -111,6 +115,15 @@ EOT;
       fwrite( $fh, date('Y-m-d H:i:s') ." ================ ".PHP_EOL );
       fwrite( $fh, $text . PHP_EOL );
       fclose( $fh );
+  }
+
+  public function save() {
+        if ($this->id) {
+            return $this->updateMultiple( $this->Attributes );
+        }
+        else {
+            return static::create( $this->Attributes );
+        }
   }
   
   public function update( $key, $value ) {

@@ -80,6 +80,20 @@ class Course extends AOREducationObject
         return $Instructor;
     }
 
+    public function getInstructors( $asObjects ) {
+        $db = new EduDB;
+        $Instructors = [];
+        $sql = "SELECT InstructorId FROM course_instructors WHERE CourseId = $this->id";
+        $InstructorIds = $db->query( $sql );
+        foreach( $InstructorIds as $InstructorId) {
+            $Instructor = new Instructor( $InstructorId );
+            if ($asObject) $Instructors[] = $Instructor;
+            else $Instructors[] = $Instructor->Attributes;
+        }
+
+        return $Instructors;
+    }
+
     public function hasCases() {
         $db = new EduDB;
         $sql = "SELECT CaseId FROM course_cases WHERE CourseId = $this->id AND Deleted = 0";
@@ -101,6 +115,11 @@ class Course extends AOREducationObject
             if ($Instructor->valid && !$Instructor->Attributes['Deleted']) $hasInstructor = TRUE;
         }
         return $hasInstructor;
+    }
+
+    public function hasInstructors() {
+        $Instructors = $this->getInstructors();
+        return (count($Instructors)) ? TRUE : FALSE;
     }
 
     public function hasSoftwares() {
