@@ -18,7 +18,9 @@ class Contact extends AOREducationObject
         'ContactPhone' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Contact Phone', 'editable' => TRUE  ),
         'ContactEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Contact Email', 'editable' => TRUE  ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE  ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  )
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  ),
+        'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
+        'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
 
     public function setInstitutionContact( $InstitutionId ){
@@ -41,5 +43,12 @@ class Contact extends AOREducationObject
         }
 
         return $contacts;
+    }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE program_contacts SET ContactId = $this->id WHERE ContactId = $OldId ";
+        $db->exec( $sql );
+        return TRUE;
     }
 }

@@ -26,6 +26,8 @@ class Institution extends AOREducationObject {
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  ),
         'Expired' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Expired', 'editable' => FALSE  ),
         'Token' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Token', 'editable' => FALSE ),
+        'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
+        'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
 
     public function assignAdmin( $UserId ) {
@@ -218,6 +220,13 @@ EOT;
       else {
           return FALSE;
       }
+    }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE institution_admins SET InstitutionId = $this->id WHERE InstitutionId = $OldId ";
+        $db->exec( $sql );
+        return TRUE;
     }
 }
 

@@ -17,7 +17,9 @@ class Textbook extends AOREducationObject
         'Authors' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Authors', 'editable' => TRUE ),
         'TextbookPublisher' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Publisher', 'editable' => TRUE ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE )
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE ),
+        'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
+        'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
 
     /**
@@ -60,5 +62,12 @@ class Textbook extends AOREducationObject
         }
 
         return $books;
+    }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE course_textbooks SET TextbookId = $this->id WHERE TextbookId = $OldId ";
+        $db->exec( $sql );
+        return TRUE;
     }
 }

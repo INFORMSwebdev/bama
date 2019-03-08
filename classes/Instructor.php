@@ -18,8 +18,17 @@ class Instructor extends AOREducationObject
         'InstructorPrefix' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Instructor Prefix', 'editable' => TRUE ),
         'InstructorEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Instructor Email', 'editable' => TRUE ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE )
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE ),
+        'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
+        'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
+
+    public function assignToCourse( $CourseId ) {
+        $db = new EduDB();
+        $sql = "INSERT IGNORE INTO course_instructors (CourseId, InstructorId) VALUES (:CourseId, $this->id)";
+        $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
+    }
 
     public static function getInstructors( $active = TRUE, $asObjects = FALSE ){
         $instructors = [];
@@ -37,5 +46,12 @@ class Instructor extends AOREducationObject
         }
 
         return $instructors;
+    }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE course_instructors SET InstructorId = $this->id WHERE InstructorId = $OldId ";
+        $db->exec( $sql );
+        return TRUE;
     }
 }

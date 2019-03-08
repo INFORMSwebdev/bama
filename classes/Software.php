@@ -16,7 +16,9 @@ class Software extends AOREducationObject
         'SoftwareName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR, 'label' => 'Software Name', 'editable' => TRUE ),
         'SoftwarePublisher' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Software Publisher', 'editable' => TRUE ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE )
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE ),
+        'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
+        'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
 
     /**
@@ -59,5 +61,12 @@ class Software extends AOREducationObject
         }
 
         return $softwares;
+    }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE course_softwares SET SoftwareId = $this->id WHERE SoftwareId = $OldId ";
+        $db->exec( $sql );
+        return TRUE;
     }
 }

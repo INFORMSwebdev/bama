@@ -23,7 +23,9 @@ class Course extends AOREducationObject
         'AnalyticTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Analytic Tag', 'editable' => TRUE  ),
         'BusinessTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Business Tag', 'editable' => TRUE  ),
         'CreateDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE  ),
-        'Deleted' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  )
+        'Deleted' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  ),
+        'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
+        'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
 
     /**
@@ -47,6 +49,13 @@ class Course extends AOREducationObject
         $db = new EduDB();
         $sql = "INSERT IGNORE INTO course_datasets (CourseId, DatasetId) VALUES ($this->id, :DatasetId)";
         $params = array( array( ":DatasetId", $DatasetId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
+    }
+
+    public function assignInstructor( $InstructorId ) {
+        $db = new EduDB();
+        $sql = "INSERT IGNORE INTO course_instructors (CourseId, InstructorId) VALUES ($this->id, :InstructorId)";
+        $params = array( array( ":InstructorId", $InstructorId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
     }
 
@@ -134,6 +143,22 @@ class Course extends AOREducationObject
         $sql = "SELECT TextbookId FROM course_textbooks WHERE CourseId = $this->id AND Deleted = 0";
         $Ids = $db->query( $sql );
         return (count($Ids)) ? TRUE : FALSE;
+    }
+
+    public function swapID( $OldId ) {
+        $db = new EduDB;
+        $sql = "UPDATE course_cases SET CourseId = $this->id WHERE CourseId = $OldId ";
+        $db->exec( $sql );
+        $sql = "UPDATE course_datasets SET CourseId = $this->id WHERE CourseId = $OldId ";
+        $db->exec( $sql );
+        $sql = "UPDATE course_instructors SET CourseId = $this->id WHERE CourseId = $OldId ";
+        $db->exec( $sql );
+        $sql = "UPDATE course_softwares SET CourseId = $this->id WHERE CourseId = $OldId ";
+        $db->exec( $sql );
+        $sql = "UPDATE course_textbooks SET CourseId = $this->id WHERE CourseId = $OldId ";
+        $db->exec( $sql );
+        $sql = "UPDATE program_courses SET CourseId = $this->id WHERE CourseId = $OldId";
+        return TRUE;
     }
 
     /**

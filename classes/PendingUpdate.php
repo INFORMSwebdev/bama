@@ -29,39 +29,22 @@ class PendingUpdate extends AOREducationObject
         $Class = $Table->Attributes['ClassName'];
         if (!$Class) throw new Exception( "Table class not found." );
         if ( $action === APPROVAL_TYPE_APPROVE ) {
-            $updateContent = unserialize($this->Attributes['UpdateContent']);
-            // TODO: Add code such that contact updates contained in program updates and
-            //  instructor updates contained in courses get written, or else they will
-            //  get thrown out during the insert/update process
             switch ($this->Attributes['UpdateTypeId']) {
                 case UPDATE_TYPE_INSERT:
-                    $NewId = $Class::create( $updateContent );
-                    if ($Class == 'Program') {
-                         $ContactId = Contact::create( $updateContent );
-                        $Program = new Program( $NewId );
-                         $Program->update( 'ContactId', $ContactId );
-                    }
-                    elseif ($Class == 'Course') {
-                        $InstructorId = Instructor::create( $updateContent );
-                        $Course = new Course( $NewId );
-                        $Course->update( 'InstructorId', $InstructorId );
-                    }
+                    $obj = new $Class( $this->Attributes['UpdateRecordId'] );
+                    $obj->update( 'ApprovalStatusId', APPROVAL_TYPE_APPROVE );
                     break;
                 case UPDATE_TYPE_UPDATE:
-                    $Obj = new $Table->Attributes['ClassName']( $this->Attributes['RecordId'] );
-                    $Obj->updateMultiple( $updateContent );
-                    /*if ($Class == 'Program') {
-                        $Contact = new Contact( $Obj->Attributes['ContactId']);
-                        $Contact->updateMultiple( $updateContent );
-                    }
-                    elseif ($Class == 'Course') {
-                        $Course = new Course( $Obj->Attributes['InstructorId'] );
-                        $Course->updateMultiple( $updateContent );
-                    }*/
+                    $newObj = new $Class( $this->Attributes['UpdateRecordId'] );
+                    $newObj->update( 'ApprovalStatusId', APPROVAL_TYPE_APPROVE );
+                    $newObj->swapId( $OldId );
+                    $oldObj = new $Class( $this->Attributes['RecordId'] );
+                    $oldObj->update( 'ApprovalStatusId', APPROVAL_TYPE_RETIRED );
                     break;
                 case UPDATE_TYPE_DELETE:
-                    $Obj = new $Table->Attributes['ClassName']( $this->Attributes['RecordId'] );
+                    $Obj = new $class( $this->Attributes['RecordId'] );
                     $Obj->update( "Deleted", 1);
+                    $Obj->update( "ApprovalStatusId", APPROVAL_TYPE_RETIRED );
                     break;
                 default:
                     throw new Exception("invalid update type indicated");
@@ -81,5 +64,11 @@ class PendingUpdate extends AOREducationObject
 
     public function reject() {
         return $this->approvalAction( APPROVAL_TYPE_REJECT );
+    }
+
+    public function swapId( $OldId ) {
+        // this will be overridden for any class that uses "join" tables to swap in the new record ID where the old ID was
+        // if a class has no associations like that, just do nothing
+        return TRUE;
     }
 }
