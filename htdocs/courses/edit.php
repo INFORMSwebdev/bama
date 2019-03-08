@@ -174,7 +174,7 @@ if($courseId){
             </div>
             <div class="tab-pane fade" id="tabInstructors" role="tabpanel" aria-labelledby="courseInstructors">
                 <div class="card-body">
-                    
+                    <h3>Instructors</h3>
                 </div>
             </div>
             <div class="tab-pane fade" id="tabSoftware" role="tabpanel" aria-labelledby="courseSoftware">
