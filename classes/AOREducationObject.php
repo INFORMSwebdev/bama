@@ -40,7 +40,7 @@ class AOREducationObject {
       $qparams[] = array( ":$key", $value, $datatype );
     }
     $result = $db->execSafe( $sql, $qparams );
-    if (!$result) die( "Something went wrong" );
+    if (!$result) die( "Something went wrong in static create method ". print_r(EduDB::$connection->errorInfo(),1) );
     $sql = "SELECT LAST_INSERT_ID()";
     return $db->queryItem( $sql );
   }
@@ -66,7 +66,7 @@ class AOREducationObject {
               break;
           case UPDATE_TYPE_UPDATE:
               $PendingUpdate->update( 'RecordId', $this->id );
-              $this->id = null;
+              $this->id = $this->Attributes[static::$primary_key] = null;
               $this->id = $this->save(); // save current object attributes into new row
               $PendingUpdate->update( 'UpdateRecordId', $this->id );
               break;
