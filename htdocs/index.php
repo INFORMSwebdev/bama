@@ -355,7 +355,7 @@ $(function() {
                             html += '<td>' + progs[x].programs[i].courses[y].CourseNumber + '</td>';
                             html += '<td>' + progs[x].programs[i].courses[y].instructor.InstructorName + '</td>';
                             html += '<td>';
-                            html += '<a role="button" class="btn btn-warning btn-block" href="/courses/edit.php?id=' + progs[x].programs[i].courses[y].CourseId + '">Edit this Course</a>';
+                            html += '<a role="button" class="btn btn-warning btn-block" href="/courses/edit.php?id=' + progs[x].programs[i].courses[y].CourseId + '">View this Course</a>';
                             html += '<button id="id_' + progs[x].programs[i].courses[y].CourseId + '" name="courseDelete" type="submit" class="btn btn-danger btn-block btn-delete">Delete this Course</button>';  
                             html += '</td>';
                             html += '</tr>';

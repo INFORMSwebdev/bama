@@ -55,10 +55,14 @@ else {
 
     //create an object w/ no Id
     $x = Instructor::createInstance( $data );
+
     //add record to pending_updates
     $result = $x->createPendingUpdate( UPDATE_TYPE_INSERT, $user->Attributes['UserId']);
+
     //report on results of insertion
     if($result == true) {
+        $pU = new PendingUpdate($result);
+        $response['NewInstructorId'] = $pU->Attributes['UpdateRecordId'];
         $msg = 'New instructor successfully submitted and is awaiting approval for posting.';
     }
     else {

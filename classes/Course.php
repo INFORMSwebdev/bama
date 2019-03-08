@@ -80,14 +80,14 @@ class Course extends AOREducationObject
         return $Instructor;
     }
 
-    public function getInstructors( $asObjects ) {
+    public function getInstructors( $asObjects = FALSE ) {
         $db = new EduDB;
         $Instructors = [];
         $sql = "SELECT InstructorId FROM course_instructors WHERE CourseId = $this->id";
-        $InstructorIds = $db->query( $sql );
+        $InstructorIds = $db->query_column( $sql );
         foreach( $InstructorIds as $InstructorId) {
             $Instructor = new Instructor( $InstructorId );
-            if ($asObject) $Instructors[] = $Instructor;
+            if ($asObjects) $Instructors[] = $Instructor;
             else $Instructors[] = $Instructor->Attributes;
         }
 
