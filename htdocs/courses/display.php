@@ -16,34 +16,35 @@ $content = '';
 //check to make sure we have an Id to work with
 if(empty($courseId)){
     //no valid Id supplied in query string
-    //display a list of courses the user can choose from
+    //set up the message to be red
+    $_SESSION['editMessage']['success'] = false;
+    $_SESSION['editMessage']['text'] = 'You must select a valid course to view it\'s details.';
 
-    $courses = Course::getAllCourses();
-    $courseListHelper = array();
-    foreach($courses as $course){
-        $courseListHelper[] = array('text' => $course['CourseTitle'], 'value' => $course['CourseId']);
-    }
-    //pass the name/value pairs to the file to get the generated HTML for a select list
-    include_once('/common/classes/optionsHTML.php');
-    $courseListHTML = optionsHTML($courseListHelper);
-
-    $content = <<<EOT
-<div class="flex-column">
-    <h2>View Course Details</h2>
-    <form action="display.php" method="get">
-        <div class="form-group">
-            <label for="course">Select a Course</label>
-		    <select class="form-control" name="course" id="course" onchange="self.location='display.php?id='+this.options[this.selectedIndex].value">
-		        {$courseListHTML}
-            </select>
-        </div>
-    </form>
-</div>
-EOT;
+    //redirect to index
+    header('Location: /index.php');
+    die;
 }
 else {
+    if(isset($_SESSION['editMessage'])){
+        //set up the alert color
+        if($_SESSION['editMessage']['success'] == true){
+            //successful insert into pending_updates table
+            $content = '<div class="alert alert-success" id="message">';
+        }
+        else {
+            //unsuccessful insert
+            $content = '<div class="alert alert-danger" id="message">';
+        }
+        //add message to alert
+        $content .= "<p>{$_SESSION['editMessage']['text']}</p></div>";
+
+        //clear out the session variable after its' use
+        $_SESSION['editMessage'] = null;
+    }
+
     //get details of course
     $courseObj = new Course($courseId);
+    //$program = $courseObj->getProgram(TRUE);
     $name = $courseObj->Attributes['CourseTitle'];
     $num = $courseObj->Attributes['CourseNumber'];
     $numberHTML = '<h3>Number</h3>';
@@ -93,7 +94,9 @@ else {
     else {
         $businessHTML .= '<p>Business tags are not currently available.</p>';
     }
-    $instructorId = $courseObj->Attributes['InstructorId'];
+    //$instructorId = $courseObj->Attributes['InstructorId'];
+    //get the instructors assigned to this course
+    $instructors = $courseObj->getInstructors(TRUE);
 
     $courseHTML = <<<EOT
 {$numberHTML}
@@ -102,29 +105,68 @@ else {
 {$textHTML}
 {$analyticHTML}
 {$businessHTML}
+<div class="btn-group">
+<a role="button" class="btn btn-warning mr-3" href="/courses/edit.php?id={$courseObj->id}">Edit this Course</a>
+<button id="id_{$courseObj->id}" name="courseDelete" type="submit" class="btn btn-danger btn-course-delete">Delete this Course</button>
+</div>
 EOT;
-
 
     //set up HTML to display on the instructors tab
     $instructorHTML = '';
-    if(isset($instructorId) && is_numeric($instructorId)){
-        //get instructor details
-        $instructor = new Instructor($instructorId);
-        $instructorFname = $instructor->Attributes['InstructorFirstName'];
-        $instructorLname = $instructor->Attributes['InstructorLastName'];
-        $instructorPref = $instructor->Attributes['InstructorPrefix'];
-        $instructorEmail = $instructor->Attributes['InstructorEmail'];
-        $emailHTML = '';
-        if(isset($instructorEmail)){
-            $emailHTML = "<p><a href='mailto:$instructorEmail'>$instructorEmail</a></p>";
+    if($instructors){
+        //set up the instructor table
+        $instructorHTML .= <<<EOT
+<table id="instructorTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Prefix</th>
+            <th>First Name</th> 
+            <th>Last Name</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+EOT;
+        foreach($instructors as $instFoo){
+            //get instructor details
+            $instructorFname = $instFoo->Attributes['InstructorFirstName'];
+            $instructorLname = $instFoo->Attributes['InstructorLastName'];
+            $instructorPref = $instFoo->Attributes['InstructorPrefix'];
+            $prefOut = '';
+            if(isset($instructorPref)){
+                $prefOut = $instructorPref;
+            }
+            else {
+                $prefOut = 'Not Set';
+            }
+            $instructorEmail = $instFoo->Attributes['InstructorEmail'];
+            $emailHTML = '';
+            if(isset($instructorEmail)){
+                $emailHTML = "<a href='mailto:$instructorEmail'>$instructorEmail</a>";
+            }
+            else {
+                $emailHTML = 'Not set.';
+            }
+
+            //set up table rows
+            $instructorHTML .= <<<EOT
+        <tr>
+            <td>{$prefOut}</td>
+            <td>{$instructorFname}</td>
+            <td>{$instructorLname}</td>
+            <td>{$emailHTML}</td>
+            <td>
+                <a role="button" class="btn btn-warning btn-block" href="/instructors/display.php?id={$instFoo->id}">View this Instructor</a>
+                <button id="id_{$instFoo->id}" name="instructorDelete" class="btn btn-danger btn-block btn-instructor-delete">Delete this Instructor</button>
+            </td>
+        </tr>
+EOT;
         }
-        else {
-            $emailHTML = "<p>Email information for this instructor is not currently available.</p>";
-        }
-        $instructorHTML = <<<EOT
-<h3>Name</h3>
-<p>{$instructorPref} {$instructorFname} {$instructorLname}</p>
-{$emailHTML}
+        $instructorHTML .= <<<EOT
+    </tbody>
+</table>
+
 EOT;
     }
     else {
@@ -144,7 +186,10 @@ EOT;
     <td>{$b->Attributes['TextbookName']}</td>
     <td>{$b->Attributes['Authors']}</td>
     <td>{$b->Attributes['TextbookPublisher']}</td>
-    <td><a type="button" class="btn btn-info" href="/textbooks/edit.php?id={$b->Attributes['TextbookId']}">Edit</a></td>
+    <td>
+        <a role="button" class="btn btn-warning btn-block" href="/textbooks/display.php?id={$b->id}">View this Textbook</a>
+        <button id="id_{$b->id}" name="textbookDelete" class="btn btn-danger btn-block btn-textbook-delete">Delete this Textbook</button>
+    </td>
 </tr>
 EOT;
         }
@@ -182,7 +227,10 @@ EOT;
 <tr>
     <td>{$soft->Attributes['SoftwareName']}</td>
     <td>{$soft->Attributes['SoftwarePublisher']}</td>
-    <td><a type="button" class="btn btn-info" href="/software/edit.php?id={$soft->Attributes['SoftwareId']}">Edit</a></td>
+    <td>
+        <a role="button" class="btn btn-warning btn-block" href="/software/display.php?id={$soft->id}">View this Software</a>
+        <button id="id_{$soft->id}" name="softwareDelete" class="btn btn-danger btn-block btn-software-delete">Delete this Software</button>
+    </td>
 </tr>
 EOT;
         }
@@ -210,37 +258,38 @@ EOT;
     $datasets = $courseObj->getDatasets();
     $datasetHTML = '';
     if($datasets){
-        $datasetHTML = '<div class="card-columns"><!-- card columns start -->';
+        $datasetRows = '';
         foreach($datasets as $dataset){
             $data = new Dataset($dataset);
-            $datasetHTML .= <<<EOT
-<div class="card"><!-- card start -->
-    <div class="card-header"><!-- card header start -->
-        <h2 class="display2">{$data->Attributes['DatasetName']}</h2>
-    </div><!-- card header end -->
-    <div class="card-body"> <!-- card body start -->
-        <h3>Type</h3>
-        {$data->Attributes['DatasetType']}
-        <h3>Integrity</h3>
-        {$data->Attributes['DatasetIntegrity']}
-        <h3>Dataset Filetype</h3>
-        {$data->Attributes['DatasetFileType']}
-        <h3>Use Description</h3>
-        {$data->Attributes['DatasetUseDescription']}
-        <h3>Access</h3>
-        {$data->Attributes['DatasetAccess']}
-        <h3>Analytics Tags</h3>
-        {$data->Attributes['AnalyticTag']}
-        <h3>Business Tags</h3>
-        {$data->Attributes['BusinessTag']}
-    </div><!-- card body end -->
-    <div class="card-footer"><!-- card footer start -->
-        <a type="button" class="btn btn-info btn-block" href="/datasets/edit.php?id={$data->Attributes['DatasetId']}">Edit</a>    
-    </div><!-- card footer end -->
-</div><!-- card end -->
+            $datasetRows .= <<<EOT
+<tr>
+    <td>{$data->Attributes['DatasetName']}</td>
+    <td>{$data->Attributes['DatasetType']}</td>
+    <td>{$data->Attributes['DatasetIntegrity']}</td>
+    <td>{$data->Attributes['DatasetAccess']}</td>
+    <td>
+        <a role="button" class="btn btn-warning btn-block" href="/datasets/display.php?id={$data->id}">View this Dataset</a>
+        <button id="id_{$data->id}" name="datasetDelete" class="btn btn-danger btn-block btn-dataset-delete">Delete this Dataset</button>
+    </td>    
+</tr>
 EOT;
         }
-        $datasetHTML .= '</div><!-- card columns end -->';
+        $datasetHTML = <<<EOT
+<table class="table table-striped" id="datasetTable">
+    <thead> 
+        <tr> 
+            <th>Name</th>
+            <th>Type</th>
+            <th>Integrity</th>
+            <th>Access</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {$datasetRows}
+    </tbody>
+</table>
+EOT;
     }
     else {
         //no datasets for this course
@@ -249,35 +298,41 @@ EOT;
 
     //get any case studies
     $cases = $courseObj->getCases();
-    $caseHTML = '';
+    $casesHTML = '';
     if($cases){
-        $caseHTML = '<div class="card-columns"><!-- card columns start -->';
+        $caseRows = '';
         foreach($cases as $case){
             $c = new CaseStudy($case);
-            $caseHTML .= <<<EOT
-<div class="card"><!-- card start -->
-    <div class="card-header"><!-- card header start -->
-        <h2 class="display2">{$c->Attributes['CaseTitle']}</h2>
-    </div><!-- card header end -->
-    <div class="card-body"> <!-- card body start -->
-        <h3>Type</h3>
-        {$c->Attributes['CaseType']}
-        <h3>Use Description</h3>
-        {$c->Attributes['CaseUseDescription']}
-        <h3>Access</h3>
-        {$c->Attributes['CaseAccess']}
-        <h3>Analytics Tags</h3>
-        {$c->Attributes['AnalyticTag']}
-        <h3>Business Tags</h3>
-        {$c->Attributes['BusinessTag']}
-    </div><!-- card body end -->
-    <div class="card-footer"><!-- card footer start -->
-        <a type="button" class="btn btn-info btn-block" href="/cases/edit.php?id={$case->Attributes['CaseId']}">Edit</a>  
-    </div><!-- card footer end -->
-</div><!-- card end -->
+            $caseRows .= <<<EOT
+<tr>
+    <td>{$c->Attributes['CaseTitle']}</td>
+    <td>{$c->Attributes['CaseType']}</td>
+    <td>{$c->Attributes['CaseAccess']}</td>
+    <td>{$c->Attributes['CaseUseDescription']}</td>
+    <td>
+        <a role="button" class="btn btn-warning btn-block" href="/cases/display.php?id={$c->id}">View this Case Study</a>
+        <button id="id_{$c->id}" name="caseDelete" class="btn btn-danger btn-block btn-case-delete">Delete this Case Study</button>
+    </td>  
+</tr>
 EOT;
         }
-        $caseHTML .= '</div><!-- card columns end -->';
+        $casesHTML .= <<<EOT
+<table class="table table-striped" id="caseTable">
+    <thead> 
+        <tr> 
+            <th>Title</th>
+            <th>Type</th>
+            <th>Access</th>
+            <th>Use Description</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {$caseRows}
+    </tbody>
+</table>
+EOT;
+
     }
     else {
         //no case studies for this course
@@ -285,7 +340,7 @@ EOT;
     }
 
     //display the course details
-    $content = <<<EOT
+    $content .= <<<EOT
 <div class="card">
     <div class="card-header" id="cardHeader">
         <h2 class="display2">{$name}</h2>
@@ -318,7 +373,18 @@ EOT;
         </div>
         <div class="tab-pane fade" id="tabInstructors" role="tabpanel" aria-labelledby="instructorDetails">
             <div class="card-body">
-                {$instructorHTML}
+                <div class="card"> 
+                    <div class="card-header">
+                        <h3>Assigned Instructors</h3>
+                    </div>
+                    <div class="card-body">
+                        {$instructorHTML}
+                        <div class="d-hidden" id="instructorListContainer"><!-- Instructor HTML goes here for AJAX --></div>
+                    </div>
+                    <div class="card-footer">
+                        <a role="button" class="btn btn-primary btn-block" id="id_{$courseId}" href="/courses/assignInstructors.php?courseId={$courseId}">Assign Instructors</a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="tab-pane fade" id="tabTextbooks" role="tabpanel" aria-labelledby="textbookDetails">
@@ -362,6 +428,178 @@ $(function() {
     $('#softwareTable').DataTable();
     $('#datasetTable').DataTable();
     $('#caseTable').DataTable();
+    $('#instructorTable').DataTable();
+    $('#datasetTable').DataTable();
+    
+    //course delete button functionality
+    $(document).on( 'click', '.btn-course-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this course?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteCourse.php", { 'CourseId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    //alert( msg );
+                    $('#message').html('<p>' + msg + '</p>')
+                    $('#message').addClass('alert alert-danger');
+                    $('#message').show();
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+    
+    //case study delete button functionality
+    $(document).on( 'click', '.btn-case-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this case study?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteCaseStudy.php", { 'CaseId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    //alert( msg );
+                    $('#message').html('<p>' + msg + '</p>')
+                    $('#message').addClass('alert alert-danger');
+                    $('#message').show();
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+    
+    //dataset delete button functionality
+    $(document).on( 'click', '.btn-dataset-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this course?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteDataset.php", { 'DatasetId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    //alert( msg );
+                    $('#message').html('<p>' + msg + '</p>')
+                    $('#message').addClass('alert alert-danger');
+                    $('#message').show();
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+    
+    //software delete button functionality
+    $(document).on( 'click', '.btn-software-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this software?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteSoftware.php", { 'SoftwareId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    //alert( msg );
+                    $('#message').html('<p>' + msg + '</p>')
+                    $('#message').addClass('alert alert-danger');
+                    $('#message').show();
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+    
+    //textbook delete button functionality
+    $(document).on( 'click', '.btn-textbook-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this textbook?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteTextbook.php", { 'TextbookId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    //alert( msg );
+                    $('#message').html('<p>' + msg + '</p>')
+                    $('#message').addClass('alert alert-danger');
+                    $('#message').show();
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
 });
 EOT;
 
@@ -375,10 +613,6 @@ $page_params['css'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/css/
 $page_params['js'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js' );
 $page_params['js'][] = array( 'text' => $customJS );
 //$page_params['js'][] = array( 'text' => $custom_js );
-$page_params['show_title_bar'] = FALSE;
-//do not display the usual header/footer
-$page_params['admin'] = TRUE;
-//$page_params['active_menu_item'] = 'home';
 //put custom/extra css files, if used
 //$page_params['css'][] = array("url" => "");
 //put custom/extra JS files, if used

@@ -55,7 +55,7 @@ if($instId){
     //display form to user
     $content = <<<EOT
 <div class="container-fluid">
-    <form action="../scripts/processInstructorAddForm.php" method="POST">
+    <form action="../scripts/processInstructorEditForm.php" method="POST">
         <div class="form-row">
             <h3>Instructor Details</h3>
         </div>
@@ -83,7 +83,7 @@ if($instId){
         <div class="form-row">
             <input type="hidden" id="instId" name="instId" value="{$instId}" />
             <button class="btn btn-warning mr-2" type="submit" name="edit" value="edit">Submit changes</button>
-            <button class="btn btn-danger" type="submit" name="delete" value="delete">Delete This Instructor</button>
+            <button class="btn btn-danger" type="submit" name="delete" value="delete" id="id_{$instId}">Delete This Instructor</button>
         </div>
         <!--<br />-->
         <div class="form-row">
@@ -129,12 +129,52 @@ else {
 EOT;
 }
 
+//set up the custom JS
+$customJS = <<<EOT
+$(function() {    
+    //instructor delete button functionality
+    $(document).on( 'click', '.btn-instructor-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this instructor?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteInstructor.php", { 'InstructorId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    //alert( msg );
+                    $('#message').html('<p>' + msg + '</p>');
+                    $('#message').addClass('alert alert-danger');
+                    $('#message').show();
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+});
+EOT;
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "Edit Instructor";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
+$page_params['js'][] = array( 'text' => $customJS );
 //$page_params['js'][] = array( 'text' => $custom_js );
 $page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer

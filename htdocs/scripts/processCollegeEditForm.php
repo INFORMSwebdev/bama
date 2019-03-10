@@ -8,24 +8,24 @@
 //require the init file
 require_once '../../init.php';
 
+$collegeId = filter_input(INPUT_POST, 'collegeId', FILTER_VALIDATE_INT);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $collegeId = filter_input(INPUT_POST, 'collegeId', FILTER_VALIDATE_INT);
+    //get the college record
+    $college = new College($collegeId);
+
+    //get user info
+    if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
+        $user = new User($_SESSION['loggedIn']);
+    } else {
+        //I don't think this should ever be hit, but just in case:
+        $user = new User(1);
+    }
 
     //check which button was pushed
     if (isset($_POST['delete'])) {
         //delete button was clicked, create pending update
-        //get the college record
-        $college = new College($collegeId);
-        //get user info
-        if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-            $user = new User($_SESSION['loggedIn']);
-        }
-        else {
-            //I don't think this should ever be hit, but just in case:
-            $user = new User(1);
-        }
-
         $result = $college->createPendingUpdate(UPDATE_TYPE_DELETE, $user->id);
 
         if($result == true) {
@@ -43,23 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = filter_input(INPUT_POST, 'collegeName', FILTER_SANITIZE_STRING);
         $type = filter_input(INPUT_POST, 'collegeType', FILTER_SANITIZE_STRING);
 
-        //get user info
-        if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-            $user = new User($_SESSION['loggedIn']);
-        } else {
-            //I don't think this should ever be hit, but just in case:
-            $user = new User(1);
-        }
-
-        //get the institution record
-        $coll = new College($collegeId);
-
         //update the record
-        $coll->Attributes['CollegeName'] = $name;
-        $coll->Attributes['CollegeType'] = $type;
+        $college->Attributes['CollegeName'] = $name;
+        $college->Attributes['CollegeType'] = $type;
 
         //put the updates in the pending_updates table
-        $result = $coll->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->id);
+        $result = $college->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->id);
 
         if($result == true) {
             //set message to show user
@@ -74,5 +63,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 //redirect user to index?
-header('Location: /index.php');
+header("Location: /colleges/display.php?id=$collegeId");
 die;

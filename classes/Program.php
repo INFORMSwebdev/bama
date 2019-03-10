@@ -174,6 +174,23 @@ class Program extends AOREducationObject
         return $programs;
     }
 
+    public function getInstructors( $active = TRUE, $asObjects = FALSE){
+        $instructors = [];
+        $db = new EduDB();
+        $sql = "SELECT i.InstructorId FROM instructors i INNER JOIN course_instructors ci on i.InstructorId = ci.InstructorId INNER JOIN program_courses pc on ci.CourseId = pc.CourseId WHERE pc.ProgramId = $this->id";
+        if ($active !== null) $sql .= " AND i.Deleted = " . (($active == TRUE) ? "0" : "1");
+        $insts = $db->queryColumn( $sql );
+        if($asObjects){
+            foreach($insts as $inst) {
+                $instructors[] = new Instructor($inst);
+            }
+        }
+        else {
+            $instructors = $insts;
+        }
+        return $instructors;
+    }
+
     public function hasContact() {
         $has = FALSE;
         if ($this->Attributes['ContactId']) {

@@ -8,24 +8,24 @@
 //require the init file
 require_once '../../init.php';
 
+$instId = filter_input(INPUT_POST, 'instId', FILTER_VALIDATE_INT);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    //get the institution record
+    $inst = new Institution($instId);
+    //get user info
+    if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
+        $user = new User($_SESSION['loggedIn']);
+    }
+    else {
+        //I don't think this should ever be hit, but just in case:
+        $user = new User(1);
+    }
+
     //check which button was pushed
-    # ToDo: go through other editForm processors and update the delete functionality to be this way
-     # Also, make sure the datasets, instructors, textbooks, etc. have stuff relating to courseId in query string
     if (isset($_POST['delete'])) {
         //delete button was clicked, create pending update
-        $instId = filter_input(INPUT_POST, 'instId', FILTER_VALIDATE_INT);
-        //get the institution record
-        $inst = new Institution($instId);
-        //get user info
-        if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-            $user = new User($_SESSION['loggedIn']);
-        }
-        else {
-            //I don't think this should ever be hit, but just in case:
-            $user = new User(1);
-        }
         $result = $inst->createPendingUpdate(UPDATE_TYPE_DELETE, $user->id);
 
         if($result == true) {
@@ -50,17 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $access = filter_input(INPUT_POST, 'access', FILTER_VALIDATE_URL);
         $instId = filter_input(INPUT_POST, 'instId', FILTER_VALIDATE_INT);
-
-        //get user info
-        if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-            $user = new User($_SESSION['loggedIn']);
-        } else {
-            //I don't think this should ever be hit, but just in case:
-            $user = new User(1);
-        }
-
-        //get the institution record
-        $inst = new Institution($instId);
 
         //update the record
         $inst->Attributes['InstitutionName'] = $name;
@@ -90,5 +79,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 //redirect user to index?
-header('Location: /index.php');
+header("Location: /institutions/display.php?id=$instId");
 die;

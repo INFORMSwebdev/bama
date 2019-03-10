@@ -160,6 +160,28 @@ EOT;
 		</div>
 EOT;
 
+        $messageHTML = '';
+        //check for messages
+        if(isset($_SESSION['editMessage'])){
+            //set up the alert color
+            if($_SESSION['editMessage']['success'] == true){
+                //successful insert into pending_updates table
+                $messageHTML = '<div class="alert alert-success" id="message">';
+            }
+            else {
+                //unsuccessful insert
+                $messageHTML = '<div class="alert alert-danger" id="message">';
+            }
+            //add message to alert
+            $messageHTML .= "<p>{$_SESSION['editMessage']['text']}</p></div>";
+
+            //clear out the session variable after its' use
+            $_SESSION['editMessage'] = null;
+        }
+
+//make empty div to put messages
+        $messageHTML .= '<div class="d-hidden" id="message"><!-- empty div for messages --></div>';
+
         $html = <<<EOT
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#" xml:lang="en-US" lang="en-US">
@@ -202,6 +224,7 @@ EOT;
         $navbar
         <div class="container-fluid">
             <div class="flex-column">
+                $messageHTML
                 {$this->params['content']}
             </div>
             $footer

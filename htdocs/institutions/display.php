@@ -12,6 +12,8 @@ require_once '../../init.php';
 
 # ToDo: make the institution select list ajax powered so it doesn't make the rest of the page load slower (optional, but would be nice)
 
+$content = '';
+
 //get list of all institutions
 $institutions = Institution::getInstitutions();
 //turn that into an array of name/value pairs to pass to the optionsHTML.php file
@@ -49,7 +51,7 @@ if ($id) {
         $email = "<a href='mailto:$email'>$email</a>";
     }
 
-    $content = <<<EOT
+    $content .= <<<EOT
 <div class="card">
     <div class="card-header">
         <h2 class="display2">{$name}</h2>
@@ -70,7 +72,7 @@ if ($id) {
 EOT;
 } else {
     //error parsing query string for integer value in id variable
-    $content = <<<EOT
+    $content .= <<<EOT
 <div class="flex-column">
     <h2>View Institution Details</h2>
     <form action="display.php" method="get">

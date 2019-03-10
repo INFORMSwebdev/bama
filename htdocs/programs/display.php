@@ -8,7 +8,7 @@
 //require the init file
 require_once '../../init.php';
 
-//checks for messages?
+$content = '';
 
 //get list of all institutions
 $progs = Program::getAllProgramsAndInstitutions();
@@ -132,7 +132,7 @@ EOT;
     $instEmail = $inst->Attributes['InstitutionEmail'];
     $instAccess = $inst->Attributes['InstitutionAccess'];
 
-    $content = <<<EOT
+    $content .= <<<EOT
 <div class="card">
     <div class="card-header" id="cardHeader">
         <h2 class="display2">{$name} - {$instName}</h2>
@@ -238,7 +238,7 @@ EOT;
 }
 else {
     //invalid input, either not there or not an integer
-    $content = <<<EOT
+    $content .= <<<EOT
 <div class="flex-column">
     <h2>View Program Details</h2>
     <form action="display.php" method="get">
@@ -253,9 +253,6 @@ else {
 </div>
 EOT;
 }
-
-# ToDo: add in another nav menu (maybe on the left rail?) that has the select list so people don't have to scroll to the bottom
- # of the page to change the program info
 
 //create the parameters to pass to the wrapper
 $page_params = array();

@@ -11,6 +11,8 @@ require_once '../../init.php';
 //get the textbookId to display info about
 $bookId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
+$content = '';
+
 if($bookId){
     //get book info to display
     $book = new Textbook($bookId);
@@ -19,7 +21,7 @@ if($bookId){
     $pub = $book->Attributes['TextbookPublisher'];
 
     //display info about the book
-    $content = <<<EOT
+    $content .= <<<EOT
 <div class="card">
     <div class="card-header" id="cardHeader">
         <h2 class="display2">{$name}</h2>
@@ -29,12 +31,16 @@ if($bookId){
         <p>{$authors}</p>
         <h3 class="display3">Publisher</h3>
         <p>{$pub}</p>
+        <div class="btn-group">
+            <a role="button" class="btn btn-warning mr-3" href="/textbooks/edit.php?id={$book->id}">Edit this Textbook</a>
+            <button id="id_{$book->id}" name="textbookDelete" type="submit" class="btn btn-danger btn-textbook-delete">Delete this Textbook</button>
+        </div>
     </div>
-    <!-- ToDo: decide if we want footer buttons or not -->
 </div>
 EOT;
 
-} else {
+}
+else {
     //display a list of books to the user for them to select from
 
     //get all books
@@ -47,7 +53,7 @@ EOT;
     include_once('/common/classes/optionsHTML.php');
     $bookListHTML = optionsHTML($bookListHelper);
 
-    $content = <<<EOT
+    $content .= <<<EOT
 <div class="flex-column">
     <h2>View Textbook Details</h2>
     <form action="display.php" method="get">
@@ -62,9 +68,48 @@ EOT;
 EOT;
 }
 
+$customJS = <<<EOT
+$(function() {
+    //textbook delete button functionality
+    $(document).on( 'click', '.btn-textbook-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this textbook?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteTextbook.php", { 'TextbookId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    //alert( msg );
+                    $('#message').html('<p>' + msg + '</p>')
+                    $('#message').addClass('alert alert-danger');
+                    $('#message').show();
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+});
+EOT;
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
+$page_params['js'][] = array( 'text' => $customJS );
 $page_params['page_title'] = "View Textbook Info";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';

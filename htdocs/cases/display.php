@@ -25,7 +25,7 @@ if(empty($caseId)) {
     include_once('/common/classes/optionsHTML.php');
     $caseListHTML = optionsHTML($caseListHelper);
 
-    $content = <<<EOT
+    $content .= <<<EOT
 <div class="flex-column">
     <h2>View Case Study Details</h2>
     <form action="display.php" method="get">
@@ -64,7 +64,7 @@ else {
         $business = 'No business tags currently available for this case study.';
     }
 
-    $content = <<<EOT
+    $content .= <<<EOT
 <div class="card">
     <div class="card-header"> 
         <h2 class="display2">{$title}</h2>
@@ -80,10 +80,53 @@ else {
         <p>{$analytics}</p>
         <h3>Business Tags</h3>
         <p>{$business}</p>
+        <div class="btn-group">
+            <a role="button" class="btn btn-warning mr-3" href="/cases/edit.php?id={$case->id}">Edit this Case Study</a>
+            <button id="id_{$case->id}" name="courseDelete" type="submit" class="btn btn-danger btn-case-delete">Delete this Case Study</button>
+        </div>
     </div>
 </div>
 EOT;
 }
+
+$customJS = <<<EOT
+$(function() {
+    //case study delete button functionality
+    $(document).on( 'click', '.btn-case-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this case study?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteCaseStudy.php", { 'CaseId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    //alert( msg );
+                    $('#message').html('<p>' + msg + '</p>')
+                    $('#message').addClass('alert alert-danger');
+                    $('#message').show();
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+});
+EOT;
+
 
 //create the parameters to pass to the wrapper
 $page_params = array();
@@ -91,6 +134,7 @@ $page_params['content'] = $content;
 $page_params['page_title'] = "View Case Study Details";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
+$page_params['js'][] = array( 'text' => $customJS );
 //$page_params['css'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css' );
 //$page_params['js'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js' );
 //$page_params['js'][] = array( 'text' => $customJS );

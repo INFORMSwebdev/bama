@@ -162,6 +162,16 @@ class Course extends AOREducationObject
     }
 
     /**
+     * removes all records from course_instructors
+     * @return int number of database rows affected by operation
+     */
+    public function unassignAllInstructors(){
+        $db = new EduDb();
+        $sql = "DELETE FROM course_instructors WHERE CourseId = $this->id";
+        return $db->exec( $sql );
+    }
+
+    /**
      * delete course - case study association
      * @param $CaseId int
      * @return int number of database rows affected by operation
@@ -228,6 +238,18 @@ class Course extends AOREducationObject
             $booksOut = $books;
         }
         return $booksOut;
+    }
+
+    public function getProgram( $asObject = FALSE ){
+        $db = new EduDb();
+        $sql = "SELECT ProgramId FROM program_courses WHERE CourseId = $this->id";
+        $programId = $db->queryColumn( $sql );
+        if($asObject){
+            return new Program($programId);
+        }
+        else {
+            return $programId;
+        }
     }
 
     public function getSoftware( $active = TRUE, $asObjects = FALSE ){

@@ -35,8 +35,6 @@ else {
 //get the options maker, its gonna be needed
 include_once('/common/classes/optionsHTML.php');
 
-$customJS = '';
-
 if($courseId){
     //check if user has permission to edit this course
     if (!in_array($courseId, $userCourses) && !isset($_SESSION['admin'])) {
@@ -89,212 +87,75 @@ if($courseId){
         //$instructorListHTML = optionsHTML($instructorListHelper);
     }
 
-    # ToDo: figure out what to do about the instructor field in this form
-
     //set up the form to serve on the page
     $content = <<<EOT
 <div class="container-fluid">
     <div class="card">
         <div class="card-header">
-            <h2>Course Edit</h2>
-            <ul class="nav nav-tabs card-header-tabs" id="cardNav" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="courseDetails" href="#tabCourse" data-toggle="tab" aria-selected="true" aria-controls="tabCourse">Course Details</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="courseInstructors" href="#tabInstructors" data-toggle="tab" aria-selected="false" aria-controls="tabInstructors">Instructors</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="courseSoftware" href="#tabSoftware" data-toggle="tab" aria-selected="false" aria-controls="tabSoftware">Software</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="courseTextbooks" href="#tabTextbooks" data-toggle="tab" aria-selected="false" aria-controls="tabTextbooks">Textbooks</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="courseStudies" href="#tabStudies" data-toggle="tab" aria-selected="false" aria-controls="tabStudies">Case Studies</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="courseDatasets" href="#tabDatasets" data-toggle="tab" aria-selected="false" aria-controls="tabDatasets">Datasets</a>
-                </li>
-            </ul>
+            <h2>Edit Course Details</h2>
         </div>
-        <div class="tab-content" id="CourseTabContent">
-            <div class="tab-pane fade show active" id="tabCourse" role="tabpanel" aria-labelledby="courseDetails">
-                <div class="card-body">
-                    <form>
-                        <div class="form-row"> 
-                            <label for="courseTitle">Title</label>
-                            <input type="text" class="form-control" name="courseTitle" id="courseTitle" value="{$co->Attributes['CourseTitle']}" placeholder="Title of course" required />
-                        </div>
-                        <br />
-                        <div class="form-row"> 
-                            <label for="courseNumber">Number</label>
-                            <input type="text" class="form-control" name="courseNumber" id="courseNumber" value="{$co->Attributes['CourseNumber']}" placeholder="Number of course" aria-describedby="numberHelp" />
-                            <p id="numberHelp">Any alphanumeric characters are allowed.</p>
-                        </div>
-                        <!--<br/>-->
-                        <div class="form-row"> 
-                            <label for="deliveryMethod">Delivery Method</label>
-                            <input type="text" class="form-control" name="deliveryMethod" id="deliveryMethod" value="{$co->Attributes['DeliveryMethod']}" placeholder="How the course is delivered" />
-                        </div>
-                        <br />
-                        <div class="form-row"> 
-                            <label for="capstoneProject">Has Capstone Project?</label>
-                            <input type="text" class="form-control" name="capstoneProject" id="capstoneProject" value="{$co->Attributes['HasCapstoneProject']}" aria-describedby="capstoneHelp" placeholder="Yes or No" />
-                            <p id="capstoneHelp">Please input yes if there is a capstone project, or no if there is none as of now.</p>
-                        </div>
-                        <!--<br />-->
-                        <div class="form-row"> 
-                            <label for="courseText">Course Text</label>
-                            <textarea class="form-control" name="courseText" id="courseText" aria-describedby="textHelp">{$co->Attributes['CourseText']}</textarea>
-                            <p id="textHelp">You can copy-paste the contents of a syllabus in this field.</p>
-                        </div>
-                        <!--<br />-->
-                        <div class="form-row"> 
-                            <label for="analyticTag">Analytics Tags</label>
-                            <input type="text" class="form-control" name="analyticTag" id="analyticTag" value="{$co->Attributes['AnalyticTag']}" placeholder="E.g. data mining; data visualization; optimization; etc." />
-                        </div>
-                        <br />
-                        <div class="form-row"> 
-                            <label for="businessTag">Business Tags</label>
-                            <input type="text" class="form-control" name="businessTag" id="businessTag" value="{$co->Attributes['BusinessTag']}" placeholder="E.g. entertainment; marketing; healthcare; etc." />
-                        </div>
-                        <br />
-                        <div class="form-row">
-                            <input type="hidden" id="courseId" name="courseId" value="{$courseId}" />
-                            <button class="btn btn-warning mr-2" type="submit" name="edit" value="edit">Submit changes</button>
-                            <button class="btn btn-danger" type="submit" name="delete" value="delete">Delete This Course</button>
-                        </div>
-                        <!--<br />-->
-                        <div class="form-row">
-                            <p class="lead">These changes will not take effect until they have been approved by an INFORMS administrator.</p>
-                        </div>
-                    </form>
+        <div class="card-body">
+            <form action="/scripts/processCourseEditForm.php" method="POST">
+                <div class="form-row"> 
+                    <label for="courseTitle">Title</label>
+                    <input type="text" class="form-control" name="courseTitle" id="courseTitle" value="{$co->Attributes['CourseTitle']}" placeholder="Title of course" required />
                 </div>
-            </div>
-            <div class="tab-pane fade" id="tabInstructors" role="tabpanel" aria-labelledby="courseInstructors">
-                <div class="card-body">
-                    <h3>Instructors</h3>
+                <br />
+                <div class="form-row"> 
+                    <label for="courseNumber">Number</label>
+                    <input type="text" class="form-control" name="courseNumber" id="courseNumber" value="{$co->Attributes['CourseNumber']}" placeholder="Number of course" aria-describedby="numberHelp" />
+                    <p id="numberHelp">Any alphanumeric characters are allowed.</p>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="tabSoftware" role="tabpanel" aria-labelledby="courseSoftware">
-                <div class="card-body">
-                    <h3>Software</h3>
+                <!--<br/>-->
+                <div class="form-row"> 
+                    <label for="deliveryMethod">Delivery Method</label>
+                    <input type="text" class="form-control" name="deliveryMethod" id="deliveryMethod" value="{$co->Attributes['DeliveryMethod']}" placeholder="How the course is delivered" />
                 </div>
-            </div>
-            <div class="tab-pane fade" id="tabTextbooks" role="tabpanel" aria-labelledby="courseTextbooks">
-                <div class="card-body">
-                    <h3>Textbooks</h3>
+                <br />
+                <div class="form-row"> 
+                    <label for="capstoneProject">Has Capstone Project?</label>
+                    <input type="text" class="form-control" name="capstoneProject" id="capstoneProject" value="{$co->Attributes['HasCapstoneProject']}" aria-describedby="capstoneHelp" placeholder="Yes or No" />
+                    <p id="capstoneHelp">Please input yes if there is a capstone project, or no if there is none as of now.</p>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="tabStudies" role="tabpanel" aria-labelledby="courseStudies">
-                <div class="card-body">
-                    <h3>Case Studies</h3>
+                <!--<br />-->
+                <div class="form-row"> 
+                    <label for="courseText">Course Text</label>
+                    <textarea class="form-control" name="courseText" id="courseText" aria-describedby="textHelp">{$co->Attributes['CourseText']}</textarea>
+                    <p id="textHelp">You can copy-paste the contents of a syllabus in this field.</p>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="tabDatasets" role="tabpanel" aria-labelledby="courseDatasets">
-                <div class="card-body">
-                    <h3>Datasets</h3>
+                <!--<br />-->
+                <div class="form-row"> 
+                    <label for="analyticTag">Analytics Tags</label>
+                    <input type="text" class="form-control" name="analyticTag" id="analyticTag" value="{$co->Attributes['AnalyticTag']}" placeholder="E.g. data mining; data visualization; optimization; etc." />
                 </div>
-            </div>
+                <br />
+                <div class="form-row"> 
+                    <label for="businessTag">Business Tags</label>
+                    <input type="text" class="form-control" name="businessTag" id="businessTag" value="{$co->Attributes['BusinessTag']}" placeholder="E.g. entertainment; marketing; healthcare; etc." />
+                </div>
+                <br />
+                <div class="form-row">
+                    <input type="hidden" id="courseId" name="courseId" value="{$courseId}" />
+                    <button class="btn btn-warning mr-2" type="submit" name="edit" value="edit">Submit changes</button>
+                    <button class="btn btn-danger btn-course-delete" type="submit" name="delete" id="id_{$courseId}" value="delete">Delete This Course</button>
+                </div>
+                <!--<br />-->
+                <div class="form-row">
+                    <p class="lead">These changes will not take effect until they have been approved by an INFORMS administrator.</p>
+                </div>
+            </form>
         </div>
+        <div class="card-footer"> 
+            <div class="btn-group"> 
+                <a role="button" class="btn btn-outline-primary" href="/instructors/add.php?courseId={$courseId}">Add an Instructor</a>
+                <a role="button" class="btn btn-outline-primary" href="/datasets/add.php?courseId={$courseId}">Add a Dataset</a>
+                <a role="button" class="btn btn-outline-primary" href="/cases/add.php?courseId={$courseId}">Add a Case Study</a>
+                <a role="button" class="btn btn-outline-primary" href="/textbooks/add.php?courseId={$courseId}">Add a Textbook</a>
+                <a role="button" class="btn btn-outline-primary" href="/software/add.php?courseId={$courseId}">Add Software</a>
+            </div>
+        </div>        
     </div>
 </div>
-
-<div class="modal fade" id="instructorModal" tabindex="-1" role="form" aria-labelledby="instructorModalTitle" aria-hidden="true">
-    <div class="modal-dialog" role="form">
-        <div class="modal-content">
-            <div class="modal-header"> 
-                <div class="modal-title" id="instructorModalTitle">Add New Instructor</div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body"> 
-                <form id="instructorAddForm">
-                    <div class="form-row">
-                        <h3>Instructor Details</h3>
-                    </div>
-                    <div class="form-row"> 
-                        <label for="firstName">First Name</label>
-                        <input type="text" class="form-control" name="firstName" id="firstName" placeholder="First name of instructor" required />
-                    </div>
-                    <br />
-                    <div class="form-row"> 
-                        <label for="lastName">Last Name</label>
-                        <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last name/surname of instructor" required />
-                    </div>
-                    <br />
-                    <div class="form-row">
-                        <label for="prefix">Prefix</label>
-		                <input type="text" class="form-control" name="prefix" id="prefix" placeholder="e.g. Mister, Mr., Professor, Doctor, etc." />
-                    </div>
-                    <br />
-                    <div class="form-row"> 
-                        <label for="email">Email</label>
-                        <input type="text" class="form-control" name="email" id="email" placeholder="Email address of instructor" aria-describedby="emailHelp" />
-                        <p id="emailHelp">Only valid email addresses will be accepted (e.g. name@organization.com)</p>
-                    </div>
-                    <!--<br />-->
-                    <div class="form-row">
-                        <input type="hidden" id="courseId" name="courseId" value="{$co->id}" />
-                        <button class="btn btn-warning" type="submit" name="addInstructor" id="instructorSubmit" value="addInstructor">Submit New Instructor</button>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer"> 
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-EOT;
-
-    $customJs = <<<EOT
-$(function() {
-    $(document).on( 'click', '.btn-addInstructor', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        $('#instructorModal').modal('toggle');
-    });
-    $(document).on( 'click', '#instructorSubmit', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        //get form info
-        var firstName = $('#firstName').val();
-        var lastName = $('#lastName').val();
-        var prefix = $('#prefix').val();
-        var email = $('#email').val();
-        $.post( "/scripts/ajax_addInstructorFromCourse.php", { 'FirstName': firstName, 'LastName': lastName, 'Prefix': prefix, 'Email': email }, function(data) {
-            //close the modal
-            $('#instructorModal').modal('toggle');
-            //alert( data );
-            if (data.errors.length > 0 ) {
-                var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
-                for (var i = 0; i < data.errors.length; i++) {
-                    msg +=  data.errors[i] + "\\r\\n";
-                }
-                //alert( msg );
-                //$('#message').html('<p>' + msg + '</p>').removeClass('d-hidden').addClass('alert alert-danger');
-                $('#message').html('<p>' + msg + '</p>');
-                $('#message').addClass('alert alert-danger');
-                $('#message').show();
-            }
-            else if (data.msg) {
-                //alert( data.msg );
-                $('#message').html('<p>' + data.msg + '</p>');
-                if(data.msg.includes('submitted')){
-                    $('#message').addClass('alert alert-success');
-                }
-                else {
-                    $('#message').addClass('alert alert-danger');
-                }
-                $('#message').show();
-            }
-        }, "json"); //, "json"
-    });
-});
 EOT;
 }
 else {
@@ -333,13 +194,51 @@ else {
 EOT;
 }
 
+$customJS = <<<EOT
+$(function() {
+    //course delete button functionality
+    $(document).on( 'click', '.btn-course-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this course?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteCourse.php", { 'CourseId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                        //alert( msg );
+                        $('#message').html('<p>' + msg + '</p>')
+                        $('#message').addClass('alert alert-danger');
+                        $('#message').show();
+                    }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+});
+EOT;
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "Edit Course";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
-$page_params['js'][] = array( 'text' => $customJs );
+$page_params['js'][] = array( 'text' => $customJS );
 //$page_params['active_menu_item'] = 'home';
 //put custom/extra css files, if used
 //$page_params['css'][] = array("url" => "");

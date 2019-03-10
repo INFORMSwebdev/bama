@@ -6,27 +6,6 @@ require_once '../init.php';
 $content = '';
 $custom_js = '';
 
-if(isset($_SESSION['editMessage'])){
-    //set up the alert color
-    if($_SESSION['editMessage']['success'] == true){
-        //successful insert into pending_updates table
-        $content = '<div class="alert alert-success" id="message">';
-    }
-    else {
-        //unsuccessful insert
-        $content = '<div class="alert alert-danger" id="message">';
-    }
-    //add message to alert
-    $content .= "<p>{$_SESSION['editMessage']['text']}</p></div>";
-
-    //clear out the session variable after its' use
-    $_SESSION['editMessage'] = null;
-}
-else {
-    //make empty div to put messages
-    $content = '<div class="d-hidden" id="message"><!-- empty div for messages --></div>';
-}
-
 //check if user is logged in, if not then redirect them to the login page; GET string is only used for testing purposes
 if ((!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] != true)) {
     //user is not logged in
@@ -355,7 +334,7 @@ $(function() {
                             html += '<td>' + progs[x].programs[i].courses[y].CourseNumber + '</td>';
                             html += '<td>' + progs[x].programs[i].courses[y].instructor.InstructorName + '</td>';
                             html += '<td>';
-                            html += '<a role="button" class="btn btn-warning btn-block" href="/courses/edit.php?id=' + progs[x].programs[i].courses[y].CourseId + '">View this Course</a>';
+                            html += '<a role="button" class="btn btn-warning btn-block" href="/courses/display.php?id=' + progs[x].programs[i].courses[y].CourseId + '">View this Course</a>';
                             html += '<button id="id_' + progs[x].programs[i].courses[y].CourseId + '" name="courseDelete" type="submit" class="btn btn-danger btn-block btn-delete">Delete this Course</button>';  
                             html += '</td>';
                             html += '</tr>';

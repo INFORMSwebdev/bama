@@ -26,7 +26,7 @@ if(empty($dataId)) {
     include_once('/common/classes/optionsHTML.php');
     $setListHTML = optionsHTML($dataListHelper);
 
-    $content = <<<EOT
+    $content .= <<<EOT
 <div class="flex-column">
     <h2>View Dataset Details</h2>
     <form action="display.php" method="get">
@@ -58,7 +58,24 @@ else {
         $business = 'Business tags are currently unavailable.';
     }
 
-    $content = <<<EOT
+    if(isset($_SESSION['editMessage'])){
+        //set up the alert color
+        if($_SESSION['editMessage']['success'] == true){
+            //successful insert into pending_updates table
+            $content = '<div class="alert alert-success" id="message">';
+        }
+        else {
+            //unsuccessful insert
+            $content = '<div class="alert alert-danger" id="message">';
+        }
+        //add message to alert
+        $content .= "<p>{$_SESSION['editMessage']['text']}</p></div>";
+
+        //clear out the session variable after its' use
+        $_SESSION['editMessage'] = null;
+    }
+
+    $content .= <<<EOT
 <div class="card">
     <div class="card-header">   
         <h2 class="display2">{$name}</h2>
@@ -78,15 +95,59 @@ else {
         <p>{$analytics}</p>
         <h3>Business Tags</h3>
         <p>{$business}</p>
+        <div class="btn-group">
+            <a role="button" class="btn btn-warning mr-3" href="/datasets/edit.php?id={$instruc->id}">Edit this Dataset</a>
+            <button id="id_{$instruc->id}" name="instructorDelete" class="btn btn-danger btn-dataset-delete">Delete this Dataset</button>
+        </div>
     </div>
 </div>
 EOT;
 }
 
+//set up the custom JS
+$customJS = <<<EOT
+$(function() {    
+    //dataset delete button functionality
+    $(document).on( 'click', '.btn-dataset-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this course?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteDataset.php", { 'DatasetId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    //alert( msg );
+                    $('#message').html('<p>' + msg + '</p>')
+                    $('#message').addClass('alert alert-danger');
+                    $('#message').show();
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+});
+EOT;
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "View Dataset Details";
+$page_params['js'][] = array( 'text' => $customJS );
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
 //$page_params['css'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css' );
