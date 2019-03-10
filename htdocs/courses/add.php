@@ -30,17 +30,6 @@ $progId = filter_input(INPUT_GET, 'progId', FILTER_VALIDATE_INT);
 
 $content = '';
 
-//get select list of instructors
-$instructors = Instructor::getInstructors();
-
-$instructorListHelper = array();
-foreach($instructors as $inst){
-    $instructorListHelper[] = array('text' => $inst['InstructorFirstName'] . ' ' . $inst['InstructorLastName'], 'value' => $inst['InstructorId']);
-}
-//pass the name/value pairs to the file to get the generated HTML for a select list
-include_once('/common/classes/optionsHTML.php');
-$instructorListHTML = optionsHTML($instructorListHelper);
-
 //display the form for adding course info to the user
 $content = <<<EOT
 <!--<div class="container-fluid">-->
@@ -58,13 +47,6 @@ $content = <<<EOT
             <input type="text" class="form-control" name="courseNumber" id="courseNumber" placeholder="Number of course" aria-describedby="numberHelp" />
             <p id="numberHelp">Any alphanumeric characters are allowed.</p>
         </div>
-        <div class="form-row">
-            <label for="instructor">Select an Instructor</label>
-		    <select class="form-control" name="instructor" id="instructor">
-		        $instructorListHTML
-            </select>
-        </div>
-        <br />
         <div class="form-row"> 
             <label for="deliveryMethod">Delivery Method</label>
             <input type="text" class="form-control" name="deliveryMethod" id="deliveryMethod" placeholder="How the course is delivered" />

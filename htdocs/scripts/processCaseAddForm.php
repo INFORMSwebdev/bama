@@ -17,6 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $analytics = filter_input(INPUT_POST, 'analyticTag', FILTER_SANITIZE_STRING);
     $business = filter_input(INPUT_POST, 'businessTag', FILTER_SANITIZE_STRING);
 
+    $courseId = filter_input(INPUT_POST, 'courseId', FILTER_VALIDATE_INT);
+
     //get user info
     if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
         $user = new User($_SESSION['loggedIn']);
@@ -37,11 +39,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
     //create an object w/ no Id
     $x = CaseStudy::createInstance( $data );
+
     //add record to pending_updates
     $result = $x->createPendingUpdate( UPDATE_TYPE_INSERT, $user->Attributes['UserId']);
 
     //report on results of insertion
     if($result == true) {
+
+        $update = new PendingUpdate($result);
+
+        //assign case study to course
+        if($courseId){
+            $course = new Course($courseId);
+            $course->assignCaseStudy($update->Attributes['UpdateRecordId']);
+        }
+
         //set message to show user
         $_SESSION['editMessage']['success'] = true;
         $_SESSION['editMessage']['text'] = 'New case study successfully submitted and is awaiting approval for posting.';

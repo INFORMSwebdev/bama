@@ -11,7 +11,7 @@ require_once '../../init.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //collect the submitted info
     $progName = filter_input(INPUT_POST, 'programName', FILTER_SANITIZE_STRING);
-    $instId = filter_input(INPUT_POST, 'Institution', FILTER_VALIDATE_INT);
+    $instId = filter_input(INPUT_POST, 'instId', FILTER_VALIDATE_INT);
     $progType = filter_input(INPUT_POST, 'ProgramType', FILTER_SANITIZE_STRING);
     $progObjs = filter_input(INPUT_POST, 'ProgramObjs', FILTER_SANITIZE_STRING);
     $progAccess = filter_input(INPUT_POST, 'ProgramAccess', FILTER_VALIDATE_URL);
@@ -33,15 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $progCostPer = filter_input(INPUT_POST, 'CostPerCredit', FILTER_SANITIZE_STRING);
     $progResTuition = filter_input(INPUT_POST, 'ResidentTuition', FILTER_SANITIZE_STRING);
     $progNonResTuition = filter_input(INPUT_POST, 'NonResident', FILTER_SANITIZE_STRING);
-    //since the following 2 Id's can be null, we don't want a filter
-    $contactId = filter_input(INPUT_POST, 'ContactId');
-    if(empty($contactId)){
-        $contactId = NULL;
-    }
-    $collegeId = filter_input(INPUT_POST, 'CollegeId');
-    if(empty($collegeId)){
-        $collegeId = NULL;
-    }
     $analyticsFlag = filter_input(INPUT_POST, 'AnalyticsFlag', FILTER_VALIDATE_BOOLEAN);
     //if the flag value is null, the checkbox was NOT checked
     if(!isset($analyticsFlag)){
@@ -63,7 +54,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //gather data to put in the pending_update record
     $data = array( "InstitutionId" => $instId,
-        'ContactId' => $contactId,
         'ProgramName' => $progName,
         'ProgramType' => $progType,
         'DeliveryMethod' => $progDeliveryMethod,
@@ -80,8 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'EstimatedNonresidentTuition' => $progNonResTuition,
         'CostPerCredit' => $progCostPer,
         'ORFlag' => $orFlag,
-        'AnalyticsFlag' => $analyticsFlag,
-        'CollegeId' => $collegeId
+        'AnalyticsFlag' => $analyticsFlag
     );
     //make a not-yet-existent Program record
     $x = Program::createInstance( $data );

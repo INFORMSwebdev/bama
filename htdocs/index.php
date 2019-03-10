@@ -348,7 +348,7 @@ $(function() {
                         html += '</table>';
                         html += '</div>'; //card-body
                         html += '<div class="card-footer">';
-                        html += '<a role="button" class="btn btn-outline-info" href="/courses/add.php?progId=' + progs[x].programs[i].ProgramId + '">Add Course</a>';
+                        html += '<a role="button" class="btn btn-primary" href="/courses/add.php?progId=' + progs[x].programs[i].ProgramId + '">Add Course</a>';
                         html += '</div>'; //card-footer
                         html += '</div>' //tab-pane;
                         html += '</div>'; //tab-content

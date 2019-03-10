@@ -39,6 +39,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //report on results of insertion
     if($result == true) {
+
+        $update = new PendingUpdate($result);
+
+        //add instructor to course
+        if($courseId){
+            $course = new Course($courseId);
+            $course->assignInstructor($update->Attributes['UpdateRecordId']);
+        }
+
         //set message to show user
         $_SESSION['editMessage']['success'] = true;
         $_SESSION['editMessage']['text'] = 'New instructor successfully submitted and is awaiting approval for posting.';

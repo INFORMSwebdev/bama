@@ -24,6 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //since (for whatever reason) syllabus filesize column in the DB in non-nullable and we aren't allowing uploads of files
     //we have to set the filesize to 0
     $sylSize = 0;
+    $progId = filter_input(INPUT_POST, 'progId', FILTER_VALIDATE_INT);
+
+
 
     //get user info
     if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
@@ -53,6 +56,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //report on results of insertion
     if($result == true) {
+
+        $update = new PendingUpdate($result);
+
+        //assign the course to the program
+        if($progId){
+            //create program object
+            $program = new Program($progId);
+
+            //assign course to this program
+            $program->assignCourse($update->Attributes['UpdateRecordId']);
+        }
+
         //set message to show user
         $_SESSION['editMessage']['success'] = true;
         $_SESSION['editMessage']['text'] = 'New course successfully submitted and is awaiting approval for posting.';

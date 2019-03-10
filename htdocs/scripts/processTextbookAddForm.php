@@ -9,6 +9,8 @@
 require_once '../../init.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $courseId = filter_input(INPUT_POST, 'courseId', FILTER_VALIDATE_INT);
+
     //gather form data
     $name = filter_input(INPUT_POST, 'textbookName');
     $authors =  filter_input(INPUT_POST, 'textbookAuthors');
@@ -33,6 +35,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //check to make sure the insert occurred successfully
     if($result == true) {
+
+        $update = new PendingUpdate($result);
+
+        //assign textbook to course
+        if($courseId){
+            $course = new Course($courseId);
+            $course->assignTextbook($update->Attributes['UpdateRecordId']);
+        }
+
         //set message to show user
         $_SESSION['editMessage']['success'] = true;
         $_SESSION['editMessage']['text'] = 'New textbook successfully submitted and is awaiting approval for posting.';

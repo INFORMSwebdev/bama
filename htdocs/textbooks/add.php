@@ -16,6 +16,8 @@ if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true){
     die;
 }
 
+$courseId = filter_input(INPUT_GET, 'courseId', FILTER_VALIDATE_INT);
+
 //display the form for adding textbook info to the user
 $content = <<<EOT
 <div class="container-fluid">
@@ -40,7 +42,7 @@ $content = <<<EOT
         </div>
         <br />
         <div class="form-row">
-            <input type="hidden" id="textbookId" name="textbookId" value="{$textbookId}" />
+            <input type="hidden" id="courseId" name="courseId" value="{$courseId}" />
             <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Textbook</button>
         </div>
         <!--<br />-->

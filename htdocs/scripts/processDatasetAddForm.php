@@ -19,6 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $analytics = filter_input(INPUT_POST, 'analyticTag', FILTER_SANITIZE_STRING);
     $business = filter_input(INPUT_POST, 'businessTag', FILTER_SANITIZE_STRING);
 
+    $courseId = filter_input(INPUT_POST, 'courseId', FILTER_VALIDATE_INT);
+
     //get user info
     if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
         $user = new User($_SESSION['loggedIn']);
@@ -48,6 +50,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //report on results of insertion
     if($result == true) {
+
+        $update = new PendingUpdate($result);
+
+        //assign dataset to course
+        if($courseId){
+            $course = new Course($courseId);
+            $course->assignDataset($update->Attributes['UpdateRecordId']);
+        }
+
         //set message to show user
         $_SESSION['editMessage']['success'] = true;
         $_SESSION['editMessage']['text'] = 'New dataset successfully submitted and is awaiting approval for posting.';

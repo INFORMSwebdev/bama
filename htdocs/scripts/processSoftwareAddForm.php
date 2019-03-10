@@ -13,6 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
     $pub = filter_input(INPUT_POST, 'publisher', FILTER_SANITIZE_STRING);
 
+    $courseId = filter_input(INPUT_POST, 'courseId', FILTER_VALIDATE_INT);
+
     //get user info
     if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
         $user = new User($_SESSION['loggedIn']);
@@ -34,6 +36,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //report on results of insertion
     if($result == true) {
+
+        $update = new PendingUpdate($result);
+
+        //assign software to course
+        if($courseId){
+            $course = new Course($courseId);
+            $course->assignSoftware($update->Attributes['UpdateRecordId']);
+        }
+
         //set message to show user
         $_SESSION['editMessage']['success'] = true;
         $_SESSION['editMessage']['text'] = 'New software successfully submitted and is awaiting approval for posting.';
