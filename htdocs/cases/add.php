@@ -16,6 +16,8 @@ if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true){
     die;
 }
 
+$courseId = filter_input(INPUT_GET, 'courseId', FILTER_VALIDATE_INT);
+
 //get the user
 $user = new User($_SESSION['loggedIn']);
 
@@ -57,6 +59,7 @@ $content = <<<EOT
         </div>
         <br />
         <div class="form-row">
+            <input type="hidden" id="courseId" name="courseId" value="{$courseId}" />
             <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Case Study</button>
         </div>
         <!--<br />-->

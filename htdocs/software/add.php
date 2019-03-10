@@ -19,6 +19,8 @@ if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true){
 //get current user
 $user = new User($_SESSION['loggedIn']);
 
+$courseId = filter_input(INPUT_GET, 'courseId', FILTER_VALIDATE_INT);
+
 //display the form for adding institution info to the user
 $content = <<<EOT
 <div class="container-fluid">
@@ -37,6 +39,7 @@ $content = <<<EOT
         </div>
         <br />
         <div class="form-row">
+            <input type="hidden" id="courseId" name="courseId" value="{$courseId}" />
             <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Software</button>
         </div>
         <!--<br />-->

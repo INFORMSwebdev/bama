@@ -26,6 +26,8 @@ else {
     $user = new User(1);
 }
 
+$courseId = filter_input(INPUT_GET, 'courseId', FILTER_VALIDATE_INT);
+
 $content = <<<EOT
 <div class="container-fluid">
     <form action="../scripts/processDatasetAddForm.php" method="POST">
@@ -77,6 +79,7 @@ $content = <<<EOT
         </div>
         <br />
         <div class="form-row">
+            <input type="hidden" id="courseId" name="courseId" value="{$courseId}" />
             <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Dataset</button>
         </div>
         <!--<br />-->

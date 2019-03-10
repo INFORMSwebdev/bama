@@ -318,6 +318,11 @@ $(function() {
                         html += '<button id="id_' + progs[x].programs[i].ProgramId + '" name="programDelete" type="submit" class="btn btn-danger btn-program-delete">Delete this Program</button>';
                         html += '</div>'; //button-group
                         html += '</div>'; //body
+                        html += '<div class="card-footer">';
+                        html += '<div class="btn-group">';
+                        html += '<a role="button" class="btn btn-primary" href="/programs/assignProgramContact.php?progId=' + progs[x].programs[i].ProgramId + '">Assign Contact</a>';
+                        html += '</div>';
+                        html += '</div>';
                         html += '</div>'; //tab-pane
                         
                         //courses tab

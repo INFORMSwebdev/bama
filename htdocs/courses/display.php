@@ -382,7 +382,7 @@ EOT;
                         <div class="d-hidden" id="instructorListContainer"><!-- Instructor HTML goes here for AJAX --></div>
                     </div>
                     <div class="card-footer">
-                        <a role="button" class="btn btn-primary btn-block" id="id_{$courseId}" href="/courses/assignInstructors.php?courseId={$courseId}">Assign Instructors</a>
+                        <a role="button" class="btn btn-primary" id="id_{$courseId}" href="/courses/assignInstructors.php?courseId={$courseId}">Assign Instructors</a>
                     </div>
                 </div>
             </div>

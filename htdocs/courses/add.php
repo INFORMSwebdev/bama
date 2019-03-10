@@ -26,6 +26,8 @@ else {
     $user = new User(1);
 }
 
+$progId = filter_input(INPUT_GET, 'progId', FILTER_VALIDATE_INT);
+
 $content = '';
 
 //get select list of instructors
@@ -91,6 +93,7 @@ $content = <<<EOT
         </div>
         <br />
         <div class="form-row">
+            <input type="hidden" name="progId" id="progId" value="{$progId}" />
             <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Course</button>
         </div>
         <!--<br />-->

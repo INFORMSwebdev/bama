@@ -40,6 +40,7 @@ $content = <<<EOT
         </div>
         <br />
         <div class="form-row">
+            <input type="hidden" id="textbookId" name="textbookId" value="{$textbookId}" />
             <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Textbook</button>
         </div>
         <!--<br />-->

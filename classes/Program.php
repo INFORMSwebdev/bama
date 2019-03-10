@@ -39,6 +39,13 @@ class Program extends AOREducationObject
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
 
+    public function assignContact( $ContactId ){
+        $db = new EduDB();
+        $sql = "INSERT IGNORE INTO program_contacts (ProgramId, ContactId) VALUES (:ProgramId, $this->id)";
+        $params = array( array( ":ContactId", $ContactId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
+    }
+
     public function getContact( $asObject = TRUE ) {
         $Contact = new Contact( $this->Attributes['ContactId'] );
         return $Contact;

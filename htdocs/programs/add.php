@@ -19,39 +19,12 @@ if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true){
 //include file that has the option lists function
 include_once('/common/classes/optionsHTML.php');
 
-//get list of contacts and turn it into a select list
-$contacts = Contact::getAllContacts();
-$contactListHelper = array();
-foreach($contacts as $c){
-    $contactListHelper[] = array ('text' => $c['ContactName'], 'value' => $c['ContactId']);
-}
-$contactListHTML = optionsHTML($contactListHelper);
-
-//get list of colleges into a select list
-$colleges = College::getAllColleges();
-$collegeHelper = array();
-foreach($colleges as $co){
-    //get institution name so editors can select the appropriate college tied to the institution
-    $foo = new Institution($co['InstitutionId']);
-    $collegeHelper[] = array ('text' => $co['CollegeName'] . ' (' . $foo->Attributes['InstitutionName'] . ')', 'value' => $co['CollegeId']);
-}
-$collegeListHTML = optionsHTML($collegeHelper);
-
-//get list of all institutions
-$institutions = Institution::getInstitutions();
-//turn that into an array of name/value pairs to pass to the optionsHTML.php file
-$instListHelper = array();
-foreach($institutions as $inst){
-    $instListHelper[] = array('text' => $inst['InstitutionName'], 'value' => $inst['InstitutionId']);
-}
-$instListHelper[] = array('text' => 'Other', 'value' => 'Other');
-//pass the name/value pairs to the file to get the generated HTML for a select list
-$instListHTML = optionsHTML($instListHelper);
+$instId = filter_input(INPUT_GET, 'instId', FILTER_VALIDATE_INT);
 
 //user is logged in, let them add a program
 $content = <<<EOT
 <div class="container-fluid">
-    <form action="../scripts/processProgramAddForm.php" method="POST">
+    <form action="/scripts/processProgramAddForm.php" method="POST">
         <div class="form-row">
             <h3>Program Details</h3>
         </div>
@@ -74,14 +47,6 @@ $content = <<<EOT
                 <input class="form-check-input" type="checkbox" id="ORFlag" name="ORFlag" value="1" />
                 <label class="ml-1" for="ORFlag">Operations Research Program</label>
             </div>
-        </div>
-        <div class="form-row">
-            <label for="institutionName">Institution</label>
-            <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required>
-                <!-- ToDo: make this into ajax and add a filter like Dave's stuff has? -->
-		        {$instListHTML}
-            </select>
-            <p id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>
         </div>
         <div class="form-row">
             <label for="ProgramObjs">Objectives</label>
@@ -153,28 +118,7 @@ $content = <<<EOT
         </div>
         <br />
         <div class="form-row">
-            <h3>Contact Details</h3>
-        </div>
-        <div class="form-row">
-            <label for="ContactId">Contact</label>
-            <select class="form-control" id="ContactId" name="ContactId" aria-describedby="ContactHelp">
-		        {$contactListHTML}
-            </select>
-            <!--<p id="ContactHelp">The list may take a second or two to load, please be patient after clicking the field.</p>-->
-        </div>
-        <br />
-        <div class="form-row">
-            <h3>College Details</h3>
-        </div>
-        <div class="form-row">
-            <label for="CollegeId">College</label>
-            <select class="form-control" id="CollegeId" name="CollegeId" aria-describedby="CollegeHelp">
-		        {$collegeListHTML}
-            </select>
-            <!--<p id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>-->
-        </div>
-        <br />
-        <div class="form-row">
+            <input type="hidden" name="instId" id="instId" value="{$instId}" />
             <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Program</button>
         </div>
         <!--<br />-->
