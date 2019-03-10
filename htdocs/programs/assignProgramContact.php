@@ -62,6 +62,8 @@ EOT;
 }
 
 $content = <<<EOT
+<h2>Select a Contact From the Table</h2>
+<p>Only 1 contact may be selected at a time.</p>
 <input type="hidden" id="progId" value="{$progId}" />
 <div class="container-fluid">
     <table class="table table-striped" id="contactTable">
@@ -158,7 +160,7 @@ EOT;
 $page_params = array();
 $page_params['content'] = $content;
 $page_params['js'][] = array( 'text' => $customJS );
-$page_params['page_title'] = "Assign Instructors to Course";
+$page_params['page_title'] = "Assign Contacts to Program";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
 $page_params['css'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css' );
