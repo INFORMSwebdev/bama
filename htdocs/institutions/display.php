@@ -112,6 +112,7 @@ $(function() {
             var helper = processProgramList(data.institutions);
             //display the returned info in the div
             $('#programList').html(helper);
+           // $('#programDetails').tab('show'); // this is how we go to tab
            // $('#usersTable').DataTable();
            // $('#courseTable').DataTable();
             
@@ -245,6 +246,7 @@ $(function() {
     });
   
     function processProgramList(progs){
+
         if(progs.length < 1) {
             //there are no programs in the passed list
             var foo = '<p class="text text-danger">No institutions available to display right now, please try again later.</p>';
@@ -307,7 +309,7 @@ $(function() {
             html += '<div class="card-body">';
             for(var x = 0; x < progs.length; x++){
                 //there is either only 1 program returned or a message that no programs available
-                if(progs[x].programs.length == 1){
+                if(progs[x].programs.length < 1){
                     //no programs for this institution
                     html += '<p>No programs are currently assigned to this institution.</p>';
                 }
@@ -421,7 +423,7 @@ $(function() {
             html += '<div class="tab-pane fade" id="tabCollege" role="tabpanel" aria-labelledby="collegeDetails">';
             html += '<div class="card-body">';
             for( var x = 0; x < progs.length; x++){
-                if(progs[x].colleges[0].length == 1){
+                if(progs[x].colleges.length < 1){
                     html += '<p>No colleges are currently assigned to this institution.</p>';
                 }
                 else {
@@ -480,6 +482,8 @@ $(function() {
             return html;
         }
     }
+    
+    
 });
 EOT;
 

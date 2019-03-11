@@ -228,7 +228,7 @@ else {
                     $foo['programs'] = $programHelper;
                 }
                 else {
-                    $foo['programs'] = 'No programs associated with the institution.';
+                    $foo['programs'] = [];
                 }
 
                 //get array of colleges
@@ -248,7 +248,7 @@ else {
                     $foo['colleges'] = $collegeHelper;
                 }
                 else {
-                    $foo['colleges'] = 'No colleges associated with the institution.';
+                    $foo['colleges'] = [];
                 }
             }
 
