@@ -50,7 +50,7 @@ if ($id) {
     else {
         $email = "<a href='mailto:$email'>$email</a>";
     }
-
+/*
     $content .= <<<EOT
 <div class="card">
     <div class="card-header">
@@ -85,8 +85,403 @@ EOT;
         </div>
     </form>
 </div>
-EOT;
+EOT;*/
 }
+
+$id = filter_input( INPUT_GET, 'id', FILTER_VALIDATE_INT );
+
+$content = <<<EOT
+<div class="container-fluid" id="programList"> 
+</div>
+
+EOT;
+
+$custom_js = <<<EOT
+$(function() {
+    $('#programList').html('<p>Loading data, please wait&hellip;</p>');
+    $.getJSON( "/scripts/ajax_displayEditorInstitution.php", {'id': $id }, function( data ) {
+        if (data.errors.length > 0) { 
+            var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+            for (var i = 0; i < data.errors.length; i++) {
+                msg +=  data.errors[i] + "\\r\\n";
+            }
+            alert( msg );
+        }
+        else if (data.success == 1) {
+            //process the returned info into HTML
+            var helper = processProgramList(data.institutions);
+            //display the returned info in the div
+            $('#programList').html(helper);
+           // $('#usersTable').DataTable();
+           // $('#courseTable').DataTable();
+            
+            //institution delete button functionality
+            $(document).on( 'click', '.btn-institution-delete', function(e) {
+                //make sure message box gets re-hidden if its shown
+                $('#message').hide();
+                var conf = confirm( "Are you sure you want to delete this institution?" );
+                if (conf) {
+                    var id = $(this).attr('id').substring(3);
+                    $.post( "/scripts/ajax_deleteInstitution.php", { 'InstitutionId': id }, function(data) {
+                        //alert( data );
+                        if (data.errors.length > 0 ) {
+                            var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                            for (var i = 0; i < data.errors.length; i++) {
+                                msg +=  data.errors[i] + "\\r\\n";
+                            }
+                            alert( msg );
+                            //$('#message').html('<p>' + msg + '</p>').removeClass('d-hidden').addClass('alert alert-danger');
+                        }
+                        else if (data.msg) {
+                            //alert( data.msg );
+                            $('#message').html('<p>' + data.msg + '</p>');
+                            if(data.msg.includes('submitted')){
+                                $('#message').addClass('alert alert-success');
+                            }
+                            else {
+                                $('#message').addClass('alert alert-danger');
+                            }
+                            $('#message').show();
+                        }
+                    }, "json");
+                }
+            });
+            
+            //college delete button functionality
+            $(document).on( 'click', '.btn-college-delete', function(e) {
+                //make sure message box gets re-hidden if its shown
+                $('#message').hide();
+                var conf = confirm( "Are you sure you want to delete this college?" );
+                if (conf) {
+                    var id = $(this).attr('id').substring(3);
+                    $.post( "/scripts/ajax_deleteCollege.php", { 'CollegeId': id }, function(data) {
+                        //alert( data );
+                        if (data.errors.length > 0 ) {
+                            var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                            for (var i = 0; i < data.errors.length; i++) {
+                                msg +=  data.errors[i] + "\\r\\n";
+                            }
+                            alert( msg );
+                            //$('#message').html('<p>' + msg + '</p>').removeClass('d-hidden').addClass('alert alert-danger');
+                        }
+                        else if (data.msg) {
+                            //alert( data.msg );
+                            $('#message').html('<p>' + data.msg + '</p>');
+                            if(data.msg.includes('submitted')){
+                                $('#message').addClass('alert alert-success');
+                            }
+                            else {
+                                $('#message').addClass('alert alert-danger');
+                            }
+                            $('#message').show();
+                        }
+                    }, "json");
+                }
+            });
+            
+            //program delete button functionality
+            $(document).on( 'click', '.btn-program-delete', function(e) {
+                //make sure message box gets re-hidden if its shown
+                $('#message').hide();
+                var conf = confirm( "Are you sure you want to delete this program?" );
+                if (conf) {
+                    var id = $(this).attr('id').substring(3);
+                    $.post( "/scripts/ajax_deleteProgram.php", { 'ProgramId': id }, function(data) {
+                        //alert( data );
+                        if (data.errors.length > 0 ) {
+                            var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                            for (var i = 0; i < data.errors.length; i++) {
+                                msg +=  data.errors[i] + "\\r\\n";
+                            }
+                            alert( msg );
+                            //$('#message').html('<p>' + msg + '</p>').removeClass('d-hidden').addClass('alert alert-danger');
+                        }
+                        else if (data.msg) {
+                            //alert( data.msg );
+                            $('#message').html('<p>' + data.msg + '</p>');
+                            if(data.msg.includes('submitted')){
+                                $('#message').addClass('alert alert-success');
+                            }
+                            else {
+                                $('#message').addClass('alert alert-danger');
+                            }
+                            $('#message').show();
+                        }
+                    }, "json");
+                }
+            });
+            
+            //course delete button functionality
+            $(document).on( 'click', '.btn-delete', function(e) {
+                //make sure message box gets re-hidden if its shown
+                $('#message').hide();
+                var conf = confirm( "Are you sure you want to delete this course?" );
+                if (conf) {
+                    var id = $(this).attr('id').substring(3);
+                    $.post( "/scripts/ajax_deleteCourse.php", { 'CourseId': id }, function(data) {
+                        //alert( data );
+                        if (data.errors.length > 0 ) {
+                            var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                            for (var i = 0; i < data.errors.length; i++) {
+                                msg +=  data.errors[i] + "\\r\\n";
+                            }
+                            alert( msg );
+                            //$('#message').html('<p>' + msg + '</p>').removeClass('d-hidden').addClass('alert alert-danger');
+                        }
+                        else if (data.msg) {
+                            $('#message').html('<p>' + data.msg + '</p>');
+                            if(data.msg.includes('submitted')){
+                                $('#message').addClass('alert alert-success');
+                            }
+                            else {
+                                $('#message').addClass('alert alert-danger');
+                            }
+                            $('#message').show();
+                        }
+                    }, "json");
+                }
+            });
+        }
+    });
+  
+    function processProgramList(progs){
+        if(progs.length < 1) {
+            //there are no programs in the passed list
+            var foo = '<p class="text text-danger">No institutions available to display right now, please try again later.</p>';
+            return foo;
+        } 
+        else if (progs.length == 1) {
+            var html = '<div class="card">';
+            html += '<div class="card-header">';
+            html += '<h2 class="display2">' + progs[0].InstitutionName + '</h2>';
+            html += '<ul class="nav nav-tabs card-header-tabs" id="cardNav" role="tablist">';
+            html += '<li class="nav-item">';
+            html += '<a class="nav-link active" id="institutionDetails" href="#tabInstitution" data-toggle="tab" aria-selected="true" aria-controls="tabInstitution">Institution</a>';
+            html += '</li>';
+            html += '<li class="nav-item">';
+            html += '<a class="nav-link" id="collegeDetails" href="#tabCollege" data-toggle="tab" aria-selected="false" aria-controls="tabCollege">College</a>';
+            html += '</li>';
+            html += '<li class="nav-item">';
+            html += '<a class="nav-link" id="programDetails" href="#tabProgram" data-toggle="tab" aria-selected="false" aria-controls="tabProgram">Program</a>';
+            html += '</li>';
+            html += '</ul>';
+            html += '</div>';
+        
+            //institution tab
+            html += '<div class="tab-content" id="InstitutionTabContent">';
+            html += '<div class="tab-pane fade show active" id="tabInstitution" role="tabpanel" aria-labelledby="institutionDetails">';
+            html += '<div class="card-body">';
+            html += '<h3>Address</h3>';
+            html += '<p>' + progs[0].InstitutionAddress + '</p>';
+            html += '<p>' + progs[0].InstitutionCity + ', ' + progs[0].InstitutionState + ' ' + progs[0].InstitutionZip + '</p>';
+            html += '<h3>Region</h3>';
+            html += '<p>' + progs[0].InstitutionRegion + '</p>';
+            html += '<h3>Contact Information</h3>';
+            html += '<h4>Phone Number</h4>';
+            html += '<p>' + progs[0].InstitutionPhone + '</p>';
+            html += '<h4>Email</h4>';
+            if(progs[0].InstitutionEmail.indexOf("@") < 0){
+                html += '<p>' + progs[0].InstitutionEmail + '</p>';
+            }
+            else {
+                html += '<p><a href="mailto:' + progs[0].InstitutionEmail + '">' + progs[0].InstitutionEmail + '</a></p>';
+            }
+            html += '<h4>Access</h4>';
+            if(progs[0].InstitutionAccess.indexOf("www") < 0){
+                html += '<p>' + progs[0].InstitutionAccess + '</p>';
+            }
+            else{
+                html += '<p><a href="' + progs[0].InstitutionAccess + '" target="_blank">' + progs[0].InstitutionAccess + '</a></p>';
+            }
+            html += '<h3>Last Modified</h3>';
+            html += '<p>' + progs[0].LastModifiedDate + '</p>';
+            html += '<div class="btn-group">';
+            html += '<a role="button" class="btn btn-warning mr-3" href="/institutions/edit.php?id=' + progs[0].InstitutionId + '">Edit this Institution</a>';
+            html += '<button id="id_' + progs[0].InstitutionId + '" name="instDelete" type="submit" class="btn btn-danger btn-institution-delete">Delete this Institution</button>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+        
+            //programs tab
+            html += '<div class="tab-pane fade" id="tabProgram" role="tabpanel" aria-labelledby="programDetails">';
+            html += '<div class="card-body">';
+            for(var x = 0; x < progs.length; x++){
+                //there is either only 1 program returned or a message that no programs available
+                if(progs[x].programs.length == 1){
+                    //no programs for this institution
+                    html += '<p>No programs are currently assigned to this institution.</p>';
+                }
+                else {
+                    html += '<div class="card-deck">';
+                    for(var i = 0; i < progs[x].programs.length; i++){
+                        html += '<div class="card">';
+                        html += '<div class="card-header">';
+                        html += '<h3>' + progs[x].programs[i].ProgramName + '</h3>';
+                        html += '<ul class="nav nav-tabs card-header-tabs" id="progCardNav" role="tablist">';
+                        html += '<li class="nav-item">';
+                        html += '<a class="nav-link active" id="progDetails' + i +'" href="#tabPrograms' + i + '" data-toggle="tab" aria-selected="true" aria-controls="tabPrograms' + i + '">Program Details</a>';
+                        html += '</li>';
+                        html += '<li class="nav-item">';
+                        html += '<a class="nav-link" id="courseDetails' + i + '" href="#tabCourse' + i + '" data-toggle="tab" aria-selected="false" aria-controls="tabCourse' + i + '">Courses</a>';
+                        html += '</li>';
+                        html += '</ul>';                
+                        html += '</div>';
+                        html += '<div class="tab-content" id="tabProgramsDerp' + i + '">';
+                        html += '<div class="tab-pane fade show active" id="tabPrograms' + i + '" role="tabpanel" aria-labelledby="progDetails' + i +'">';
+                        html += '<div class="card-body">';
+                        html += '<h4>Type</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramType + '</p>';
+                        html += '<h4>Delivery Method</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramDelivery + '</p>';
+                        html += '<h4>Access</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramAccess + '</p>';
+                        html += '<h4>Objectives</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramObjectives + '</p>';
+                        html += '<h4>Full Time Duration</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramFullTime + '</p>';
+                        html += '<h4>Part Time Duration</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramPartTime + '</p>';
+                        html += '<h4>Testing Requirements</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramTestingRequirements + '</p>';
+                        html += '<h4>Other Requirements</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramOtherRequirements + '</p>';
+                        html += '<h4>Year Established</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramEstablished + '</p>';
+                        html += '<h4>Scholarship</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramScholarship + '</p>';
+                        html += '<h4>Credits</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramCredits + '</p>';
+                        html += '<h4>Estimated Resident Tuition</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramResidentTuition + '</p>';
+                        html += '<h4>Estimated Non-Resident Tuition</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramNonResidentTuition + '</p>';
+                        html += '<h4>Cost Per Credit</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramCostPerCredit + '</p>';
+                        html += '<h4>Analytics or O.R. Program</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramAnalyticsOR + '</p>';
+                        html += '<h4>This Record Created On</h4>';
+                        html += '<p>' + progs[x].programs[i].ProgramCreated + '</p>';
+                        html += '<h3>Contact Details</h3>';
+                        html += '<h4>Name</h4>';
+                        html += '<p>' + progs[x].programs[i].ContactName + '</p>';
+                        html += '<h4>Title</h4>';
+                        html += '<p>' + progs[x].programs[i].ContactTitle + '</p>';
+                        html += '<h4>Phone</h4>';
+                        html += '<p>' + progs[x].programs[i].ContactPhone + '</p>';
+                        html += '<h4>Email</h4>';
+                        html += '<p>' + progs[x].programs[i].ContactEmail + '</p>';
+                        html += '<div class="btn-group">';
+                        html += '<a role="button" class="btn btn-warning mr-3" href="/programs/edit.php?id=' + progs[x].programs[i].ProgramId + '">Edit this Program</a>';
+                        html += '<button id="id_' + progs[x].programs[i].ProgramId + '" name="programDelete" type="submit" class="btn btn-danger btn-program-delete">Delete this Program</button>';
+                        html += '</div>'; //button-group
+                        html += '</div>'; //body
+                        html += '<div class="card-footer">';
+                        html += '<div class="btn-group">';
+                        html += '<a role="button" class="btn btn-primary" href="/programs/assignProgramContact.php?progId=' + progs[x].programs[i].ProgramId + '">Assign Contact</a>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>'; //tab-pane
+                        
+                        //courses tab
+                        html += '<div class="tab-pane fade" id="tabCourse' + i + '" role="tabpanel" aria-labelledby="courseDetails' + i + '">';
+                        html += '<div class="card-body">';
+                        html += '<table class="table table-striped" id="courseTable">';
+                        html += '<thead>';
+                        html += '<tr><th>Title</th><th>Number</th><th>Instructor</th><th></th></tr>';
+                        html += '</thead>';
+                        html += '<tbody>';
+                        for( var y = 0; y < progs[x].programs[i].courses.length; y++){
+                            html += '<tr>';
+                            html += '<td>' + progs[x].programs[i].courses[y].CourseTitle + '</td>';
+                            html += '<td>' + progs[x].programs[i].courses[y].CourseNumber + '</td>';
+                            html += '<td>' + progs[x].programs[i].courses[y].instructor.InstructorName + '</td>';
+                            html += '<td>';
+                            html += '<a role="button" class="btn btn-warning btn-block" href="/courses/display.php?id=' + progs[x].programs[i].courses[y].CourseId + '">View this Course</a>';
+                            html += '<button id="id_' + progs[x].programs[i].courses[y].CourseId + '" name="courseDelete" type="submit" class="btn btn-danger btn-block btn-delete">Delete this Course</button>';  
+                            html += '</td>';
+                            html += '</tr>';
+                        }
+                        html += '</tbody>';
+                        html += '</table>';
+                        html += '</div>'; //card-body
+                        html += '<div class="card-footer">';
+                        html += '<a role="button" class="btn btn-primary" href="/courses/add.php?progId=' + progs[x].programs[i].ProgramId + '">Add Course</a>';
+                        html += '</div>'; //card-footer
+                        html += '</div>' //tab-pane;
+                        html += '</div>'; //tab-content
+                        html += '</div>'; //card
+                    }
+                    html += '</div>';
+                }
+            }
+            html += '</div>';
+            html += '</div>';
+            
+            //college tab
+            html += '<div class="tab-pane fade" id="tabCollege" role="tabpanel" aria-labelledby="collegeDetails">';
+            html += '<div class="card-body">';
+            for( var x = 0; x < progs.length; x++){
+                if(progs[x].colleges[0].length == 1){
+                    html += '<p>No colleges are currently assigned to this institution.</p>';
+                }
+                else {
+                    html += '<div class="card-deck">';
+                    for(var i = 0; i < progs[x].colleges.length; i++){
+                        html += '<div class="card">';
+                        html += '<div class="card-header">';
+                        html += '<h3>'+ progs[x].colleges[i].CollegeName + '</h3>';
+                        html += '</div>';
+                        html += '<div class="card-body">';
+                        html += '<h4>Type</h4>';
+                        html += '<p>' + progs[x].colleges[i].CollegeType + '</p>';
+                        html += '<h4>Created</h4>';
+                        html += '<p>' + progs[x].colleges[i].CollegeCreated + '</p>';
+                        html += '<div class="btn-group">';
+                        html += '<a role="button" class="btn btn-warning mr-3" href="/colleges/edit.php?id=' + progs[x].colleges[i].CollegeId + '">Edit this College</a>';
+                        html += '<button id="id_' + progs[x].colleges[i].CollegeId + '" name="collegeDelete" type="submit" class="btn btn-danger btn-college-delete">Delete this College</button>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                    }
+                    html += '</div>';
+                }
+            }
+            html += '</div>';
+            html += '</div>';
+            
+            //footer
+            html += '<div class="card-footer">';
+            html += '<div class="btn-group mr-3" role="group" aria-label="Add colleges or programs to this institution">';
+            html += '<a role="button" class="btn btn-outline-primary" href="/colleges/add.php?instId=' + progs[0].InstitutionId + '">Add a College</a>';
+            html += '<a role="button" class="btn btn-outline-primary" href="/programs/add.php?instId=' + progs[0].InstitutionId + '">Add a Program</a>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+            return html;
+        }
+        else {
+            var html = '<h2>Institutions</h2><table class="table table-striped" id="usersTable"><thead><tr><th>Name</th><th>City</th><th>State</th><th>Deleted?</th><th></th></tr></thead><tbody>';
+            for( var i = 0; i < progs.length; i++ ){
+                html += '<tr>';
+                html += '<td>' + progs[i].InstitutionName + '</td>';
+                html += '<td>' + progs[i].InstitutionCity + '</td>';
+                html += '<td>' + progs[i].InstitutionState + '</td>';
+                if(progs[i].Deleted == 0){
+                    html += '<td>No</td>';
+                }
+                else {
+                    html += '<td>Yes</td>';
+                }
+                html += '<td><a class="btn btn-primary btn-block" href="/institutions/display.php?id=' + progs[i].InstitutionId + '">Details</a><a class="btn btn-info btn-block" href="/institutions/edit.php?id=' + progs[i].InstitutionId + '">Edit</a></td>';
+                html += '</tr>';
+            }
+            html += '</tbody></table>';
+            return html;
+        }
+    }
+});
+EOT;
 
 //set page parameters up
 $page_params['content'] = $content;
@@ -100,7 +495,7 @@ $page_params['admin'] = TRUE;
 //put custom/extra css files, if used
 //$page_params['css'][] = array("url" => "");
 //put custom/extra JS files, if used
-//$page_params['js'][] = array("url" => "");
+$page_params['js'][] = array("text" => $custom_js );
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content
