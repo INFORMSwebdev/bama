@@ -73,18 +73,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $prog->Attributes['ProgramObjectives'] = $progObjs;
         $prog->Attributes['FullTimeDuration'] = $progFullTime;
         $prog->Attributes['PartTimeDuration'] = $progPartTime;
-        $prog->Attributes['TestingRequirements'] = $progTestingReqs;
-        $prog->Attributes['OtherRequirements'] = $progOtherReqs;
+        $prog->Attributes['TestingRequirement'] = $progTestingReqs;
+        $prog->Attributes['OtherRequirement'] = $progOtherReqs;
         $prog->Attributes['Credits'] = $progCredits;
         $prog->Attributes['YearEstablished'] = $progYear;
         $prog->Attributes['Scholarship'] = $progScholarships;
         $prog->Attributes['EstimatedResidentTuition'] = $progResTuition;
         $prog->Attributes['EstimatedNonresidentTuition'] = $progNonResTuition;
         $prog->Attributes['CostPerCredit'] = $progCostPer;
-        $prog->Attributes['Deleted'] = $progDeleted;
+        //$prog->Attributes['Deleted'] = $progDeleted;
         $prog->Attributes['ORFlag'] = $orFlag;
         $prog->Attributes['AnalyticsFlag'] = $analyticsFlag;
         $prog->Attributes['CollegeId'] = $collegeId;
+        $prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
         //put the updates in the pending_updates table
         $result = $prog->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);

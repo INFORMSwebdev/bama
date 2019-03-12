@@ -92,11 +92,14 @@ class Program extends AOREducationObject
         return $coursesOut;
     }
 
-    public static function getAllPrograms( $active = TRUE, $asObjects = FALSE ){
+    public static function getAllPrograms( $active = TRUE, $asObjects = FALSE, $ApprovalStatusId=2 ){
         $programs = [];
         $db = new EduDB();
         $sql = "SELECT * FROM programs";
-        if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        $crit = '';
+        if ($active !== null) $crit .= " Deleted = " . (($active == TRUE) ? "0" : "1");
+        if ($ApprovalStatusId) $crit .= (($crit) ? " AND " : "") . " ApprovalStatusId = $ApprovalStatusId";
+        if ($crit) $sql .= " WHERE " . $crit;
         $progs = $db->query( $sql );
         if ($asObjects) {
             foreach( $progs as $prog) {

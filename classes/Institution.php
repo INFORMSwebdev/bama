@@ -81,7 +81,7 @@ class Institution extends AOREducationObject {
         return $Institution;
     }
 
-    public static function getInstitutions( $active = TRUE, $asObjects = FALSE) {
+    public static function getInstitutions( $active = TRUE, $asObjects = FALSE, $ApprovalStatusID = 2) {
         $institutions = [];
         $db = new EduDB();
         $sql = "SELECT * FROM institutions";
@@ -124,10 +124,11 @@ class Institution extends AOREducationObject {
         return $Instructors;
     }
 
-    public function getPrograms( $asObjects = TRUE ) {
+    public function getPrograms( $asObjects = TRUE, $ApprovalStatusId = 2 ) {
         $db = new EduDB;
         $Programs = [];
         $sql = "SELECT ProgramId FROM programs WHERE InstitutionId=$this->id";
+        if ($ApprovalStatusId) $sql .= " AND ApprovalStatusId = $ApprovalStatusId";
         $ProgramIds = $db->queryColumn( $sql );
         if ($asObjects) {
             $Programs = [];
