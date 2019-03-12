@@ -257,9 +257,10 @@ $(function() {
                 else {
                     html += '<div class="card-deck">';
                     for(var i = 0; i < progs[x].programs.length; i++){
+                        statusClass = 'status-'+progs[x].programs[i].ApprovalStatusId;
                         html += '<div class="card">';
                         html += '<div class="card-header">';
-                        html += '<h3>' + progs[x].programs[i].ProgramName + '</h3>';
+                        html += '<h3 class="'+statusClass+'">' + progs[x].programs[i].ProgramName + '</h3>';
                         html += '<ul class="nav nav-tabs card-header-tabs" id="progCardNav" role="tablist">';
                         html += '<li class="nav-item">';
                         html += '<a class="nav-link active" id="progDetails' + i +'" href="#tabPrograms' + i + '" data-toggle="tab" aria-selected="true" aria-controls="tabPrograms' + i + '">Program Details</a>';
@@ -431,6 +432,21 @@ $custom_css = <<<EOT
 td.responsiveCol {
     overflow-wrap: break-word;
     max-width: 250px;
+}
+.status-0 /* unknown */ { 
+  color: #f00;
+}
+.status-1 /* New */ { 
+  color: #0f0;
+}
+.status-2 /* Approved */ { 
+  color: #000;
+}
+.status-3 /* Deleted */ { 
+  color: #00f;
+}
+.status-4 /* Retired */ { 
+  color: #888;
 }
 EOT;
 

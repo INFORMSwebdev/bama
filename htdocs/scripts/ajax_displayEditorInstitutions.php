@@ -208,6 +208,7 @@ else {
                                 $helperHelp['ContactEmail'] = "<a href='{$progContact->Attributes['ContactEmail']}' target='_blank'>{$progContact->Attributes['ContactEmail']}</a>";
                             }
                         }
+                        $helperHelp['ApprovalStatusId'] = $ip->Attributes['ApprovalStatusId'];
                         //add record to the array
                         $programHelper[] = $helperHelp;
                     }
