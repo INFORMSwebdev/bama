@@ -16,6 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //get the record info to update
     $prog = new Program($progId);
 
+    //get the users Id to put in the table
+    if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
+        $user = new User($_SESSION['loggedIn']);
+    } else {
+        //I can't think of why this case would ever happen, but just in case set the user to default ADMIN/system record
+        $user = new User(1);
+    }
+
     //check which button was pushed
     if (isset($_POST['delete'])) {
         //delete button was clicked, create pending update
@@ -32,14 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     else {
-        //get the users Id to put in the table
-        if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-            $user = new User($_SESSION['loggedIn']);
-        } else {
-            //I can't think of why this case would ever happen, but just in case set the user to default ADMIN/system record
-            $user = new User(1);
-        }
-
         //get all the form field values
         $progName = filter_input(INPUT_POST, 'programName', FILTER_SANITIZE_STRING);
         $instId = filter_input(INPUT_POST, 'Institution', FILTER_VALIDATE_INT);
