@@ -63,7 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $dataset->Attributes['DatasetAccess'] = $access;
         $dataset->Attributes['AnalyticTag'] = $analytics;
         $dataset->Attributes['BusinessTag'] = $business;
-        $dataset->Attributes['Deleted'] = $datasetDeleted;
+        //$dataset->Attributes['Deleted'] = $datasetDeleted;
+        $dataset->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
         //put the updates in the pending_updates table
         $result = $course->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
@@ -80,5 +81,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 //redirect user to index?
-header("Location: /datasets/display.php?id=$datasetId");
+header("Location: /datasets/display.php?id={$datasetId}");
 die;

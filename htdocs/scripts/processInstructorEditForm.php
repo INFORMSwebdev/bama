@@ -50,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $inst->Attributes['InstructorLastName'] = $lName;
         $inst->Attributes['InstructorPrefix'] = $prefix;
         $inst->Attributes['InstructorEmail'] = $email;
+        $inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
         //put the updates in the pending_updates table
         $result = $inst->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->id);
@@ -66,5 +67,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 //redirect user to index?
-header("Location: /instructors/display.php?id=$instId");
+header("Location: /instructors/display.php?id={$instId}");
 die;

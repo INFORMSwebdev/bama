@@ -62,6 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $inst->Attributes['InstitutionEmail'] = $email;
         $inst->Attributes['InstitutionAccess'] = $access;
         //$inst->Attributes['Deleted'] = $instDeleted;
+        $inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
         //put the updates in the pending_updates table
         $result = $inst->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
@@ -79,5 +80,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 //redirect user to index?
-header("Location: /institutions/display.php?id=$instId");
+header("Location: /institutions/display.php?id={$instId}");
 die;

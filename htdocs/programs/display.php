@@ -171,6 +171,8 @@ EOT;
                 {$accessHTML}
                 <h3 class="display3">Year Established</h3>
                 <p>{$year}</p>
+                <h3>Scholarship</h3>
+                <p>{$scholarship}</p>
             </div>
         </div>
         <div class="tab-pane fade" id="tabDelivery" role="tabpanel" aria-labelledby="deliveryDetails">

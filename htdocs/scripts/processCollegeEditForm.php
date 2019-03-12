@@ -46,6 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //update the record
         $college->Attributes['CollegeName'] = $name;
         $college->Attributes['CollegeType'] = $type;
+        $college->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
         //put the updates in the pending_updates table
         $result = $college->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->id);
@@ -63,5 +64,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 //redirect user to index?
-header("Location: /colleges/display.php?id=$collegeId");
+header("Location: /colleges/display.php?id={$collegeId}");
 die;

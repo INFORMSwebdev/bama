@@ -101,5 +101,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 //redirect user to index?
-header("Location: /programs/display.php?id=$$progId");
+header("Location: /programs/display.php?id={$progId}");
 die;

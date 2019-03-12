@@ -49,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $book->Attributes['TextbookName'] = $name;
         $book->Attributes['Authors'] = $name;
         $book->Attributes['TextbookPublisher'] = $name;
+        $book->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
         //put the updates in the pending_updates table
         $result = $book->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
@@ -64,5 +65,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 //redirect user to index?
-header("Location: /textbooks/display.php?id=$id");
+header("Location: /textbooks/display.php?id={$id}");
 die;

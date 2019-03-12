@@ -46,7 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //update its attributes
         $soft->Attributes['SoftwareName'] = $name;
         $soft->Attributes['SoftwarePublisher'] = $pub;
-        $soft->Attributes['Deleted'] = $softDeleted;
+        //$soft->Attributes['Deleted'] = $softDeleted;
+        $soft->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
         //put the updates in the pending_updates table
         $result = $soft->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
@@ -63,5 +64,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 //redirect user to index?
-header("Location: /software/display.php?id=$softId");
+header("Location: /software/display.php?id={$softId}");
 die;

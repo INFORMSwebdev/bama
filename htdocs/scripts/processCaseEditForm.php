@@ -62,6 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $c->Attributes['CaseAccess'] = $access;
         $c->Attributes['AnalyticTag'] = $analytics;
         $c->Attributes['BusinessTag'] = $business;
+        $c->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
         //put the updates in the pending_updates table
         $result = $c->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
@@ -78,5 +79,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 //redirect user to index?
-header("Location: /cases/display.php?id=$caseId");
+header("Location: /cases/display.php?id={$caseId}");
 die;

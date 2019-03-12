@@ -61,6 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $course->Attributes['SyllabusFilesize'] = $sylSize;
         $course->Attributes['AnalyticTag'] = $analytics;
         $course->Attributes['BusinessTag'] = $business;
+        $course->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
         //put the updates in the pending_updates table
         $result = $course->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
@@ -77,5 +78,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 //redirect user to index?
-header("Location: /courses/display.php?id=$courseId");
+header("Location: /courses/display.php?id={$courseId}");
 die;
