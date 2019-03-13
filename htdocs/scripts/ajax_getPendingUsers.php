@@ -14,7 +14,7 @@ $db = new EduDB;
 $sql = "SELECT PendingUserId, FirstName, LastName, Username, Comments, pu.CreateDate Created, InstitutionName Institution   
   FROM pending_users pu 
   LEFT JOIN institutions i ON pu.InstitutionId = i.InstitutionId 
-  WHERE ApprovalStatusId < 2";
+  WHERE pu.ApprovalStatusId < 2";
 $PendingUsers = $db->query( $sql );
 
 header('Content-Type: application/json; charset=utf-8');
