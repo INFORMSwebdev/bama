@@ -27,7 +27,8 @@ if($id){
     //get all the details about the requested program to display
     $prog = new Program($id);
     $instId = $prog->Attributes['InstitutionId'];
-    $contactId = $prog->Attributes['ContactId'];
+    //$contactId = $prog->Attributes['ContactId'];
+    $contacts = $prog->getContacts();
     $name = $prog->Attributes['ProgramName'];
     $type = $prog->Attributes['ProgramType'];
     $delivery = $prog->Attributes['DeliveryMethod'];
@@ -89,16 +90,20 @@ if($id){
 
     $contactHTML = '';
     //get contact details to display
-    if(is_numeric($contactId)){
-        $contact = new Contact($contactId);
-        $contactName = $contact->Attributes['ContactName'];
-        $contactTitle = $contact->Attributes['ContactTitle'];
-        $contactPhone = $contact->Attributes['ContactPhone'];
-        $contactEmail = $contact->Attributes['ContactEmail'];
-        $contactHTML = <<<EOT
+    if($contacts){
+
+
+        //$contact = new Contact($contactId);
+        foreach($contacts as $contact) {
+            $contactName = $contact->Attributes['ContactName'];
+            $contactTitle = $contact->Attributes['ContactTitle'];
+            $contactPhone = $contact->Attributes['ContactPhone'];
+            $contactEmail = $contact->Attributes['ContactEmail'];
+            $contactHTML .= <<<EOT
 <h3 class="display3">{$contactName}</h3>
 <p>{$contactTitle}<br />{$contactPhone}<br /><a href="mailto:{$contactEmail}">{$contactEmail}</a></p>
 EOT;
+        }
     }
     else {
         $contactName = $contactTitle = $contactPhone = $contactEmail = 'Contact information for this program is not currently available';

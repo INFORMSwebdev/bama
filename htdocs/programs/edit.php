@@ -45,7 +45,8 @@ if (is_numeric($_SESSION['loggedIn'])) {
             //redirect to index
             header('Location: /index.php');
             die;
-        } else {
+        }
+        else {
             //get all the details about the requested program to display
             $prog = new Program($progId);
             $instId = $prog->Attributes['InstitutionId'];
@@ -103,27 +104,20 @@ EOT;
 
             //get contact details
             //get list of contacts and turn it into a select list
-            $contacts = Contact::getAllContacts();
-            $contactListHelper = array();
-            foreach ($contacts as $c) {
-                $contactListHelper[] = array('text' => $c['ContactName'], 'value' => $c['ContactId']);
+            //$contacts = Contact::getAllContacts();
+            $contacts = $prog->getContacts();
+            if($contacts) {
+                $contactListHelper = array();
+                foreach ($contacts as $c) {
+                    $contactListHelper[] = array('text' => $c->Attributes['ContactName'], 'value' => $c->Attributes['ContactId']);
+                }
+                $contactListHTML = optionsHTML($contactListHelper);
+                if (isset($contactId)) {
+                    $contactListHTML = str_replace('<option value="' . $contactId . '">', '<option value="' . $contactId . '" selected>', $contactListHTML);
+                }
             }
-            $contactListHTML = optionsHTML($contactListHelper);
-            if (isset($contactId)) {
-                $contactListHTML = str_replace('<option value="' . $contactId . '">', '<option value="' . $contactId . '" selected>', $contactListHTML);
-            }
-
-            //get list of colleges and set the currently selected option to assigned college
-            $colleges = College::getAllColleges();
-            $collegeHelper = array();
-            foreach ($colleges as $co) {
-                //get institution name so editors can select the appropriate college tied to the institution
-                $foo = new Institution($co['InstitutionId']);
-                $collegeHelper[] = array('text' => $co['CollegeName'] . ' (' . $foo->Attributes['InstitutionName'] . ')', 'value' => $co['CollegeId']);
-            }
-            $collegeListHTML = optionsHTML($collegeHelper);
-            if (isset($collegeId)) {
-                $collegeListHTML = str_replace('<option value="' . $collegeId . '">', '<option value="' . $collegeId . '" selected>', $collegeListHTML);
+            else {
+                $contactListHTML = '<p>There are no contacts associated with this program.</p>';
             }
 
             //get institution details
@@ -143,14 +137,27 @@ EOT;
             $institutions = Institution::getInstitutions();
             //turn that into an array of name/value pairs to pass to the optionsHTML.php file
             $instListHelper = array();
-            foreach ($institutions as $inst) {
-                $instListHelper[] = array('text' => $inst['InstitutionName'], 'value' => $inst['InstitutionId']);
+            foreach ($institutions as $instFoo) {
+                $instListHelper[] = array('text' => $instFoo['InstitutionName'], 'value' => $instFoo['InstitutionId']);
             }
             $instListHelper[] = array('text' => 'Other', 'value' => 'Other');
             //pass the name/value pairs to the file to get the generated HTML for a select list
             $instListHTML = optionsHTML($instListHelper);
             //make the currently assigned institution be the selected value
             $instListHTML = str_replace('<option value="' . $instId . '">', '<option value="' . $instId . '" selected>', $instListHTML);
+
+            //get list of colleges in the institution and set the currently selected option to assigned college
+            $colleges = $inst->getColleges();
+            $collegeHelper = array();
+            foreach ($colleges as $co) {
+                //get institution name so editors can select the appropriate college tied to the institution
+                $foo = new Institution($co->Attributes['InstitutionId']);
+                $collegeHelper[] = array('text' => $co->Attributes['CollegeName'] . ' (' . $foo->Attributes['InstitutionName'] . ')', 'value' => $co->Attributes['CollegeId']);
+            }
+            $collegeListHTML = optionsHTML($collegeHelper);
+            if (isset($collegeId)) {
+                $collegeListHTML = str_replace('<option value="' . $collegeId . '">', '<option value="' . $collegeId . '" selected>', $collegeListHTML);
+            }
 
             //user DOES have permission to edit this page, display the form
             $content = <<<EOT
@@ -324,7 +331,6 @@ EOT;
 EOT;
     }
 }
-
 
 //create the parameters to pass to the wrapper
 $page_params = array();

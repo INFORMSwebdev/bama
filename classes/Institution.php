@@ -132,7 +132,7 @@ class Institution extends AOREducationObject {
         return $Instructors;
     }
 
-    public function getPrograms( $asObjects = TRUE, $ApprovalStatusId = APPROVAL_STATUS_APPROVED ) {
+    public function getPrograms( $asObjects = TRUE, $ApprovalStatusId = APPROVAL_TYPE_APPROVE ) {
         $db = new EduDB;
         $Programs = [];
         $sql = "SELECT ProgramId FROM programs WHERE InstitutionId=$this->id";
