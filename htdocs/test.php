@@ -6,11 +6,8 @@
  * Time: 10:30 AM
  */
 
-require_once("/common/classes/pdo_db_single.php");
-require_once( "../classes/AOREducationObject.php");
-require_once ("../classes/EduDB.php");
-require_once( "../classes/User.php");
-$u = new User(41);
+require_once("../init.php" );
+$u = new Institution(9841);
 //print_r( $u->getInstitutionAssignments());
-print_r( $u->wtf());
+print_r( $u->getContacts() );
 echo "done";

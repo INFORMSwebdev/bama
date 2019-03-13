@@ -58,6 +58,24 @@ class Program extends AOREducationObject
         return $Contact;
     }
 
+    public function getContacts( $asObjects = TRUE, $ApprovalStatusId = APPROVAL_TYPE_APPROVE ) {
+        $db = new EduDB;
+        $sql = <<<EOT
+SELECT pc.ContactId
+FROM program_contacts pc
+JOIN contacts c ON pc.ContactId = c.ContactId
+WHERE pc.Deleted = 0 AND c.Deleted = 0 AND ProgramId = $this->id 
+EOT;
+        if ($ApprovalStatusId) $sql .= " AND c.ApprovalStatusId = $ApprovalStatusId";
+        $ContactIds = $db->queryColumn( $sql );
+        if (!$asObjects) return $ContactIds;
+        else {
+            $Contacts = null;
+            foreach($ContactIds as $ContactId ) $Contacts[] = new Contact($ContactId);
+            return $Contacts;
+        }
+    }
+
     public function getTextbooks( $active = TRUE, $asObjects = FALSE ) {
         $booksOut = [];
         $db = new EduDB();

@@ -49,6 +49,14 @@ class Institution extends AOREducationObject {
         else return $CollegeIds;
     }
 
+    public function getContacts( $asObjects = TRUE, $ApprovalStatus = APPROVAL_TYPE_APPROVE ) {
+        $Programs = $this->getPrograms( $asObjects, $ApprovalStatus );
+        $Contacts = [];
+        foreach( $Programs as $Program ) $Contacts[] = $Program->getContacts( $asObjects, $ApprovalStatus );
+        $Contacts = array_unique( $Contacts, SORT_REGULAR );
+        return $Contacts;
+    }
+
     public function getCourses( $asObjects = TRUE ) {
         $Programs = $this->getPrograms();
         $Courses = [];
@@ -124,7 +132,7 @@ class Institution extends AOREducationObject {
         return $Instructors;
     }
 
-    public function getPrograms( $asObjects = TRUE, $ApprovalStatusId = 2 ) {
+    public function getPrograms( $asObjects = TRUE, $ApprovalStatusId = APPROVAL_STATUS_APPROVED ) {
         $db = new EduDB;
         $Programs = [];
         $sql = "SELECT ProgramId FROM programs WHERE InstitutionId=$this->id";
