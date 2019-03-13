@@ -10,4 +10,5 @@ require_once("../init.php" );
 $u = new Institution(9841);
 //print_r( $u->getInstitutionAssignments());
 print_r( $u->getContacts() );
+echo PHP_EOL."has contacts: " . $u->hasColleges();
 echo "done";

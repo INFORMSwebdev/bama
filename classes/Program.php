@@ -235,6 +235,11 @@ EOT;
         return $has;
     }
 
+    public function hasContacts( $ApprovalStatusId = APPROVAL_TYPE_APPROVE ) {
+        $Contacts = $this->getContacts( FALSE, $ApprovalStatusId );
+        return (count($Contacts)) ? TRUE : FALSE;
+    }
+
     public function hasCourses() {
         $db = new EduDB;
         $sql = "SELECT CourseId FROM program_courses WHERE ProgramId = $this->id AND Deleted = 0";

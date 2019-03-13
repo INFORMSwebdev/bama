@@ -165,6 +165,11 @@ class Institution extends AOREducationObject {
         return (count($Ids)) ? TRUE : FALSE;
     }
 
+    public function hasContacts( $ApprovalStatusId = APPROVAL_TYPE_APPROVE ) {
+        $Contacts = $this->getContacts( FALSE, $ApprovalStatusId );
+        return (count($Contacts)) ? TRUE : FALSE;
+    }
+
     public function hasPrograms() {
         $db = new EduDB;
         $sql = "SELECT ProgramId FROM programs WHERE InstitutionId = $this->id AND Deleted = 0";
