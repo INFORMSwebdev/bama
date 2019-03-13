@@ -297,14 +297,14 @@ $(function() {
     $(document).on( 'click', '.btn-submit-collegeAssignment', function(e) {
         //hide the message box so the old message (if there) doesn't get confused with the new message (is this necessary?)
         $('#message').hide();
-        
-        //clear out the college list
-        $('#collegeList').html( '' );
     
         //gather selected college
         var colId = $('#collegeSelectList option:selected').val();
         //get the program id
         var progId = $('#progId').val();
+        
+        //hide the college list
+        $('#collegeList').hide();
         
         //send it to the ajax processor
         //I hope I can still use this id from above the .get!
