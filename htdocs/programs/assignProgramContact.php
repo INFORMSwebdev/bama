@@ -12,7 +12,7 @@ require_once '../../init.php';
 if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true){
     //user is not logged in
     $_SESSION['logoutMessage'] = 'You must be logged in to assign a contact to a program.';
-    header('Location: ../users/login.php');
+    header('Location: /users/login.php');
     die;
 }
 

@@ -12,7 +12,7 @@ require_once '../../init.php';
 if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true){
     //user is not logged in
     $_SESSION['logoutMessage'] = 'Please log in to edit dataset information.';
-    header('Location: ../users/login.php');
+    header('Location: /users/login.php');
     die;
 }
 

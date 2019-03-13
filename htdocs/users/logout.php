@@ -10,7 +10,7 @@ unset($_SESSION['admin']);
 $_SESSION['logoutMessage'] = 'You have been logged out of the site.';
 
 //redirect to login page
-header("Location: ../users/login.php");
+header("Location: /users/login.php");
 
 //halt execution of this script after the redirect
 //(this probably doesn't matter in this particular script since the end is right after here anyways)

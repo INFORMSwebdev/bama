@@ -71,7 +71,7 @@ function validateInput($user, $pass)
                 $_SESSION['loginErrors'] = array( 'usernameErrors' => $username_err, 'passwordErrors' => $password_err);
                 $_SESSION['loginInput'] = array( 'username' => $username );
                 //redirect to login page and inform user the results of the password verification
-                header('Location: ../users/login.php');
+                header('Location: /users/login.php');
                 die;
             }
         } else {
@@ -81,7 +81,7 @@ function validateInput($user, $pass)
             $_SESSION['loginErrors'] = array( 'usernameErrors' => $username_err, 'passwordErrors' => $password_err);
             $_SESSION['loginInput'] = array( 'username' => $username );
             //redirect to login page and inform user the results of the username check
-            header('Location: ../users/login.php');
+            header('Location: /users/login.php');
             die;
         }
     } else {
@@ -89,7 +89,7 @@ function validateInput($user, $pass)
         $_SESSION['loginErrors'] = array('usernameErrors' => $username_err, 'passwordErrors' => $password_err);
         $_SESSION['loginInput'] = array('username' => $user);
         //redirect user back to login page to re-input stuff
-        header("Location: ../users/login.php");
+        header("Location: /users/login.php");
         die;
     }
 }
