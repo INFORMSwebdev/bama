@@ -34,7 +34,8 @@ if($id){
     $access = $prog->Attributes['ProgramAccess'];
     if(isset($access) && !empty($access)){
         $accessHTML = "<p><a target='_blank' href='$access'>$access</a></p>";
-    } else {
+    }
+    else {
         $accessHTML = "<p class='text-info'>Access information for this program is currently not available.</p>";
     }
     $objectives = $prog->Attributes['ProgramObjectives'];
@@ -98,7 +99,8 @@ if($id){
 <h3 class="display3">{$contactName}</h3>
 <p>{$contactTitle}<br />{$contactPhone}<br /><a href="mailto:{$contactEmail}">{$contactEmail}</a></p>
 EOT;
-    } else {
+    }
+    else {
         $contactName = $contactTitle = $contactPhone = $contactEmail = 'Contact information for this program is not currently available';
         $contactHTML = "<p class='text text-info'>$contactName</p>";
     }
@@ -114,10 +116,13 @@ EOT;
 <p>{$collegeName}</p>
 <h3 class="display3">Type</h3>
 <p>{$collegeType}</p>
+
 EOT;
-    } else {
-        $collegeName = $collegeType = 'College information for this program is not currently available.';
+    }
+    else {
+        $collegeName = $collegeType = 'This program is not currently assigned to a college.';
         $collegeHTML = "<p class='text text-info'>$collegeName</p>";
+        $collegeHTML .= "<button id='id_{$instId}' class='btn btn-primary btn-assignToCollege'>Assign to College</button>";
     }
 
     //get institution details to display
@@ -174,6 +179,7 @@ EOT;
                 <h3>Scholarship</h3>
                 <p>{$scholarship}</p>
             </div>
+            <input type="hidden" id="progId" value="{$prog->id}" />
         </div>
         <div class="tab-pane fade" id="tabDelivery" role="tabpanel" aria-labelledby="deliveryDetails">
             <div class="card-body">
@@ -218,6 +224,7 @@ EOT;
         <div class="tab-pane fade" id="tabCollege" role="tabpanel" aria-labelledby="collegeDetails">
             <div class="card-body">
                 {$collegeHTML}
+                <div id="collegeList"><!-- empty div for college list AJAX stuff --></div> 
             </div>
         </div>
         <div class="tab-pane fade" id="tabContact" role="tabpanel" aria-labelledby="contactDetails">
@@ -226,15 +233,12 @@ EOT;
             </div>
         </div>
     </div>
-    <!--<div class="card-footer" id="cardFooter">
+    <div class="card-footer" id="cardFooter">
         <div class="btn-group" role="group" aria-label="Other program specific information">
-            <a role="button" class="btn btn-outline-primary" href="/courses/programCourses.php?id={$prog->Attributes['ProgramId']}">Program Courses</a>
-            <a role="button" class="btn btn-outline-primary" href="/instructors/programInstructors.php?id={$prog->Attributes['ProgramId']}">Program Instructors</a>
-            <a role="button" class="btn btn-outline-primary" href="/software/programSoftware.php?id={$prog->Attributes['ProgramId']}">Program Software</a>
-            <a role="button" class="btn btn-outline-primary" href="/textbooks/programTextbooks.php?progId={$prog->Attributes['ProgramId']}">Program Text Books</a>
-            <a role="button" class="btn btn-outline-primary" href="/cases/programCases.php?id={$prog->Attributes['ProgramId']}">Program Case Studies</a>
+            <a role="button" class="btn btn-warning mr-3" href="/programs/edit.php?id={$id}">Edit This Program</a>
+            <button id="id_{$id}" role="button" class="btn btn-danger btn-institution-delete">Delete This Program</button>
         </div>
-    </div>-->
+    </div>
 </div>
 EOT;
 }
@@ -256,6 +260,164 @@ else {
 EOT;
 }
 
+$customJS = <<<EOT
+$(function() {    
+    //assignToCollege button functionality
+    $(document).on( 'click', '.btn-assignToCollege', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        
+        //get list of colleges to choose from
+        var id = $(this).attr('id').substring(3);
+        $.getJSON( "/scripts/ajax_getColleges.php", { 'InstitutionId': id }, function(data) {
+            //alert( data );
+            if (data.errors.length > 0 ) {
+                var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                for (var i = 0; i < data.errors.length; i++) {
+                    msg +=  data.errors[i] + "\\r\\n";
+                }
+                //alert( msg );
+                $('#message').html('<p>' + msg + '</p>');
+                $('#message').addClass('alert alert-danger');
+                $('#message').show();
+            }
+            else if (data.success == 1) {
+                //display list to user in a nice way
+                var htmlFoo = processCollegeList(data.colleges);
+                $('#collegeList').html(htmlFoo);
+            }
+            else {
+                //I don't think this should ever get hit, but what would happen if it did?
+                $('#collegeList').html('<p>Derp</p>');
+            }
+        }); 
+    });
+    
+    //submitting college assignment via ajax
+    $(document).on( 'click', '.btn-submit-collegeAssignment', function(e) {
+        //hide the message box so the old message (if there) doesn't get confused with the new message (is this necessary?)
+        $('#message').hide();
+        
+        //clear out the college list
+        $('#collegeList').html( '' );
+    
+        //gather selected college
+        var colId = $('#collegeSelectList option:selected').val();
+        //get the program id
+        var progId = $('#progId').val();
+        
+        //send it to the ajax processor
+        //I hope I can still use this id from above the .get!
+        $.post( "/scripts/ajax_assignProgramToCollege.php", {'ProgramId': progId, 'CollegeId': colId}, function(data){
+            //alert( data );
+            //display results of processor
+            if (data.errors.length > 0 ) {
+                var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                for (var i = 0; i < data.errors.length; i++) {
+                    msg +=  data.errors[i] + "\\r\\n";
+                }
+                //alert( msg );
+                $('#message').html('<p>' + msg + '</p>');
+                $('#message').addClass('alert alert-danger');
+                $('#message').show();
+            }
+            else {
+                $('#message').html('<p>' + data.message + '</p>');
+                $('#message').addClass('alert alert-success');
+                $('#message').show();
+            }
+        }, 'json' ); 
+    });
+    
+    //institution delete button functionality
+    $(document).on( 'click', '.btn-institution-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this institution?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteInstitution.php", { 'InstitutionId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    alert( msg );
+                    //$('#message').html('<p>' + msg + '</p>').removeClass('d-hidden').addClass('alert alert-danger');
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+    
+    //program delete button functionality
+    $(document).on( 'click', '.btn-program-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this program?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteProgram.php", { 'ProgramId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    alert( msg );
+                    //$('#message').html('<p>' + msg + '</p>').removeClass('d-hidden').addClass('alert alert-danger');
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+});
+
+function processCollegeList(colleges){
+    var html = '<h2>Colleges</h2>';
+    html += '<p>Select a College Below:</p>';
+    
+    //html += '<form>'
+    //set up the select list
+    html += '<select size="5" id="collegeSelectList">';
+    html += '<option></option>';
+    //set up how the info gets displayed in the div for the user to select the college
+    for(var i = 0; i < colleges.length; i++) {
+        html += '<option value="' + colleges[i].CollegeId + '">' + colleges[i].CollegeName + '</option>';
+    }
+    html += '</select>';
+    html += '<br />';
+    html += '<button id="collegeSelectSubmit" class="btn btn-info btn-submit-collegeAssignment">Assign to Selected College</button>';
+    //html += '</form>';
+    
+    //return the HTML to put in the div
+    return html;
+}
+
+EOT;
+
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
@@ -270,7 +432,7 @@ $page_params['admin'] = TRUE;
 //put custom/extra css files, if used
 //$page_params['css'][] = array("url" => "");
 //put custom/extra JS files, if used
-//$page_params['js'][] = array("url" => "");
+$page_params['js'][] = array("text" => $customJS);
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content
