@@ -59,6 +59,7 @@ class AOREducationObject {
       $TableId = $class::$tableId;
       $PendingUpdateId = PendingUpdate::create( ['UpdateTypeId'=>$updateTypeId, 'TableId'=>$TableId, 'UpdateContent'=>serialize($this->Attributes),'UserId'=>$UserId] );
       $PendingUpdate = new PendingUpdate( $PendingUpdateId );
+      $this->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
       switch( $updateTypeId ) {
           case UPDATE_TYPE_INSERT:
               $this->id = $this->save();
