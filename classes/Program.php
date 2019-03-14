@@ -41,14 +41,14 @@ class Program extends AOREducationObject
 
     public function assignContact( $ContactId ){
         $db = new EduDB();
-        $sql = "INSERT IGNORE INTO program_contacts (ProgramId, ContactId) VALUES (:ProgramId, $this->id)";
+        $sql = "INSERT IGNORE INTO program_contacts (ProgramId, ContactId) VALUES ($this->id, :ContactId)";
         $params = array( array( ":ContactId", $ContactId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
     }
 
     public function assignCourse( $CourseId ){
         $db = new EduDB();
-        $sql = "INSERT IGNORE INTO program_courses (ProgramId, CourseId) VALUES (:ProgramId, $this->id)";
+        $sql = "INSERT IGNORE INTO program_courses (ProgramId, CourseId) VALUES ( $this->id, :CourseId)";
         $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
     }
