@@ -28,7 +28,8 @@ define( "UPDATE_TYPE_DELETE", $aes['updateTypeDelete']);
 define( "APPROVAL_TYPE_NEW", $aes['approvalTypeNew']);
 define( "APPROVAL_TYPE_APPROVE", $aes['approvalTypeApprove']);
 define( "APPROVAL_TYPE_REJECT", $aes['approvalTypeReject']);
-define( "APPROVAL_TYPE_RETIRED", $aes['approvalTypeReject']);
+define( "APPROVAL_TYPE_RETIRED", $aes['approvalTypeRetired']);
+define( "APPROVAL_TYPE_DELETED", $aes['approvalTypeDeleted']);
 
 define( "ADMIN_EMAIL", $aes['admin_email'] );
 require_once( CLASSES_DIR . "autoload.php");

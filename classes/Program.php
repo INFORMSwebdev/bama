@@ -255,4 +255,19 @@ EOT;
         $db->exec( $sql );
         return TRUE;
     }
+
+    public function unassignAllContacts() {
+        $db = new EduDB;
+        $sql = "DELETE FROM program_contacts WHERE ProgramId = $this->id";
+        return $db->exec( $sql );
+    }
+
+    public function unassignContact( $ContactId ) {
+
+        $db = new EduDB();
+        $sql = "DELETE FROM program_contacts WHERE ProgramId = $this->id AND ContactId = :ContactId";
+        $params = array( array( ":ContactId", $ContactId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
+
+    }
 }
