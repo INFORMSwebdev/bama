@@ -159,6 +159,8 @@ EOT;
                 $collegeListHTML = str_replace('<option value="' . $collegeId . '">', '<option value="' . $collegeId . '" selected>', $collegeListHTML);
             }
 
+            # ToDo: add assign contacts button instead of select list, since we can now have multiple contacts be assigned to a program
+
             //user DOES have permission to edit this page, display the form
             $content = <<<EOT
 <div class="container-fluid">

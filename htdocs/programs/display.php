@@ -91,19 +91,49 @@ if($id){
     $contactHTML = '';
     //get contact details to display
     if($contacts){
-
+        $contactHTML .= '<div class="card-deck">';
 
         //$contact = new Contact($contactId);
         foreach($contacts as $contact) {
             $contactName = $contact->Attributes['ContactName'];
             $contactTitle = $contact->Attributes['ContactTitle'];
+            if(!isset($contactTitle)){
+                $contactTitle = 'Title not set.';
+            }
+
             $contactPhone = $contact->Attributes['ContactPhone'];
+            if(!isset($contactPhone)){
+                $contactPhone = 'Phone not set.';
+            }
+
             $contactEmail = $contact->Attributes['ContactEmail'];
+            if(!isset($contactEmail)){
+                $contactEmail = 'Email not set.';
+            }
+            else {
+                $contactEmail = "<a href=mailto:$contactEmail'>$contactEmail</a>";
+            }
+
             $contactHTML .= <<<EOT
-<h3 class="display3">{$contactName}</h3>
-<p>{$contactTitle}<br />{$contactPhone}<br /><a href="mailto:{$contactEmail}">{$contactEmail}</a></p>
+<div class="card">
+    <div class="card-header">
+        <h3 class="display3">{$contactName}</h3>
+    </div>
+    <div class="card-body">
+        <p>{$contactTitle}<br />{$contactPhone}<br />{$contactEmail}</p>
+    </div>
+    <div class="card-footer"> 
+        <div class="btn-group"> 
+            <button type="button" class="btn btn-info btn-unAssignContact mr-3" id="id_{$contact->id}">Unassign This Contact</button>
+            <button type="button" class="btn btn-danger btn-contact-delete" id="id_{$contact->id}">Delete This Contact</button>
+        </div>
+    </div>
+</div>
 EOT;
         }
+
+        $contactHTML .= '</div>';
+        $contactHTML .= "<a type='button' role='button' class='btn btn-primary btn-block btn-assign-contacts mt-3' id='id_{$prog->id}' href='/programs/assignProgramContact.php?progId={$prog->id}'>Assign Contacts</a>";
     }
     else {
         $contactName = $contactTitle = $contactPhone = $contactEmail = 'Contact information for this program is not currently available';
@@ -121,7 +151,6 @@ EOT;
 <p>{$collegeName}</p>
 <h3 class="display3">Type</h3>
 <p>{$collegeType}</p>
-
 EOT;
     }
     else {
@@ -241,7 +270,7 @@ EOT;
     <div class="card-footer" id="cardFooter">
         <div class="btn-group" role="group" aria-label="Other program specific information">
             <a role="button" class="btn btn-warning mr-3" href="/programs/edit.php?id={$id}">Edit This Program</a>
-            <button id="id_{$id}" role="button" class="btn btn-danger btn-institution-delete">Delete This Program</button>
+            <button id="id_{$id}" role="button" class="btn btn-danger btn-program-delete">Delete This Program</button>
         </div>
     </div>
 </div>
@@ -334,6 +363,38 @@ $(function() {
         }, 'json' ); 
     });
     
+    //contact delete button functionality
+    $(document).on( 'click', '.btn-contact-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this contact?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteContact.php", { 'ContactId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    alert( msg );
+                    //$('#message').html('<p>' + msg + '</p>').removeClass('d-hidden').addClass('alert alert-danger');
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+    
     //institution delete button functionality
     $(document).on( 'click', '.btn-institution-delete', function(e) {
         //make sure message box gets re-hidden if its shown
@@ -419,7 +480,6 @@ function processCollegeList(colleges){
     //return the HTML to put in the div
     return html;
 }
-
 EOT;
 
 

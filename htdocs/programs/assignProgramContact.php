@@ -18,71 +18,96 @@ if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true){
 
 $progId = filter_input(INPUT_GET, 'progId', FILTER_VALIDATE_INT);
 
-$contacts = Contact::getAllContacts();
+//make sure there is a valid program id to work with (i.e. it is present and is an integer)
+if(!$progId){
+    # ToDo: figure out what to do if not passed a valid ProgramId, and if an else statement is needed here for regular content
+}
 
-$tableRows = '';
+//get the program to work with
+$prog = new Program($progId);
 
-foreach($contacts as $co){
+//get currently assigned contacts to pre-check
+$programContacts = $prog->getContacts();
 
-    $c = new Contact($co['ContactId']);
+//make it easier to search the program contacts
+$progConIds = [];
+foreach($programContacts as $pc){
+    $progConIds[] = $pc->id;
+}
 
-    $name = $c->Attributes['ContactName'];
-    $title = $c->Attributes['ContactTitle'];
-    $phone = $c->Attributes['ContactPhone'];
-    $email = $c->Attributes['ContactEmail'];
+//get assignable contacts
+$inst = new Institution($prog->Attributes['InstitutionId']);
 
-    $titleOut = $title;
-    if(empty($title)){
-        $titleOut = 'Not set';
+//This is returned as an array of contacts for each program (i.e. the first level array is each program and inside each is a list of unique contacts for each program.
+// But, what we need here is not to have duplicates appear if they are in separate programs
+//So, the work around is going to be this:
+// for each program, get contacts into a main array but after check for the contact already in array
+$instContacts = $inst->getContacts();
+
+//array of associative arrays
+$finalContacts = [];
+
+//loop through each program and add contacts to the finalContacts if they aren't already in it
+foreach($instContacts as $progCon){
+    //loop through each contact in this program and add them to the list if they aren't there yet
+    foreach($progCon as $co){
+        //check whether this contact is already in the final array
+        if(array_search($co->id, array_column($finalContacts, 'ContactId')) === false) {
+            //it is not already present
+            //temporary helper array
+            $foo = [];
+
+            $foo['ContactName'] = $co->Attributes['ContactName'];
+            $foo['ContactId'] = $co->id;
+
+            //add contact to array
+            $finalContacts[] = $foo;
+        }
     }
+}
 
-    $phoneOut = $phone;
-    if(empty($phone)){
-        $phoneOut = 'Not set';
-    }
+//set up the checklist
+$contactOptions = '';
 
-    $emailOut = 'Not set';
-    if(!empty($email)){
-        $emailOut = "<a href='mailto:$email'>$email</a>";
-    }
+foreach($finalContacts as $derp) {
 
-    $tableRows .= <<<EOT
-<tr>
-    <td>{$name}</td>
-    <td>{$titleOut}</td>
-    <td>{$phoneOut}</td>
-    <td>{$emailOut}</td>
-    <td>
-        <button id="id_{$c->id}" class="btn btn-primary btn-contact-select btn-block">Select this Contact</button>
-        <a role="button" class="btn btn-warning btn-block" href="/contacts/edit.php?id={$c->id}">Edit this Contact</a>
-        <button id="id_{$c->id}" name="contactDelete" class="btn btn-danger btn-block btn-contact-delete">Delete this Contact</button>
-    </td>
-</tr>
+    $contactId = $derp['ContactId'];
+    $name = $derp['ContactName'];
+
+    //check if this contact is currently assigned to the program and make that option pre-checked
+    if(in_array($contactId, $progConIds)){
+        $contactOptions .= <<<EOT
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" name="contactChecklistOption[]" id="check_{$contactId}" value="{$contactId}" checked>
+    <label for="check_{$contactId}">$name</label>
+</div>
 EOT;
+    }
+    else {
+        $contactOptions .= <<<EOT
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" name="contactChecklistOption[]" id="check_{$contactId}" value="{$contactId}">
+    <label for="check_{$contactId}">$name</label>
+</div>
+EOT;
+    }
 }
 
 $content = <<<EOT
-<h2>Select a Contact From the Table</h2>
-<p>Only 1 contact may be selected at a time.</p>
-<input type="hidden" id="progId" value="{$progId}" />
+<h2>Select Contacts From the Checklist</h2>
+<p>Any checked contacts will be assigned to the {$prog->Attributes['ProgramName']} program. Any un-checked contacts will be unassigned from the program, if they are currently assigned.</p>
 <div class="container-fluid">
-    <table class="table table-striped" id="contactTable">
-        <thead> 
-            <tr> 
-                <th>Name</th>
-                <th>Title</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody> 
-            {$tableRows}
-        </tbody>
-    </table>
+    <form action="/scripts/processAssignProgramContactForm.php" method="POST">
+        <div class="form-group">
+            {$contactOptions}
+        </div>
+        <div class="form-group">
+            <input type="hidden" id="progId" name="progId" value="{$prog->id}" />
+            <button type="submit" class="btn btn-primary">Submit Assignments</button>
+        </div>
+    </form>
 </div>
 EOT;
-
 
 $customJS = <<<EOT
 $(function() {

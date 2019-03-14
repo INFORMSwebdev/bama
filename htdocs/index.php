@@ -240,6 +240,7 @@ $(function() {
             html += '<h3>Last Modified</h3>';
             html += '<p>' + progs[0].LastModifiedDate + '</p>';
             html += '<div class="btn-group">';
+            html += '<a role="button" class="btn btn-info mr-3" href="/institutions/display.php?id=' + progs[0].InstitutionId + '">View Institution Details</a>';
             html += '<a role="button" class="btn btn-warning mr-3" href="/institutions/edit.php?id=' + progs[0].InstitutionId + '">Edit this Institution</a>';
             html += '<button id="id_' + progs[0].InstitutionId + '" name="instDelete" type="submit" class="btn btn-danger btn-institution-delete">Delete this Institution</button>';
             html += '</div>';
@@ -316,6 +317,7 @@ $(function() {
                         html += '<h4>Email</h4>';
                         html += '<p>' + progs[x].programs[i].ContactEmail + '</p>';
                         html += '<div class="btn-group">';
+                        html += '<a role="button" class="btn btn-info mr-3" href="/programs/display.php?id=' + progs[x].programs[i].ProgramId + '">View Program Details</a>';
                         html += '<a role="button" class="btn btn-warning mr-3" href="/programs/edit.php?id=' + progs[x].programs[i].ProgramId + '">Edit this Program</a>';
                         html += '<button id="id_' + progs[x].programs[i].ProgramId + '" name="programDelete" type="submit" class="btn btn-danger btn-program-delete">Delete this Program</button>';
                         html += '</div>'; //button-group
@@ -341,7 +343,8 @@ $(function() {
                             html += '<td>' + progs[x].programs[i].courses[y].CourseNumber + '</td>';
                             html += '<td>' + progs[x].programs[i].courses[y].instructor.InstructorName + '</td>';
                             html += '<td>';
-                            html += '<a role="button" class="btn btn-warning btn-block" href="/courses/display.php?id=' + progs[x].programs[i].courses[y].CourseId + '">View this Course</a>';
+                            html += '<a role="button" class="btn btn-info btn-block" href="/courses/display.php?id=' + progs[x].programs[i].courses[y].CourseId + '">View Course Details</a>';
+                            html += '<a role="button" class="btn btn-warning btn-block" href="/courses/edit.php?id=' + progs[x].programs[i].courses[y].CourseId + '">Edit this Course</a>';
                             html += '<button id="id_' + progs[x].programs[i].courses[y].CourseId + '" name="courseDelete" type="submit" class="btn btn-danger btn-block btn-delete">Delete this Course</button>';  
                             html += '</td>';
                             html += '</tr>';
@@ -382,6 +385,7 @@ $(function() {
                         html += '<h4>Created</h4>';
                         html += '<p>' + progs[x].colleges[i].CollegeCreated + '</p>';
                         html += '<div class="btn-group">';
+                        html += '<a role="button" class="btn btn-info mr-3" href="/colleges/display.php?id=' + progs[x].programs[i].CollegeId + '">View College Details</a>';
                         html += '<a role="button" class="btn btn-warning mr-3" href="/colleges/edit.php?id=' + progs[x].colleges[i].CollegeId + '">Edit this College</a>';
                         html += '<button id="id_' + progs[x].colleges[i].CollegeId + '" name="collegeDelete" type="submit" class="btn btn-danger btn-college-delete">Delete this College</button>';
                         html += '</div>';
