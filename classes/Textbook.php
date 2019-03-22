@@ -21,6 +21,8 @@ class Textbook extends AOREducationObject
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
+    public static $full_text_columns = 'TextbookName, Authors, TextbookPublisher';
+    public static $name_sql = 'TextbookName';
 
     /**
      * add course - textbook association

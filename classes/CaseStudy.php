@@ -24,6 +24,8 @@ class CaseStudy extends AOREducationObject {
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
+    public static $full_text_columns = 'CaseTitle, CaseUseDescription, AnalyticTag, BusinessTag';
+    public static $name_sql = 'CaseTitle';
 
     /**
      * add course - case study association

@@ -8,6 +8,8 @@
 
 require_once( "../../init.php");
 
+$redirect = (isset($_SESSION['admin_login_redirect'])) ? $_SESSION['admin_login_redirect'] : '/admin/index.php';
+
 $errors = [];
 $content = <<<EOT
 <div class="flex-column">
@@ -57,7 +59,9 @@ $(function() {
         }
         alert( msg );
       }
-      else if (data.success == 1) window.location.href = "/admin/index.php";
+      else if (data.success == 1) {
+        window.location.href = "$redirect";
+      }
     }, "json");
   });
 });

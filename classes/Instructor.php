@@ -22,6 +22,8 @@ class Instructor extends AOREducationObject
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
+    public static $full_text_columns = 'InstructorLastName, InstructorFirstName, InstructorEmail';
+    public static $name_sql = "CONCAT(InstructorFirstName,' ',InstructorLastName)";
 
     public function assignToCourse( $CourseId ) {
         $db = new EduDB();

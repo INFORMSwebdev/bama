@@ -20,6 +20,8 @@ class Software extends AOREducationObject
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
+    public static $full_text_columns = 'SoftwareName, SoftwarePublisher';
+    public static $name_sql = 'SoftwareName';
 
     /**
      * add course - software association

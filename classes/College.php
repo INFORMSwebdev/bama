@@ -21,6 +21,8 @@ class College extends AOREducationObject
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
+    public static $full_text_columns = 'CollegeName';
+    public static $name_sql = 'CollegeName';
 
     public static function getAllColleges( $active = TRUE, $asObjects = FALSE ){
         $colleges = [];

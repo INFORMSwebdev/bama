@@ -27,6 +27,8 @@ class Course extends AOREducationObject
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
+    public static $full_text_columns = 'CourseTitle, CourseText, AnalyticTag, BusinessTag';
+    public static $name_sql = 'CourseTitle';
 
     /**
      * add course - case study association

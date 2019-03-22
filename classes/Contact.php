@@ -22,6 +22,8 @@ class Contact extends AOREducationObject
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
     );
+    public static $full_text_columns = 'ContactName, ContactEmail';
+    public static $name_sql = 'ContactName';
 
     public function setInstitutionContact( $InstitutionId ){
       // this can be accomplished by updating the institution object's ContactId attribute so not adding code for this until later
