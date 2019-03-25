@@ -19,8 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
         $user = new User($_SESSION['loggedIn']);
     } else {
-        //I can't think of why this case would ever happen, but just in case set the user to default ADMIN/system record
-        $user = new User(1);
+        $_SESSION['logoutMessage'] = 'You must be logged in to submit new textbooks.';
+        header('Location: /users/login.php');
+        die;
     }
 
     //set up the new objects' info
@@ -53,8 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['editMessage']['success'] = false;
         $_SESSION['editMessage']['text'] = "New textbook was not added to the system. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
     }
-
-    //redirect user to index
-    header('Location: /index.php');
-    die;
 }
+//redirect user to index
+header('Location: /index.php');
+die;

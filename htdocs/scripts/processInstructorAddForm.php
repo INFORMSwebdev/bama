@@ -21,8 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = new User($_SESSION['loggedIn']);
     }
     else {
-        //I don't think this should ever be hit, but just in case:
-        $user = new User(1);
+        $_SESSION['logoutMessage'] = 'You must be logged in to submit new instructors.';
+        header('Location: /users/login.php');
+        die;
     }
 
     //get the form data into an array to create an object
@@ -57,8 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['editMessage']['success'] = false;
         $_SESSION['editMessage']['text'] = "New instructor was not added to the system. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
     }
-
-    //redirect user to index
-    header('Location: /index.php');
-    die;
 }
+//redirect user to index
+header('Location: /index.php');
+die;
