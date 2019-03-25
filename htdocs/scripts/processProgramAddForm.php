@@ -8,6 +8,16 @@
 //require the init file
 require_once '../../init.php';
 
+//get the users Id to put in the table
+if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
+    $user = new User($_SESSION['loggedIn']);
+}
+else {
+    $_SESSION['logoutMessage'] = 'You must be logged in to submit new programs.';
+    header('Location: /users/login.php');
+    die;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //collect the submitted info
     $progName = filter_input(INPUT_POST, 'programName', FILTER_SANITIZE_STRING);
@@ -44,15 +54,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $orFlag = FALSE;
     }
 
-    //get the users Id to put in the table
-    if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
-        $user = new User($_SESSION['loggedIn']);
-    } else {
-        $_SESSION['logoutMessage'] = 'You must be logged in to submit new programs.';
-        header('Location: /users/login.php');
-        die;
-    }
-
     //gather data to put in the pending_update record
     $data = array( "InstitutionId" => $instId,
         'ProgramName' => $progName,
@@ -75,19 +76,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
     //make a not-yet-existent Program record
     $x = Program::createInstance( $data );
-    //add record to pending_updates
-    $result = $x->createPendingUpdate( UPDATE_TYPE_INSERT, $user->Attributes['UserId']);
 
-    //check to make sure the insert occurred successfully
-    if($result == true) {
-        //set message to show user
-        $_SESSION['editMessage']['success'] = true;
-        $_SESSION['editMessage']['text'] = 'New program successfully submitted and is awaiting approval for posting.';
+    if($user->id == 1){
+        $result = $x->save();
+        if($result){
+            $p = new Program($result);
+            $p->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
+            //set message to show user
+            $_SESSION['editMessage']['success'] = true;
+            $_SESSION['editMessage']['text'] = 'New program successfully added.';
+        }
+        else {
+            $_SESSION['editMessage']['success'] = false;
+            $_SESSION['editMessage']['text'] = "New program was not added to the system. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+        }
     }
     else {
-        //I can't think of why this case would ever happen, but just in case set the user to default ADMIN/system record
-        $_SESSION['editMessage']['success'] = false;
-        $_SESSION['editMessage']['text'] = "New program was not added to the system. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+        //add record to pending_updates
+        $result = $x->createPendingUpdate(UPDATE_TYPE_INSERT, $user->Attributes['UserId']);
+
+        //check to make sure the insert occurred successfully
+        if ($result == true) {
+            //set message to show user
+            $_SESSION['editMessage']['success'] = true;
+            $_SESSION['editMessage']['text'] = 'New program successfully submitted and is awaiting approval for posting.';
+        } else {
+            //I can't think of why this case would ever happen, but just in case set the user to default ADMIN/system record
+            $_SESSION['editMessage']['success'] = false;
+            $_SESSION['editMessage']['text'] = "New program was not added to the system. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+        }
     }
 }
 //redirect user to index
