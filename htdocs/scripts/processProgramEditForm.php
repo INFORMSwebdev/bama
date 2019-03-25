@@ -89,9 +89,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if($user->id == 1){
             $prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
-            $prog->save();
-            $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Program successfully updated.';
+            $results = $prog->save();
+            if($results) {
+                $_SESSION['editMessage']['success'] = true;
+                $_SESSION['editMessage']['text'] = 'Program successfully updated.';
+            }
+            else {
+                $_SESSION['editMessage']['success'] = false;
+                $_SESSION['editMessage']['text'] = "Program update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            }
         }
         else {
             $prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
@@ -102,7 +108,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 //set message to show user
                 $_SESSION['editMessage']['success'] = true;
                 $_SESSION['editMessage']['text'] = 'Program update successfully submitted and is awaiting approval for posting.';
-            } else {
+            }
+            else {
                 $_SESSION['editMessage']['success'] = false;
                 $_SESSION['editMessage']['text'] = "Program update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
             }

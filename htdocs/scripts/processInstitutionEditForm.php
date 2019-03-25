@@ -65,9 +65,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if($user->id == 1){
             $inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
-            $inst->save();
-            $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Institution successfully updated.';
+            $results = $inst->save();
+            if($results) {
+                $_SESSION['editMessage']['success'] = true;
+                $_SESSION['editMessage']['text'] = 'Institution successfully updated.';
+            }
+            else {
+                $_SESSION['editMessage']['success'] = false;
+                $_SESSION['editMessage']['text'] = "Institution update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            }
         }
         else {
             $inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
@@ -78,7 +84,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 //set message to show user
                 $_SESSION['editMessage']['success'] = true;
                 $_SESSION['editMessage']['text'] = 'Institution update successfully submitted and is awaiting approval for posting.';
-            } else {
+            }
+            else {
                 $_SESSION['editMessage']['success'] = false;
                 $_SESSION['editMessage']['text'] = "Institution update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
             }

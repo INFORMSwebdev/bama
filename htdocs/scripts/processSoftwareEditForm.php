@@ -51,9 +51,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if($user->id == 1){
             $soft->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
-            $soft->save();
-            $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Software successfully updated.';
+            $results = $soft->save();
+            if($results) {
+                $_SESSION['editMessage']['success'] = true;
+                $_SESSION['editMessage']['text'] = 'Software successfully updated.';
+            }
+            else {
+                $_SESSION['editMessage']['success'] = false;
+                $_SESSION['editMessage']['text'] = "Software update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            }
         }
         else {
             $soft->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
@@ -64,7 +70,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 //set message to show user
                 $_SESSION['editMessage']['success'] = true;
                 $_SESSION['editMessage']['text'] = 'Software update successfully submitted and is awaiting approval for posting.';
-            } else {
+            }
+            else {
                 $_SESSION['editMessage']['success'] = false;
                 $_SESSION['editMessage']['text'] = "Software update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
             }

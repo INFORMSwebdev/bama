@@ -53,9 +53,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if($user->id == 1){
             $c->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
-            $c->save();
-            $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Case study successfully updated.';
+            $results = $c->save();
+            if($results) {
+                $_SESSION['editMessage']['success'] = true;
+                $_SESSION['editMessage']['text'] = 'Case study successfully updated.';
+            }
+            else {
+                $_SESSION['editMessage']['success'] = false;
+                $_SESSION['editMessage']['text'] = "Case study update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            }
         }
         else {
             $c->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
@@ -67,7 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 //set message to show user
                 $_SESSION['editMessage']['success'] = true;
                 $_SESSION['editMessage']['text'] = 'Case study update successfully submitted and is awaiting approval for posting.';
-            } else {
+            }
+            else {
                 $_SESSION['editMessage']['success'] = false;
                 $_SESSION['editMessage']['text'] = "Case study update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
             }
