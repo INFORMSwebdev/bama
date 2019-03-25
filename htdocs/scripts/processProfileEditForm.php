@@ -12,6 +12,23 @@ require_once '../../init.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $userId = filter_input(INPUT_POST, 'userId', FILTER_VALIDATE_INT);
+
+    if($userId != true){
+        $_SESSION['editMessage']['success'] = false;
+        $_SESSION['editMessage']['text'] = 'Invalid user Id passed.';
+        header('Location: /users/login.php');
+        die;
+    }
+
+    if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
+        $user = new User($_SESSION['loggedIn']);
+    }
+    else{
+        $_SESSION['logoutMessage'] = 'You must be logged in to submit profile edits.';
+        header('Location: /users/login.php');
+        die;
+    }
+
     //get user record
     $user = new User( $userId );
 
@@ -44,7 +61,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'FirstName' => $firstName,
                 'LastName' => $lastName
             );
-        } else {
+        }
+        else {
             //username was changed, check to make sure its not currently in use
             if (User::usernameExists($userName)) {
                 $_SESSION['editMessage']['success'] = false;

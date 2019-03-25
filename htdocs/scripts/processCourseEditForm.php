@@ -18,9 +18,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //get user info
     if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
         $user = new User($_SESSION['loggedIn']);
-    } else {
-        //I don't think this should ever be hit, but just in case:
-        $user = new User(1);
     }
 
     //check which button was pushed
@@ -61,18 +58,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $course->Attributes['SyllabusFilesize'] = $sylSize;
         $course->Attributes['AnalyticTag'] = $analytics;
         $course->Attributes['BusinessTag'] = $business;
-        $course->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
-        //put the updates in the pending_updates table
-        $result = $course->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
-
-        if ($result == true) {
-            //set message to show user
+        if($user->id == 1){
+            $course->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            $course->save();
             $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Course update successfully submitted and is awaiting approval for posting.';
-        } else {
-            $_SESSION['editMessage']['success'] = false;
-            $_SESSION['editMessage']['text'] = "Course update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            $_SESSION['editMessage']['text'] = 'Course successfully updated.';
+        }
+        else {
+            $course->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+            //put the updates in the pending_updates table
+            $result = $course->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
+
+            if ($result == true) {
+                //set message to show user
+                $_SESSION['editMessage']['success'] = true;
+                $_SESSION['editMessage']['text'] = 'Course update successfully submitted and is awaiting approval for posting.';
+            } else {
+                $_SESSION['editMessage']['success'] = false;
+                $_SESSION['editMessage']['text'] = "Course update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            }
         }
     }
 }

@@ -19,9 +19,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //get the users Id to put in the table
     if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
         $user = new User($_SESSION['loggedIn']);
-    } else {
-        //I can't think of why this case would ever happen, but just in case set the user to default ADMIN/system record
-        $user = new User(1);
+    }
+    else{
+        $_SESSION['logoutMessage'] = 'You must be logged in to submit program edits.';
+        header('Location: /users/login.php');
+        die;
     }
 
     //check which button was pushed
@@ -81,22 +83,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $prog->Attributes['EstimatedResidentTuition'] = $progResTuition;
         $prog->Attributes['EstimatedNonresidentTuition'] = $progNonResTuition;
         $prog->Attributes['CostPerCredit'] = $progCostPer;
-        //$prog->Attributes['Deleted'] = $progDeleted;
         $prog->Attributes['ORFlag'] = $orFlag;
         $prog->Attributes['AnalyticsFlag'] = $analyticsFlag;
         $prog->Attributes['CollegeId'] = $collegeId;
-        $prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
-        //put the updates in the pending_updates table
-        $result = $prog->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
-
-        if ($result == true) {
-            //set message to show user
+        if($user->id == 1){
+            $prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            $prog->save();
             $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Program update successfully submitted and is awaiting approval for posting.';
-        } else {
-            $_SESSION['editMessage']['success'] = false;
-            $_SESSION['editMessage']['text'] = "Program update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            $_SESSION['editMessage']['text'] = 'Program successfully updated.';
+        }
+        else {
+            $prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+            //put the updates in the pending_updates table
+            $result = $prog->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
+
+            if ($result == true) {
+                //set message to show user
+                $_SESSION['editMessage']['success'] = true;
+                $_SESSION['editMessage']['text'] = 'Program update successfully submitted and is awaiting approval for posting.';
+            } else {
+                $_SESSION['editMessage']['success'] = false;
+                $_SESSION['editMessage']['text'] = "Program update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            }
         }
     }
 }

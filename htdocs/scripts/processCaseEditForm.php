@@ -18,10 +18,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
         $user = new User($_SESSION['loggedIn']);
     }
-    else {
-        //I don't think this should ever be hit, but just in case:
-        $user = new User(1);
-    }
 
     //check which button was pushed
     if (isset($_POST['delete'])) {
@@ -47,14 +43,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $analytics = filter_input(INPUT_POST, 'analyticTag', FILTER_SANITIZE_STRING);
         $business = filter_input(INPUT_POST, 'businessTag', FILTER_SANITIZE_STRING);
 
-        //get user info
-        if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-            $user = new User($_SESSION['loggedIn']);
-        } else {
-            //I don't think this should ever be hit, but just in case:
-            $user = new User(1);
-        }
-
         //set it up with the new info
         $c->Attributes['CaseTitle'] = $title;
         $c->Attributes['CaseType'] = $type;
@@ -62,18 +50,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $c->Attributes['CaseAccess'] = $access;
         $c->Attributes['AnalyticTag'] = $analytics;
         $c->Attributes['BusinessTag'] = $business;
-        $c->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
-        //put the updates in the pending_updates table
-        $result = $c->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
-
-        if ($result == true) {
-            //set message to show user
+        if($user->id == 1){
+            $c->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            $c->save();
             $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Case study update successfully submitted and is awaiting approval for posting.';
-        } else {
-            $_SESSION['editMessage']['success'] = false;
-            $_SESSION['editMessage']['text'] = "Case study update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            $_SESSION['editMessage']['text'] = 'Case study successfully updated.';
+        }
+        else {
+            $c->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+
+            //put the updates in the pending_updates table
+            $result = $c->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
+
+            if ($result == true) {
+                //set message to show user
+                $_SESSION['editMessage']['success'] = true;
+                $_SESSION['editMessage']['text'] = 'Case study update successfully submitted and is awaiting approval for posting.';
+            } else {
+                $_SESSION['editMessage']['success'] = false;
+                $_SESSION['editMessage']['text'] = "Case study update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            }
         }
     }
 }

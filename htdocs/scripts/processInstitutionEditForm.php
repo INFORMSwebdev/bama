@@ -18,9 +18,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
         $user = new User($_SESSION['loggedIn']);
     }
-    else {
-        //I don't think this should ever be hit, but just in case:
-        $user = new User(1);
+    else{
+        $_SESSION['logoutMessage'] = 'You must be logged in to submit institution edits.';
+        header('Location: /users/login.php');
+        die;
     }
 
     //check which button was pushed
@@ -61,20 +62,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $inst->Attributes['InstitutionPhone'] = $phone;
         $inst->Attributes['InstitutionEmail'] = $email;
         $inst->Attributes['InstitutionAccess'] = $access;
-        //$inst->Attributes['Deleted'] = $instDeleted;
-        $inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
-        //put the updates in the pending_updates table
-        $result = $inst->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
-
-        if($result == true) {
-            //set message to show user
+        if($user->id == 1){
+            $inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            $inst->save();
             $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Institution update successfully submitted and is awaiting approval for posting.';
+            $_SESSION['editMessage']['text'] = 'Institution successfully updated.';
         }
         else {
-            $_SESSION['editMessage']['success'] = false;
-            $_SESSION['editMessage']['text'] = "Institution update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            $inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+            //put the updates in the pending_updates table
+            $result = $inst->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
+
+            if ($result == true) {
+                //set message to show user
+                $_SESSION['editMessage']['success'] = true;
+                $_SESSION['editMessage']['text'] = 'Institution update successfully submitted and is awaiting approval for posting.';
+            } else {
+                $_SESSION['editMessage']['success'] = false;
+                $_SESSION['editMessage']['text'] = "Institution update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            }
         }
     }
 }

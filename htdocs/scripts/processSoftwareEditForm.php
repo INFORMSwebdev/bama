@@ -18,9 +18,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //get user info
     if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
         $user = new User($_SESSION['loggedIn']);
-    } else {
-        //I don't think this should ever be hit, but just in case:
-        $user = new User(1);
+    }
+    else{
+        $_SESSION['logoutMessage'] = 'You must be logged in to submit software edits.';
+        header('Location: /users/login.php');
+        die;
     }
 
     //check which button was pushed
@@ -46,19 +48,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //update its attributes
         $soft->Attributes['SoftwareName'] = $name;
         $soft->Attributes['SoftwarePublisher'] = $pub;
-        //$soft->Attributes['Deleted'] = $softDeleted;
-        $soft->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
-        //put the updates in the pending_updates table
-        $result = $soft->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
-
-        if ($result == true) {
-            //set message to show user
+        if($user->id == 1){
+            $soft->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            $soft->save();
             $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Software update successfully submitted and is awaiting approval for posting.';
-        } else {
-            $_SESSION['editMessage']['success'] = false;
-            $_SESSION['editMessage']['text'] = "Software update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            $_SESSION['editMessage']['text'] = 'Software successfully updated.';
+        }
+        else {
+            $soft->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+            //put the updates in the pending_updates table
+            $result = $soft->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->id);
+
+            if ($result == true) {
+                //set message to show user
+                $_SESSION['editMessage']['success'] = true;
+                $_SESSION['editMessage']['text'] = 'Software update successfully submitted and is awaiting approval for posting.';
+            } else {
+                $_SESSION['editMessage']['success'] = false;
+                $_SESSION['editMessage']['text'] = "Software update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            }
         }
     }
 }
