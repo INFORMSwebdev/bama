@@ -44,7 +44,7 @@ class PendingUpdate extends AOREducationObject
                 case UPDATE_TYPE_DELETE:
                     $Obj = new $class( $this->Attributes['RecordId'] );
                     $Obj->update( "Deleted", 1);
-                    $Obj->update( "ApprovalStatusId", APPROVAL_TYPE_RETIRED );
+                    $Obj->update( "ApprovalStatusId", APPROVAL_TYPE_DELETED );
                     break;
                 default:
                     throw new Exception("invalid update type indicated");
