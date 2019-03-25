@@ -8,6 +8,16 @@
 //require the init file
 require_once '../../init.php';
 
+//get the users Id to put in the table
+if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
+    $user = new User($_SESSION['loggedIn']);
+}
+else{
+    $_SESSION['logoutMessage'] = 'You must be logged in to submit textbook edits.';
+    header('Location: /users/login.php');
+    die;
+}
+
 $id = filter_input(INPUT_POST, 'textbookId', FILTER_VALIDATE_INT);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -15,16 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = filter_input(INPUT_POST, 'textbookId', FILTER_VALIDATE_INT);
     //get the record to update
     $book = new Textbook($id);
-
-    //get the users Id to put in the table
-    if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
-        $user = new User($_SESSION['loggedIn']);
-    }
-    else{
-        $_SESSION['logoutMessage'] = 'You must be logged in to submit textbook edits.';
-        header('Location: /users/login.php');
-        die;
-    }
 
     //check which button was pushed
     if (isset($_POST['delete'])) {

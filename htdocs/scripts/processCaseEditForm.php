@@ -8,16 +8,21 @@
 //require the init file
 require_once '../../init.php';
 
+if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
+    $user = new User($_SESSION['loggedIn']);
+}
+else {
+    $_SESSION['logoutMessage'] = 'You must be logged in to edit case studies.';
+    header('Location: /users/login.php');
+    die;
+}
+
 $caseId = filter_input(INPUT_POST, 'caseId', FILTER_VALIDATE_INT);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //get the object to be updated
     $c = new CaseStudy($caseId);
-
-    if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-        $user = new User($_SESSION['loggedIn']);
-    }
 
     //check which button was pushed
     if (isset($_POST['delete'])) {

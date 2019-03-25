@@ -8,22 +8,22 @@
 //require the init file
 require_once '../../init.php';
 
+//get user info
+if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
+    $user = new User($_SESSION['loggedIn']);
+}
+else{
+    $_SESSION['logoutMessage'] = 'You must be logged in to submit software edits.';
+    header('Location: /users/login.php');
+    die;
+}
+
 $softId = filter_input(INPUT_POST, 'softId', FILTER_VALIDATE_INT);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //get the software record
     $soft = new Software($softId);
-
-    //get user info
-    if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-        $user = new User($_SESSION['loggedIn']);
-    }
-    else{
-        $_SESSION['logoutMessage'] = 'You must be logged in to submit software edits.';
-        header('Location: /users/login.php');
-        die;
-    }
 
     //check which button was pushed
     if (isset($_POST['delete'])) {

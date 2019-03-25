@@ -8,6 +8,16 @@
 //require the init file
 require_once '../../init.php';
 
+//get the users Id to put in the table
+if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
+    $user = new User($_SESSION['loggedIn']);
+}
+else{
+    $_SESSION['logoutMessage'] = 'You must be logged in to submit program edits.';
+    header('Location: /users/login.php');
+    die;
+}
+
 $progId = filter_input(INPUT_POST, 'programId', FILTER_VALIDATE_INT);
 
 //ensure we are processing only on a POST request
@@ -15,16 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //get the record info to update
     $prog = new Program($progId);
-
-    //get the users Id to put in the table
-    if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-        $user = new User($_SESSION['loggedIn']);
-    }
-    else{
-        $_SESSION['logoutMessage'] = 'You must be logged in to submit program edits.';
-        header('Location: /users/login.php');
-        die;
-    }
 
     //check which button was pushed
     if (isset($_POST['delete'])) {

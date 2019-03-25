@@ -8,22 +8,22 @@
 //require the init file
 require_once '../../init.php';
 
+//get user info
+if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
+    $user = new User($_SESSION['loggedIn']);
+}
+else{
+    $_SESSION['logoutMessage'] = 'You must be logged in to submit dataset edits.';
+    header('Location: /users/login.php');
+    die;
+}
+
 $datasetId = filter_input(INPUT_POST, 'datasetId', FILTER_VALIDATE_INT);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //get the object to be updated
     $dataset = new Dataset($datasetId);
-
-    //get user info
-    if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-        $user = new User($_SESSION['loggedIn']);
-    }
-    else{
-        $_SESSION['logoutMessage'] = 'You must be logged in to submit dataset edits.';
-        header('Location: /users/login.php');
-        die;
-    }
 
     if (isset($_POST['delete'])) {
         //delete button was clicked, create pending update

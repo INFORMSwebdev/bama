@@ -8,17 +8,22 @@
 //require the init file
 require_once '../../init.php';
 
+//get user info
+if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
+    $user = new User($_SESSION['loggedIn']);
+}
+else {
+    $_SESSION['logoutMessage'] = 'You must be logged in to edit colleges.';
+    header('Location: /users/login.php');
+    die;
+}
+
 $collegeId = filter_input(INPUT_POST, 'collegeId', FILTER_VALIDATE_INT);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //get the college record
     $college = new College($collegeId);
-
-    //get user info
-    if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-        $user = new User($_SESSION['loggedIn']);
-    }
 
     //check which button was pushed
     if (isset($_POST['delete'])) {
