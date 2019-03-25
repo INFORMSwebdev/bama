@@ -138,8 +138,9 @@ EOT;
   }
   
   public function updateMultiple( $params ) {
+    $counter = 0;
     foreach( $params as $key => $value ) {
-      $this->update( $key, $value );
+      $counter += $this->update( $key, $value );
     }
   }
 
