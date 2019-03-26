@@ -7,7 +7,7 @@
  */
 
 require_once( "../../init.php");
-if (!isset($_SESSION['admin']) && !isset($_SESSION['loggedIn'])) die( "unauthorized access" );
+//if (!isset($_SESSION['admin']) && !isset($_SESSION['loggedIn'])) die( "unauthorized access" );
 
 $ok_crits = [
     'deleted' => 'Deleted = 1',
