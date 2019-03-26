@@ -8,6 +8,16 @@
 //require the init file
 require_once '../../init.php';
 
+//get the users Id to put in the table
+if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
+    $user = new User($_SESSION['loggedIn']);
+}
+else{
+    $_SESSION['logoutMessage'] = 'You must be logged in to submit program edits.';
+    header('Location: /users/login.php');
+    die;
+}
+
 $progId = filter_input(INPUT_POST, 'programId', FILTER_VALIDATE_INT);
 
 //ensure we are processing only on a POST request
@@ -15,16 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //get the record info to update
     $prog = new Program($progId);
-
-    //get the users Id to put in the table
-    if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-        $user = new User($_SESSION['loggedIn']);
-    }
-    else{
-        $_SESSION['logoutMessage'] = 'You must be logged in to submit program edits.';
-        header('Location: /users/login.php');
-        die;
-    }
 
     //check which button was pushed
     if (isset($_POST['delete'])) {
@@ -89,9 +89,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if($user->id == 1){
             $prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
-            $prog->save();
-            $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Program successfully updated.';
+            $results = $prog->save();
+            if($results) {
+                $_SESSION['editMessage']['success'] = true;
+                $_SESSION['editMessage']['text'] = 'Program successfully updated.';
+            }
+            else {
+                $_SESSION['editMessage']['success'] = false;
+                $_SESSION['editMessage']['text'] = "Program update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            }
         }
         else {
             $prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
@@ -102,7 +108,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 //set message to show user
                 $_SESSION['editMessage']['success'] = true;
                 $_SESSION['editMessage']['text'] = 'Program update successfully submitted and is awaiting approval for posting.';
-            } else {
+            }
+            else {
                 $_SESSION['editMessage']['success'] = false;
                 $_SESSION['editMessage']['text'] = "Program update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
             }

@@ -8,6 +8,16 @@
 //require the init file
 require_once '../../init.php';
 
+//get the users Id to put in the table
+if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
+    $user = new User($_SESSION['loggedIn']);
+}
+else{
+    $_SESSION['logoutMessage'] = 'You must be logged in to submit textbook edits.';
+    header('Location: /users/login.php');
+    die;
+}
+
 $id = filter_input(INPUT_POST, 'textbookId', FILTER_VALIDATE_INT);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -15,16 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = filter_input(INPUT_POST, 'textbookId', FILTER_VALIDATE_INT);
     //get the record to update
     $book = new Textbook($id);
-
-    //get the users Id to put in the table
-    if(isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])){
-        $user = new User($_SESSION['loggedIn']);
-    }
-    else{
-        $_SESSION['logoutMessage'] = 'You must be logged in to submit textbook edits.';
-        header('Location: /users/login.php');
-        die;
-    }
 
     //check which button was pushed
     if (isset($_POST['delete'])) {
@@ -54,9 +54,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if($user->id == 1){
             $book->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
-            $book->save();
-            $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Textbook successfully updated.';
+            $results = $book->save();
+            if($results) {
+                $_SESSION['editMessage']['success'] = true;
+                $_SESSION['editMessage']['text'] = 'Textbook successfully updated.';
+            }
+            else {
+                $_SESSION['editMessage']['success'] = false;
+                $_SESSION['editMessage']['text'] = "Textbook update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            }
         }
         else {
             $book->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
@@ -67,7 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 //set message to show user
                 $_SESSION['editMessage']['success'] = true;
                 $_SESSION['editMessage']['text'] = 'Textbook update successfully submitted and is awaiting approval for posting.';
-            } else {
+            }
+            else {
                 $_SESSION['editMessage']['success'] = false;
                 $_SESSION['editMessage']['text'] = "Textbook update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
             }

@@ -8,22 +8,22 @@
 //require the init file
 require_once '../../init.php';
 
+//get user info
+if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
+    $user = new User($_SESSION['loggedIn']);
+}
+else{
+    $_SESSION['logoutMessage'] = 'You must be logged in to submit dataset edits.';
+    header('Location: /users/login.php');
+    die;
+}
+
 $datasetId = filter_input(INPUT_POST, 'datasetId', FILTER_VALIDATE_INT);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //get the object to be updated
     $dataset = new Dataset($datasetId);
-
-    //get user info
-    if (isset($_SESSION['loggedIn']) && is_numeric($_SESSION['loggedIn'])) {
-        $user = new User($_SESSION['loggedIn']);
-    }
-    else{
-        $_SESSION['logoutMessage'] = 'You must be logged in to submit dataset edits.';
-        header('Location: /users/login.php');
-        die;
-    }
 
     if (isset($_POST['delete'])) {
         //delete button was clicked, create pending update
@@ -69,9 +69,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if($user->id == 1){
             $dataset->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
-            $dataset->save();
-            $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Dataset successfully updated.';
+            $results = $dataset->save();
+            if($results) {
+                $_SESSION['editMessage']['success'] = true;
+                $_SESSION['editMessage']['text'] = 'Dataset successfully updated.';
+            }
+            else {
+                $_SESSION['editMessage']['success'] = false;
+                $_SESSION['editMessage']['text'] = "Dataset update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
+            }
         }
         else {
             $dataset->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
@@ -82,7 +88,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 //set message to show user
                 $_SESSION['editMessage']['success'] = true;
                 $_SESSION['editMessage']['text'] = 'Dataset update successfully submitted and is awaiting approval for posting.';
-            } else {
+            }
+            else {
                 $_SESSION['editMessage']['success'] = false;
                 $_SESSION['editMessage']['text'] = "Dataset update failed. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
             }
