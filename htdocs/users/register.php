@@ -45,28 +45,27 @@ $content = <<<EOT
 	<h1>Request for Program Administrator</h1>
 </div>
 <div class="flex-column">
-	<p>Please fill this form to submit a request to become an Institution Administrator.</p>
-	<p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+	<p>Please fill this form to submit a request to become an Institution Administrator. Fields marked with <span class="text text-danger">*</span> are required.</p>
 </div>
 <div class="container-fluid">
 	<form action="{$registerFormProcessor}" method="post">
 		<div class="form-group">
-			<label for="Username">Email Address</label> <span class="text text-danger">*</span>
+			<label for="Username">Email Address</label><span class="text text-danger">*</span>
 			<input type="text" class="form-control" name="Username" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." required />
 			<small id="UserNameHelp" class="form-text text-muted">This is a separate login from an INFORMS account.</small>
 		</div>
 		<div class="form-group">
-			<label for="FirstName">First Name</label> <span class="text text-danger">*</span>
+			<label for="FirstName">First Name</label><span class="text text-danger">*</span>
 			<input type="text" class="form-control" name="FirstName" id="FirstName" placeholder="First Name" required />
 			<!--<small id="FirstNameHelp" class="form-text text-muted">We could add in help text for international people here if needed</small>-->
 		</div>
 		<div class="form-group">
-			<label for="LastName">Last Name</label> <span class="text text-danger">*</span>
+			<label for="LastName">Last Name</label><span class="text text-danger">*</span>
 			<input type="text" class="form-control" name="LastName" id="LastName" placeholder="Last Name" required />
 			<!--<small id="LastNameHelp" class="form-text text-muted">We could add in help text for international people here if needed</small>-->
 		</div>
 		<div class="form-group">
-		    <label for="Institution">Institution (select one)</label> <span class="text text-danger">*</span>
+		    <label for="Institution">Institution (select one)</label><span class="text text-danger">*</span>
 		    <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required>
 		        {$instListHTML}
             </select>

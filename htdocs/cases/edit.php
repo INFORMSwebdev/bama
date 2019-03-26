@@ -55,13 +55,16 @@ if($caseId){
     $business = $c->Attributes['BusinessTag'];
 
     $content = <<<EOT
+<div class="flex-column">
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+</div>
 <div class="container-fluid">
     <form action="../scripts/processCaseEditForm.php" method="POST">
         <div class="form-row">
             <h3>Case Study Details</h3>
         </div>
         <div class="form-row"> 
-            <label for="caseTitle">Title</label>
+            <label for="caseTitle">Title</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="caseTitle" id="caseTitle" placeholder="Title of case study" value="{$name}" required />
         </div>
         <br />

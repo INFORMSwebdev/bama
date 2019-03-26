@@ -50,41 +50,44 @@ if($datasetId){
     $dataset = new Dataset($datasetId);
 
     $content = <<<EOT
+<div class="flex-column">
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+</div>
 <div class="container-fluid">
     <form action="../scripts/processDatasetEditForm.php" method="POST">
         <div class="form-row">
             <h3>Dataset Details</h3>
         </div>
         <div class="form-row"> 
-            <label for="datasetName">Name</label>
+            <label for="datasetName">Name</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="datasetName" id="datasetName" placeholder="Name of dataset" value="{$dataset->Attributes['DatasetName']}" required />
         </div>
         <br />
         <div class="form-row"> 
-            <label for="datasetType">Type</label>
+            <label for="datasetType">Type</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="datasetType" id="datasetType" placeholder="Type of dataset" value="{$dataset->Attributes['DatasetType']}" required />
         </div>
         <br />
         <div class="form-row">
-            <label for="datasetIntegrity">Integrity</label>
+            <label for="datasetIntegrity">Integrity</label><span class="text text-danger">*</span>
 		    <textarea class="form-control" name="datasetIntegrity" id="datasetIntegrity" aria-describedby="integrityHelp" placeholder="Describe the integrity of the dataset" value="{$dataset->Attributes['DatasetIntegrity']}" required></textarea>
 		    <p id="integrityHelp">Note telling how the integrity is expected to be entered.</p>
         </div>
         <!--<br />-->
         <div class="form-row"> 
-            <label for="datasetFileType">File Type</label>
+            <label for="datasetFileType">File Type</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="datasetFileType" id="datasetFileType" aria-describedby="fileTypeHelp" placeholder="Type of file the dataset is" value="{$dataset->Attributes['DatasetFileType']}" required />
             <p id="fileTypeHelp">.DOCX, .DOC, .PDF, .XLSX, etc.</p>
         </div>
         <!--<br />-->
         <div class="form-row"> 
-            <label for="useDescription">Use Description</label>
+            <label for="useDescription">Use Description</label><span class="text text-danger">*</span>
             <textarea class="form-control" name="useDescription" id="useDescription" aria-describedby="descriptionHelp" placeholder="Describe how to use the dataset" value="{$dataset->Attributes['DatasetUseDescription']}" required></textarea>
             <p id="descriptionHelp">Advice on how to best input the use description.</p>
         </div>
         <!--<br />-->
         <div class="form-row"> 
-            <label for="datasetAccess">Access</label>
+            <label for="datasetAccess">Access</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="datasetAccess" id="datasetAccess" aria-describedby="accessHelp" placeholder="www.informs.org/datasets/exampleFile.docx" value="{$dataset->Attributes['DatasetAccess']}" required />
             <p id="accessHelp">Only valid URLs will be accepted.</p>
         </div>

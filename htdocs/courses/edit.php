@@ -89,6 +89,9 @@ if($courseId){
 
     //set up the form to serve on the page
     $content = <<<EOT
+<div class="flex-column">
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+</div>
 <div class="container-fluid">
     <div class="card">
         <div class="card-header">
@@ -97,7 +100,7 @@ if($courseId){
         <div class="card-body">
             <form action="/scripts/processCourseEditForm.php" method="POST">
                 <div class="form-row"> 
-                    <label for="courseTitle">Title</label>
+                    <label for="courseTitle">Title</label><span class="text text-danger">*</span>
                     <input type="text" class="form-control" name="courseTitle" id="courseTitle" value="{$co->Attributes['CourseTitle']}" placeholder="Title of course" required />
                 </div>
                 <br />

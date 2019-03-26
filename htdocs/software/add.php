@@ -23,13 +23,16 @@ $courseId = filter_input(INPUT_GET, 'courseId', FILTER_VALIDATE_INT);
 
 //display the form for adding institution info to the user
 $content = <<<EOT
+<div class="flex-column">
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+</div>
 <div class="container-fluid">
     <form action="../scripts/processSoftwareAddForm.php" method="POST">
         <div class="form-row">
             <h3>Software Details</h3>
         </div>
         <div class="form-row"> 
-            <label for="name">Name</label>
+            <label for="name">Name</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="name" id="name" placeholder="Name of software" required />
         </div>
         <br />

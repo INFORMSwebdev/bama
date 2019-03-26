@@ -73,35 +73,38 @@ if($instId){
 
     //display form w/ the specified institution info
     $content = <<<EOT
+<div class="flex-column">
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+</div>
 <div class="container-fluid">
     <form action="../scripts/processInstitutionEditForm.php" method="POST">
         <div class="form-row">
             <h3>Institution Details</h3>
         </div>
         <div class="form-row"> 
-            <label for="institutionName">Name</label>
+            <label for="institutionName">Name</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="institutionName" id="institutionName" placeholder="Name of institution" value="{$name}" required />
         </div>
         <br />
         <div class="form-row"> 
-            <label for="institutionAddress">Address</label>
+            <label for="institutionAddress">Address</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="institutionAddress" id="institutionAddress" placeholder="Address of institution" aria-describedby="addressHelp" value="{$addr}" required />
             <p id="addressHelp">Please use the format: Number, Street Name, Suite (if applicable)</p>
         </div>
         <div class="form-row">
-            <label for="city">City</label>
+            <label for="city">City</label><span class="text text-danger">*</span>
 		    <input type="text" class="form-control" name="city" id="city" placeholder="City where institution is located" value="{$city}" required />
         </div>
         <br />
         <div class="form-row"> 
-            <label for="state">State</label>
+            <label for="state">State</label><span class="text text-danger">*</span>
             <select class="form-control" name="state" id="state" required>
 		        {$stateListHTML}
             </select>
         </div>
         <br />
         <div class="form-row"> 
-            <label for="zip">Zip Code</label>
+            <label for="zip">Zip Code</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="zip" id="zip" placeholder="Zip code" value="{$zip}" required />
         </div>
         <br />

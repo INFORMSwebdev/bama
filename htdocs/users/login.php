@@ -73,11 +73,11 @@ if(isset($_SESSION['loginInput'])) {
 	<h1>Institution Administrator Login</h1>
 </div>
 <div class="flex-column">
-	<p>Log in to administrate your program's information.</p>
+	<p>Log in to administrate your program's information. Fields marked with <span class="text text-danger">*</span> are required.</p>
 </div>
 <form class="needs-validation" action="../scripts/processLoginForm.php" method="post" novalidate id="login_form">
 	<div class="form-group">
-		<label for="validationUsername">Username</label>
+		<label for="validationUsername">Username</label><span class="text text-danger">*</span>
 		<input type="text" class="form-control" id="validationUsername" name="username" placeholder="Username" value="{$prevUsername}" required />
 		<div class="valid-feedback">
 			Looks good!
@@ -87,7 +87,7 @@ if(isset($_SESSION['loginInput'])) {
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="validationPassword">Password</label>
+		<label for="validationPassword">Password</label><span class="text text-danger">*</span>
 		<input type="password" class="form-control" id="validationPassword" name="password" placeholder="Password" required />
 		<div class="valid-feedback">
 			Looks good!
@@ -115,7 +115,7 @@ else {
 <div class="container-fluid">
     <form class="needs-validation" action="../scripts/processLoginForm.php" method="post" novalidate>
     	<div class="form-group">
-    		<label for="validationUsername">Username</label>
+    		<label for="validationUsername">Username</label><span class="text text-danger">*</span>
     		<input type="text" class="form-control" id="validationUsername" name="username" placeholder="Username" required />
     		<div class="valid-feedback">
     			Looks good!
@@ -125,7 +125,7 @@ else {
     		</div>
     	</div>
     	<div class="form-group">
-    		<label for="validationPassword">Password</label>
+    		<label for="validationPassword">Password</label><span class="text text-danger">*</span>
     		<input type="password" class="form-control" id="validationPassword" name="password" placeholder="Password" required />
     		<div class="valid-feedback">
     			Looks good!

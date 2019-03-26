@@ -163,13 +163,16 @@ EOT;
 
             //user DOES have permission to edit this page, display the form
             $content = <<<EOT
+<div class="flex-column">
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+</div>
 <div class="container-fluid">
     <form action="../scripts/processProgramEditForm.php" method="POST">
         <div class="form-row">
             <h3>Program Details</h3>
         </div>
         <div class="form-row">
-            <label for="programName">Program Name</label>
+            <label for="programName">Program Name</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="programName" id="programName" value="{$name}" placeholder="Program Name" required />
         </div>
         <br />
@@ -195,7 +198,7 @@ EOT;
             <textarea class="form-control" name="ProgramObjs" id="ProgramObjs" rows="3">{$objectives}</textarea>
         </div>
         <div class="form-row">
-            <label for="ProgramType">Type</label>
+            <label for="ProgramType">Type</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="ProgramType" id="ProgramType" value="{$type}" placeholder="Program Type" required />
         </div>
         <div class="form-row">

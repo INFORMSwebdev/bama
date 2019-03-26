@@ -22,13 +22,16 @@ $courseId = filter_input(INPUT_GET, 'courseId', FILTER_VALIDATE_INT);
 $user = new User($_SESSION['loggedIn']);
 
 $content = <<<EOT
+<div class="flex-column">
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+</div>
 <div class="container-fluid">
     <form action="../scripts/processCaseAddForm.php" method="POST">
         <div class="form-row">
             <h3>Case Study Details</h3>
         </div>
         <div class="form-row"> 
-            <label for="caseTitle">Title</label>
+            <label for="caseTitle">Title</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="caseTitle" id="caseTitle" placeholder="Title of case study" required />
         </div>
         <br />

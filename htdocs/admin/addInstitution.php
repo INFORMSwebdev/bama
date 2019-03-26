@@ -36,12 +36,13 @@ $content = <<<EOT
 </div>
 <div class="flex-column">
     <h2>Add Institution</h2>
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
 </div>
 <div class="flex-column">
   <form id="form-addInstitution">
     <div class="form-group">
-      <label for="InstitutionName">Institution Name</label>
-      <input type="text" class="form-control" id="InstitutionName" name="InstitutionName" placeholder="Institution Name" required/>
+      <label for="InstitutionName">Institution Name</label><span class="text text-danger">*</span>
+      <input type="text" class="form-control" id="InstitutionName" name="InstitutionName" placeholder="Institution Name" required />
     </div>
     <div class="form-group">
       <label for="InstitutionAddress">Street Address</label>

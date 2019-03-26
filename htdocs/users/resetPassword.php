@@ -15,11 +15,12 @@ $content = <<<EOT
 	<p>Use the form below to request a password reset. An email will be sent to you with a link that 
 	will allow you to set a new password. If you do not receive the password reset email within a few minutes, check 
 	your spam/junk folder.</p>
+	<p>Fields marked with <span class="text text-danger">*</span> are required.</p>
 </div>
 <div class="container-fluid">
     <form id="passwordResetForm">
       <div class="form-group">
-        <label for="email">Email Address</label>
+        <label for="email">Email Address</label><span class="text text-danger">*</span>
     		<input type="email" class="form-control" id="email" name="email" placeholder="Email Address" required />
     		<div class="valid-feedback">
     			Looks good!

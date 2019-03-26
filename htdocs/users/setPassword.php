@@ -17,6 +17,7 @@ $_SESSION["password_set_for"] = $User->id;
 $content = <<<EOT
 <div class="flex-column">
 	<h1>Set New Password</h1>
+	<p>Fields marked with <span class="text text-danger">*</span> are required.</p>
 </div>
 <div class="flex-column">
 	<p>Password rules:</p>
@@ -29,11 +30,11 @@ $content = <<<EOT
 <div class="container-fluid">
     <form id="setPasswordForm" method="POST">
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password">Password</label><span class="text text-danger">*</span>
     		<input minlength="8" type="password" class="form-control" id="password" name="password" required />
       </div>
       <div class="form-group">
-        <label for="password_confirm">Retype Password to Confirm</label>
+        <label for="password_confirm">Retype Password to Confirm</label><span class="text text-danger">*</span>
     		<input type="password" class="form-control" id="password_confirm" name="password_confirm" required />
       </div>
       <div class="form-group">

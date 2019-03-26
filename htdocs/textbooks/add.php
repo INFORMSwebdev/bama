@@ -20,13 +20,16 @@ $courseId = filter_input(INPUT_GET, 'courseId', FILTER_VALIDATE_INT);
 
 //display the form for adding textbook info to the user
 $content = <<<EOT
+<div class="flex-column">
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+</div>
 <div class="container-fluid">
     <form action="../scripts/processTextbookAddForm.php" method="POST">
         <div class="form-row">
             <h3>Textbook Details</h3>
         </div>
         <div class="form-row"> 
-            <label for="textbookName">Name</label>
+            <label for="textbookName">Name</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="textbookName" id="textbookName" placeholder="Title of textbook" required />
         </div>
         <br />

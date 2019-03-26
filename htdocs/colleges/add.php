@@ -26,7 +26,7 @@ if($instId){
 
     $content = <<<EOT
 <div class="flex-column">
-    <p>This college will be associated with your assigned institution.</p>
+    <p>This college will be associated with your assigned institution. Fields marked with <span class="text text-danger">*</span> are required.</p>
 </div>
 <div class="container-fluid">
     <form action="/scripts/processCollegeAddForm.php" method="POST">
@@ -34,11 +34,11 @@ if($instId){
             <h3>College Details</h3>
         </div>
         <div class="form-row"> 
-            <label for="collegeName">Name</label>
+            <label for="collegeName">Name</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="collegeName" id="collegeName" placeholder="Name of college" required />
         </div>
         <div class="form-row"> 
-            <label for="collegeType">Type</label>
+            <label for="collegeType">Type</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="collegeType" id="collegeType" placeholder="Type of college" required />
         </div>
         <br />

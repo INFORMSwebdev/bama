@@ -23,13 +23,16 @@ $instId = filter_input(INPUT_GET, 'instId', FILTER_VALIDATE_INT);
 
 //user is logged in, let them add a program
 $content = <<<EOT
+<div class="flex-column">
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+</div>
 <div class="container-fluid">
     <form action="/scripts/processProgramAddForm.php" method="POST">
         <div class="form-row">
             <h3>Program Details</h3>
         </div>
         <div class="form-row">
-            <label for="programName">Program Name</label>
+            <label for="programName">Program Name</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="programName" id="programName" placeholder="Program Name" required />
         </div>
         <br />
@@ -53,7 +56,7 @@ $content = <<<EOT
             <textarea class="form-control" name="ProgramObjs" id="ProgramObjs" rows="3"></textarea>
         </div>
         <div class="form-row">
-            <label for="ProgramType">Type</label>
+            <label for="ProgramType">Type</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="ProgramType" id="ProgramType" placeholder="Program Type" required />
         </div>
         <div class="form-row">

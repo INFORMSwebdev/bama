@@ -28,18 +28,21 @@ if($courseId){
 
 //display the form for adding institution info to the user
 $content = <<<EOT
+<div class="flex-column">
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+</div>
 <div class="container-fluid">
     <form action="../scripts/processInstructorAddForm.php" method="POST">
         <div class="form-row">
             <h3>Instructor Details</h3>
         </div>
         <div class="form-row"> 
-            <label for="firstName">First Name</label>
+            <label for="firstName">First Name</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="firstName" id="firstName" placeholder="First name of instructor" required />
         </div>
         <br />
         <div class="form-row"> 
-            <label for="lastName">Last Name</label>
+            <label for="lastName">Last Name</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last name/surname of instructor" required />
         </div>
         <br />

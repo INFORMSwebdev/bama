@@ -28,13 +28,16 @@ if($collegeId){
     $college = new College($collegeId);
 
     $content = <<<EOT
+<div class="flex-column">
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+</div>
 <div class="container-fluid">
     <form action="../scripts/processCollegeEditForm.php" method="POST">
         <div class="form-row"> 
             <h3>College Details</h3>
         </div>
         <div class="form-row"> 
-            <label for="collegeName">Title</label>
+            <label for="collegeName">Title</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="collegeName" id="collegeName" value="{$college->Attributes['CollegeName']}" value="{$college->Attributes['CollegeName']}" placeholder="Name of college" required />
         </div>
         <div class="form-row"> 

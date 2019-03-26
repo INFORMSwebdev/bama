@@ -32,13 +32,16 @@ $content = '';
 
 //display the form for adding course info to the user
 $content = <<<EOT
-<!--<div class="container-fluid">-->
+<div class="flex-column">
+    <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
+</div>
+<div class="container-fluid">
     <form action="../scripts/processCourseAddForm.php" method="POST">
         <div class="form-row">
             <h3>Course Details</h3>
         </div>
         <div class="form-row"> 
-            <label for="courseTitle">Title</label>
+            <label for="courseTitle">Title</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="courseTitle" id="courseTitle" placeholder="Title of course" required />
         </div>
         <br />
@@ -83,7 +86,7 @@ $content = <<<EOT
             <p class="lead">This course will not be added to the system until the changes are approved by an INFORMS administrator.</p>
         </div>
     </form>
-<!--</div>-->
+</div>
 EOT;
 
 //create the parameters to pass to the wrapper

@@ -38,19 +38,20 @@ $instList .= '</ul>';
 $content = <<<EOT
 <div class="flex-column">
 	<h2>My Profile Information</h2>
+	<p>Fields marked with <span class="text text-danger">*</span> are required.</p>
 </div>
 <div class="contianer-fluid">
 	<form action="../scripts/processProfileEditForm.php" method="POST">
 		<div class="form-group">
-			<label for="Username">Email Address/Username</label>
+			<label for="Username">Email Address/Username</label><span class="text text-danger">*</span>
 			<input type="text" class="form-control" name="Username" value="{$userName}" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." required />
 		</div>
 		<div class="form-group">
-			<label for="FirstName">First Name</label>
+			<label for="FirstName">First Name</label><span class="text text-danger">*</span>
 			<input type="text" class="form-control" name="FirstName" value="{$firstName}" id="FirstName" placeholder="First Name" required />
 		</div>
 		<div class="form-group">
-			<label for="LastName">Last Name</label>
+			<label for="LastName">Last Name</label><span class="text text-danger">*</span>
 			<input type="text" class="form-control" name="LastName" value="{$lastName}" id="LastName" placeholder="Last Name" required />
 		</div>
 		<div class="form-group">
