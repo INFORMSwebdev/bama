@@ -43,8 +43,9 @@ $content = <<<EOT
 		</div>
 	  </div>
 	  <div class="form-row">
-        <label for="email">Email Address</label>
+        <label for="email">Email Address/Username</label>
         <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required>
+        <small id="UserNameHelp" class="form-text text-muted">This is a separate login from an INFORMS account. Email address is the username.</small>
         <div class="valid-feedback">
             Looks good!
         </div>
@@ -94,7 +95,7 @@ function fillInsts( filter ) {
   $('#inst').prop( "disabled", "disabled" );
   $.getJSON( "/scripts/ajax_getInstitutions.php", { 'filter': filter, 'crits': ['not-deleted','not-expired'] }, function( data ) {
     $('#inst').empty();
-    $('#inst').append( $('<option valueg="0">(no selection)</option>' ));
+    $('#inst').append( $('<option value="0">(no selection)</option>' ));
     for( var i = 0; i < data.insts.length; i++ ) {
       var opt = $('<option value="'+data.insts[i].InstitutionId+'">'+data.insts[i].InstitutionName+'</option>');
       $('#inst').append( opt );
