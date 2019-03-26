@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = trim($_POST['Username']);
     $firstName = trim($_POST['FirstName']);
     $lastName = trim($_POST['LastName']);
-    $instId = trim($_POST['Institution']);
+    $instId = trim($_POST['inst']);
     $comments = trim($_POST['Comments']);
 
     //check the validity of inputs
@@ -32,11 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //add record to pending_users table
     $pendingUserId = PendingUser::create(
         array(
-            'Username' => trim($_POST['Username']),
-            'FirstName' => trim($_POST['FirstName']),
-            'LastName' => trim($_POST['LastName']),
-            'InstitutionId' => trim($_POST['Institution']),
-            'Comments' => trim($_POST['Comments'])
+            'Username' => $user,
+            'FirstName' => $firstName,
+            'LastName' => $lastName,
+            'InstitutionId' => $instId,
+            'Comments' => $comments
         )
     );
 

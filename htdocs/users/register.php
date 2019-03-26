@@ -64,14 +64,31 @@ $content = <<<EOT
 			<input type="text" class="form-control" name="LastName" id="LastName" placeholder="Last Name" required />
 			<!--<small id="LastNameHelp" class="form-text text-muted">We could add in help text for international people here if needed</small>-->
 		</div>
-		<div class="form-group">
-		    <label for="Institution">Institution (select one)</label><span class="text text-danger">*</span>
-		    <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required>
-		        {$instListHTML}
-            </select>
-            <small id="InstitutionHelp" class="form-text text-muted">Select the institution that you wish to be an administrator for.</small>
-            <small id="InstitutionOther" class="form-text text-warning">If you do not see your institution in the list, please select the 'Other' option and specify your institution in the Justification box below.</small>
-        </div>
+		
+		<!--<div class="form-group">-->
+		    <!--<label for="Institution">Institution (select one)</label><span class="text text-danger">*</span>-->
+		    <!--<select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required>-->
+		        <!-- -->
+            <!--</select>-->    
+        <!--</div>-->
+        
+        <div class="form-group" id="instPickerContainer">
+	        <div class="col-xs-6 form-group">
+                <label for="inst">Institution</label>
+                <select name="inst" id="inst" class="form-control"></select>
+                <small id="InstitutionHelp" class="form-text text-muted">Select the institution that you wish to be an administrator for.</small>
+                <small id="InstitutionOther" class="form-text text-warning">If you do not see your institution in the list, please select the 'Other' option and specify your institution in the Justification box below.</small>
+            </div>
+            <div class="col-xs-6 form-group">
+                <label for="instFilter">Filter</label>
+                <div id="instFilterContainer">
+                    <input type="text" class="form-control"  id="instFilter" />
+                    <button id="clearFilter" title="clear filter">X</button>
+                </div>
+            </div>
+	    </div>
+        
+        
         <div class="form-group">
             <label for="Comments">{$commentBoxLabel}</label>
             <textarea class="form-control" id="Comments" name="Comments" rows="3"></textarea>
@@ -83,19 +100,77 @@ $content = <<<EOT
 </div>
 EOT;
 
+$custom_css = <<<EOT
+#instPickerContainer { display: grid; grid-template-columns: auto 250px; }
+#instFilterContainer { position: relative; }
+input#instFilter { padding-right: 25px; width: 100%; }
+button#clearFilter { 
+position:absolute; 
+top:0; 
+right: 0; 
+width:25px; 
+height: calc(2.25rem + 2px);
+color: #f00; 
+display: none;}
+
+EOT;
+
+$custom_js = <<<EOT
+function fillInsts( filter ) {
+  $('#inst').empty();
+  $('#inst').append( $('<option>Loading...</option>' ));
+  $('#inst').prop( "disabled", "disabled" );
+  $.getJSON( "/scripts/ajax_getInstitutions.php", { 'filter': filter, 'crits': ['not-deleted','not-expired'] }, function( data ) {
+    $('#inst').empty();
+    $('#inst').append( $('<option value="0">(no selection)</option>' ));
+    for( var i = 0; i < data.insts.length; i++ ) {
+      var opt = $('<option value="'+data.insts[i].InstitutionId+'">'+data.insts[i].InstitutionName+'</option>');
+      $('#inst').append( opt );
+    }
+    $('#inst').prop( "disabled", false );
+  });
+}
+$(function() {
+  fillInsts( null );
+  $('#instFilter').on( 'click keyup', function (e) {
+    if ($(this).val().length > 2 ) {
+      fillInsts( $(this).val() );
+      $('#clearFilter').show();
+    }
+  });
+  $('#inviteForm').submit(function(e) {
+    e.preventDefault();
+    $.post( "/scripts/ajax_processInvite.php", $(this).serialize(), function(data) {
+      if (data.errors.length > 0 ) {
+        var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+        for (var i = 0; i < data.errors.length; i++) {
+          msg +=  data.errors[i] + "\\r\\n";
+        }
+        alert( msg );
+      }
+      else if (data.msg) alert( data.msg );
+      else alert( "Something went wrong." );
+    }, "json");
+  });
+  $('#clearFilter').on( 'click keyup', function(e) {
+    e.preventDefault();
+    $('#instFilter').val( null );
+    $('#clearFilter').hide();
+    fillInsts( null );
+  });
+});
+EOT;
+
 //set page parameters up
 $page_params['content'] = $content;
 $page_params['page_title'] = $page_title;
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
-$page_params['show_title_bar'] = FALSE;
 //do not display the usual header/footer
-$page_params['admin'] = TRUE;
 $page_params['active_menu_item'] = 'users';
 //put custom/extra css files, if used
-//$page_params['css'][] = array("url" => "");
-//put custom/extra JS files, if used
-//$page_params['js'][] = array("url" => "");
+$page_params['css'][] = array( 'text' => $custom_css );
+$page_params['js'][] = array( 'text' => $custom_js );
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content

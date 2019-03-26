@@ -63,6 +63,7 @@ $content .= <<<EOT
             <p>{$lastName}</p>
             <h3>Administrator of Institution</h3>
             {$instList}
+            <p>If you wish to change the institution you administrate, please contact an INFORMS admin at <a href="mailto:educationresources@informs.org">educationresources@informs.org</a>.</p>
         </div>
         <div class="card-footer"> 
             <a class="btn btn-primary" href="editProfile.php" role="button">Edit My Info</a>
