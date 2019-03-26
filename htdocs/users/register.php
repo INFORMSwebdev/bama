@@ -13,7 +13,8 @@ $registerFormProcessor = '/scripts/processRegisterForm.php';
 if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
     if(isset($_SESSION['admin']) && $_SESSION['admin'] == true){
         //user is an INFORMS admin, let them see the regular page content
-    } else {
+    }
+    else {
         //user is an institution admin who already has a user account
         $_SESSION['registerMessage'] = 'You already have an account, you don\'t need to register again.';
         header('Location: profile.php');
@@ -50,22 +51,22 @@ $content = <<<EOT
 	<form action="{$registerFormProcessor}" method="post">
 		<div class="form-group">
 			<label for="Username">Email Address</label>
-			<input type="text" class="form-control" name="Username" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." required />
+			<input type="text" class="form-control" name="Username" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." required /><span class="text text-danger">*</span>
 			<small id="UserNameHelp" class="form-text text-muted">This is a separate login from an INFORMS account.</small>
 		</div>
 		<div class="form-group">
 			<label for="FirstName">First Name</label>
-			<input type="text" class="form-control" name="FirstName" id="FirstName" placeholder="First Name" required />
+			<input type="text" class="form-control" name="FirstName" id="FirstName" placeholder="First Name" required /><span class="text text-danger">*</span>
 			<!--<small id="FirstNameHelp" class="form-text text-muted">We could add in help text for international people here if needed</small>-->
 		</div>
 		<div class="form-group">
 			<label for="LastName">Last Name</label>
-			<input type="text" class="form-control" name="LastName" id="LastName" placeholder="Last Name" required />
+			<input type="text" class="form-control" name="LastName" id="LastName" placeholder="Last Name" required /><span class="text text-danger">*</span>
 			<!--<small id="LastNameHelp" class="form-text text-muted">We could add in help text for international people here if needed</small>-->
 		</div>
 		<div class="form-group">
 		    <label for="Institution">Institution (select one)</label>
-		    <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required>
+		    <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required><span class="text text-danger">*</span>
 		        {$instListHTML}
             </select>
             <small id="InstitutionHelp" class="form-text text-muted">Select the institution that you wish to be an administrator for.</small>
