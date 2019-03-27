@@ -23,7 +23,12 @@ class PendingUpdate extends AOREducationObject
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE )
     );
 
-    public function approvalAction( $action ) {
+    /**
+     * @param $action
+     * @return bool
+     * @throws Exception
+     */
+    public function approvalAction($action ) {
         $this->update( 'ApprovalStatusId', $this->Attributes['ApprovalStatusId'] = $action );
         $Table = new Table( $this->Attributes['TableId'] );
         $Class = $Table->Attributes['ClassName'];
@@ -54,19 +59,35 @@ class PendingUpdate extends AOREducationObject
         return TRUE;
     }
 
+    /**
+     * @return bool
+     * @throws Exception
+     */
     public function approve() {
         return $this->approvalAction( APPROVAL_TYPE_APPROVE );
     }
 
+    /**
+     * @return bool
+     * @throws Exception
+     */
     public function deny() { // this is just alias for reject method
         return $this->approvalAction( APPROVAL_TYPE_REJECT );
     }
 
+    /**
+     * @return bool
+     * @throws Exception
+     */
     public function reject() {
         return $this->approvalAction( APPROVAL_TYPE_REJECT );
     }
 
-    public function swapId( $OldId ) {
+    /**
+     * @param $OldId
+     * @return bool
+     */
+    public function swapId($OldId ) {
         // this will be overridden for any class that uses "join" tables to swap in the new record ID where the old ID was
         // if a class has no associations like that, just do nothing
         return TRUE;

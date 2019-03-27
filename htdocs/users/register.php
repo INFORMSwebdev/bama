@@ -64,14 +64,6 @@ $content = <<<EOT
 			<input type="text" class="form-control" name="LastName" id="LastName" placeholder="Last Name" required />
 			<!--<small id="LastNameHelp" class="form-text text-muted">We could add in help text for international people here if needed</small>-->
 		</div>
-		
-		<!--<div class="form-group">-->
-		    <!--<label for="Institution">Institution (select one)</label><span class="text text-danger">*</span>-->
-		    <!--<select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required>-->
-		        <!-- -->
-            <!--</select>-->    
-        <!--</div>-->
-        
         <div class="form-group" id="instPickerContainer">
 	        <div class="col-xs-6 form-group">
                 <label for="inst">Institution</label>
@@ -86,9 +78,7 @@ $content = <<<EOT
                     <button id="clearFilter" title="clear filter">X</button>
                 </div>
             </div>
-	    </div>
-        
-        
+	    </div>        
         <div class="form-group">
             <label for="Comments">{$commentBoxLabel}</label>
             <textarea class="form-control" id="Comments" name="Comments" rows="3"></textarea>
@@ -127,6 +117,7 @@ function fillInsts( filter ) {
       var opt = $('<option value="'+data.insts[i].InstitutionId+'">'+data.insts[i].InstitutionName+'</option>');
       $('#inst').append( opt );
     }
+    $('#inst').append( $('<option value="0">Other</option>' ));
     $('#inst').prop( "disabled", false );
   });
 }
@@ -137,20 +128,6 @@ $(function() {
       fillInsts( $(this).val() );
       $('#clearFilter').show();
     }
-  });
-  $('#inviteForm').submit(function(e) {
-    e.preventDefault();
-    $.post( "/scripts/ajax_processInvite.php", $(this).serialize(), function(data) {
-      if (data.errors.length > 0 ) {
-        var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
-        for (var i = 0; i < data.errors.length; i++) {
-          msg +=  data.errors[i] + "\\r\\n";
-        }
-        alert( msg );
-      }
-      else if (data.msg) alert( data.msg );
-      else alert( "Something went wrong." );
-    }, "json");
   });
   $('#clearFilter').on( 'click keyup', function(e) {
     e.preventDefault();

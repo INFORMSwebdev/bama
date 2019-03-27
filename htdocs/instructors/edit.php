@@ -90,7 +90,7 @@ if($instId){
         </div>
         <!--<br />-->
         <div class="form-row">
-            <p class="lead">This institution will not be added to the system until the changes are approved by an INFORMS administrator.</p>
+            <p class="lead">These changes will not be added to the system until they are approved by an INFORMS administrator.</p>
         </div>
     </form>
 </div>
