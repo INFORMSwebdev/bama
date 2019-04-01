@@ -19,6 +19,8 @@ $User = new User( $UserId );
 foreach( $User->Attributes as $key => $value ) {
     $$key = filter_var( $value, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 }
+$InstitutionIds = $User->getInstitutionAssignments();
+$InstitutionId = (count($InstitutionIds)) ? $InstitutionIds[0] : 0;
 
 $content = <<<EOT
 <div class="flex-column">
@@ -50,6 +52,10 @@ $content = <<<EOT
           <label for="Created">Created</label>
           <div class="readonly" name="Created" id="Created">{$CreateDate}</div>
 	   </div>
+	   <div class="form-row"> 
+	       <label for="InstitutionId">Institution</label>
+	       <select class="form-control" name="InstitutionId" id="InstitutionId"></select>
+	   </div>
 	   <div class="btn-toolbar">
           <input class="btn btn-primary btn-space" type="submit" value="Save" id="btn-submit" disabled />
           <input class="btn btn-secondary btn-space" type="button" value="Cancel" id="btn-cancel" disabled/>
@@ -65,10 +71,27 @@ padding: .375rem .75rem;
 }
 .btn-space { margin: 0 5px; }
 .btn { width: 100px; }
+.btn-toolbar { margin-top: 10px; }
 EOT;
 
 $custom_js = <<<EOT
+function fillInsts( filter, InstitutionId = 0 ) {
+  $('#InstitutionId').empty();
+  $('#InstitutionId').append( $('<option>Loading...</option>' ));
+  $('#InstitutionId').prop( "disabled", "disabled" );
+  $.getJSON( "/scripts/ajax_getInstitutions.php", { 'filter': filter, 'crits': ['not-deleted','not-expired'] }, function( data ) {
+    $('#InstitutionId').empty();
+    $('#InstitutionId').append( $('<option value="0">(no selection)</option>' ));
+    for( var i = 0; i < data.insts.length; i++ ) {
+      var opt = $('<option value="'+data.insts[i].InstitutionId+'">'+data.insts[i].InstitutionName+'</option>');
+      if (InstitutionId == data.insts[i].InstitutionId) opt.attr("selected","selected");
+      $('#InstitutionId').append( opt );
+    }
+    $('#InstitutionId').prop( "disabled", false );
+  });
+}
 $(function() {
+    fillInsts(null, $InstitutionId);
     var saved_data = $('#userEditForm').serialize();
     $('#userEditForm').on( 'click keyup', function(e) {
       $('#btn-submit,#btn-cancel').attr( "disabled", ($(this).serialize() == saved_data));
@@ -100,6 +123,7 @@ $(function() {
         return false;
       }
     });
+    
 });
 EOT;
 

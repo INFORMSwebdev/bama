@@ -18,6 +18,7 @@ $FirstName = trim(filter_input( INPUT_POST, 'FirstName', FILTER_SANITIZE_FULL_SP
 $LastName = trim(filter_input( INPUT_POST, 'LastName', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES ));
 $Username = filter_input( INPUT_POST, 'Username', FILTER_SANITIZE_EMAIL );
 $Comments = filter_input( INPUT_POST, 'Comments', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+$InstitutionId = filter_input( INPUT_POST, 'InstitutionId', FILTER_VALIDATE_INT );
 
 if (!$UserId) $errors[] = "Missing required parameter: UserId";
 if (!$FirstName) $errors[] = "The First Name field is required.";
@@ -34,6 +35,16 @@ if (!count($errors)) {
         $User->update( 'Username', $Username );
         $User->update( 'Comments', $Comments );
         $success = 1;
+    }
+    $InstitutionIds = $User->getInstitutionAssignments();
+    if ($InstitutionId == 0 && count($InstitutionIds)) {
+        // we are assuming in this case that Admin specifically changed assignment to
+        // the index 0 option wanting to remove the existing assignment
+        foreach( $InstitutionIds as $InstId ) $User->unassignFromInstitution($InstId);
+    }
+    elseif ($InstitutionId > 0) {
+        // if InstitutionId is a positive value, go ahead and make the assignment
+        $User->assignToInstitution( $InstitutionId );
     }
 }
 
