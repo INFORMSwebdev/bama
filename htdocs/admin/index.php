@@ -192,6 +192,9 @@ var resultTable = '';
 $(function() {
     createSearchCategoryMenu( 'All' );
     resultTable = $('#resultTable').DataTable({
+        "oLanguage": {
+            "sSearch": "Filter"
+        },
         "order": [[3, 'desc']],
         "columnDefs": [
             {

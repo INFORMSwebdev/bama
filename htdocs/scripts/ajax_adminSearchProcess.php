@@ -7,7 +7,7 @@
  */
 
 require_once ('../../init.php');
-//if(!isset($_SESSION['admin']) || !$_SESSION['admin']) die("unauthorized access");
+if(!isset($_SESSION['admin']) || !$_SESSION['admin']) die("unauthorized access");
 
 $classes = [
     'Institutions' => 'Institution',
@@ -36,6 +36,7 @@ function createSQL( $category, $class, $search_term, $statuses ) {
     $full_text_cols = $class::$full_text_columns;
     $name_sql = $class::$name_sql;
     $match_phrase = "MATCH($full_text_cols) AGAINST ('$search_term' IN NATURAL LANGUAGE MODE)";
+    if (!$search_term) $match_phrase = "1";
     $sql = <<<EOT
 SELECT '$category' AS category, $name_sql AS name, $primary_key AS id, $match_phrase AS score 
 FROM $table_name
