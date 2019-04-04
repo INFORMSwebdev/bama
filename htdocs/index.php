@@ -385,7 +385,7 @@ $(function() {
                         html += '<h4>Created</h4>';
                         html += '<p>' + progs[x].colleges[i].CollegeCreated + '</p>';
                         html += '<div class="btn-group">';
-                        html += '<a role="button" class="btn btn-info mr-3" href="/colleges/display.php?id=' + progs[x].programs[i].CollegeId + '">View College Details</a>';
+                        html += '<a role="button" class="btn btn-info mr-3" href="/colleges/display.php?id=' + progs[x].colleges[i].CollegeId + '">View College Details</a>';
                         html += '<a role="button" class="btn btn-warning mr-3" href="/colleges/edit.php?id=' + progs[x].colleges[i].CollegeId + '">Edit this College</a>';
                         html += '<button id="id_' + progs[x].colleges[i].CollegeId + '" name="collegeDelete" type="submit" class="btn btn-danger btn-college-delete">Delete this College</button>';
                         html += '</div>';

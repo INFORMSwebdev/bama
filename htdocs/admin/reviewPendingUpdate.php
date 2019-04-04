@@ -38,11 +38,16 @@ foreach( $data as $key => $value ) {
     $data_html .= '</div>';
 }
 
+$thing = new $Class( $Update->Attributes['UpdateRecordId']);
+$ancestry_html = print_r($thing,1);//$thing->getAncestry();
+
 $content = <<<EOT
 <div class="flex-column">
   <h1>Review Pending Update</h1>
 </div>
 <div class="container-fluid">
+    <h3>$Class</h3>
+    $ancestry_html
     $data_html
     <div class="row btn-toolbar">
         <button class="btn btn-primary btn-Approve" id="btn-Approve">Approve</button>

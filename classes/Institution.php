@@ -41,7 +41,7 @@ class Institution extends AOREducationObject {
 
     public function getColleges( $asObjects = TRUE ) {
         $db = new EduDB();
-        $sql = "SELECT CollegeId FROM colleges WHERE InstitutionId=$this->id";
+        $sql = "SELECT CollegeId FROM colleges WHERE InstitutionId=$this->id AND ApprovalStatusId = ".APPROVAL_TYPE_APPROVE; ;
         $CollegeIds = $db->queryColumn( $sql );
         if ($asObjects) {
             $Colleges = [];

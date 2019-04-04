@@ -66,9 +66,11 @@ class AOREducationObject {
               $PendingUpdate->update( 'UpdateRecordId', $this->id );
               break;
           case UPDATE_TYPE_UPDATE:
+              $OriginalRecordId = $this->id;
               $PendingUpdate->update( 'RecordId', $this->id );
               $this->id = $this->Attributes[static::$primary_key] = null;
               $this->id = $this->save(); // save current object attributes into new row
+              $this->update('OriginalRecordId', $OriginalRecordId);
               $PendingUpdate->update( 'UpdateRecordId', $this->id );
               break;
           case UPDATE_TYPE_DELETE:
@@ -101,6 +103,18 @@ EOT;
     $db = new EduDB();
     $sql = "DELETE FROM ".static::$table." WHERE ".static::$primary_key."=$this->id";
     return $db->exec( $sql );
+  }
+
+  public function getAncestry() {
+      if (!method_exists($this, 'getParent')) return null;
+      $str = '';
+      $parent = $this;
+      while($parent = $parent->getParent()) {
+          $class = get_class($parent);
+          $str = $class . ": " .print_r($parent,1)." ". $parent->Attributes[$class::$name_sql] . "<br/>".$str;
+          if ($class == "Institution" || !method_exists($parent, 'getParent')) break;
+      }
+      return $str;
   }
 
     /**

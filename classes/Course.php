@@ -109,6 +109,7 @@ class Course extends AOREducationObject
         $db = new EduDB;
         $sql = "SELECT ProgramId FROM program_courses WHERE CourseId = $this->id";
         $ProgramId = $db->queryItem( $sql );
+        //die($sql);
         if ($asObject) return new Program( $ProgramId );
         else return $ProgramId;
     }
