@@ -111,7 +111,7 @@ EOT;
       $parent = $this;
       while($parent = $parent->getParent()) {
           $class = get_class($parent);
-          $str = $class . ": " .print_r($parent,1)." ". $parent->Attributes[$class::$name_sql] . "<br/>".$str;
+          $str = '<ul><li>' . $class . ": <b>" . $parent->Attributes[$class::$name_sql] . '</b>' . $str . "</li></ul>";
           if ($class == "Institution" || !method_exists($parent, 'getParent')) break;
       }
       return $str;
