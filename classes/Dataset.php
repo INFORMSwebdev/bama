@@ -77,6 +77,14 @@ class Dataset extends AOREducationObject
         return $datasets;
     }
 
+    public function getParent( $asObject = TRUE ) {
+        $db = new EduDB;
+        $sql = "SELECT CourseId FROM course_datasets WHERE DatasetId = $this->id";
+        $CourseId = $db->queryItem( $sql );
+        if ($asObject) return new Course( $CourseId );
+        else return $CourseId;
+    }
+
     public function swapID( $OldId ) {
         $db = new EduDB;
         $sql = "UPDATE course_datasets SET DatasetId = $this->id WHERE DatasetId = $OldId ";

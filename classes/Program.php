@@ -228,6 +228,17 @@ EOT;
         return $instructors;
     }
 
+    public function getParent( $asObject = TRUE ) {
+        if ($this->Attributes['CollegeId']) {
+            if ($asObject) return new College( $this->Attributes['CollegeId']);
+            else return $this->Attributes['CollegeId'];
+        }
+        else {
+            if ($asObject) return new Institution( $this->Attributes['InstitutionId']);
+            else return $this->Attributes['InstitutionId'];
+        }
+    }
+
     public function hasContact() {
         $has = FALSE;
         if ($this->Attributes['ContactId']) {

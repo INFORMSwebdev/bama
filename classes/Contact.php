@@ -47,6 +47,14 @@ class Contact extends AOREducationObject
         return $contacts;
     }
 
+    public function getParent( $asObject = TRUE ) {
+        $db = new EduDB;
+        $sql = "SELECT ProgramId FROM program_contacts WHERE ContactId = $this->id";
+        $ProgramId = $db->queryItem( $sql );
+        if ($asObject) return new Program( $ProgramId );
+        else return $ProgramId;
+    }
+
     public function swapID( $OldId ) {
         $db = new EduDB;
         $sql = "UPDATE program_contacts SET ContactId = $this->id WHERE ContactId = $OldId ";

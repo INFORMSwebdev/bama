@@ -69,6 +69,14 @@ class CaseStudy extends AOREducationObject {
         return $casesOut;
     }
 
+    public function getParent( $asObject = TRUE ) {
+        $db = new EduDB;
+        $sql = "SELECT CourseId FROM course_cases WHERE CaseId = $this->id";
+        $CourseId = $db->queryItem( $sql );
+        if ($asObject) return new Course( $CourseId );
+        else return $CourseId;
+    }
+
     public function swapID( $OldId ) {
         $db = new EduDB;
         $sql = "UPDATE course_cases SET CaseId = $this->id WHERE CaseId = $OldId ";

@@ -66,6 +66,14 @@ class Textbook extends AOREducationObject
         return $books;
     }
 
+    public function getParent( $asObject = TRUE ) {
+        $db = new EduDB;
+        $sql = "SELECT CourseId FROM course_textbooks WHERE TextbookId = $this->id";
+        $CourseId = $db->queryItem( $sql );
+        if ($asObject) return new Course( $CourseId );
+        else return $CourseId;
+    }
+
     public function swapID( $OldId ) {
         $db = new EduDB;
         $sql = "UPDATE course_textbooks SET TextbookId = $this->id WHERE TextbookId = $OldId ";

@@ -50,6 +50,14 @@ class Instructor extends AOREducationObject
         return $instructors;
     }
 
+    public function getParent( $asObject = TRUE ) {
+        $db = new EduDB;
+        $sql = "SELECT CourseId FROM course_instructors WHERE InstructorId = $this->id";
+        $CourseId = $db->queryItem( $sql );
+        if ($asObject) return new Course( $CourseId );
+        else return $CourseId;
+    }
+
     public function swapID( $OldId ) {
         $db = new EduDB;
         $sql = "UPDATE course_instructors SET InstructorId = $this->id WHERE InstructorId = $OldId ";

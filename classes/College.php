@@ -42,6 +42,14 @@ class College extends AOREducationObject
         return $colleges;
     }
 
+    public function getParent( $asObject = TRUE ) {
+        $db = new EduDB;
+        $sql = "SELECT InstitutionId FROM colleges WHERE CollegeId = $this->id";
+        $InstitutionId = $db->queryItem( $sql );
+        if ($asObject) return new Institution( $InstitutionId );
+        else return $InstitutionId;
+    }
+
     public function hasPrograms() {
         $db = new EduDB;
         $sql = "SELECT ProgramId FROM programs WHERE CollegeId = $this->id";

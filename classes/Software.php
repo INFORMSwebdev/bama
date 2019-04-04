@@ -65,6 +65,14 @@ class Software extends AOREducationObject
         return $softwares;
     }
 
+    public function getParent( $asObject = TRUE ) {
+        $db = new EduDB;
+        $sql = "SELECT CourseId FROM course_softwares WHERE SoftwareId = $this->id";
+        $CourseId = $db->queryItem( $sql );
+        if ($asObject) return new Course( $CourseId );
+        else return $CourseId;
+    }
+
     public function swapID( $OldId ) {
         $db = new EduDB;
         $sql = "UPDATE course_softwares SET SoftwareId = $this->id WHERE SoftwareId = $OldId ";

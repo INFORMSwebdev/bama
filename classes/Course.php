@@ -105,6 +105,14 @@ class Course extends AOREducationObject
         return $Instructors;
     }
 
+    public function getParent( $asObject = TRUE ) {
+        $db = new EduDB;
+        $sql = "SELECT ProgramId FROM program_courses WHERE CourseId = $this->id";
+        $ProgramId = $db->queryItem( $sql );
+        if ($asObject) return new Program( $ProgramId );
+        else return $ProgramId;
+    }
+
     public function hasCases() {
         $db = new EduDB;
         $sql = "SELECT CaseId FROM course_cases WHERE CourseId = $this->id AND Deleted = 0";
