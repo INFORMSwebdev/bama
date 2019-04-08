@@ -23,6 +23,41 @@ try {
     $result = $PendingUpdate->approvalAction( $action );
     $actionDesc = ($action == APPROVAL_TYPE_APPROVE) ? "approved" : "rejected";
     $msg = "Update $actionDesc.";
+    // TO DO: send mail to editor to notify about approval
+    $e_params = [];
+    $recipients = [];
+    $TableId = $PendingUpdate->Attributes['TableId'];
+    $Table = new Table( $TableId );
+    $Class = $Table->Attributes['ClassName'];
+    $RecordId = ($PendingUpdate->Attributes['UpdateTypeId']==UPDATE_TYPE_DELETE) ? $PendingUpdate->Attributes['RecordId'] : $PendingUpdate->Attributes['UpdateRecordId'];
+    $Obj = new $Class( $RecordId );
+    $O_ancestry = $Obj->getAncestry( FALSE );
+    $inst = $O_ancestry[count($O_ancestry)-1];
+    $Users = $inst->getUserAssignments( TRUE );
+    foreach ($Users as $User) {
+        if (filter_var( $User->Attributes['Username'], FILTER_VALIDATE_EMAIL)) {
+            $recipients[] = $User->Attributes['Username'];
+        }
+    }
+    if (count($recipients)) {
+        $approved = ($action==APPROVAL_TYPE_APPROVE)? "approved" : "denied";
+        $details = '<br /><br />';
+        $S_ancestry = $Obj->getAncestry();
+        $details .= '<p>'.$S_ancestry.'</p>';
+        foreach( $Class::$data_structure AS $key => $props ) {
+            if ($props['editable']) $details .= $props['label'] . ": ".$Obj->Attributes[$key]."<br/>";
+        }
+        $e_params['to'] = implode(",", $recipients );
+        $e_params['subject'] = "Analytics and Operations Research Education Database - Pending Update Approval";
+        $e_params['body_html'] = <<<EOT
+<p>The submitted update request has been $approved.</p>
+$details
+<p>Please address questions and concerns to <a href="mailto:educationresources@informs.org">educationresources@informs.org</a>.</p>
+EOT;
+        $email = new email($e_params);
+        $email->send();
+    }
+
 }
 catch (Exception $e) {
     $errors[] = $e->getMessage();
