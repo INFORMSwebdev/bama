@@ -130,12 +130,14 @@ EOT;
         }
 
         $contactHTML .= '</div>';
-        $contactHTML .= "<a type='button' role='button' class='btn btn-primary btn-block btn-assign-contacts mt-3' id='id_{$prog->id}' href='/programs/assignProgramContact.php?progId={$prog->id}'>Assign Contact(s)</a>";
+        $contactHTML .= "<a type='button' role='button' class='btn btn-primary btn-block btn-assign-contacts mt-3' id='id_{$prog->id}' href='/programs/assignProgramContact.php?progId={$prog->id}'>Assign Existing Contact(s)</a>";
+        $contactHTML .= "<a role='button' href='/contacts/add.php?progId=$prog->id' id='addNewContact' class='btn btn-info btn-block btn-contact-add'>Add New Contact and Assign</a>";
     }
     else {
         $contactName = $contactTitle = $contactPhone = $contactEmail = 'No contacts are currently assigned to this program.';
         $contactHTML = "<p class='text text-info'>$contactName</p>";
-        $contactHTML .= "<a type='button' role='button' class='btn btn-primary btn-block btn-assign-contacts mt-3' id='id_{$prog->id}' href='/programs/assignProgramContact.php?progId={$prog->id}'>Assign Contact(s)</a>";
+        $contactHTML .= "<a type='button' role='button' class='btn btn-primary btn-block btn-assign-contacts mt-3' id='id_{$prog->id}' href='/programs/assignProgramContact.php?progId={$prog->id}'>Assign Existing Contact(s)</a>";
+        $contactHTML .= "<a role='button' href='/contacts/add.php?progId=$prog->id' id='addNewContact' class='btn btn-info btn-contact-add'>Add New Contact and Assign</a>";
     }
 
     $collegeId = $prog->Attributes['CollegeId'];

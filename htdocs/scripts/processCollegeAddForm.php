@@ -58,7 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New college successfully submitted and is awaiting approval for posting.';
-        } else {
+        }
+        else {
             //I can't think of why this case would ever happen, but just in case set the user to default ADMIN/system record
             $_SESSION['editMessage']['success'] = false;
             $_SESSION['editMessage']['text'] = "New college was not added to the system. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";

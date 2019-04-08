@@ -161,6 +161,32 @@ EOT;
 
             # ToDo: add assign contacts button instead of select list, since we can now have multiple contacts be assigned to a program
 
+            $contactHTML = <<<EOT
+<br />
+        <div class="form-row">
+            <h3>Contact Details</h3>
+        </div>
+        <div class="form-row">
+            <label for="ContactId">Contact</label>
+            <select class="form-control" id="ContactId" name="ContactId" aria-describedby="ContactHelp">
+		        {$contactListHTML}
+            </select>
+            <!--<p id="ContactHelp">The list may take a second or two to load, please be patient after clicking the field.</p>-->
+        </div>
+        <br />
+        <div class="form-row">
+            <h3>College Details</h3>
+        </div>
+        <div class="form-row">
+            <label for="CollegeId">College</label>
+            <select class="form-control" id="CollegeId" name="CollegeId" aria-describedby="CollegeHelp">
+		        {$collegeListHTML}
+            </select>
+            <!--<p id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>-->
+        </div>
+EOT;
+
+
             //user DOES have permission to edit this page, display the form
             $content = <<<EOT
 <div class="flex-column">
@@ -261,28 +287,7 @@ EOT;
             <label for="NonResident">Estimated Non-Resident Tuition</label>
             <input type="text" class="form-control" name="NonResident" id="NonResident" value="{$nonRes}" />
         </div>
-        <br />
-        <div class="form-row">
-            <h3>Contact Details</h3>
-        </div>
-        <div class="form-row">
-            <label for="ContactId">Contact</label>
-            <select class="form-control" id="ContactId" name="ContactId" aria-describedby="ContactHelp">
-		        {$contactListHTML}
-            </select>
-            <!--<p id="ContactHelp">The list may take a second or two to load, please be patient after clicking the field.</p>-->
-        </div>
-        <br />
-        <div class="form-row">
-            <h3>College Details</h3>
-        </div>
-        <div class="form-row">
-            <label for="CollegeId">College</label>
-            <select class="form-control" id="CollegeId" name="CollegeId" aria-describedby="CollegeHelp">
-		        {$collegeListHTML}
-            </select>
-            <!--<p id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>-->
-        </div>
+        <!-- Contact & College details went here -->
         <br />
         <div class="form-row">
             <input type="hidden" id="programId" name="programId" value="{$progId}" />
