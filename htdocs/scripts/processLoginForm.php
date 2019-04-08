@@ -56,7 +56,7 @@ function validateInput($user, $pass)
             //validate the password passed against the stored value
             if($curUser->checkPassword($password) == true) {
                 //if valid, user is considered logged in; store user ID in session variable
-                $_SESSION["loggedIn"] = $curUser->Attributes['UserId'];
+                $_SESSION["loggedIn"] = $curUser->id;
                 //unset the session variable containing use input if it was set so the system doesn't get 'confused' about stuff
                 unset($_SESSION['loginInput']);
 

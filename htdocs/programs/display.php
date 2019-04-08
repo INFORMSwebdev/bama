@@ -27,6 +27,7 @@ if($id){
     //get all the details about the requested program to display
     $prog = new Program($id);
     $instId = $prog->Attributes['InstitutionId'];
+    $inst = new Institution($instId);
     //$contactId = $prog->Attributes['ContactId'];
     $contacts = $prog->getContacts();
     $name = $prog->Attributes['ProgramName'];
@@ -83,10 +84,6 @@ if($id){
     if(!isset($cost) || empty($cost)) {
         $cost = 'Cost per credit information for this program is not currently available.';
     }
-    //we only use the flag columns in queries, no need to display info about them on this page
-    //$ops = $prog->Attributes['ORFlag'];
-    //$analytics = $prog->Attributes['AnalyticsFlag'];
-    $collegeId = $prog->Attributes['CollegeId'];
 
     $contactHTML = '';
     //get contact details to display
@@ -124,7 +121,7 @@ if($id){
     </div>
     <div class="card-footer"> 
         <div class="btn-group"> 
-            <button type="button" class="btn btn-info btn-unAssignContact mr-3" id="id_{$contact->id}">Unassign This Contact</button>
+            <button type="button" class="btn btn-info btn-contact-unassign mr-3" id="id_{$contact->id}">Un-assign This Contact</button>
             <button type="button" class="btn btn-danger btn-contact-delete" id="id_{$contact->id}">Delete This Contact</button>
         </div>
     </div>
@@ -140,27 +137,39 @@ EOT;
         $contactHTML = "<p class='text text-info'>$contactName</p>";
     }
 
+    $collegeId = $prog->Attributes['CollegeId'];
     $collegeHTML = '';
-    //get college details to display
-    if(is_numeric($collegeId)){
-        $college = new College($collegeId);
-        $collegeName = $college->Attributes['CollegeName'];
-        $collegeType = $college->Attributes['CollegeType'];
-        $collegeHTML = <<<EOT
-<h3 class="display3">Name</h3>
-<p>{$collegeName}</p>
-<h3 class="display3">Type</h3>
-<p>{$collegeType}</p>
-EOT;
-    }
-    else {
+    if(empty($collegeId) || !is_numeric($collegeId)){
         $collegeName = $collegeType = 'This program is not currently assigned to a college.';
         $collegeHTML = "<p class='text text-info'>$collegeName</p>";
         $collegeHTML .= "<button id='id_{$instId}' class='btn btn-primary btn-assignToCollege'>Assign to College</button>";
     }
+    else {
+        $c = new College($collegeId);
+        $collegeHTML = <<<EOT
+<div class="card">
+    <div class="card-header"> 
+        <h3 class="display3">{$c->Attributes['CollegeName']}</h3>
+    </div>
+    <div class="card-body"> 
+        <h4>Type</h4>
+        <p>{$c->Attributes['CollegeType']}</p>
+        <h4>Created</h4>
+        <p>{$c->Attributes['CreateDate']}</p>
+    </div>
+    <div class="card-footer"> 
+        <div class="btn-group"> 
+            <button type="button" class="btn btn-info btn-college-unassign mr-3" id="id_{$c->id}">Un-assign This College</button>
+            <button type="button" class="btn btn-danger btn-college-delete" id="id_{$c->id}">Delete This College</button>
+        </div>
+    </div>
+</div>
+<br />
+<button id='id_{$instId}' class='btn btn-primary btn-assignToCollege'>Assign to Different College</button>
+EOT;
+    }
 
     //get institution details to display
-    $inst = new Institution($instId);
     $instName = $inst->Attributes['InstitutionName'];
     $instAddr = $inst->Attributes['InstitutionAddress'];
     $instCity = $inst->Attributes['InstitutionCity'];
@@ -327,6 +336,38 @@ $(function() {
         }); 
     });
     
+    //college delete button functionality
+    $(document).on( 'click', '.btn-college-delete', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to delete this college?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            $.post( "/scripts/ajax_deleteCollege.php", { 'CollegeId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    alert( msg );
+                    //$('#message').html('<p>' + msg + '</p>').removeClass('d-hidden').addClass('alert alert-danger');
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+    
     //submitting college assignment via ajax
     $(document).on( 'click', '.btn-submit-collegeAssignment', function(e) {
         //hide the message box so the old message (if there) doesn't get confused with the new message (is this necessary?)
@@ -371,6 +412,73 @@ $(function() {
         if (conf) {
             var id = $(this).attr('id').substring(3);
             $.post( "/scripts/ajax_deleteContact.php", { 'ContactId': id }, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    alert( msg );
+                    //$('#message').html('<p>' + msg + '</p>').removeClass('d-hidden').addClass('alert alert-danger');
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+    
+    //un-assign contact button functionality
+    $(document).on( 'click', '.btn-contact-unassign', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+                
+        var conf = confirm( "Are you sure you want to un-assign this contact from the program?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            var progId = new URLSearchParams(window.location.search).get('id');
+            $.post( "/scripts/ajax_unassignContact.php", { 'ContactId': id, 'ProgramId': progId}, function(data) {
+                //alert( data );
+                if (data.errors.length > 0 ) {
+                    var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                    for (var i = 0; i < data.errors.length; i++) {
+                        msg +=  data.errors[i] + "\\r\\n";
+                    }
+                    alert( msg );
+                    //$('#message').html('<p>' + msg + '</p>').removeClass('d-hidden').addClass('alert alert-danger');
+                }
+                else if (data.msg) {
+                    //alert( data.msg );
+                    $('#message').html('<p>' + data.msg + '</p>');
+                    if(data.msg.includes('submitted')){
+                        $('#message').addClass('alert alert-success');
+                    }
+                    else {
+                        $('#message').addClass('alert alert-danger');
+                    }
+                    $('#message').show();
+                }
+            }, "json");
+        }
+    });
+    
+    //un-assign college button functionality
+    $(document).on( 'click', '.btn-college-unassign', function(e) {
+        //make sure message box gets re-hidden if its shown
+        $('#message').hide();
+        var conf = confirm( "Are you sure you want to un-assign this college from the program?" );
+        if (conf) {
+            var id = $(this).attr('id').substring(3);
+            var progId = new URLSearchParams(window.location.search).get('id');
+            $.post( "/scripts/ajax_unassignCollege.php", { 'ContactId': id, 'ProgramId': progId }, function(data) {
                 //alert( data );
                 if (data.errors.length > 0 ) {
                     var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
