@@ -31,10 +31,11 @@ $programContacts = $prog->getContacts();
 
 //make it easier to search the program contacts
 $progConIds = [];
-foreach($programContacts as $pc){
-    $progConIds[] = $pc->id;
+if($programContacts){
+    foreach($programContacts as $pc){
+        $progConIds[] = $pc->id;
+    }
 }
-
 //get assignable contacts
 $inst = new Institution($prog->Attributes['InstitutionId']);
 
@@ -50,18 +51,20 @@ $finalContacts = [];
 //loop through each program and add contacts to the finalContacts if they aren't already in it
 foreach($instContacts as $progCon){
     //loop through each contact in this program and add them to the list if they aren't there yet
-    foreach($progCon as $co){
-        //check whether this contact is already in the final array
-        if(array_search($co->id, array_column($finalContacts, 'ContactId')) === false) {
-            //it is not already present
-            //temporary helper array
-            $foo = [];
+    if($progCon) {
+        foreach ($progCon as $co) {
+            //check whether this contact is already in the final array
+            if (array_search($co->id, array_column($finalContacts, 'ContactId')) === false) {
+                //it is not already present
+                //temporary helper array
+                $foo = [];
 
-            $foo['ContactName'] = $co->Attributes['ContactName'];
-            $foo['ContactId'] = $co->id;
+                $foo['ContactName'] = $co->Attributes['ContactName'];
+                $foo['ContactId'] = $co->id;
 
-            //add contact to array
-            $finalContacts[] = $foo;
+                //add contact to array
+                $finalContacts[] = $foo;
+            }
         }
     }
 }

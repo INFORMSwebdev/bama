@@ -18,7 +18,7 @@ else if(!$ProgramId){
     $errors[] = 'Missing required parameter: ProgramId.';
 }
 else {
-    $user = new User($_SESSION('loggedIn'));
+    $user = new User($_SESSION['loggedIn']);
     $prog = new Program($ProgramId);
     $con = new Contact($ContactId);
 

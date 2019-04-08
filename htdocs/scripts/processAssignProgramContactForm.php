@@ -59,5 +59,5 @@ else {
     }
 }
 //redirect user to program display page
-//header("Location: /programs/display.php?id=$progId");
-//die;
+header("Location: /programs/display.php?id=$progId");
+die;

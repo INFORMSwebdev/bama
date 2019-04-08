@@ -130,11 +130,12 @@ EOT;
         }
 
         $contactHTML .= '</div>';
-        $contactHTML .= "<a type='button' role='button' class='btn btn-primary btn-block btn-assign-contacts mt-3' id='id_{$prog->id}' href='/programs/assignProgramContact.php?progId={$prog->id}'>Assign Contacts</a>";
+        $contactHTML .= "<a type='button' role='button' class='btn btn-primary btn-block btn-assign-contacts mt-3' id='id_{$prog->id}' href='/programs/assignProgramContact.php?progId={$prog->id}'>Assign Contact(s)</a>";
     }
     else {
-        $contactName = $contactTitle = $contactPhone = $contactEmail = 'Contact information for this program is not currently available';
+        $contactName = $contactTitle = $contactPhone = $contactEmail = 'No contacts are currently assigned to this program.';
         $contactHTML = "<p class='text text-info'>$contactName</p>";
+        $contactHTML .= "<a type='button' role='button' class='btn btn-primary btn-block btn-assign-contacts mt-3' id='id_{$prog->id}' href='/programs/assignProgramContact.php?progId={$prog->id}'>Assign Contact(s)</a>";
     }
 
     $collegeId = $prog->Attributes['CollegeId'];
@@ -165,7 +166,7 @@ EOT;
     </div>
 </div>
 <br />
-<button id='id_{$instId}' class='btn btn-primary btn-assignToCollege'>Assign to Different College</button>
+<button id='id_{$instId}' class='btn btn-primary btn-block btn-assignToCollege'>Assign to Different College</button>
 EOT;
     }
 
@@ -458,7 +459,7 @@ $(function() {
                 else if (data.msg) {
                     //alert( data.msg );
                     $('#message').html('<p>' + data.msg + '</p>');
-                    if(data.msg.includes('submitted')){
+                    if(data.msg.includes('submitted') || data.msg.includes('successfully')){
                         $('#message').addClass('alert alert-success');
                     }
                     else {
@@ -478,7 +479,7 @@ $(function() {
         if (conf) {
             var id = $(this).attr('id').substring(3);
             var progId = new URLSearchParams(window.location.search).get('id');
-            $.post( "/scripts/ajax_unassignCollege.php", { 'ContactId': id, 'ProgramId': progId }, function(data) {
+            $.post( "/scripts/ajax_unassignCollege.php", { 'CollegeId': id, 'ProgramId': progId }, function(data) {
                 //alert( data );
                 if (data.errors.length > 0 ) {
                     var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
