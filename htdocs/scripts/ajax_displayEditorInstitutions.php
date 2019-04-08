@@ -11,7 +11,7 @@ require_once '../../init.php';
 //set up response variables
 $response = [];
 $response['errors'] = [];
-$_SESSION['loggedIn'] = 41;
+
 if(!isset($_SESSION['loggedIn'])){
     //user is not logged in
     $response['errors'][] = 'You must log in in order to get a list of editable programs.';
