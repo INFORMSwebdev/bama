@@ -105,16 +105,22 @@ EOT;
     return $db->exec( $sql );
   }
 
-  public function getAncestry() {
+  public function getAncestry( $asString = TRUE ) {
       if (!method_exists($this, 'getParent')) return null;
       $str = '';
+      $coll = [];
       $parent = $this;
       while($parent = $parent->getParent()) {
           $class = get_class($parent);
-          $str = '<ul><li>' . $class . ": <b>" . $parent->Attributes[$class::$name_sql] . '</b>' . $str . "</li></ul>";
+          if ($asString) {
+              $str = '<ul><li>' . $class . ": <b>" . $parent->Attributes[$class::$name_sql] . '</b>' . $str . "</li></ul>";
+          }
+          else {
+              $coll[] = $parent;
+          }
           if ($class == "Institution" || !method_exists($parent, 'getParent')) break;
       }
-      return $str;
+      return $asString ? $str : $coll;
   }
 
     /**
