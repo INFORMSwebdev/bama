@@ -64,7 +64,7 @@ $content = <<<EOT
         </div>
         <!--<br />-->
         <div class="form-row">
-            <p class="lead">This Contact will not be added to the system until the changes are approved by an INFORMS administrator.</p>
+            <p class="lead">These changes will not be displayed until they are approved by an INFORMS administrator.</p>
         </div>
     </form>
 </div>
@@ -73,7 +73,7 @@ EOT;
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
-$page_params['page_title'] = "Edit Instructor";
+$page_params['page_title'] = "Edit Contact";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
 //wrapper class to pass all the content and params to

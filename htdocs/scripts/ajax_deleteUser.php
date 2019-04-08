@@ -14,14 +14,18 @@ $errors = [];
 $msg = '';
 
 $UserId = filter_input( INPUT_POST, 'UserId', FILTER_SANITIZE_NUMBER_INT );
-if (!$UserId) $errors[] = "Missing required parameter: UserId";
+if (!$UserId) {
+    $errors[] = 'Missing required parameter: UserId.';
+}
 else {
     $User = new User( $UserId );
-    if (!$User->valid) $errors[] = "The UserId provided does not correspond to an existing user.";
+    if (!$User->valid) {
+        $errors[] = 'The UserId provided does not correspond to an existing user.';
+    }
     else {
         $result = $User->update( "Deleted", 1);
-        if ($result) $msg = "User deleted.";
-        else $errors[] = "User could not be deleted, alert IT dept.";
+        if ($result) $msg = 'User deleted.';
+        else $errors[] = 'User could not be deleted, alert IT dept.';
     }
 }
 

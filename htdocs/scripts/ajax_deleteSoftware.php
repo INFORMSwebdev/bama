@@ -13,25 +13,40 @@ $msg = '';
 
 $SoftwareId = filter_input( INPUT_POST, 'SoftwareId', FILTER_VALIDATE_INT );
 
-if (!$SoftwareId) $errors[] = "Missing required parameter: SoftwareId";
+if(!isset($_SESSION['loggedIn']) || !is_numeric($_SESSION['loggedIn'])){
+    $errors[] = 'You must be logged in to delete instructors.';
+}
+else if (!$SoftwareId) {
+    $errors[] = 'Missing required parameter: SoftwareId.';
+}
 else {
     $soft = new Software( $SoftwareId );
-    if (!$soft->valid) $errors[] = "The SoftwareId provided does not correspond to an existing software.";
+    if (!$soft->valid) {
+        $errors[] = 'The SoftwareId provided does not correspond to an existing software.';
+    }
     else {
         //get the userId
-        if(isset($_SESSION['loggedIn'])){
-            $user = new User($_SESSION['loggedIn']);
+        $user = new User($_SESSION['loggedIn']);
+
+        if($user->id == 1){
+            $soft->Attributes['Deleted'] = 1;
+            $result = $soft->save();
+
+            if ($result){
+                $msg = "Software '{$soft->Attributes['SoftwareName']}' successfully marked as deleted.";
+            }
+            else {
+                $errors[] = "Software '{$soft->Attributes['SoftwareName']}' could not be deleted, alert IT dept.";
+            }
         }
         else {
-            //this should never happen, but just in case:
-            $user = new User(1);
-        }
-        $result = $soft->createPendingUpdate(UPDATE_TYPE_DELETE, $user->id);
-        if ($result){
-            $msg = "Software '{$soft->Attributes['SoftwareName']}' submitted for deletion.";
-        }
-        else {
-            $errors[] = "Software '{$soft->Attributes['SoftwareName']}' could not be deleted, alert IT dept.";
+            $result = $soft->createPendingUpdate(UPDATE_TYPE_DELETE, $user->id);
+            if ($result) {
+                $msg = "Software '{$soft->Attributes['SoftwareName']}' submitted for deletion.";
+            }
+            else {
+                $errors[] = "Software '{$soft->Attributes['SoftwareName']}' could not be deleted, alert IT dept.";
+            }
         }
     }
 }

@@ -13,25 +13,39 @@ $msg = '';
 
 $CourseId = filter_input( INPUT_POST, 'CourseId', FILTER_VALIDATE_INT );
 
-if (!$CourseId) $errors[] = "Missing required parameter: CourseId";
+if(!isset($_SESSION['loggedIn']) || !is_numeric($_SESSION['loggedIn'])){
+    $errors[] = 'You must be logged in to delete courses.';
+}
+else if (!$CourseId) {
+    $errors[] = 'Missing required parameter: CourseId.';
+}
 else {
     $course = new Course( $CourseId );
-    if (!$course->valid) $errors[] = "The CourseId provided does not correspond to an existing course.";
+    if (!$course->valid) {
+        $errors[] = 'The CourseId provided does not correspond to an existing course.';
+    }
     else {
         //get the userId
-        if(isset($_SESSION['loggedIn'])){
-            $user = new User($_SESSION['loggedIn']);
+        $user = new User($_SESSION['loggedIn']);
+
+        if($user->id == 1){
+            $course->Attributes['Deleted'] = 1;
+            $result = $course->save();
+            if($result){
+                $msg = "Course '{$course->Attributes['CourseTitle']}' successfully marked as deleted.";
+            }
+            else {
+                $errors[] = "Course '{$course->Attributes['CourseTitle']}' could not be deleted, alert IT dept.";
+            }
         }
         else {
-            //this should never happen, but just in case:
-            $user = new User(1);
-        }
-        $result = $course->createPendingUpdate(UPDATE_TYPE_DELETE, $user->id);
-        if ($result){
-            $msg = "Course '{$course->Attributes['CourseTitle']}' submitted for deletion.";
-        }
-        else {
-            $errors[] = "Course '{$course->Attributes['CourseTitle']}' could not be deleted, alert IT dept.";
+            $result = $course->createPendingUpdate(UPDATE_TYPE_DELETE, $user->id);
+            if ($result) {
+                $msg = "Course '{$course->Attributes['CourseTitle']}' submitted for deletion.";
+            }
+            else {
+                $errors[] = "Course '{$course->Attributes['CourseTitle']}' could not be deleted, alert IT dept.";
+            }
         }
     }
 }

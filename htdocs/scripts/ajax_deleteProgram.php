@@ -13,25 +13,40 @@ $msg = '';
 
 $ProgId = filter_input( INPUT_POST, 'ProgramId', FILTER_VALIDATE_INT );
 
-if (!$ProgId) $errors[] = "Missing required parameter: ProgramId";
+if(!isset($_SESSION['loggedIn']) || !is_numeric($_SESSION['loggedIn'])){
+    $errors[] = 'You must be logged in to delete instructors.';
+}
+else if (!$ProgId) {
+    $errors[] = 'Missing required parameter: ProgramId.';
+}
 else {
     $prog = new Program( $ProgId );
-    if (!$prog->valid) $errors[] = "The ProgramId provided does not correspond to an existing program.";
+    if (!$prog->valid) {
+        $errors[] = 'The ProgramId provided does not correspond to an existing program.';
+    }
     else {
         //get the userId
-        if(isset($_SESSION['loggedIn'])){
-            $user = new User($_SESSION['loggedIn']);
+        $user = new User($_SESSION['loggedIn']);
+
+        if($user->id == 1){
+            $prog->Attributes['Deleted'] = 1;
+            $result = $prog->save();
+
+            if ($result) {
+                $msg = "Program '{$prog->Attributes['ProgramName']}' successfully marked as deleted.";
+            }
+            else {
+                $errors[] = "Program '{$prog->Attributes['ProgramName']}' could not be deleted, alert IT dept.";
+            }
         }
         else {
-            //this should never happen, but just in case:
-            $user = new User(1);
-        }
-        $result = $prog->createPendingUpdate(UPDATE_TYPE_DELETE, $user->id);
-        if ($result){
-            $msg = "Program '{$prog->Attributes['ProgramName']}' submitted for deletion.";
-        }
-        else {
-            $errors[] = "Program '{$prog->Attributes['ProgramName']}' could not be deleted, alert IT dept.";
+            $result = $prog->createPendingUpdate(UPDATE_TYPE_DELETE, $user->id);
+            if ($result) {
+                $msg = "Program '{$prog->Attributes['ProgramName']}' submitted for deletion.";
+            }
+            else {
+                $errors[] = "Program '{$prog->Attributes['ProgramName']}' could not be deleted, alert IT dept.";
+            }
         }
     }
 }

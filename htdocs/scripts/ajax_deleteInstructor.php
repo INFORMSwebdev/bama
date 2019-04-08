@@ -13,26 +13,42 @@ $msg = '';
 
 $InstructorId = filter_input( INPUT_POST, 'InstructorId', FILTER_VALIDATE_INT );
 
-if (!$InstructorId) $errors[] = "Missing required parameter: InstructorId";
+if(!isset($_SESSION['loggedIn']) || !is_numeric($_SESSION['loggedIn'])){
+    $errors[] = 'You must be logged in to delete instructors.';
+}
+else if (!$InstructorId) {
+    $errors[] = 'Missing required parameter: InstructorId.';
+}
 else {
     $inst = new Instructor( $InstructorId );
-    if (!$inst->valid) $errors[] = "The InstructorId provided does not correspond to an existing course.";
+    if (!$inst->valid) {
+        $errors[] = 'The InstructorId provided does not correspond to an existing course.';
+    }
     else {
         //get the userId
-        if(isset($_SESSION['loggedIn'])){
-            $user = new User($_SESSION['loggedIn']);
-        }
-        else {
-            //this should never happen, but just in case:
-            $user = new User(1);
-        }
-        $result = $inst->createPendingUpdate(UPDATE_TYPE_DELETE, $user->id);
+        $user = new User($_SESSION['loggedIn']);
         $name = $inst->Attributes['InstructorFirstName'] . ' ' . $inst->Attributes['InstructorLastName'];
-        if ($result){
-            $msg = "Instructor '$name' submitted for deletion.";
+
+        if($user->id == 1){
+            $inst->Attributes['Deleted'] = 1;
+            $result = $inst->save();
+
+            if ($result) {
+                $msg = "Instructor '$name' successfully marked as deleted.";
+            }
+            else {
+                $errors[] = "Instructor '$name' could not be deleted, alert IT dept.";
+            }
         }
         else {
-            $errors[] = "Instructor '$name' could not be deleted, alert IT dept.";
+            $result = $inst->createPendingUpdate(UPDATE_TYPE_DELETE, $user->id);
+
+            if ($result) {
+                $msg = "Instructor '$name' submitted for deletion.";
+            }
+            else {
+                $errors[] = "Instructor '$name' could not be deleted, alert IT dept.";
+            }
         }
     }
 }
