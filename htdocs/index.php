@@ -28,7 +28,10 @@ else {
         $contentHelp = "<p>Welcome $userName! Below are all institutions. You can use the Search box to find records quickly.</p><p>This is a <strong>very</strong> large list, please give the page up to 30 seconds to load the information initially.</p>";
     }
     else {
-        $contentHelp = "<p>Welcome $userName! Below is the institution you administrate.</p><p>Please keep in mind that any updates will require INFORMS Administrator approval before changes are reflected on this site.</p>";
+        $contentHelp = "<p>Welcome $userName! Below is the institution you administrate.</p>";
+        $contentHelp .= "<p>Please keep in mind that any updates will require INFORMS Administrator approval before changes are reflected on this site.</p>";
+        $subject = 'Analytics%20and%20O.R.%20Education%20Database%20-%20Institution%20Detail%20Update%20Request';
+        $contentHelp .= "<p class='lead'>Any updates to your institution will have to be made by an INFORMS admin. Please email the updates to <a href='mailto:educationresources@informs.org?subject=$subject'>educationresources@informs.org</a> using the provided subject line.</p>";
     }
     $content .= <<<EOT
 <div class="flex-column">
