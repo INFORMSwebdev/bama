@@ -24,8 +24,8 @@ else {
 
     //get info for all institutions this user is an editor of
     if (!$is_admin) {
-        $insts = $user->getInstitutions();
-        if (!in_array($id, $insts)) {
+        $insts = $user->getInstitutions(true, false);
+        if(array_search($id, array_column($insts, 'InstitutionId')) === false) {
             $response['errors'][] = "You are not authorized the edit this institution";
         }
     }

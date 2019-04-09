@@ -99,7 +99,7 @@ EOT;
 $custom_js = <<<EOT
 $(function() {
     $('#programList').html('<p>Loading data, please wait&hellip;</p>');
-    $.getJSON( "/scripts/ajax_displayEditorInstitutions.php", {'id': $id }, function( data ) {
+    $.getJSON( "/scripts/ajax_displayEditorInstitution.php", {'id': $id }, function( data ) {
         if (data.errors.length > 0) { 
             var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
             for (var i = 0; i < data.errors.length; i++) {
