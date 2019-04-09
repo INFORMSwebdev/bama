@@ -80,7 +80,9 @@ class AOREducationObject {
 
 
       $link = WEB_ROOT."admin/pendingUpdates.php";
-      $details = '<div style="margin: 10px 0">';
+      $details = '<p>'.$this->getAncestry().'</p>';
+      $details .= '<p>'.$this->Attributes[$class::$name_sql].'</p>';
+      $details .= '<div style="margin: 10px 0">';
       foreach( $this->Attributes as $key => $value ) {
           $details .= $key . ": " . filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS)."<br/>";
       }
