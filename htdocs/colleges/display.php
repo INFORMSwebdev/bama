@@ -9,7 +9,7 @@
 require_once '../../init.php';
 
 //get the college id
-$collegeId = filter_input_array(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$collegeId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 $content = '';
 
@@ -17,9 +17,15 @@ $college = new College($collegeId);
 
 //get info to display
 $instId = $college->Attributes['InstitutionId'];
-$inst = new Institution($instId);
 $name = $college->Attributes['CollegeName'];
 $type = $college->Attributes['CollegeType'];
+if(!empty($instId)) {
+    $inst = new Institution($instId);
+    $instName = $inst->Attributes['InstitutionName'];
+}
+else {
+    $instName = 'Not currently assigned to an institution.';
+}
 
 $content .= <<<EOT
 <div class="card">
@@ -30,7 +36,7 @@ $content .= <<<EOT
         <h3>Type of College</h3>
         <p>{$type}</p>
         <h3>Part of Institution</h3>
-        <p>{$inst->Attributes['InstitutionName']}</p>
+        <p>{$instName}</p>
         <div class="btn-group">
             <a role="button" class="btn btn-warning mr-3" href="/colleges/edit.php?id={$college->id}">Edit this College</a>
             <button id="id_{$college->id}" name="collegeDelete" type="submit" class="btn btn-danger btn-college-delete">Delete this College</button>
