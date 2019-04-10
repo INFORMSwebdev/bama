@@ -31,7 +31,7 @@ else {
         $contentHelp = "<p>Welcome $userName! Below is the institution you administrate.</p>";
         $contentHelp .= "<p>Please keep in mind that any updates will require INFORMS Administrator approval before changes are reflected on this site.</p>";
         $subject = 'Analytics%20and%20O.R.%20Education%20Database%20-%20Institution%20Detail%20Update%20Request';
-        $contentHelp .= "<p class='lead'>Any updates to your institution will have to be made by an INFORMS admin. Please email the updates to <a href='mailto:educationresources@informs.org?subject=$subject'>educationresources@informs.org</a> using the provided subject line.</p>";
+        $contentHelp .= "<p class='lead'>If you want to change the institution you administrate, please email the request to <a href='mailto:educationresources@informs.org?subject=$subject'>educationresources@informs.org</a> using the provided subject line.</p>";
     }
     $content .= <<<EOT
 <div class="flex-column">
