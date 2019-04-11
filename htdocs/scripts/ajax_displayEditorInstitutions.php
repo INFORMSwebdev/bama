@@ -183,30 +183,61 @@ else {
                         $helperHelp['ProgramCreated'] = $ip->Attributes['CreateDate'];
 
                         //need to pull more info for the last 2 things
-                        if (empty($ip->Attributes['ContactId'])) {
-                            $helperHelp['ContactName'] = $helperHelp['ContactTitle'] = $helperHelp['ContactPhone'] = $helperHelp['ContactEmail'] = 'Contact details not set.';
+                        //get all assigned contacts
+                        $progContacts = $ip->getContacts();
+                        if (!$progContacts) {
+                            $helperHelp['Contacts'][] = null;
                         } else {
-                            $progContact = new Contact($ip->Attributes['ContactId']);
+                            foreach($progContacts as $c){
+                                if(empty($c->Attributes['ContactTitle'])){
+                                    $cTitle = 'Contact title not set.';
+                                }
+                                else {
+                                    $cTitle = $c->Attributes['ContactTitle'];
+                                }
 
-                            $helperHelp['ContactName'] = $progContact->Attributes['ContactName'];
+                                if(empty($c->Attributes['ContactPhone'])){
+                                    $cPhone = 'Contact phone not set.';
+                                }
+                                else {
+                                    $cPhone = $c->Attributes['ContactPhone'];
+                                }
 
-                            if (empty($progContact->Attributes['ContactTitle'])) {
-                                $helperHelp['ContactTitle'] = 'Title not set.';
-                            } else {
-                                $helperHelp['ContactTitle'] = $progContact->Attributes['ContactTitle'];
+                                if(empty($c->Attributes['ContactEmail'])){
+                                    $cEmail = 'Contact email not set.';
+                                }
+                                else {
+                                    $cEmail = '<a href="mailto:' . $c->Attributes['ContactEmail'] . '">' . $c->Attributes['ContactEmail'] .  '</a>';
+                                }
+
+                                $helperHelp['Contacts'][] = array(
+                                    'ContactName' => $c->Attributes['ContactName'],
+                                    'ContactTitle' => $cTitle,
+                                    'ContactPhone' => $cPhone,
+                                    'ContactEmail' => $cEmail
+                                );
                             }
-
-                            if (empty($progContact->Attributes['ContactPhone'])) {
-                                $helperHelp['ContactPhone'] = 'Phone not set.';
-                            } else {
-                                $helperHelp['ContactPhone'] = $progContact->Attributes['ContactPhone'];
-                            }
-
-                            if (empty($progContact->Attributes['ContactEmail'])) {
-                                $helperHelp['ContactEmail'] = 'Email not set.';
-                            } else {
-                                $helperHelp['ContactEmail'] = "<a href='{$progContact->Attributes['ContactEmail']}' target='_blank'>{$progContact->Attributes['ContactEmail']}</a>";
-                            }
+//                            $progContact = new Contact($ip->Attributes['ContactId']);
+//
+//                            $helperHelp['ContactName'] = $progContact->Attributes['ContactName'];
+//
+//                            if (empty($progContact->Attributes['ContactTitle'])) {
+//                                $helperHelp['ContactTitle'] = 'Title not set.';
+//                            } else {
+//                                $helperHelp['ContactTitle'] = $progContact->Attributes['ContactTitle'];
+//                            }
+//
+//                            if (empty($progContact->Attributes['ContactPhone'])) {
+//                                $helperHelp['ContactPhone'] = 'Phone not set.';
+//                            } else {
+//                                $helperHelp['ContactPhone'] = $progContact->Attributes['ContactPhone'];
+//                            }
+//
+//                            if (empty($progContact->Attributes['ContactEmail'])) {
+//                                $helperHelp['ContactEmail'] = 'Email not set.';
+//                            } else {
+//                                $helperHelp['ContactEmail'] = "<a href='{$progContact->Attributes['ContactEmail']}' target='_blank'>{$progContact->Attributes['ContactEmail']}</a>";
+//                            }
                         }
                         $helperHelp['ApprovalStatusId'] = $ip->Attributes['ApprovalStatusId'];
                         //add record to the array
