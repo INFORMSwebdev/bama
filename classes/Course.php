@@ -169,6 +169,7 @@ class Course extends AOREducationObject
         $sql = "UPDATE course_textbooks SET CourseId = $this->id WHERE CourseId = $OldId ";
         $db->exec( $sql );
         $sql = "UPDATE program_courses SET CourseId = $this->id WHERE CourseId = $OldId";
+        $db->exec( $sql );
         return TRUE;
     }
 
