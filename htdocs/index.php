@@ -338,7 +338,6 @@ $(function() {
                         html += '<div class="card-footer">';
                         html += '<div class="btn-group">';
                         html += '<a role="button" class="btn btn-primary mr-3" href="/programs/assignProgramContact.php?progId=' + progs[x].programs[i].ProgramId + '">Assign Existing Contact</a>';
-                        //add 'add new contact' button here?
                         html += '<a role="button" href="/contacts/add.php?progId=' + progs[x].programs[i].ProgramId + '" id="addNewContact" name="addNewContact" class="btn btn-info btn-contact-add">Add New Contact and Assign</a>';
                         html += '</div>';
                         html += '</div>';

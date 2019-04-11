@@ -363,15 +363,25 @@ $(function() {
                         html += '<p>' + progs[x].programs[i].ProgramAnalyticsOR + '</p>';
                         html += '<h4>This Record Created On</h4>';
                         html += '<p>' + progs[x].programs[i].ProgramCreated + '</p>';
-                        html += '<h3>Contact Details</h3>';
-                        html += '<h4>Name</h4>';
-                        html += '<p>' + progs[x].programs[i].ContactName + '</p>';
-                        html += '<h4>Title</h4>';
-                        html += '<p>' + progs[x].programs[i].ContactTitle + '</p>';
-                        html += '<h4>Phone</h4>';
-                        html += '<p>' + progs[x].programs[i].ContactPhone + '</p>';
-                        html += '<h4>Email</h4>';
-                        html += '<p>' + progs[x].programs[i].ContactEmail + '</p>';
+                        html += '<h3>Assigned Contacts</h3>';
+                        if(progs[x].programs[i].Contacts == null){
+                            html += '<p>No contacts currently assigned to this program.</p>';
+                        }
+                        else {
+                            for(var k = 0; k < progs[x].programs[i].Contacts.length; k++){
+                                html += '<h4>Name</h4>';
+                                html += '<p>' + progs[x].programs[i].Contacts[k].ContactName + '</p>';
+                                html += '<h4>Title</h4>';
+                                html += '<p>' + progs[x].programs[i].Contacts[k].ContactTitle + '</p>';
+                                html += '<h4>Phone</h4>';
+                                html += '<p>' + progs[x].programs[i].Contacts[k].ContactPhone + '</p>';
+                                html += '<h4>Email</h4>';
+                                html += '<p>' + progs[x].programs[i].Contacts[k].ContactEmail + '</p>';
+                                if(k + 1 < progs[x].programs[i].Contacts.length){
+                                    html += '<hr />';
+                                }
+                            }
+                        }
                         html += '<div class="btn-group">';
                         html += '<a role="button" class="btn btn-warning mr-3" href="/programs/edit.php?id=' + progs[x].programs[i].ProgramId + '">Edit this Program</a>';
                         html += '<button id="id_' + progs[x].programs[i].ProgramId + '" name="programDelete" type="submit" class="btn btn-danger btn-program-delete">Delete this Program</button>';
@@ -379,7 +389,8 @@ $(function() {
                         html += '</div>'; //body
                         html += '<div class="card-footer">';
                         html += '<div class="btn-group">';
-                        html += '<a role="button" class="btn btn-primary" href="/programs/assignProgramContact.php?progId=' + progs[x].programs[i].ProgramId + '">Assign Contact</a>';
+                        html += '<a role="button" class="btn btn-primary mr-3" href="/programs/assignProgramContact.php?progId=' + progs[x].programs[i].ProgramId + '">Assign Existing Contact</a>';
+                        html += '<a role="button" href="/contacts/add.php?progId=' + progs[x].programs[i].ProgramId + '" id="addNewContact" name="addNewContact" class="btn btn-info btn-contact-add">Add New Contact and Assign</a>';
                         html += '</div>';
                         html += '</div>';
                         html += '</div>'; //tab-pane
@@ -398,7 +409,8 @@ $(function() {
                             html += '<td>' + progs[x].programs[i].courses[y].CourseNumber + '</td>';
                             html += '<td>' + progs[x].programs[i].courses[y].instructor.InstructorName + '</td>';
                             html += '<td>';
-                            html += '<a role="button" class="btn btn-warning btn-block" href="/courses/display.php?id=' + progs[x].programs[i].courses[y].CourseId + '">View this Course</a>';
+                            html += '<a role="button" class="btn btn-info btn-block" href="/courses/display.php?id=' + progs[x].programs[i].courses[y].CourseId + '">View Course Details</a>';
+                            html += '<a role="button" class="btn btn-warning btn-block" href="/courses/edit.php?id=' + progs[x].programs[i].courses[y].CourseId + '">Edit this Course</a>';
                             html += '<button id="id_' + progs[x].programs[i].courses[y].CourseId + '" name="courseDelete" type="submit" class="btn btn-danger btn-block btn-delete">Delete this Course</button>';  
                             html += '</td>';
                             html += '</tr>';
