@@ -195,6 +195,7 @@ else {
 
                         $helperHelp['ProgramCreated'] = $ip->Attributes['CreateDate'];
 
+                        //get contacts associated with the program
                         $progContacts = $ip->getContacts();
                         if (!$progContacts) {
                             $helperHelp['Contacts'][] = null;
@@ -227,32 +228,6 @@ else {
                             }
                         }
 
-                        //need to pull more info for the last 2 things
-//                        if (empty($ip->Attributes['ContactId'])) {
-//                            $helperHelp['ContactName'] = $helperHelp['ContactTitle'] = $helperHelp['ContactPhone'] = $helperHelp['ContactEmail'] = 'Contact details not set.';
-//                        } else {
-//                            $progContact = new Contact($ip->Attributes['ContactId']);
-//
-//                            $helperHelp['ContactName'] = $progContact->Attributes['ContactName'];
-//
-//                            if (empty($progContact->Attributes['ContactTitle'])) {
-//                                $helperHelp['ContactTitle'] = 'Title not set.';
-//                            } else {
-//                                $helperHelp['ContactTitle'] = $progContact->Attributes['ContactTitle'];
-//                            }
-//
-//                            if (empty($progContact->Attributes['ContactPhone'])) {
-//                                $helperHelp['ContactPhone'] = 'Phone not set.';
-//                            } else {
-//                                $helperHelp['ContactPhone'] = $progContact->Attributes['ContactPhone'];
-//                            }
-//
-//                            if (empty($progContact->Attributes['ContactEmail'])) {
-//                                $helperHelp['ContactEmail'] = 'Email not set.';
-//                            } else {
-//                                $helperHelp['ContactEmail'] = "<a href='{$progContact->Attributes['ContactEmail']}' target='_blank'>{$progContact->Attributes['ContactEmail']}</a>";
-//                            }
-//                        }
                         //add record to the array
                         $programHelper[] = $helperHelp;
                     }
