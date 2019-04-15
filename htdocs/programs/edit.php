@@ -405,7 +405,6 @@ function processCollegeList(colleges){
 }
 EOT;
 
-
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;

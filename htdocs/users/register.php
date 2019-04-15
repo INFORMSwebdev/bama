@@ -143,9 +143,7 @@ $page_params['content'] = $content;
 $page_params['page_title'] = $page_title;
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
-//do not display the usual header/footer
-$page_params['active_menu_item'] = 'users';
-//put custom/extra css files, if used
+//put custom/extra css files
 $page_params['css'][] = array( 'text' => $custom_css );
 $page_params['js'][] = array( 'text' => $custom_js );
 //wrapper class to pass all the content and params to

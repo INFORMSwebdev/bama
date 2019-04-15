@@ -44,6 +44,5 @@ EOT;
 $page_params = [];
 $page_params['content'] = $content;
 $page_params['page_title'] = "INFORMS Analytics &amp; OR Education Database - ADMIN - Add Institution";
-$page_params['admin'] = TRUE;
 $wrapper = new wrapperBama($page_params);
 $wrapper->html();

@@ -13,8 +13,6 @@ class wrapperBama
     {
         $ini = parse_ini_file("/common/settings/common.ini", TRUE);
         $this->params = array(
-            'admin' => FALSE,
-            'brand_bar' => TRUE,
             'site_title' => 'INFORMS Online',
             'site_url' => '/',
             'page_title' => '',
@@ -28,7 +26,6 @@ class wrapperBama
             'js' => array(),
             'file' => '',
             'content' => '',
-            'active_menu_item' => '',
             'web_path' => $ini['analytics_education_settings']['web_root'],
             'root_path' => $ini['analytics_education_settings']['root_dir'],
             'html_path' => $ini['analytics_education_settings']['root_dir'] . $ini['analytics_education_settings']['html_dir'],

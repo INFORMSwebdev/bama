@@ -241,7 +241,6 @@ EOT;
 $p_params = [];
 $p_params['page_title'] = "INFORMS Analytics &amp; OR Education Database - ADMIN";
 $p_params['content'] = $content;
-$p_params['admin'] = TRUE;
 $p_params['css'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css' );
 $p_params['css'][] = array( 'text' => $custom_css );
 $p_params['js'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js' );

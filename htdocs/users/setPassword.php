@@ -86,7 +86,6 @@ EOT;
 
 $p_params = [];
 $p_params['page_title'] = "INFORMS Analytics &amp; OR Education Database - Set Password";
-$p_params['admin'] = TRUE;
 $p_params['content'] = $content;
 $p_params['js'][] = array( 'text' => $custom_js );
 $wrapper = new wrapperBama($p_params);

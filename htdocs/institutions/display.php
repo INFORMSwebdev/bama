@@ -82,7 +82,8 @@ EOT;
         </div>
     </form>
 </div>
-EOT;*/
+EOT;
+*/
 }
 
 $id = filter_input( INPUT_GET, 'id', FILTER_VALIDATE_INT );
@@ -505,13 +506,7 @@ $page_params['content'] = $content;
 $page_params['page_title'] = "Display Institution Information";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
-$page_params['show_title_bar'] = FALSE;
-//do not display the usual header/footer
-$page_params['admin'] = TRUE;
-//$page_params['active_menu_item'] = 'register';
-//put custom/extra css files, if used
-//$page_params['css'][] = array("url" => "");
-//put custom/extra JS files, if used
+//put custom/extra JS files
 $page_params['js'][] = array("text" => $custom_js );
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);

@@ -96,8 +96,8 @@ else {
         <h3>Business Tags</h3>
         <p>{$business}</p>
         <div class="btn-group">
-            <a role="button" class="btn btn-warning mr-3" href="/datasets/edit.php?id={$instruc->id}">Edit this Dataset</a>
-            <button id="id_{$instruc->id}" name="instructorDelete" class="btn btn-danger btn-dataset-delete">Delete this Dataset</button>
+            <a role="button" class="btn btn-warning mr-3" href="/datasets/edit.php?id={$dataset->id}">Edit this Dataset</a>
+            <button id="id_{$dataset->id}" name="instructorDelete" class="btn btn-danger btn-dataset-delete">Delete this Dataset</button>
         </div>
     </div>
 </div>
@@ -150,18 +150,6 @@ $page_params['page_title'] = "View Dataset Details";
 $page_params['js'][] = array( 'text' => $customJS );
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
-//$page_params['css'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css' );
-//$page_params['js'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js' );
-//$page_params['js'][] = array( 'text' => $customJS );
-//$page_params['js'][] = array( 'text' => $custom_js );
-$page_params['show_title_bar'] = FALSE;
-//do not display the usual header/footer
-$page_params['admin'] = TRUE;
-//$page_params['active_menu_item'] = 'home';
-//put custom/extra css files, if used
-//$page_params['css'][] = array("url" => "");
-//put custom/extra JS files, if used
-//$page_params['js'][] = array("url" => "");
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content

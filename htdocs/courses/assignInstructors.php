@@ -103,19 +103,9 @@ EOT;
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
-//$page_params['js'][] = array( 'text' => $customJS );
 $page_params['page_title'] = "Assign Instructors to Course";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
-//$page_params['css'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css' );
-//$page_params['js'][] = array( 'url' => 'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js' );
-//$page_params['js'][] = array( 'text' => $customJS );
-//$page_params['js'][] = array( 'text' => $custom_js );
-//$page_params['active_menu_item'] = 'home';
-//put custom/extra css files, if used
-//$page_params['css'][] = array("url" => "");
-//put custom/extra JS files, if used
-//$page_params['js'][] = array("url" => "");
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content
