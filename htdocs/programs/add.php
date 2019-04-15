@@ -21,6 +21,14 @@ include_once('/common/classes/optionsHTML.php');
 
 $instId = filter_input(INPUT_GET, 'instId', FILTER_VALIDATE_INT);
 
+if(empty($instId)){
+    $collegeHTML = '<p>No valid InstitutionId to get college information for. College must be assigned after this new program has been approved by an INFORMS admin.</p>';
+}
+else {
+    $inst = new Institution($instId);
+
+}
+
 //user is logged in, let them add a program
 $content = <<<EOT
 <div class="flex-column">
@@ -121,6 +129,12 @@ $content = <<<EOT
         </div>
         <br />
         <div class="form-row">
+            <h3>College Assignment</h3>
+        </div>
+        <div class="form-row"> 
+            <div id="collegeList"><!-- empty div for college list AJAX stuff --></div>
+        </div>
+        <div class="form-row">
             <input type="hidden" name="instId" id="instId" value="{$instId}" />
             <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Program</button>
         </div>
@@ -132,21 +146,68 @@ $content = <<<EOT
 </div>
 EOT;
 
+$customJS = <<<EOT
+$(function() {
+    //make sure message box gets re-hidden if its shown
+    $('#message').hide();
+        
+    //get list of colleges to choose from
+    var urlParams = new URLSearchParams(window.location.search);
+    var id = urlParams.get('instId');
+    $.getJSON( "/scripts/ajax_getColleges.php", { 'InstitutionId': id }, function(data) {
+        //alert( data );
+        if (data.errors.length > 0 ) {
+            var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+            for (var i = 0; i < data.errors.length; i++) {
+                msg +=  data.errors[i] + "\\r\\n";
+            }
+            //alert( msg );
+            $('#message').html('<p>' + msg + '</p>');
+            $('#message').addClass('alert alert-danger');
+            $('#message').show();
+        }
+        else if (data.success == 1) {
+        //display list to user in a nice way
+            var htmlFoo = processCollegeList(data.colleges);
+            $('#collegeList').html(htmlFoo);
+        }
+        else {
+            //I don't think this should ever get hit, but what would happen if it did?
+            $('#collegeList').html('<p>Derp</p>');
+        }
+    }); 
+});
+
+function processCollegeList(colleges){
+    var html = '<h4>Colleges</h4>';
+    html += '<p>Select one college below to assign this program to:</p>';
+    
+    //html += '<form>'
+    //set up the select list
+    html += '<select size="5" id="collegeSelectList" name="collegeSelectList">';
+    html += '<option></option>';
+    //set up how the info gets displayed in the div for the user to select the college
+    for(var i = 0; i < colleges.length; i++) {
+        html += '<option value="' + colleges[i].CollegeId + '">' + colleges[i].CollegeName + '</option>';
+    }
+    html += '</select>';
+    //html += '<br />';
+    //html += '<button id="collegeSelectSubmit" class="btn btn-info btn-submit-collegeAssignment">Assign to Selected College</button>';
+    //html += '</form>';
+    
+    //return the HTML to put in the div
+    return html;
+}
+EOT;
+
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "Add a Program";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
-//$page_params['js'][] = array( 'text' => $custom_js );
-$page_params['show_title_bar'] = FALSE;
-//do not display the usual header/footer
-$page_params['admin'] = TRUE;
-//$page_params['active_menu_item'] = 'home';
-//put custom/extra css files, if used
-//$page_params['css'][] = array("url" => "");
-//put custom/extra JS files, if used
-//$page_params['js'][] = array("url" => "");
+$page_params['js'][] = array( 'text' => $customJS );
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content

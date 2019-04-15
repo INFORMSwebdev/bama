@@ -159,8 +159,6 @@ EOT;
                 $collegeListHTML = str_replace('<option value="' . $collegeId . '">', '<option value="' . $collegeId . '" selected>', $collegeListHTML);
             }
 
-            # ToDo: add assign contacts button instead of select list, since we can now have multiple contacts be assigned to a program
-
             $contactHTML = <<<EOT
 <br />
         <div class="form-row">
@@ -186,7 +184,6 @@ EOT;
         </div>
 EOT;
 
-
             //user DOES have permission to edit this page, display the form
             $content = <<<EOT
 <div class="flex-column">
@@ -210,14 +207,6 @@ EOT;
         </div>
         <div class="form-row">
             {$opsHTML}
-        </div>
-        <div class="form-row">
-            <label for="institutionName">Institution</label>
-            <select class="form-control" id="Institution" name="Institution" aria-describedby="InstitutionHelp" required>
-                <!-- ToDo: make this into ajax and add a filter like Dave's stuff has? -->
-		        {$instListHTML}
-            </select>
-            <p id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>
         </div>
         <div class="form-row">
             <label for="ProgramObjs">Objectives</label>
@@ -290,7 +279,16 @@ EOT;
         <!-- Contact & College details went here -->
         <br />
         <div class="form-row">
+            <h3>College Assignment</h3>
+        </div>
+        <div class="form-row"> 
+            <div id="collegeList"><!-- empty div for college list AJAX stuff --></div>
+        </div>
+        <br />
+        <div class="form-row">
+            <input type="hidden" id="currentCollege" name="currentCollege" value="{$prog->Attributes['CollegeId']}" />
             <input type="hidden" id="programId" name="programId" value="{$progId}" />
+            <input type="hidden" id="institutionId" name="institutionId" value="{$inst->id}" />
             <button class="btn btn-warning mr-2" type="submit" name="edit" value="edit">Submit changes</button>
             <button class="btn btn-danger" type="submit" name="delete" value="delete">Delete This Program</button>
         </div>
@@ -299,6 +297,9 @@ EOT;
             <p class="lead">These changes will not take effect until they have been approved by an INFORMS administrator.</p>
         </div>
     </form>
+</div>
+<div class="flex-column">
+    <a href="/programs/display.php?id={$prog->id}" role="button" class="btn btn-primary">View Program Details Page</a>
 </div>
 EOT;
         }
@@ -342,21 +343,76 @@ EOT;
     }
 }
 
+$customJS = <<<EOT
+$(function() {
+    //make sure message box gets re-hidden if its shown
+    $('#message').hide();
+        
+    //get list of colleges to choose from
+    //var urlParams = new URLSearchParams(window.location.search);
+    var id = $('#institutionId').val();
+    //alert('id = ' + id); 
+    $.getJSON( "/scripts/ajax_getColleges.php", { 'InstitutionId': id }, function(data) {
+        //alert( data );
+        if (data.errors.length > 0 ) {
+            var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+            for (var i = 0; i < data.errors.length; i++) {
+                msg +=  data.errors[i] + "\\r\\n";
+            }
+            //alert( msg );
+            $('#message').html('<p>' + msg + '</p>');
+            $('#message').addClass('alert alert-danger');
+            $('#message').show();
+        }
+        else if (data.success == 1) {
+        //display list to user in a nice way
+            var htmlFoo = processCollegeList(data.colleges);
+            $('#collegeList').html(htmlFoo);
+        }
+        else {
+            //I don't think this should ever get hit, but what would happen if it did?
+            $('#collegeList').html('<p>Derp</p>');
+        }
+    }); 
+});
+
+function processCollegeList(colleges){
+    var html = '<h4>Colleges</h4>';
+    html += '<p>Select one college below to assign this program to:</p>';
+    
+    //html += '<form>'
+    var id = $('#currentCollege').val();
+    //console.log(id);
+    //set up the select list
+    html += '<select size="5" id="collegeSelectList" name="collegeSelectList">';
+    html += '<option></option>';
+    //set up how the info gets displayed in the div for the user to select the college
+    for(var i = 0; i < colleges.length; i++) {
+        if(id == colleges[i].CollegeId){
+            html += '<option value="' + colleges[i].CollegeId + '" selected>' + colleges[i].CollegeName + '</option>';
+        }
+        else {
+            html += '<option value="' + colleges[i].CollegeId + '">' + colleges[i].CollegeName + '</option>';
+        }
+    }
+    html += '</select>';
+    //html += '<br />';
+    //html += '<button id="collegeSelectSubmit" class="btn btn-info btn-submit-collegeAssignment">Assign to Selected College</button>';
+    //html += '</form>';
+    
+    //return the HTML to put in the div
+    return html;
+}
+EOT;
+
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "Edit Program Details";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
-//$page_params['js'][] = array( 'text' => $custom_js );
-$page_params['show_title_bar'] = FALSE;
-//do not display the usual header/footer
-$page_params['admin'] = TRUE;
-//$page_params['active_menu_item'] = 'home';
-//put custom/extra css files, if used
-//$page_params['css'][] = array("url" => "");
-//put custom/extra JS files, if used
-//$page_params['js'][] = array("url" => "");
+$page_params['js'][] = array( 'text' => $customJS );
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content

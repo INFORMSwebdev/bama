@@ -78,6 +78,9 @@ if($softId){
         </div>
     </form>
 </div>
+<div class="flex-column">
+    <a href="/software/display.php?id={$soft->id}" role="button" class="btn btn-primary">View Software Details Page</a>
+</div>
 EOT;
 }
 else {
@@ -121,15 +124,6 @@ $page_params['content'] = $content;
 $page_params['page_title'] = "Edit Software";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
-//$page_params['js'][] = array( 'text' => $custom_js );
-$page_params['show_title_bar'] = FALSE;
-//do not display the usual header/footer
-$page_params['admin'] = TRUE;
-//$page_params['active_menu_item'] = 'home';
-//put custom/extra css files, if used
-//$page_params['css'][] = array("url" => "");
-//put custom/extra JS files, if used
-//$page_params['js'][] = array("url" => "");
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content

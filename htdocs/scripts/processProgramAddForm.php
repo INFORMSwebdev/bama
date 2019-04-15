@@ -54,6 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $orFlag = FALSE;
     }
 
+    $collegeId = filter_input(INPUT_POST, 'collegeSelectList', FILTER_VALIDATE_INT);
+
     //gather data to put in the pending_update record
     $data = array( "InstitutionId" => $instId,
         'ProgramName' => $progName,
@@ -72,7 +74,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'EstimatedNonresidentTuition' => $progNonResTuition,
         'CostPerCredit' => $progCostPer,
         'ORFlag' => $orFlag,
-        'AnalyticsFlag' => $analyticsFlag
+        'AnalyticsFlag' => $analyticsFlag,
+        'CollegeId' => $collegeId
     );
     //make a not-yet-existent Program record
     $x = Program::createInstance( $data );

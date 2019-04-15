@@ -52,6 +52,10 @@ if($collegeId){
         </div>
     </form>
 </div>
+<br />
+<div class="flex-column">
+    <a href="/colleges/display.php?id={$college->id}" role="button" class="btn btn-primary">View College Details Page</a>
+</div>
 EOT;
 }
 else {

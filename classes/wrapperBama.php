@@ -124,7 +124,6 @@ EOT;
             $userCourses = $user->getCourses();
             $userDatasets = $user->getDatasets();
 
-            // ToDo: update the wrapper nav items if user has no items to edit in them, will depend on how things get changed up a bit
             $navbar = <<<EOT
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="https://www.informs.org" target="_blank">

@@ -40,7 +40,6 @@ if(empty($instructorId)) {
 EOT;
 }
 else {
-    # ToDo: determine if we want to display more info about the instructor on this page, like which institution/college/whatever they instruct at
     //display info about the specified instructor
     $instruc = new Instructor($instructorId);
     $firstName = $instruc->Attributes['InstructorFirstName'];

@@ -159,6 +159,10 @@ if($courseId){
         </div>        
     </div>
 </div>
+<br />
+<div class="flex-column">
+    <a href="/courses/display.php?id={$co->id}" role="button" class="btn btn-primary">View Course Details Page</a>
+</div>
 EOT;
 }
 else {

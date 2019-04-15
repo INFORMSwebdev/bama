@@ -68,6 +68,9 @@ $content = <<<EOT
         </div>
     </form>
 </div>
+<div class="flex-column">
+    <a href="/contacts/display.php?id={$con->id}" role="button" class="btn btn-primary">View Contact Details Page</a>
+</div>
 EOT;
 
 //create the parameters to pass to the wrapper

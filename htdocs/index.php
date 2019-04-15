@@ -62,6 +62,40 @@ $(function() {
             $('#usersTable').DataTable();
             $('#courseTable').DataTable();
             
+            //Contact delete button functionality
+            $(document).on( 'click', '.btn-contact-delete', function(e) {
+                //make sure message box gets re-hidden if its shown
+                $('#message').hide();
+                var conf = confirm( "Are you sure you want to delete this contact?" );
+                if (conf) {
+                    var id = $(this).attr('id').substring(3);
+                    $.post( "/scripts/ajax_deleteContact.php", { 'ContactId': id }, function(data) {
+                        //alert( data );
+                        if (data.errors.length > 0 ) {
+                            var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
+                            for (var i = 0; i < data.errors.length; i++) {
+                                msg +=  data.errors[i] + "\\r\\n";
+                            }
+                            //alert( msg );
+                            $('#message').html('<p>' + msg + '</p>');
+                            $('#message').addClass('alert alert-danger');
+                            $('#message').show();
+                        }
+                        else if (data.msg) {
+                            //alert( data.msg );
+                            $('#message').html('<p>' + data.msg + '</p>');
+                            if(data.msg.includes('submitted')){
+                                $('#message').addClass('alert alert-success');
+                            }
+                            else {
+                                $('#message').addClass('alert alert-danger');
+                            }
+                            $('#message').show();
+                        }
+                    }, "json");
+                }
+            });
+            
             //institution delete button functionality
             $(document).on( 'click', '.btn-institution-delete', function(e) {
                 //make sure message box gets re-hidden if its shown
@@ -310,8 +344,11 @@ $(function() {
                         html += '<p>' + progs[x].programs[i].ProgramAnalyticsOR + '</p>';
                         html += '<h4>This Record Created On</h4>';
                         html += '<p>' + progs[x].programs[i].ProgramCreated + '</p>';
+                        html += '<h3>College Assignment</h3>';
+                        html += '<p>' + progs[x].programs[i].College + '</p>';
                         html += '<h3>Assigned Contacts</h3>';
-                        if(progs[x].programs[i].Contacts == null){
+                        console.log(progs[x].programs[i]);
+                        if(progs[x].programs[i].Contacts[0] == null){
                             html += '<p>No contacts currently assigned to this program.</p>';
                         }
                         else {
@@ -324,12 +361,15 @@ $(function() {
                                 html += '<p>' + progs[x].programs[i].Contacts[k].ContactPhone + '</p>';
                                 html += '<h4>Email</h4>';
                                 html += '<p>' + progs[x].programs[i].Contacts[k].ContactEmail + '</p>';
-                                if(k + 1 < progs[x].programs[i].Contacts.length){
-                                    html += '<hr />';
-                                }
+                                html += '<div class="btn-group btn-group-sm">';
+                                html += '<a href="/contacts/display.php?id=' + progs[x].programs[i].Contacts[k].ContactId + '" role="button" class="btn btn-info mr-3">View Contact Details</a>';
+                                html += '<a href="/contacts/edit.php?id=' + progs[x].programs[i].Contacts[k].ContactId + '" role="button" class="btn btn-warning mr-3">Edit Contact Details</a>';
+                                html += '<button class="btn btn-danger btn-contact-delete">Delete Contact</button>';
+                                html += '</div>';
+                                html += '<hr />';
                             }
                         }
-                        html += '<div class="btn-group">';
+                        html += '<div class="btn-group mt-3">';
                         html += '<a role="button" class="btn btn-info mr-3" href="/programs/display.php?id=' + progs[x].programs[i].ProgramId + '">View Program Details</a>';
                         html += '<a role="button" class="btn btn-warning mr-3" href="/programs/edit.php?id=' + progs[x].programs[i].ProgramId + '">Edit this Program</a>';
                         html += '<button id="id_' + progs[x].programs[i].ProgramId + '" name="programDelete" type="submit" class="btn btn-danger btn-program-delete">Delete this Program</button>';

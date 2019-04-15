@@ -157,7 +157,8 @@ EOT;
             <td>{$instructorLname}</td>
             <td>{$emailHTML}</td>
             <td>
-                <a role="button" class="btn btn-warning btn-block" href="/instructors/display.php?id={$instFoo->id}">View this Instructor</a>
+                <a role="button" class="btn btn-info btn-block" href="/instructors/display.php?id={$instFoo->id}">View this Instructor</a>
+                <a role="button" class="btn btn-warning btn-block" href="/instructors/edit.php?id={$instFoo->id}">Edit this Instructor</a>
                 <button id="id_{$instFoo->id}" name="instructorDelete" class="btn btn-danger btn-block btn-instructor-delete">Delete this Instructor</button>
             </td>
         </tr>
@@ -187,7 +188,8 @@ EOT;
     <td>{$b->Attributes['Authors']}</td>
     <td>{$b->Attributes['TextbookPublisher']}</td>
     <td>
-        <a role="button" class="btn btn-warning btn-block" href="/textbooks/display.php?id={$b->id}">View this Textbook</a>
+        <a role="button" class="btn btn-info btn-block" href="/textbooks/display.php?id={$b->id}">View this Textbook</a>
+        <a role="button" class="btn btn-warning btn-block" href="/textbooks/edit.php?id={$b->id}">Edit this Textbook</a>
         <button id="id_{$b->id}" name="textbookDelete" class="btn btn-danger btn-block btn-textbook-delete">Delete this Textbook</button>
     </td>
 </tr>
@@ -228,7 +230,8 @@ EOT;
     <td>{$soft->Attributes['SoftwareName']}</td>
     <td>{$soft->Attributes['SoftwarePublisher']}</td>
     <td>
-        <a role="button" class="btn btn-warning btn-block" href="/software/display.php?id={$soft->id}">View this Software</a>
+        <a role="button" class="btn btn-info btn-block" href="/software/display.php?id={$soft->id}">View this Software</a>
+        <a role="button" class="btn btn-warning btn-block" href="/software/edit.php?id={$soft->id}">Edit this Software</a>
         <button id="id_{$soft->id}" name="softwareDelete" class="btn btn-danger btn-block btn-software-delete">Delete this Software</button>
     </td>
 </tr>
@@ -268,7 +271,8 @@ EOT;
     <td>{$data->Attributes['DatasetIntegrity']}</td>
     <td>{$data->Attributes['DatasetAccess']}</td>
     <td>
-        <a role="button" class="btn btn-warning btn-block" href="/datasets/display.php?id={$data->id}">View this Dataset</a>
+        <a role="button" class="btn btn-info btn-block" href="/datasets/display.php?id={$data->id}">View this Dataset</a>
+        <a role="button" class="btn btn-warning btn-block" href="/datasets/edit.php?id={$data->id}">Edit this Dataset</a>
         <button id="id_{$data->id}" name="datasetDelete" class="btn btn-danger btn-block btn-dataset-delete">Delete this Dataset</button>
     </td>    
 </tr>
@@ -310,7 +314,8 @@ EOT;
     <td>{$c->Attributes['CaseAccess']}</td>
     <td>{$c->Attributes['CaseUseDescription']}</td>
     <td>
-        <a role="button" class="btn btn-warning btn-block" href="/cases/display.php?id={$c->id}">View this Case Study</a>
+        <a role="button" class="btn btn-info btn-block" href="/cases/display.php?id={$c->id}">View this Case Study</a>
+        <a role="button" class="btn btn-warning btn-block" href="/cases/edit.php?id={$c->id}">Edit this Case Study</a>
         <button id="id_{$c->id}" name="caseDelete" class="btn btn-danger btn-block btn-case-delete">Delete this Case Study</button>
     </td>  
 </tr>

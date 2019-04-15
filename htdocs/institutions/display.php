@@ -9,9 +9,6 @@
 require_once '../../init.php';
 
 //checks for messages?
-
-# ToDo: make the institution select list ajax powered so it doesn't make the rest of the page load slower (optional, but would be nice)
-
 $content = '';
 
 //get list of all institutions
@@ -364,7 +361,7 @@ $(function() {
                         html += '<h4>This Record Created On</h4>';
                         html += '<p>' + progs[x].programs[i].ProgramCreated + '</p>';
                         html += '<h3>Assigned Contacts</h3>';
-                        if(progs[x].programs[i].Contacts == null){
+                        if(progs[x].programs[i].Contacts[0] == null){
                             html += '<p>No contacts currently assigned to this program.</p>';
                         }
                         else {
@@ -383,6 +380,7 @@ $(function() {
                             }
                         }
                         html += '<div class="btn-group">';
+                        html += '<a role="button" class="btn btn-info mr-3" href="/programs/display.php?id=' + progs[x].programs[i].ProgramId + '">View Program Details</a>';
                         html += '<a role="button" class="btn btn-warning mr-3" href="/programs/edit.php?id=' + progs[x].programs[i].ProgramId + '">Edit this Program</a>';
                         html += '<button id="id_' + progs[x].programs[i].ProgramId + '" name="programDelete" type="submit" class="btn btn-danger btn-program-delete">Delete this Program</button>';
                         html += '</div>'; //button-group
@@ -451,6 +449,7 @@ $(function() {
                         html += '<h4>Created</h4>';
                         html += '<p>' + progs[x].colleges[i].CollegeCreated + '</p>';
                         html += '<div class="btn-group">';
+                        html += '<a role="button" class="btn btn-info mr-3" href="/colleges/display.php?id=' + progs[x].colleges[i].CollegeId + '">View College Details</a>';
                         html += '<a role="button" class="btn btn-warning mr-3" href="/colleges/edit.php?id=' + progs[x].colleges[i].CollegeId + '">Edit this College</a>';
                         html += '<button id="id_' + progs[x].colleges[i].CollegeId + '" name="collegeDelete" type="submit" class="btn btn-danger btn-college-delete">Delete this College</button>';
                         html += '</div>';
