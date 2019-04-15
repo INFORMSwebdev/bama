@@ -347,7 +347,7 @@ $(function() {
                         html += '<h3>College Assignment</h3>';
                         html += '<p>' + progs[x].programs[i].College + '</p>';
                         html += '<h3>Assigned Contacts</h3>';
-                        console.log(progs[x].programs[i]);
+                        //console.log(progs[x].programs[i]);
                         if(progs[x].programs[i].Contacts[0] == null){
                             html += '<p>No contacts currently assigned to this program.</p>';
                         }

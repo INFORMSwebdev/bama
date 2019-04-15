@@ -195,6 +195,14 @@ else {
 
                         $helperHelp['ProgramCreated'] = $ip->Attributes['CreateDate'];
 
+                        if(empty($ip->Attributes['CollegeId'])){
+                            $helperHelp['College'] = 'Not assigned.';
+                        }
+                        else {
+                            $coll = new College($ip->Attributes['CollegeId']);
+                            $helperHelp['College'] = $coll->Attributes['CollegeName'];
+                        }
+
                         //get contacts associated with the program
                         $progContacts = $ip->getContacts();
                         if (!$progContacts) {
