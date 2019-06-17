@@ -22,6 +22,9 @@ if (isset($_GET['testing'])) {
     $_SESSION['loggedIn'] = 41;
 }
 
+$subject = 'Analytics%20and%20O.R.%20Education%20Database%20-%20Institution%20Detail%20Update%20Request';
+$contentHelp = "<p class='lead'>If you want to change the institution you administrate, please email the request to <a href='mailto:educationresources@informs.org?subject=$subject'>educationresources@informs.org</a> using the provided subject line.</p>";
+
 $user = new User($_SESSION['loggedIn']);
 $userName = $user->Attributes['Username'];
 $firstName = $user->Attributes['FirstName'];
@@ -63,7 +66,7 @@ $content .= <<<EOT
             <p>{$lastName}</p>
             <h3>Administrator of Institution</h3>
             {$instList}
-            <p>If you wish to change the institution you administrate, please contact an INFORMS admin at <a href="mailto:educationresources@informs.org">educationresources@informs.org</a>.</p>
+            {$contentHelp}
         </div>
         <div class="card-footer"> 
             <a class="btn btn-primary" href="editProfile.php" role="button">Edit My Info</a>

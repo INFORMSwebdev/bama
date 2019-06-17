@@ -18,6 +18,9 @@ if ((!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true)){
     die;
 }
 
+$subject = 'Analytics%20and%20O.R.%20Education%20Database%20-%20Institution%20Detail%20Update%20Request';
+$contentHelp = "<p class='lead'>If you want to change the institution you administrate, please email the request to <a href='mailto:educationresources@informs.org?subject=$subject'>educationresources@informs.org</a> using the provided subject line.</p>";
+
 //get the users info
 $user = new User($_SESSION['loggedIn']);
 $userName = $user->Attributes['Username'];
@@ -64,6 +67,7 @@ $content = <<<EOT
 <div class="flex-column">
     <h3>Administrator of Institution</h3>
     {$instList}
+    {$contentHelp}
 </div>
 EOT;
 
