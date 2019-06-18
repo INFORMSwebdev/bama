@@ -18,6 +18,14 @@ $Value = filter_input( INPUT_POST, 'Value', FILTER_SANITIZE_NUMBER_INT );
 
 $Institution = new Institution( $InstitutionId);
 $result = $Institution->update( 'Deleted', $Value);
+if ($result) {
+    if ($Value) {
+        $Institution->update( 'ApprovalStatusId', APPROVAL_TYPE_DELETED );
+    }
+    else {
+        $Institution->update( 'ApprovalStatusId', APPROVAL_TYPE_APPROVE );
+    }
+}
 
 $action = ($Value) ? "deleted" : "undeleted";
 if ($result) $msg = "Institution $action.";

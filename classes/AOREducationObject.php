@@ -164,6 +164,7 @@ EOT;
     foreach( $params as $key => $value ) {
       $counter += $this->update( $key, $value );
     }
+    return $counter;
   }
 
 }

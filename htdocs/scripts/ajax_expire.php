@@ -18,6 +18,14 @@ $Value = filter_input( INPUT_POST, 'Value', FILTER_SANITIZE_NUMBER_INT );
 
 $Institution = new Institution( $InstitutionId);
 $result = $Institution->update( 'Expired', $Value);
+if ($result) {
+    if ($Value) {
+        $Institution->update( 'ApprovalStatusId', APPROVAL_TYPE_RETIRED );
+    }
+    else {
+        $Institution->update( 'ApprovalStatusId', APPROVAL_TYPE_APPROVE );
+    }
+}
 
 $action = ($Value) ? "expired" : "unexpired";
 if ($result) $msg = "Institution $action.";
