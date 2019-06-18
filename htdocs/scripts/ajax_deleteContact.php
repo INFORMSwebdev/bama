@@ -33,6 +33,7 @@ else {
 
         if($user->id == 1){
             $contact->Attributes['Deleted'] = 1;
+            $contact->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_DELETED;
             $result = $contact->save();
             if($result){
                 $msg = "Contact '{$contact->Attributes['ContactName']}' successfully marked as deleted.";

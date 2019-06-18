@@ -30,6 +30,7 @@ else {
 
         if($user->id == 1){
             $prog->Attributes['Deleted'] = 1;
+            $prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_DELETED;
             $result = $prog->save();
 
             if ($result) {

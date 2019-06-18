@@ -30,6 +30,7 @@ else {
 
         if($user->id == 1){
             $college->Attributes['Deleted'] = 1;
+            $college->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_DELETED;
             $result = $college->save();
             if ($result) {
                 $msg = "College '{$college->Attributes['CollegeName']}' successfully marked as deleted.";

@@ -30,6 +30,7 @@ else {
 
         if($user->id == 1){
             $soft->Attributes['Deleted'] = 1;
+            $soft->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_DELETED;
             $result = $soft->save();
 
             if ($result){

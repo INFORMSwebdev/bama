@@ -30,6 +30,7 @@ else {
 
         if($user->id == 1){
             $course->Attributes['Deleted'] = 1;
+            $course->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_DELETED;
             $result = $course->save();
             if($result){
                 $msg = "Course '{$course->Attributes['CourseTitle']}' successfully marked as deleted.";

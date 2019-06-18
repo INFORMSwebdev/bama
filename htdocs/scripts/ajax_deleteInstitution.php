@@ -30,6 +30,7 @@ else {
 
         if($user->id == 1){
             $inst->Attributes['Deleted'] = 1;
+            $inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_DELETED;
             $result = $inst->save();
             if ($result) {
                 $msg = "Institution '{$inst->Attributes['InstitutionName']}' successfully marked as deleted.";
