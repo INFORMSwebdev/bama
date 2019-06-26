@@ -11,7 +11,7 @@ if ((!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] != true)) {
     //user is not logged in
     $content .= <<<EOT
 <div class="jumbotron">
-    <h1>Welcome to the Analytics &amp; Operations Research Eduction Admin Site!</h1>
+    <h1>Welcome to the Analytics &amp; Operations Research Education Admin Site!</h1>
     <p class="lead">Please log in to make updates to your program's information.</p>
     <a class="btn btn-primary btn-block" href="/users/login.php" role="button">Log In</a>
 </div>
