@@ -152,7 +152,7 @@ EOT;
 		<!-- page_footer.tpl -->
 		<div class="container-fluid">
 			<div class="row">
-			    <p class="lead">Report any problems with this site to <a href="mailto:webdev@mail.informs.org">webdev@mail.informs.org</a>.</p>
+			    <p class="lead">Report any problems with this site to <a href="mailto:educationresources@informs.org">educationresources@informs.org</a>.</p>
 			</div>
 		</div>
 EOT;
