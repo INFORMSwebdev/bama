@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else {
         //get all the form field values
         $progName = filter_input(INPUT_POST, 'programName', FILTER_SANITIZE_STRING);
-        $instId = filter_input(INPUT_POST, 'Institution', FILTER_VALIDATE_INT);
+        $instId = filter_input(INPUT_POST, 'institutionId', FILTER_VALIDATE_INT);
         $progType = filter_input(INPUT_POST, 'ProgramType', FILTER_SANITIZE_STRING);
         $progObjs = filter_input(INPUT_POST, 'ProgramObjs', FILTER_SANITIZE_STRING);
         $progAccess = filter_input(INPUT_POST, 'ProgramAccess', FILTER_VALIDATE_URL);
@@ -63,6 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $contactId = filter_input(INPUT_POST, 'ContactId');
         $collegeId = filter_input(INPUT_POST, 'CollegeId');
         $analyticsFlag = filter_input(INPUT_POST, 'AnalyticsFlag', FILTER_VALIDATE_BOOLEAN);
+        if (!$analyticsFlag) $analyticsFlag = 0;
         $orFlag = filter_input(INPUT_POST, 'ORFlag', FILTER_VALIDATE_BOOLEAN);
 
         //update the info in the objects attributes

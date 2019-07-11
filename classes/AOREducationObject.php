@@ -24,6 +24,7 @@ class AOREducationObject {
   public static function clean_input_array( $input_array, $structure ) {
     $output_array = array();
     foreach( $input_array as $key => $value ) {
+        //if ($key == static::$primary_key) continue;
       if (in_array( $key, array_keys( $structure ))) $output_array[$key] = $value;
     }
     return $output_array;
@@ -40,7 +41,7 @@ class AOREducationObject {
       $qparams[] = array( ":$key", $value, $datatype );
     }
     $result = $db->execSafe( $sql, $qparams );
-    if (!$result) die( "Something went wrong in static create method ". print_r(EduDB::$connection->errorInfo(),1) );
+    if (!$result) die( "Something went wrong in static create method " . print_r(EduDB::$connection->errorInfo(),1) );
     $sql = "SELECT LAST_INSERT_ID()";
     return $db->queryItem( $sql );
   }
