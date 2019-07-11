@@ -97,7 +97,8 @@ class User extends AOREducationObject
         if($this->id == 1){
             //get all institutions
             $sql = "SELECT * FROM institutions";
-            if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+            if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1") . ' AND ApprovalStatusId = ' . APPROVAL_TYPE_APPROVE;
+            else $sql .= ' WHERE ApprovalStatusId = ' . APPROVAL_TYPE_APPROVE;
         }
         else {
             $sql = "SELECT * FROM institutions i INNER JOIN institution_admins a ON i.InstitutionId = a.InstitutionId WHERE a.UserId = $this->id";
