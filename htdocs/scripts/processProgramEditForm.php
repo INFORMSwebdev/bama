@@ -65,6 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $analyticsFlag = filter_input(INPUT_POST, 'AnalyticsFlag', FILTER_VALIDATE_BOOLEAN);
         if (!$analyticsFlag) $analyticsFlag = 0;
         $orFlag = filter_input(INPUT_POST, 'ORFlag', FILTER_VALIDATE_BOOLEAN);
+        if(!$orFlag) $orFlag = 0;
 
         //update the info in the objects attributes
         $prog->Attributes['InstitutionId'] = $instId;
