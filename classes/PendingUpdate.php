@@ -42,6 +42,7 @@ class PendingUpdate extends AOREducationObject
             switch ($this->Attributes['UpdateTypeId']) {
                 case UPDATE_TYPE_INSERT:
                     $pending = $Class::createInstance( $params );
+                    $pending->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
                     $RecordId = $pending->save();
                     break;
                 case UPDATE_TYPE_UPDATE:
