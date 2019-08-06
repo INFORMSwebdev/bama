@@ -21,6 +21,9 @@ include_once('/common/classes/optionsHTML.php');
 
 $instId = filter_input(INPUT_GET, 'instId', FILTER_VALIDATE_INT);
 
+$prog = new Program();
+$deliveryOptions = $prog->getDeliveryMethodOptions(TRUE);
+
 if(empty($instId)){
     $collegeHTML = '<p>No valid InstitutionId to get college information for. College must be assigned after this new program has been approved by an INFORMS admin.</p>';
 }
@@ -85,7 +88,9 @@ $content = <<<EOT
         </div>
         <div class="form-row">
             <label for="DeliveryMethod">Method</label>
-            <input type="text" class="form-control" name="DeliveryMethod" id="DeliveryMethod" />                
+            <select class="form-control" id="DeliveryMethod" name="DeliveryMethod">
+                {$deliveryOptions}
+            </select>             
         </div>
         <div class="form-row">
             <label for="FullTime">Full Time Duration</label>

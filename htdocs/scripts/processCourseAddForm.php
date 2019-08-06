@@ -26,7 +26,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $instructorId = null;
     }
     $number = filter_input(INPUT_POST, 'courseNumber', FILTER_SANITIZE_STRING);
-    $delivery = filter_input(INPUT_POST, 'deliveryMethod', FILTER_SANITIZE_STRING);
+    //$delivery = filter_input(INPUT_POST, 'deliveryMethod', FILTER_SANITIZE_STRING);
+    $delivery = filter_input(INPUT_POST, 'deliveryMethod', FILTER_VALIDATE_INT);
+    //if no option is selected, we will use the Unknown method in the select table
+    if(!$delivery){
+        $delivery = 10;
+    }
     $capstone = filter_input(INPUT_POST, 'capstoneProject', FILTER_SANITIZE_STRING);
     $text = filter_input(INPUT_POST, 'courseText', FILTER_SANITIZE_STRING);
     $analytics = filter_input(INPUT_POST, 'analyticTag', FILTER_SANITIZE_STRING);
@@ -41,7 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'CourseTitle' => $title,
         'InstructorId' => $instructorId,
         'CourseNumber' => $number,
-        'DeliveryMethod' => $delivery,
+        //'DeliveryMethod' => $delivery,
+        'DeliveryMethodId' => $delivery,
         'HasCapstoneProject' => $capstone,
         'CourseText' => $text,
         'SyllabusFilesize' => $sylSize,

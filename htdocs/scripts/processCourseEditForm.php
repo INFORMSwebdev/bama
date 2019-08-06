@@ -45,7 +45,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $title = filter_input(INPUT_POST, 'courseTitle', FILTER_SANITIZE_STRING);
 
         $number = filter_input(INPUT_POST, 'courseNumber', FILTER_SANITIZE_STRING);
-        $delivery = filter_input(INPUT_POST, 'deliveryMethod', FILTER_SANITIZE_STRING);
+        //commented out due to new delivery method dropdown list
+        //$delivery = filter_input(INPUT_POST, 'deliveryMethod', FILTER_SANITIZE_STRING);
+        $delivery = filter_input(INPUT_POST, 'deliveryMethod', FILTER_VALIDATE_INT);
         $capstone = filter_input(INPUT_POST, 'capstoneProject', FILTER_SANITIZE_STRING);
         $text = filter_input(INPUT_POST, 'courseText', FILTER_SANITIZE_STRING);
         $analytics = filter_input(INPUT_POST, 'analyticTag', FILTER_SANITIZE_STRING);
@@ -57,7 +59,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //set it up with the new info
         $course->Attributes['CourseTitle'] = $title;
         $course->Attributes['CourseNumber'] = $number;
-        $course->Attributes['DeliveryMethod'] = $delivery;
+        //new delivery method dropdown
+        //$course->Attributes['DeliveryMethod'] = $delivery;
+        if(empty($delivery)){
+            $course->Attributes['DeliveryMethodId'] = 10;
+        }
+        else {
+            $course->Attributes['DeliveryMethodId'] = $delivery;
+        }
         $course->Attributes['HasCapstoneProject'] = $capstone;
         $course->Attributes['CourseText'] = $text;
         $course->Attributes['SyllabusFilesize'] = $sylSize;

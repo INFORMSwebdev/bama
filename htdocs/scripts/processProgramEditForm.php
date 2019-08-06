@@ -50,7 +50,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $progAccess = filter_input(INPUT_POST, 'ProgramAccess', FILTER_VALIDATE_URL);
         $progYear = filter_input(INPUT_POST, 'YearEstablished', FILTER_SANITIZE_NUMBER_INT);
         $progScholarships = filter_input(INPUT_POST, 'Scholarship', FILTER_SANITIZE_STRING);
-        $progDeliveryMethod = filter_input(INPUT_POST, 'DeliveryMethod', FILTER_SANITIZE_STRING);
+        //$progDeliveryMethod = filter_input(INPUT_POST, 'DeliveryMethod', FILTER_SANITIZE_STRING);
+        $progDeliveryMethod = filter_input(INPUT_POST, 'DeliveryMethod', FILTER_VALIDATE_INT);
+        if(!$progDeliveryMethod){
+            //default to unknown delivery method if none were selected
+            $progDeliveryMethod = 10;
+        }
         $progFullTime = filter_input(INPUT_POST, 'FullTime', FILTER_SANITIZE_STRING);
         $progPartTime = filter_input(INPUT_POST, 'PartTime', FILTER_SANITIZE_STRING);
         $progTestingReqs = filter_input(INPUT_POST, 'TestingRequirement', FILTER_SANITIZE_STRING);
@@ -72,7 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $prog->Attributes['ContactId'] = $contactId;
         $prog->Attributes['ProgramName'] = $progName;
         $prog->Attributes['ProgramType'] = $progType;
-        $prog->Attributes['DeliveryMethod'] = $progDeliveryMethod;
+        //$prog->Attributes['DeliveryMethod'] = $progDeliveryMethod;
+        $prog->Attributes['DeliveryMethodId'] = $progDeliveryMethod;
         $prog->Attributes['ProgramAccess'] = $progAccess;
         $prog->Attributes['ProgramObjectives'] = $progObjs;
         $prog->Attributes['FullTimeDuration'] = $progFullTime;

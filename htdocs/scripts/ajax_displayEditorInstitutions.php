@@ -93,7 +93,9 @@ else {
                         $helperHelp['ProgramId'] = $ip->id;
                         $helperHelp['ProgramName'] = $ip->Attributes['ProgramName'];
                         $helperHelp['ProgramType'] = $ip->Attributes['ProgramType'];
-                        $helperHelp['ProgramDelivery'] = $ip->Attributes['DeliveryMethod'];
+                        //commented out below because of the new drop down list
+                        //$helperHelp['ProgramDelivery'] = $ip->Attributes['DeliveryMethod'];
+                        $helperHelp['ProgramDelivery'] = $ip->getDeliveryMethod();
 
                         if (empty($ip->Attributes['ProgramAccess'])) {
                             $helperHelp['ProgramAccess'] = 'Access information not set.';

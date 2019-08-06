@@ -26,6 +26,8 @@ class Course extends AOREducationObject
         'Deleted' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  ),
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
+        'DeliveryMethodId' => array('required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Delivery Method', 'editable' => TRUE),
+        'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified Date', 'editable' => FALSE ),
     );
     public static $full_text_columns = 'CourseTitle, CourseText, AnalyticTag, BusinessTag';
     public static $name_sql = 'CourseTitle';
@@ -83,6 +85,51 @@ class Course extends AOREducationObject
         $sql = "INSERT IGNORE INTO course_textbooks (CourseId, TextbookId) VALUES ($this->id, :TextbookId)";
         $params = array( array( ":TextbookId", $TextbookId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
+    }
+
+    public function getDeliveryMethod(){
+        $db = new EduDB();
+
+        if(empty($this->Attributes['DeliveryMethodId'])){
+            return 'No Delivery Method set for this program.';
+        }
+        else {
+            $sql = 'SELECT method FROM delivery_methods WHERE id=' . $this->Attributes['DeliveryMethodId'];
+            //should only have the 1 delivery method
+            $results = $db->queryColumn($sql);
+            return $results[0];
+        }
+    }
+
+    public function getDeliveryMethodOptions($first = NULL){
+        $db = new EduDb();
+
+        $sql = 'SELECT id, method FROM delivery_methods';
+        $results = $db->query($sql);
+
+        $helper = array();
+        foreach($results as $r){
+            $helper[] = array('value' => $r['id'], 'text' => $r['method']);
+        }
+
+        if(!empty($this->Attributes['DeliveryMethodId'])){
+            //have the currently selected delivery method be currently selected, and we don't want an empty first option
+            if(is_null($first)){
+                return optionsHTML($helper, $this->Attributes['DeliveryMethodId'], TRUE, array(FALSE));
+            }
+            else {
+                return optionsHTML($helper, $this->Attributes['DeliveryMethodId'], TRUE);
+            }
+        }
+        else {
+            //no current delivery method selected
+            if(is_null($first)){
+                return optionsHTML($helper, 10, TRUE, array(FALSE));
+            }
+            else {
+                return optionsHTML($helper);
+            }
+        }
     }
 
     public function getInstructor() {

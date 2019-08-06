@@ -32,7 +32,8 @@ if($id){
     $contacts = $prog->getContacts();
     $name = $prog->Attributes['ProgramName'];
     $type = $prog->Attributes['ProgramType'];
-    $delivery = $prog->Attributes['DeliveryMethod'];
+    //$delivery = $prog->Attributes['DeliveryMethod'];
+    $delivery = $prog->getDeliveryMethod();
     $access = $prog->Attributes['ProgramAccess'];
     if(isset($access) && !empty($access)){
         $accessHTML = "<p><a target='_blank' href='$access'>$access</a></p>";

@@ -34,7 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $progYear = NULL;
     }
     $progScholarships = filter_input(INPUT_POST, 'Scholarship', FILTER_SANITIZE_STRING);
-    $progDeliveryMethod = filter_input(INPUT_POST, 'DeliveryMethod', FILTER_SANITIZE_STRING);
+    //$progDeliveryMethod = filter_input(INPUT_POST, 'DeliveryMethod', FILTER_SANITIZE_STRING);
+    $progDeliveryMethod = filter_input(INPUT_POST, 'DeliveryMethod', FILTER_VALIDATE_INT);
+    //default delivery method to unknown if none selected
+    if(!$progDeliveryMethod) $progDeliveryMethod = 10;
     $progFullTime = filter_input(INPUT_POST, 'FullTime', FILTER_SANITIZE_STRING);
     $progPartTime = filter_input(INPUT_POST, 'PartTime', FILTER_SANITIZE_STRING);
     $progTestingReqs = filter_input(INPUT_POST, 'TestingRequirement', FILTER_SANITIZE_STRING);
@@ -60,7 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = array( "InstitutionId" => $instId,
         'ProgramName' => $progName,
         'ProgramType' => $progType,
-        'DeliveryMethod' => $progDeliveryMethod,
+        //'DeliveryMethod' => $progDeliveryMethod,
+        'DeliveryMethodId' => $progDeliveryMethod,
         'ProgramAccess' => $progAccess,
         'ProgramObjectives' => $progObjs,
         'FullTimeDuration' => $progFullTime,

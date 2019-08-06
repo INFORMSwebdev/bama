@@ -7,6 +7,7 @@
  */
 //require the init file
 require_once '../../init.php';
+require_once '/common/classes/optionsHTML.php';
 
 //check if user is logged in
 if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true){
@@ -27,6 +28,9 @@ else {
 }
 
 $progId = filter_input(INPUT_GET, 'progId', FILTER_VALIDATE_INT);
+
+$c = new Course();
+$deliveryMethods = $c->getDeliveryMethodOptions(TRUE);
 
 $content = '';
 
@@ -52,7 +56,9 @@ $content = <<<EOT
         </div>
         <div class="form-row"> 
             <label for="deliveryMethod">Delivery Method</label>
-            <input type="text" class="form-control" name="deliveryMethod" id="deliveryMethod" placeholder="How the course is delivered" />
+            <select class="form-control" name="deliveryMethod" id="deliveryMethod">
+                {$deliveryMethods}    
+            </select>
         </div>
         <br />
         <div class="form-row"> 

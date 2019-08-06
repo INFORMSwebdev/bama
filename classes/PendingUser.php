@@ -19,7 +19,8 @@ class PendingUser extends AOREducationObject
         'InstitutionId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Institution ID', 'editable' => FALSE ),
         'Comments' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Comments', 'editable' => FALSE ),
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Approval Status', 'editable' => TRUE ),
-        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE )
+        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
+        'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified Date', 'editable' => FALSE ),
     );
 
     public function approvalAction( $action ) {

@@ -20,7 +20,8 @@ class User extends AOREducationObject
         'Comments' => array('required' => FALSE, 'datatype' => PDO::PARAM_STR),
         'Token' => array('required' => FALSE, 'datatype' => PDO::PARAM_STR),
         'CreateDate' => array('required' => TRUE, 'datatype' => PDO::PARAM_STR),
-        'Deleted' => array('required' => TRUE, 'datatype' => PDO::PARAM_INT)
+        'Deleted' => array('required' => TRUE, 'datatype' => PDO::PARAM_INT),
+        'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified Date', 'editable' => FALSE ),
     );
 
     /**

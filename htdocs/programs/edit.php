@@ -7,6 +7,7 @@
  */
 //require the init file
 require_once '../../init.php';
+include_once '/common/classes/optionsHTML.php';
 
 //get the program ID (if set) of the program to edit
 $progId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -53,7 +54,8 @@ if (is_numeric($_SESSION['loggedIn'])) {
             $contactId = $prog->Attributes['ContactId'];
             $name = $prog->Attributes['ProgramName'];
             $type = $prog->Attributes['ProgramType'];
-            $delivery = $prog->Attributes['DeliveryMethod'];
+            //$delivery = $prog->Attributes['DeliveryMethod'];
+            $deliveryMethods = $prog->getDeliveryMethodOptions();
             $access = $prog->Attributes['ProgramAccess'];
             $objectives = $prog->Attributes['ProgramObjectives'];
             $fullTime = $prog->Attributes['FullTimeDuration'];
@@ -100,7 +102,7 @@ EOT;
             $collegeId = $prog->Attributes['CollegeId'];
 
             //include file that creates the option lists function
-            include_once('/common/classes/optionsHTML.php');
+            //include_once('/common/classes/optionsHTML.php');
 
             //get contact details
             //get list of contacts and turn it into a select list
@@ -234,7 +236,9 @@ EOT;
         </div>
         <div class="form-row">
             <label for="DeliveryMethod">Method</label>
-            <input type="text" class="form-control" name="DeliveryMethod" id="DeliveryMethod" value="{$delivery}" />                
+            <select class="form-control" id="DeliveryMethod" name="DeliveryMethod">
+                {$deliveryMethods}
+            </select>                
         </div>
         <div class="form-row">
             <label for="FullTime">Full Time Duration</label>

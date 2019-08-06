@@ -87,6 +87,8 @@ if($courseId){
         //$instructorListHTML = optionsHTML($instructorListHelper);
     }
 
+    $deliveryMethods = $co->getDeliveryMethodOptions();
+
     //set up the form to serve on the page
     $content = <<<EOT
 <div class="flex-column">
@@ -112,7 +114,9 @@ if($courseId){
                 <!--<br/>-->
                 <div class="form-row"> 
                     <label for="deliveryMethod">Delivery Method</label>
-                    <input type="text" class="form-control" name="deliveryMethod" id="deliveryMethod" value="{$co->Attributes['DeliveryMethod']}" placeholder="How the course is delivered" />
+                    <select name="deliveryMethod" id="deliveryMethod" class="form-control">
+                        {$deliveryMethods}
+                    </select>
                 </div>
                 <br />
                 <div class="form-row"> 

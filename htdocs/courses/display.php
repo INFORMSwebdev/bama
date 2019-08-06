@@ -54,7 +54,9 @@ else {
     else {
         $numberHTML .= '<p>Course number is currently not available.</p>';
     }
-    $delivery = $courseObj->Attributes['DeliveryMethod'];
+    //commenting out below because of the new delivery method dropdown
+    //$delivery = $courseObj->Attributes['DeliveryMethod'];
+    $delivery = $courseObj->getDeliveryMethod();
     $deliveryHTML = '<h3>Delivery Method</h3>';
     if(isset($delivery)){
         $deliveryHTML .= "<p>$delivery</p>";
