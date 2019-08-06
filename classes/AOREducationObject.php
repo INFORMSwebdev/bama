@@ -72,7 +72,7 @@ class AOREducationObject {
       $datatype = (is_null( $value )) ? PDO::PARAM_NULL : static::$data_structure[$key]['datatype'];
       $qparams[] = array( ":$key", $value, $datatype );
     }
-    $result = $db->execSafe( $sql, $qparams );die($sql . " ". print_r($qparams,1));
+    $result = $db->execSafe( $sql, $qparams );
     if (!$result) die( "Something went wrong in static create method " . print_r(EduDB::$connection->errorInfo(),1) ) .$sql;
     $sql = "SELECT LAST_INSERT_ID()";
     return $db->queryItem( $sql );
