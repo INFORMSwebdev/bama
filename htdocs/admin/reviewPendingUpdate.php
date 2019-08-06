@@ -17,7 +17,7 @@ if (!$UpdateId) die( "Missing required parameter: UpdateId");
 
 $Update = new PendingUpdate( $UpdateId );
 $UpdateTypes = [
-    UPDATE_TYPE_INSERT => "Insert",
+    UPDATE_TYPE_INSERT => "Add",
     UPDATE_TYPE_UPDATE => "Update",
     UPDATE_TYPE_DELETE => "Delete"
 ];
@@ -37,13 +37,11 @@ foreach( $data as $key => $value ) {
     $data_html .= '<div class="data_value">' . $value . '</div>';
     $data_html .= '</div>';
 }
+$thing = $Class::createInstance( $data );
+if ($UpdateType == 'Update' || $UpdateType == 'Delete') {
+    $thing->id = $thing->Attributes[$Class::$primary_key];
+}
 
-if ($UpdateType == UPDATE_TYPE_UPDATE) {
-    $thing = new $Class( $Update->Attributes['RecordId'] );
-}
-else {
-    $thing = new $Class( $Update->Attributes['UpdateRecordId'] );
-}
 $ancestry_html = $thing->getAncestry();
 
 $content = <<<EOT
@@ -51,6 +49,7 @@ $content = <<<EOT
   <h1>Review Pending Update</h1>
 </div>
 <div class="container-fluid">
+    <p>Update Type: $UpdateType</p>
     $ancestry_html
     <h3>$Class</h3>
     
