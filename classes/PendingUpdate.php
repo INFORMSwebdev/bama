@@ -36,7 +36,7 @@ class PendingUpdate extends AOREducationObject
         $Class = $Table->Attributes['ClassName'];
         $primary_key = $Class::$primary_key;
         $params = unserialize( $this->Attributes['UpdateContent'] );
-        $RecordId = $params[$primary_key];
+        if (isset($params[$primary_key])) $RecordId = $params[$primary_key];
         if (!$Class) throw new Exception( "Table class not found." );
         if ( $action === APPROVAL_TYPE_APPROVE ) {
             switch ($this->Attributes['UpdateTypeId']) {

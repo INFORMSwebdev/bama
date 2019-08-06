@@ -30,7 +30,7 @@ try {
     $Table = new Table( $TableId );
     $Class = $Table->Attributes['ClassName'];
     $params = unserialize( $PendingUpdate->Attributes['UpdateContent']);
-    $RecordId = $params[$Class::$primary_key];
+    if (isset($params[$Class::$primary_key])) $RecordId = $params[$Class::$primary_key];
     //$RecordId = ($PendingUpdate->Attributes['UpdateTypeId']==UPDATE_TYPE_DELETE) ? $PendingUpdate->Attributes['RecordId'] : $PendingUpdate->Attributes['UpdateRecordId'];
     if ($PendingUpdate->Attributes['UpdateTypeId'] == UPDATE_TYPE_INSERT) $RecordId = $result;
     $Obj = new $Class( $RecordId );
