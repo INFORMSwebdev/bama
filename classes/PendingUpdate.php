@@ -33,18 +33,16 @@ class PendingUpdate extends AOREducationObject
         $Table = new Table( $this->Attributes['TableId'] );
         $Class = $Table->Attributes['ClassName'];
         if (!$Class) throw new Exception( "Table class not found." );
+
         if ( $action === APPROVAL_TYPE_APPROVE ) {
+            $params = unserialize( $this->Attributes['UpdateContent'] );
+            $pending = $Class::createInstance( $params );
             switch ($this->Attributes['UpdateTypeId']) {
                 case UPDATE_TYPE_INSERT:
-                    $obj = new $Class( $this->Attributes['UpdateRecordId'] );
-                    $obj->update( 'ApprovalStatusId', APPROVAL_TYPE_APPROVE );
+                    $pending->save();
                     break;
                 case UPDATE_TYPE_UPDATE:
-                    $newObj = new $Class( $this->Attributes['UpdateRecordId'] );
-                    $newObj->update( 'ApprovalStatusId', APPROVAL_TYPE_APPROVE );
-                    $oldObj = new $Class( $this->Attributes['RecordId'] );
-                    $oldObj->update( 'ApprovalStatusId', APPROVAL_TYPE_RETIRED );
-                    $newObj->swapId( $oldObj->id );
+                    $pending->save();
                     break;
                 case UPDATE_TYPE_DELETE:
                     $Obj = new $Class( $this->Attributes['RecordId'] );

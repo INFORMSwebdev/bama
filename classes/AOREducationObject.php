@@ -30,6 +30,28 @@ class AOREducationObject {
     return $output_array;
   }
 
+
+    /**
+     * Compares two objects of same type and returns an array of keys where the values differ.
+     * @param $o1
+     * @param $o2
+     * @return array
+     */
+    public static function compareObjects($o1, $o2 ) {
+      $output = [];
+      $class = get_class( $o1 );
+      $class2 = get_class( $o2 );
+      if ($class != $class2) die( "compareObjects failed because objects are of type $class and $class2 and need to be the same.");
+      $ignored_fields = [ $class::$primary_key, 'ApprovalStatusId', 'CreateDate', 'LastModifiedDate'];
+      foreach( $o1->Attributes as $key => $value ) {
+          if (in_array( $key, $ignored_fields )) continue;
+          else {
+              if ($value != $o2->Attributes[$key]) $output[] = $key;
+          }
+      }
+      return $output;
+  }
+
   public static function create( $params ) {
     $db = new EduDB();
     $params = self::clean_input_array( $params, static::$data_structure );
@@ -60,32 +82,49 @@ class AOREducationObject {
       $TableId = $class::$tableId;
       $PendingUpdateId = PendingUpdate::create( ['UpdateTypeId'=>$updateTypeId, 'TableId'=>$TableId, 'UpdateContent'=>serialize($this->Attributes),'UserId'=>$UserId] );
       $PendingUpdate = new PendingUpdate( $PendingUpdateId );
-      $this->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
-      switch( $updateTypeId ) {
+      $PendingUpdate->update( 'RecordId', $this->id );
+      //$this->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+      /*switch( $updateTypeId ) {
           case UPDATE_TYPE_INSERT:
-              $this->id = $this->save();
-              $PendingUpdate->update( 'UpdateRecordId', $this->id );
+              //$this->id = $this->save();
+              //$PendingUpdate->update( 'UpdateRecordId', $this->id );
               break;
           case UPDATE_TYPE_UPDATE:
-              $OriginalRecordId = $this->id;
+              //$OriginalRecordId = $this->id;
               $PendingUpdate->update( 'RecordId', $this->id );
-              $this->id = $this->Attributes[static::$primary_key] = null;
-              $this->id = $this->save(); // save current object attributes into new row
-              $this->update('OriginalRecordId', $OriginalRecordId);
-              $PendingUpdate->update( 'UpdateRecordId', $this->id );
+              //$this->id = $this->Attributes[static::$primary_key] = null;
+              //$this->id = $this->save(); // save current object attributes into new row
+              //$this->update('OriginalRecordId', $OriginalRecordId);
+              //$PendingUpdate->update( 'UpdateRecordId', $this->id );
               break;
           case UPDATE_TYPE_DELETE:
               $PendingUpdate->update( 'RecordId', $this->id );
               break;
-      }
-
+      }*/
 
       $link = WEB_ROOT."admin/pendingUpdates.php";
       $details = '<p>'.$this->getAncestry().'</p>';
       $details .= '<p>'.$this->Attributes[$class::$name_sql].'</p>';
       $details .= '<div style="margin: 10px 0">';
-      foreach( $this->Attributes as $key => $value ) {
-          $details .= $key . ": " . filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS)."<br/>";
+      switch( $updateTypeId ) {
+          case UPDATE_TYPE_INSERT:
+              foreach( $this->Attributes as $key => $value ) {
+                  $details .= $key . ": " . filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS)."<br/>";
+              }
+              break;
+          case UPDATE_TYPE_UPDATE:
+              $original = new $class( $this->id );
+              $keys = self::compareObjects($original, $this);
+              foreach( $keys as $key ) {
+                  $details .= "Current value for $key: ".$original->Attributes[$key] . "<br/>";
+                  $details .= "Updated value for $key: ". $this->Attributes[$key] . "<br /><br />";
+              }
+              break;
+          case UPDATE_TYPE_DELETE:
+              foreach( $this->Attributes as $key => $value ) {
+                  $details .= $key . ": " . filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS)."<br/>";
+              }
+              break;
       }
       $details .= '</div>';
       $e_params = [];
