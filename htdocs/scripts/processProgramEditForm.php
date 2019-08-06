@@ -96,7 +96,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $prog->Attributes['CollegeId'] = $collegeId;
 
         if($user->id == 1){
-            $prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            //this was needed for our old update scheme, but no longer
+            //$prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
             $results = $prog->save();
             if($results) {
                 $_SESSION['editMessage']['success'] = true;
@@ -108,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         else {
-            $prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+            //$prog->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
             //put the updates in the pending_updates table
             $result = $prog->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
 

@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $soft->Attributes['SoftwarePublisher'] = $pub;
 
         if($user->id == 1){
-            $soft->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            //$soft->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
             $results = $soft->save();
             if($results) {
                 $_SESSION['editMessage']['success'] = true;
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         else {
-            $soft->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+            //$soft->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
             //put the updates in the pending_updates table
             $result = $soft->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->id);
 

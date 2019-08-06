@@ -31,7 +31,7 @@ else {
 
         if($user->id == 1){
             $data->Attributes['Deleted'] = 1;
-            $data->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_DELETED;
+            //$data->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_DELETED;
             $result = $data->save();
             if ($result) {
                 $msg = "Dataset '{$data->Attributes['DatasetName']}' successfully marked as deleted.";

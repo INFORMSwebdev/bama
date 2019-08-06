@@ -30,7 +30,7 @@ else {
 
         if($user->id == 1){
             $book->Attributes['Deleted'] = 1;
-            $book->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_DELETED;
+            //$book->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_DELETED;
             $result = $book->save();
 
             if ($result) {

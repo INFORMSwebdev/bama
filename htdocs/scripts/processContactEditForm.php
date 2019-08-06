@@ -58,7 +58,7 @@ else {
 
     //check if admin or editor update
     if($user->id == 1) {
-        $con->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+        //$con->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
         $results = $con->save();
         if($results) {
             $_SESSION['editMessage']['success'] = true;
@@ -70,7 +70,7 @@ else {
         }
     }
     else {
-        $con->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+        //$con->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
         //put the updates in the pending_updates table
         $result = $con->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->id);
 

@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $college->Attributes['CollegeType'] = $type;
 
         if($user->id == 1){
-            $college->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            //$college->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
             $results = $college->save();
             if($results) {
                 $_SESSION['editMessage']['success'] = true;
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         else {
-            $college->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+            //$college->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
             //put the updates in the pending_updates table
             $result = $college->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->id);
 

@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $c->Attributes['BusinessTag'] = $business;
 
         if($user->id == 1){
-            $c->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            //$c->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
             $results = $c->save();
             if($results) {
                 $_SESSION['editMessage']['success'] = true;
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         else {
-            $c->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+            //$c->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
 
             //put the updates in the pending_updates table
             $result = $c->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);

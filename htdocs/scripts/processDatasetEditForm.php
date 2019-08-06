@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         if($user->id == 1){
-            $dataset->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            //$dataset->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
             $results = $dataset->save();
             if($results) {
                 $_SESSION['editMessage']['success'] = true;
@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         else {
-            $dataset->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+            //$dataset->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
             //put the updates in the pending_updates table
             $result = $course->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
 

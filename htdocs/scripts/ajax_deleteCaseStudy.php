@@ -30,7 +30,7 @@ else {
 
         if($user->id == 1){
             $case->Attributes['Deleted'] = 1;
-            $case->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_DELETED;
+            //$case->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_DELETED;
             $result = $case->save();
             if ($result) {
                 $msg = "Case study '{$case->Attributes['CaseTitle']}' successfully marked as deleted.";

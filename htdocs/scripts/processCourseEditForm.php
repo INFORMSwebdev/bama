@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $course->Attributes['BusinessTag'] = $business;
 
         if($user->id == 1){
-            $course->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            //$course->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
             $results = $course->save();
             if($results) {
                 $_SESSION['editMessage']['success'] = true;
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         else {
-            $course->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+            //$course->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
             //put the updates in the pending_updates table
             $result = $course->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->Attributes['UserId']);
 

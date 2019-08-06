@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $book->Attributes['TextbookPublisher'] = $name;
 
         if($user->id == 1){
-            $book->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            //$book->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
             $results = $book->save();
             if($results) {
                 $_SESSION['editMessage']['success'] = true;
@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         else {
-            $book->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+            //$book->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
             //put the updates in the pending_updates table
             $result = $book->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->id);
 

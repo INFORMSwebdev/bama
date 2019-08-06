@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $inst->Attributes['InstructorEmail'] = $email;
 
         if($user->id == 1){
-            $inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
+            //$inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
             $results = $inst->save();
             if($results) {
                 $_SESSION['editMessage']['success'] = true;
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         else {
-            $inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
+            //$inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_NEW;
             //put the updates in the pending_updates table
             $result = $inst->createPendingUpdate(UPDATE_TYPE_UPDATE, $user->id);
 
