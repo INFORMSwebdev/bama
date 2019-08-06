@@ -77,7 +77,7 @@ $(function() {
   $('#btn-Approve, #btn-Reject').on( 'click keyup', function(e) {
     var action = ($(this).hasClass('btn-Approve')) ? $approve : $reject;
     $.post( '/scripts/ajax_ApprovalAction.php', { 'action': action, 'UpdateId': $UpdateId }, function(data) {
-      alert(data);
+      //alert(data);
       if (data.errors.length > 0 ) {
         var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
         for (var i = 0; i < data.errors.length; i++) {
@@ -90,7 +90,7 @@ $(function() {
         window.location.href="/admin/pendingUpdates.php";
       }
       else alert( "Something went wrong." );
-    }/*, "json"*/);
+    }, "json");
   });
 });
 EOT;

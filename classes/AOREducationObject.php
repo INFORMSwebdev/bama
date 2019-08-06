@@ -81,6 +81,9 @@ class AOREducationObject {
   public static function createInstance( $params ) {
       $object = new static();
       $params = self::clean_input_array( $params, static::$data_structure );
+      $Class = get_called_class();
+      $primary_key = $Class::$primary_key;
+      $object->id = $params[$primary_key];
       $object->Attributes = $params;
       $object->valid = TRUE;
       return $object;

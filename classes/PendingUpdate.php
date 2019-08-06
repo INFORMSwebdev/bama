@@ -45,8 +45,9 @@ class PendingUpdate extends AOREducationObject
                     $RecordId = $pending->save();
                     break;
                 case UPDATE_TYPE_UPDATE:
-                    $pending = new $Class( $RecordId );
+                    $pending = $Class::createInstance( $params );
                     $pending->save();
+
                     break;
                 case UPDATE_TYPE_DELETE:
                     $Obj = new $Class( $RecordId );
