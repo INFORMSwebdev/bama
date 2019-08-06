@@ -87,5 +87,6 @@ else {
 }
 
 //redirect user to index?
-header("Location: /instructors/display.php?id={$instId}");
+//header("Location: /instructors/display.php?id={$instId}");
+header('Location: /index.php');
 die;

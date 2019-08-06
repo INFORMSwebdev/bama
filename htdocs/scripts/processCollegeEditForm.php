@@ -80,5 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 //redirect user to index?
-header("Location: /colleges/display.php?id={$collegeId}");
+//header("Location: /colleges/display.php?id={$collegeId}");
+header('Location: /index.php');
 die;
