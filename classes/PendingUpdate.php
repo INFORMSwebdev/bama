@@ -21,6 +21,7 @@ class PendingUpdate extends AOREducationObject
         'UserId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'User ID', 'editable' => FALSE ),
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Approval Status', 'editable' => TRUE ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
+        'ParentId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Parent Record ID', 'editable' => FALSE ),
         'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified Date', 'editable' => FALSE ),
     );
 
