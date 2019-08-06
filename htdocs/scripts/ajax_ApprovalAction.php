@@ -29,10 +29,20 @@ try {
     $TableId = $PendingUpdate->Attributes['TableId'];
     $Table = new Table( $TableId );
     $Class = $Table->Attributes['ClassName'];
-    $RecordId = ($PendingUpdate->Attributes['UpdateTypeId']==UPDATE_TYPE_DELETE) ? $PendingUpdate->Attributes['RecordId'] : $PendingUpdate->Attributes['UpdateRecordId'];
+    $params = unserialize( $PendingUpdate->Attributes['UpdateContent']);
+    $RecordId = $params[$Class::$primary_key];
+    //$RecordId = ($PendingUpdate->Attributes['UpdateTypeId']==UPDATE_TYPE_DELETE) ? $PendingUpdate->Attributes['RecordId'] : $PendingUpdate->Attributes['UpdateRecordId'];
+    if ($PendingUpdate->Attributes['UpdateTypeId'] == UPDATE_TYPE_INSERT) $RecordId = $result;
     $Obj = new $Class( $RecordId );
-    $O_ancestry = $Obj->getAncestry( FALSE );
-    $inst = $O_ancestry[count($O_ancestry)-1];
+
+    if ($Class=='Institution') {
+        $inst = $Obj;
+    }
+    else {
+        $O_ancestry = $Obj->getAncestry( FALSE );
+        $inst = $O_ancestry[count($O_ancestry)-1];
+    }
+
     $Users = $inst->getUserAssignments( TRUE );
     foreach ($Users as $User) {
         if (filter_var( $User->Attributes['Username'], FILTER_VALIDATE_EMAIL)) {

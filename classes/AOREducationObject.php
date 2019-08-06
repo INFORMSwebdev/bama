@@ -53,17 +53,27 @@ class AOREducationObject {
   }
 
   public static function create( $params ) {
+      /* $primary_key = static::$primary_key;
+      *$excluded_keys = [ $primary_key, 'CreateDate', 'LastModifiedDate'];
+        $temp_params = $params;
+       $params = [];
+      foreach( $temp_params as $key => $value) {
+           if (!in_array($key, $excluded_keys)) {
+               $params[$key] = $value;
+           }
+       }*/
     $db = new EduDB();
     $params = self::clean_input_array( $params, static::$data_structure );
     $keys = array_keys( $params );
     $sql = "INSERT INTO ".static::$table." (".implode(",", $keys).") VALUES (:".implode(",:", $keys).")";
     $qparams = array();
+
     foreach ( $params as $key => $value ) {
       $datatype = (is_null( $value )) ? PDO::PARAM_NULL : static::$data_structure[$key]['datatype'];
       $qparams[] = array( ":$key", $value, $datatype );
     }
-    $result = $db->execSafe( $sql, $qparams );
-    if (!$result) die( "Something went wrong in static create method " . print_r(EduDB::$connection->errorInfo(),1) );
+    $result = $db->execSafe( $sql, $qparams );die($sql . " ". print_r($qparams,1));
+    if (!$result) die( "Something went wrong in static create method " . print_r(EduDB::$connection->errorInfo(),1) ) .$sql;
     $sql = "SELECT LAST_INSERT_ID()";
     return $db->queryItem( $sql );
   }
@@ -190,6 +200,9 @@ EOT;
   }
   
   public function update( $key, $value ) {
+        $Class = get_class($this);
+        $ignored_fields = [ $Class::$primary_key, 'CreateDate', 'LastModifiedDate'];
+        if (in_array( $key, $ignored_fields )) return FALSE;
     $db = new EduDB();
     $params = array();
     $sql = "UPDATE ".static::$table." SET $key=:value WHERE ".static::$primary_key ." = $this->id";
