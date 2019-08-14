@@ -24,6 +24,7 @@ class College extends AOREducationObject
     );
     public static $full_text_columns = 'CollegeName';
     public static $name_sql = 'CollegeName';
+    public static $parent_class = 'Institution';
 
     public static function getAllColleges( $active = TRUE, $asObjects = FALSE ){
         $colleges = [];

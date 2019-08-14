@@ -31,6 +31,7 @@ class Institution extends AOREducationObject {
     );
     public static $full_text_columns = 'InstitutionName, InstitutionCity, InstitutionState, InstitutionRegion';
     public static $name_sql = 'InstitutionName';
+    public static $parent_class = NULL;
 
     public function assignAdmin( $UserId ) {
         $db = new EduDb;

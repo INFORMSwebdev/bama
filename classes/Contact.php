@@ -25,6 +25,7 @@ class Contact extends AOREducationObject
     );
     public static $full_text_columns = 'ContactName, ContactEmail';
     public static $name_sql = 'ContactName';
+    public static $parent_class = 'Program';
 
     public function setInstitutionContact( $InstitutionId ){
       // this can be accomplished by updating the institution object's ContactId attribute so not adding code for this until later

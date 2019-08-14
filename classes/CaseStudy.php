@@ -27,6 +27,7 @@ class CaseStudy extends AOREducationObject {
     );
     public static $full_text_columns = 'CaseTitle, CaseUseDescription, AnalyticTag, BusinessTag';
     public static $name_sql = 'CaseTitle';
+    public static $parent_class = 'Course';
 
     /**
      * add course - case study association

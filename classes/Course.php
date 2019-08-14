@@ -31,6 +31,7 @@ class Course extends AOREducationObject
     );
     public static $full_text_columns = 'CourseTitle, CourseText, AnalyticTag, BusinessTag';
     public static $name_sql = 'CourseTitle';
+    public static $parent_class = 'Program';
 
     /**
      * add course - case study association

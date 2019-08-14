@@ -28,19 +28,28 @@ $Table = new Table( $Update->Attributes['TableId'] );
 $Class = $Table->Attributes['ClassName'];
 
 $data = unserialize( $Update->Attributes['UpdateContent'] );
+$changed_keys = [];
+if ($UpdateType == 'Update') {
+    $obj1 = new $Class( $data[$Class::$primary_key] );
+    $obj2 = $Class::createInstance( $data );
+    $changed_keys = $Class::compareObjects( $obj1, $obj2 );
+}
+
 $data_html = '';
 // TODO:  we really should make the column names have friendly descriptions, and columns holding foreign keys should  have their values translated into friendly values
 foreach( $data as $key => $value ) {
     if (!$value) $value = '&nbsp;';
+    $changed_class = (in_array( $key, $changed_keys )) ? ' changed' : '';
     $data_html .= '<div class="row data_row">';
     $data_html .= '<div class="data_label">' . $Class::$data_structure[$key]['label'] . '</div>';
-    $data_html .= '<div class="data_value">' . $value . '</div>';
+    $data_html .= '<div class="data_value'.$changed_class.'">' . $value . '</div>';
     $data_html .= '</div>';
 }
 $thing = $Class::createInstance( $data );
 if ($UpdateType == 'Update' || $UpdateType == 'Delete') {
     $thing->id = $thing->Attributes[$Class::$primary_key];
 }
+else $thing->id = $Update->Attributes['UpdateRecordId'];
 
 $ancestry_html = $thing->getAncestry();
 
@@ -68,6 +77,7 @@ $custom_css = <<<EOT
 .data_label, .data_value { display: block; width: 100%; }
 .data_label { font-weight: bold; }
 .data_value { padding: 0 10px; }
+.data_value.changed { color: red; font-weight: bold; }
 EOT;
 
 $approve = APPROVAL_TYPE_APPROVE;

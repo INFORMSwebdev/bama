@@ -25,6 +25,7 @@ class Instructor extends AOREducationObject
     );
     public static $full_text_columns = 'InstructorLastName, InstructorFirstName, InstructorEmail';
     public static $name_sql = "CONCAT(InstructorFirstName,' ',InstructorLastName)";
+    public static $parent_class = 'Course';
 
     public function assignToCourse( $CourseId ) {
         $db = new EduDB();
