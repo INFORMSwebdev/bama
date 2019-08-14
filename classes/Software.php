@@ -23,6 +23,7 @@ class Software extends AOREducationObject
     );
     public static $full_text_columns = 'SoftwareName, SoftwarePublisher';
     public static $name_sql = 'SoftwareName';
+    public static $parent_class = 'Course';
 
     /**
      * add course - software association

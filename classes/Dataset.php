@@ -12,23 +12,24 @@ class Dataset extends AOREducationObject
     public static $primary_key = "DatasetId";
     public static $tableId = 12;
     public static $data_structure = array(
-        'DatasetId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT ),
-        'DatasetName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR ),
-        'DatasetType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'DatasetIntegrity' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'DatasetFileType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'DatasetUseDescription' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'DatasetAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'AnalyticTag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'BusinessTag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT ),
+        'DatasetId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => "Dataset ID" ),
+        'DatasetName' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR, 'label' => "Dataset ID" ),
+        'DatasetType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => "Dataset ID" ),
+        'DatasetIntegrity' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => "Dataset ID" ),
+        'DatasetFileType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => "Dataset ID" ),
+        'DatasetUseDescription' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => "Dataset ID" ),
+        'DatasetAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => "Dataset ID" ),
+        'AnalyticTag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => "Dataset ID" ),
+        'BusinessTag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => "Dataset ID" ),
+        'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => "Dataset ID" ),
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => "Dataset ID" ),
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
         'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified Date', 'editable' => FALSE ),
     );
     public static $full_text_columns = 'DatasetName, DatasetUseDescription, AnalyticTag, BusinessTag';
     public static $name_sql = 'DatasetName';
+    public static $parent_class = 'Course';
 
     /**
      * add course - dataset association

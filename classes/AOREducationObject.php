@@ -115,31 +115,33 @@ class AOREducationObject {
               break;
       }*/
 
-      $link = WEB_ROOT."admin/pendingUpdates.php";
-      $details = '<p>'.$this->getAncestry().'</p>';
-      $details .= '<p>'.$this->Attributes[$class::$name_sql].'</p>';
-      $details .= '<div style="margin: 10px 0">';
+
+      $attr_details = '';
       switch( $updateTypeId ) {
           case UPDATE_TYPE_INSERT:
+          case UPDATE_TYPE_DELETE:
               foreach( $this->Attributes as $key => $value ) {
-                  $details .= $key . ": " . filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS)."<br/>";
+                  $attr_details .= $key . ": " . filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS)."<br/>";
               }
+              //$this->id = $this->Attributes[$class::$primary_key] = $this->save();
+              //$PendingUpdate->update( 'UpdateRecordId', $this->id );
               break;
           case UPDATE_TYPE_UPDATE:
               $original = new $class( $this->id );
               $keys = self::compareObjects($original, $this);
               foreach( $keys as $key ) {
-                  $details .= "Current value for $key: ".$original->Attributes[$key] . "<br/>";
-                  $details .= "Updated value for $key: ". $this->Attributes[$key] . "<br /><br />";
-              }
-              break;
-          case UPDATE_TYPE_DELETE:
-              foreach( $this->Attributes as $key => $value ) {
-                  $details .= $key . ": " . filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS)."<br/>";
+                  $attr_details .= "Current value for $key: ".$original->Attributes[$key] . "<br/>";
+                  $attr_details .= "Updated value for $key: ". $this->Attributes[$key] . "<br /><br />";
               }
               break;
       }
+      $link = WEB_ROOT."admin/pendingUpdates.php";
+      $details = '<p>'.$this->getAncestry().'</p>';
+      $details .= '<p>'.$this->Attributes[$class::$name_sql].'</p>';
+      $details .= '<div style="margin: 10px 0">';
+      $details .= $attr_details;
       $details .= '</div>';
+
       $e_params = [];
       $e_params['to'] = ADMIN_EMAIL;
       $e_params['subject'] = "Analytics and Operations Research Education Database - Pending Update Request";
@@ -175,6 +177,7 @@ EOT;
           }
           if ($class == "Institution" || !method_exists($parent, 'getParent')) break;
       }
+
       return $asString ? $str : $coll;
   }
 

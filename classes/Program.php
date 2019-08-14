@@ -42,6 +42,7 @@ class Program extends AOREducationObject
     );
     public static $full_text_columns = 'ProgramName, ProgramObjectives';
     public static $name_sql = 'ProgramName';
+    public static $parent_class = 'Institution';
 
     public function assignContact( $ContactId ){
         $db = new EduDB();

@@ -24,6 +24,7 @@ class Textbook extends AOREducationObject
     );
     public static $full_text_columns = 'TextbookName, Authors, TextbookPublisher';
     public static $name_sql = 'TextbookName';
+    public static $parent_class = 'Course';
 
     /**
      * add course - textbook association
