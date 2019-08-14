@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'BusinessTag' => $business
     );
     //create an object w/ Id
-    $x = Course::create( $data );
+    $x = new Course(Course::create( $data ));
 
     //assign the course to the program
     if ($progId) {

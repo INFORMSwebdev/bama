@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
 
     //make a Program record
-    $x = Program::create( $data );
+    $x = new Program(Program::create( $data ));
 
     if($user->id == 1){
         if($x){

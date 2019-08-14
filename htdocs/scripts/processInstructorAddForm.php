@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
 
     //create an object w/ an Id
-    $x = Instructor::create( $data );
+    $x = new Instructor(Instructor::create( $data ));
 
     //add instructor to course
     if ($courseId) {

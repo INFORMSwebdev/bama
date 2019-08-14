@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
 
     //create an object to get the Id
-    $x = Software::create( $data );
+    $x = new Software(Software::create( $data ));
 
     //assign software to course
     if ($courseId) {

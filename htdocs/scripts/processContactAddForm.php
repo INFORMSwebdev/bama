@@ -35,7 +35,7 @@ $data = array(
     'ContactEmail' => $email
 );
 
-$x = Contact::create($data);
+$x = new Contact(Contact::create($data));
 
 //assign the new contact to the program so when it gets approved it will show
 $prog->assignContact($x->id);

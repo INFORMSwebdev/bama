@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'BusinessTag' => $business
     );
     //create an object w/ no Id
-    $x = CaseStudy::create( $data );
+    $x = new CaseStudy(CaseStudy::create( $data ));
 
     //assign case study to course
     if ($courseId) {

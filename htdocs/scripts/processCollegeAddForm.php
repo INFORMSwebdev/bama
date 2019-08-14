@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
 
     //create an object w/ Id
-    $x = College::create( $data );
+    $x = new College(College::create( $data ));
 
     if($user->id == 1){
         if($x){

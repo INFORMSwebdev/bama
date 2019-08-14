@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
 
     //create an object w/ Id
-    $x = Dataset::create( $data );
+    $x = new Dataset(Dataset::create( $data ));
 
     //assign dataset to course
     if ($courseId) {
