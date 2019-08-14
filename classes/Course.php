@@ -286,7 +286,7 @@ class Course extends AOREducationObject
     public function getBooks( $active = TRUE, $asObjects = FALSE ){
         $booksOut = [];
         $db = new EduDB();
-        $sql = "SELECT TextbookId FROM course_textbooks WHERE CourseId = $this->id";
+        $sql = "SELECT TextbookId FROM textbooks WHERE TextbookId IN (SELECT TextbookId FROM course_textbooks WHERE CourseId = $this->id) AND ApprovalStatusId = 2";
         if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
         $books = $db->queryColumn( $sql );
         if($asObjects){
