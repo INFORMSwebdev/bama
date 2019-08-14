@@ -32,13 +32,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'Authors' => $authors,
         'TextbookPublisher' => $pub
     );
-    $x = Textbook::createInstance( $data );
+
+    //create the row in the DB to get an ID back
+    $x = Textbook::create( $data );
+
+    //assign textbook to course
+    if ($courseId) {
+        $course = new Course($courseId);
+        $course->assignTextbook($x->Attributes['TextbookId']);
+    }
 
     if($user->id == 1){
-        $result = $x->save();
-        if($result){
-            $t = new Textbook($result);
-            $t->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
+        if($x){
+            $x->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New textbook successfully added.';
@@ -54,15 +60,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //check to make sure the insert occurred successfully
         if ($result == true) {
-
-            $update = new PendingUpdate($result);
-
-            //assign textbook to course
-            if ($courseId) {
-                $course = new Course($courseId);
-                $course->assignTextbook($update->Attributes['UpdateRecordId']);
-            }
-
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New textbook successfully submitted and is awaiting approval for posting.';

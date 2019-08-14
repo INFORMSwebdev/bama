@@ -33,14 +33,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'InstructorPrefix' => $prefix,
         'InstructorEmail' => $email
     );
-    //create an object w/ no Id
-    $x = Instructor::createInstance( $data );
+
+    //create an object w/ an Id
+    $x = Instructor::create( $data );
+
+    //add instructor to course
+    if ($courseId) {
+        $course = new Course($courseId);
+        $course->assignInstructor($x->Attributes['InstructorId']);
+    }
 
     if($user->id == 1){
-        $result = $x->save();
-        if($result){
-            $inst = new Instructor($result);
-            $inst->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
+        if($x){
+            $x->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New instructor successfully added.';
@@ -56,15 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //report on results of insertion
         if ($result == true) {
-
-            $update = new PendingUpdate($result);
-
-            //add instructor to course
-            if ($courseId) {
-                $course = new Course($courseId);
-                $course->assignInstructor($update->Attributes['UpdateRecordId']);
-            }
-
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New instructor successfully submitted and is awaiting approval for posting.';

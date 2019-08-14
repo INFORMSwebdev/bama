@@ -35,14 +35,14 @@ $data = array(
     'ContactEmail' => $email
 );
 
-$x = Contact::createInstance($data);
+$x = Contact::create($data);
+
+//assign the new contact to the program so when it gets approved it will show
+$prog->assignContact($x->id);
 
 if($user->id == 1){
-    $result = $x->save();
-    if($result){
-        $c = new Contact($result);
-        $prog->assignContact($c->id);
-        $c->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
+    if($x){
+        $x->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
         //set message to show user
         $_SESSION['editMessage']['success'] = true;
         $_SESSION['editMessage']['text'] = 'New contact successfully added and associated with program.';
@@ -58,9 +58,6 @@ else {
 
     //report on results of insertion
     if ($result == true) {
-        //assign the new contact to the program so when it gets approved it will show
-        $prog->assignContact($x->id);
-
         //set message to show user
         $_SESSION['editMessage']['success'] = true;
         $_SESSION['editMessage']['text'] = 'New contact successfully submitted and assigned, and is awaiting approval for posting.';

@@ -42,14 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'InstitutionAccess' => $access,
         'InstitutionEmail' => $email
     );
-    //create an object w/ no Id
-    $x = Institution::createInstance( $data );
+
+    //create an object w/ Id
+    $x = Institution::create( $data );
 
     if($user->id == 1){
-        $result = $x->save();
-        if($result){
-            $inst = new Institution($result);
-            $inst->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
+        if($x){
+            $x->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New institution successfully added.';

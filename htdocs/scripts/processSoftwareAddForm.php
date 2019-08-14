@@ -30,14 +30,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'SoftwareName' => $name,
         'SoftwarePublisher' => $pub
     );
-    //create an object w/ no Id
-    $x = Software::createInstance( $data );
+
+    //create an object to get the Id
+    $x = Software::create( $data );
+
+    //assign software to course
+    if ($courseId) {
+        $course = new Course($courseId);
+        $course->assignSoftware($x->Attributes['SoftwareId']);
+    }
 
     if($user->id == 1){
-        $result = $x->save();
-        if($result){
-            $s = new Software($result);
-            $s->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
+        if($x){
+            $x->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New software successfully added.';
@@ -53,15 +58,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //report on results of insertion
         if ($result == true) {
-
-            $update = new PendingUpdate($result);
-
-            //assign software to course
-            if ($courseId) {
-                $course = new Course($courseId);
-                $course->assignSoftware($update->Attributes['UpdateRecordId']);
-            }
-
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New software successfully submitted and is awaiting approval for posting.';

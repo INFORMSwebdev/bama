@@ -39,13 +39,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'BusinessTag' => $business
     );
     //create an object w/ no Id
-    $x = CaseStudy::createInstance( $data );
+    $x = CaseStudy::create( $data );
+
+    //assign case study to course
+    if ($courseId) {
+        $course = new Course($courseId);
+        $course->assignCaseStudy($x->Attributes['CaseId']);
+    }
 
     if($user->id == 1){
-        $result = $x->save();
         if($result){
-            $case = new CaseStudy($result);
-            $case->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
+            $x->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New case study successfully added.';
@@ -61,15 +65,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //report on results of insertion
         if ($result == true) {
-
-            $update = new PendingUpdate($result);
-
-            //assign case study to course
-            if ($courseId) {
-                $course = new Course($courseId);
-                $course->assignCaseStudy($update->Attributes['UpdateRecordId']);
-            }
-
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New case study successfully submitted and is awaiting approval for posting.';

@@ -60,7 +60,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $collegeId = filter_input(INPUT_POST, 'collegeSelectList', FILTER_VALIDATE_INT);
 
     //gather data to put in the pending_update record
-    $data = array( "InstitutionId" => $instId,
+    $data = array(
+        "InstitutionId" => $instId,
         'ProgramName' => $progName,
         'ProgramType' => $progType,
         //'DeliveryMethod' => $progDeliveryMethod,
@@ -81,14 +82,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'AnalyticsFlag' => $analyticsFlag,
         'CollegeId' => $collegeId
     );
-    //make a not-yet-existent Program record
-    $x = Program::createInstance( $data );
+
+    //make a Program record
+    $x = Program::create( $data );
 
     if($user->id == 1){
-        $result = $x->save();
-        if($result){
-            $p = new Program($result);
-            $p->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
+        if($x){
+            $x->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New program successfully added.';

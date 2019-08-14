@@ -54,14 +54,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'AnalyticTag' => $analytics,
         'BusinessTag' => $business
     );
-    //create an object w/ no Id
-    $x = Course::createInstance( $data );
+    //create an object w/ Id
+    $x = Course::create( $data );
+
+    //assign the course to the program
+    if ($progId) {
+        //create program object
+        $program = new Program($progId);
+
+        //assign course to this program
+        $program->assignCourse($x->Attributes['CourseId']);
+    }
 
     if($user->id == 1){
-        $result = $x->save();
-        if($result){
-            $c = new Course($result);
-            $c->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
+        if($x){
+            $x->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New course successfully added.';
@@ -77,18 +84,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //report on results of insertion
         if ($result == true) {
-
-            $update = new PendingUpdate($result);
-
-            //assign the course to the program
-            if ($progId) {
-                //create program object
-                $program = new Program($progId);
-
-                //assign course to this program
-                $program->assignCourse($update->Attributes['UpdateRecordId']);
-            }
-
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New course successfully submitted and is awaiting approval for posting.';

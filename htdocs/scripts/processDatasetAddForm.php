@@ -43,14 +43,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'BusinessTag' => $business
     );
 
-    //create an object w/ no Id
-    $x = Dataset::createInstance( $data );
+    //create an object w/ Id
+    $x = Dataset::create( $data );
+
+    //assign dataset to course
+    if ($courseId) {
+        $course = new Course($courseId);
+        $course->assignDataset($x->Attributes['DatasetId']);
+    }
 
     if($user->id == 1){
-        $result = $x->save();
-        if($result){
-            $d = new Dataset($result);
-            $d->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
+        if($x){
+            $x->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New dataset successfully added.';
@@ -66,15 +70,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //report on results of insertion
         if ($result == true) {
-
-            $update = new PendingUpdate($result);
-
-            //assign dataset to course
-            if ($courseId) {
-                $course = new Course($courseId);
-                $course->assignDataset($update->Attributes['UpdateRecordId']);
-            }
-
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New dataset successfully submitted and is awaiting approval for posting.';

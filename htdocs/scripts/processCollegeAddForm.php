@@ -32,14 +32,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'CollegeType' => $type
     );
 
-    //create an object w/ no Id
-    $x = College::createInstance( $data );
+    //create an object w/ Id
+    $x = College::create( $data );
 
     if($user->id == 1){
-        $result = $x->save();
-        if($result){
-            $c = new College($result);
-            $c->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
+        if($x){
+            $x->update('ApprovalStatusId', APPROVAL_TYPE_APPROVE);
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
             $_SESSION['editMessage']['text'] = 'New college successfully added.';

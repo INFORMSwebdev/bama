@@ -1,5 +1,8 @@
 <?php
 /**
+ * Note: I would have changed the way this script runs but I couldn't find anywhere that actually uses it so I left it
+ * as-is. -DH 8/14/2019 @ 9:30 AM
+ *
  * Created by PhpStorm.
  * User: dherold
  * Date: 3/8/2019
