@@ -49,7 +49,7 @@ $thing = $Class::createInstance( $data );
 if ($UpdateType == 'Update' || $UpdateType == 'Delete') {
     $thing->id = $thing->Attributes[$Class::$primary_key];
 }
-else $thing->id = $Update->Attributes['UpdateRecordId'];
+else $thing->id = $Update->Attributes['RecordId'];
 
 $ancestry_html = $thing->getAncestry();
 
