@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
 
     //create an object w/ Id
-    $x = new Insitution(Institution::create( $data ));
+    $x = new Institution(Institution::create( $data ));
 
     if($user->id == 1){
         if($x){

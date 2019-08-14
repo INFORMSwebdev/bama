@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
 
     //create the row in the DB to get an ID back
-    $x = Textbook::create( $data );
+    $x = new Textbook(Textbook::create( $data ));
 
     //assign textbook to course
     if ($courseId) {
