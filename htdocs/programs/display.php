@@ -89,7 +89,7 @@ if($id){
     $contactHTML = '';
     //get contact details to display
     if($contacts){
-        $contactHTML .= '<div class="card-deck">';
+        $contactHTML .= '<div class="card-column">';
 
         //$contact = new Contact($contactId);
         foreach($contacts as $contact) {
@@ -127,6 +127,7 @@ if($id){
         </div>
     </div>
 </div>
+<br/>
 EOT;
         }
 
