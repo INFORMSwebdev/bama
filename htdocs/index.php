@@ -294,7 +294,7 @@ $(function() {
                     html += '<p>No programs are currently assigned to this institution.</p>';
                 }
                 else {
-                    html += '<div class="card-deck">';
+                    html += '<div class="card-column">';
                     for(var i = 0; i < progs[x].programs.length; i++){
                         statusClass = 'status-'+progs[x].programs[i].ApprovalStatusId;
                         html += '<div class="card">';
@@ -412,6 +412,7 @@ $(function() {
                         html += '</div>' //tab-pane;
                         html += '</div>'; //tab-content
                         html += '</div>'; //card
+                        html += '<br/>';
                     }
                     html += '</div>';
                 }
@@ -427,7 +428,7 @@ $(function() {
                     html += '<p>No colleges are currently assigned to this institution.</p>';
                 }
                 else {
-                    html += '<div class="card-deck">';
+                    html += '<div class="card-column">';
                     for(var i = 0; i < progs[x].colleges.length; i++){
                         html += '<div class="card">';
                         html += '<div class="card-header">';
@@ -445,6 +446,7 @@ $(function() {
                         html += '</div>';
                         html += '</div>';
                         html += '</div>';
+                        html += '<br/>';
                     }
                     html += '</div>';
                 }
