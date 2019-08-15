@@ -364,7 +364,7 @@ $(function() {
                                 html += '<div class="btn-group btn-group-sm">';
                                 html += '<a href="/contacts/display.php?id=' + progs[x].programs[i].Contacts[k].ContactId + '" role="button" class="btn btn-info mr-3">View Contact Details</a>';
                                 html += '<a href="/contacts/edit.php?id=' + progs[x].programs[i].Contacts[k].ContactId + '" role="button" class="btn btn-warning mr-3">Edit Contact Details</a>';
-                                html += '<button class="btn btn-danger btn-contact-delete">Delete Contact</button>';
+                                html += '<button id="id_' + progs[x].programs[i].Contacts[k].ContactId + '" class="btn btn-danger btn-contact-delete">Delete Contact</button>';
                                 html += '</div>';
                                 html += '<hr />';
                             }
