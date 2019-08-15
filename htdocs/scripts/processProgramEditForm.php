@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $progNonResTuition = filter_input(INPUT_POST, 'NonResident', FILTER_SANITIZE_STRING);
         //since the following 2 Id's can be null, we don't want a filter
         $contactId = filter_input(INPUT_POST, 'ContactId');
-        $collegeId = filter_input(INPUT_POST, 'CollegeId');
+        $collegeId = filter_input(INPUT_POST, 'collegeSelectList');
         $analyticsFlag = filter_input(INPUT_POST, 'AnalyticsFlag', FILTER_VALIDATE_BOOLEAN);
         if (!$analyticsFlag) $analyticsFlag = 0;
         $orFlag = filter_input(INPUT_POST, 'ORFlag', FILTER_VALIDATE_BOOLEAN);
