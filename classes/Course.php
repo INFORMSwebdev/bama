@@ -142,7 +142,7 @@ class Course extends AOREducationObject
     public function getInstructors( $asObjects = FALSE ) {
         $db = new EduDB;
         $Instructors = [];
-        $sql = "SELECT InstructorId FROM course_instructors WHERE CourseId = $this->id";
+        $sql = "SELECT ci.InstructorId FROM course_instructors ci JOIN instructors i ON ci.InstructorId = i.InstructorId WHERE CourseId = $this->id AND i.ApprovalStatusId = 2";
         $InstructorIds = $db->query_column( $sql );
         foreach( $InstructorIds as $InstructorId) {
             $Instructor = new Instructor( $InstructorId );

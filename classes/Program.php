@@ -262,7 +262,7 @@ EOT;
     public function getInstructors( $active = TRUE, $asObjects = FALSE){
         $instructors = [];
         $db = new EduDB();
-        $sql = "SELECT i.InstructorId FROM instructors i INNER JOIN course_instructors ci on i.InstructorId = ci.InstructorId INNER JOIN program_courses pc on ci.CourseId = pc.CourseId WHERE pc.ProgramId = $this->id";
+        $sql = "SELECT i.InstructorId FROM instructors i INNER JOIN course_instructors ci on i.InstructorId = ci.InstructorId INNER JOIN program_courses pc on ci.CourseId = pc.CourseId WHERE pc.ProgramId = $this->id AND i.ApprovalStatusId=2";
         if ($active !== null) $sql .= " AND i.Deleted = " . (($active == TRUE) ? "0" : "1");
         $insts = $db->queryColumn( $sql );
         if($asObjects){
