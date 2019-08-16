@@ -32,7 +32,7 @@ try {
     $params = unserialize( $PendingUpdate->Attributes['UpdateContent']);
     if (isset($params[$Class::$primary_key])) $RecordId = $params[$Class::$primary_key];
     //$RecordId = ($PendingUpdate->Attributes['UpdateTypeId']==UPDATE_TYPE_DELETE) ? $PendingUpdate->Attributes['RecordId'] : $PendingUpdate->Attributes['UpdateRecordId'];
-    if ($PendingUpdate->Attributes['UpdateTypeId'] == UPDATE_TYPE_INSERT) $RecordId = $result;
+    //if ($PendingUpdate->Attributes['UpdateTypeId'] == UPDATE_TYPE_INSERT) $RecordId = $result;
     $Obj = new $Class( $RecordId );
 
     if ($Class=='Institution') {
