@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = filter_input(INPUT_POST, 'caseTitle', FILTER_SANITIZE_STRING);
     $type = filter_input(INPUT_POST, 'caseType', FILTER_SANITIZE_STRING);
     $useDesc = filter_input(INPUT_POST, 'useDesc', FILTER_SANITIZE_STRING);
-    $access = filter_input(INPUT_POST, 'capstoneProject', FILTER_SANITIZE_STRING);
+    $access = filter_input(INPUT_POST, 'caseAccess', FILTER_SANITIZE_STRING);
     $analytics = filter_input(INPUT_POST, 'analyticTag', FILTER_SANITIZE_STRING);
     $business = filter_input(INPUT_POST, 'businessTag', FILTER_SANITIZE_STRING);
 
@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //get the form data into an array to create an object
     $data = array(
-        'Case' => $title,
+        'CaseTitle' => $title,
         'CaseType' => $type,
         'CaseUseDescription' => $useDesc,
         'CaseAccess' => $access,
@@ -74,6 +74,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-//redirect user to index
-header('Location: /index.php');
+//redirect user to course display page
+header('Location: /courses/display.php?id=' . $courseId);
 die;

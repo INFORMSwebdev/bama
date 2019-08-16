@@ -101,8 +101,8 @@ EOT;
     public function getCourses( $active = TRUE, $asObjects = FALSE ) {
         $coursesOut = [];
         $db = new EduDB();
-        $sql = "SELECT CourseId FROM program_courses WHERE ProgramId = $this->id";
-        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $sql = "SELECT a.CourseId FROM program_courses a join courses b on a.CourseId = b.CourseId WHERE a.ProgramId = $this->id and b.ApprovalStatusId = 2";
+        if ($active !== null) $sql .= " AND b.Deleted = " . (($active == TRUE) ? "0" : "1");
         $courses = $db->queryColumn( $sql );
         if($asObjects){
             foreach($courses as $course){

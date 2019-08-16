@@ -401,14 +401,14 @@ $(function() {
                         html += '<div class="card-body">';
                         html += '<table class="table table-striped" id="courseTable">';
                         html += '<thead>';
-                        html += '<tr><th>Title</th><th>Number</th><th>Instructor</th><th></th></tr>';
+                        html += '<tr><th>Title</th><th>Number</th><!--<th>Instructor</th>--><th></th></tr>';
                         html += '</thead>';
                         html += '<tbody>';
                         for( var y = 0; y < progs[x].programs[i].courses.length; y++){
                             html += '<tr>';
                             html += '<td>' + progs[x].programs[i].courses[y].CourseTitle + '</td>';
                             html += '<td>' + progs[x].programs[i].courses[y].CourseNumber + '</td>';
-                            html += '<td>' + progs[x].programs[i].courses[y].instructor.InstructorName + '</td>';
+                            //html += '<td>' + progs[x].programs[i].courses[y].instructor.InstructorName + '</td>';
                             html += '<td>';
                             html += '<a role="button" class="btn btn-info btn-block" href="/courses/display.php?id=' + progs[x].programs[i].courses[y].CourseId + '">View Course Details</a>';
                             html += '<a role="button" class="btn btn-warning btn-block" href="/courses/edit.php?id=' + progs[x].programs[i].courses[y].CourseId + '">Edit this Course</a>';

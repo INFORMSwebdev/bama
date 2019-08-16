@@ -68,6 +68,6 @@ else {
         $_SESSION['editMessage']['text'] = "New contact was not added to the system. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
     }
 }
-//redirect user to index
-header('Location: /index.php');
+//redirect user to program display page
+header('Location: /programs/display.php?id=' . $progId);
 die;

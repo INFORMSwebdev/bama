@@ -80,6 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-//redirect user to index
-header('Location: /index.php');
+//redirect user to course display page
+header('Location: /courses/display.php?id=' . $courseId);
 die;

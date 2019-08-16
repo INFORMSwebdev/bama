@@ -315,8 +315,8 @@ class Course extends AOREducationObject
     public function getSoftware( $active = TRUE, $asObjects = FALSE ){
         $softOut = [];
         $db = new EduDB();
-        $sql = "SELECT SoftwareId FROM course_softwares WHERE CourseId = $this->id";
-        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $sql = "SELECT a.SoftwareId FROM course_softwares a JOIN softwares b on a.SoftwareId = b.SoftwareId WHERE a.CourseId = $this->id and b.ApprovalStatusId = 2";
+        if ($active !== null) $sql .= " AND b.Deleted = " . (($active == TRUE) ? "0" : "1");
         $softs = $db->queryColumn( $sql );
         if($asObjects){
             foreach($softs as $soft){
@@ -332,8 +332,8 @@ class Course extends AOREducationObject
     public function getDatasets( $active = TRUE, $asObjects = FALSE ){
         $dataOut = [];
         $db = new EduDB();
-        $sql = "SELECT DatasetId FROM course_datasets WHERE CourseId = $this->id";
-        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $sql = "SELECT a.DatasetId FROM course_datasets a JOIN datasets b on a.DatasetId = b.DatasetId WHERE a.CourseId = $this->id and b.ApprovalStatusId = 2";
+        if ($active !== null) $sql .= " AND b.Deleted = " . (($active == TRUE) ? "0" : "1");
         $sets = $db->queryColumn( $sql );
         if($asObjects){
             foreach($sets as $set){
@@ -349,8 +349,8 @@ class Course extends AOREducationObject
     public function getCases( $active = TRUE, $asObjects = FALSE ){
         $casesOut = [];
         $db = new EduDB();
-        $sql = "SELECT CaseId FROM course_cases WHERE CourseId = $this->id";
-        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $sql = "SELECT a.CaseId FROM course_cases a JOIN cases b ON a.CaseId = b.CaseId WHERE a.CourseId = $this->id and b.ApprovalStatusId = 2";
+        if ($active !== null) $sql .= " AND b.Deleted = " . (($active == TRUE) ? "0" : "1");
         $cases = $db->queryColumn( $sql );
         if($asObjects){
             foreach($cases as $case){
