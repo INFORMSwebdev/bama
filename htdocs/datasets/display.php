@@ -50,7 +50,9 @@ else {
     $useDesc = $dataset->Attributes['DatasetUseDescription'];
     $access = $dataset->Attributes['DatasetAccess'];
     //add in check for HTTP/HTTPS
-    //if()
+    if(strpos($access, 'HTTP') === FALSE || strpos($access, 'HTTPS') === FALSE){
+        $access = 'http://' . $access;
+    }
     $accHelp = $access;
     $access = '<a href="' . $accHelp . '">' . $accHelp . '</a>';
     $analytics = $dataset->Attributes['AnalyticTag'];
