@@ -49,6 +49,10 @@ else {
     $fileType = $dataset->Attributes['DatasetFileType'];
     $useDesc = $dataset->Attributes['DatasetUseDescription'];
     $access = $dataset->Attributes['DatasetAccess'];
+    //add in check for HTTP/HTTPS
+    //if()
+    $accHelp = $access;
+    $access = '<a href="' . $accHelp . '">' . $accHelp . '</a>';
     $analytics = $dataset->Attributes['AnalyticTag'];
     if(empty($analytics)){
         $analytics = 'Analytic tags are currently unavailable.';

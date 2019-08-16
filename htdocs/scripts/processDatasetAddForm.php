@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $integrity = filter_input(INPUT_POST, 'datasetIntegrity', FILTER_SANITIZE_STRING);
     $fileType = filter_input(INPUT_POST, 'datasetFileType', FILTER_SANITIZE_STRING);
     $useDescription = filter_input(INPUT_POST, 'useDescription', FILTER_SANITIZE_STRING);
-    $datasetAccess = filter_input(INPUT_POST, 'datasetAccess', FILTER_VALIDATE_URL);
+    $datasetAccess = filter_input(INPUT_POST, 'datasetAccess', FILTER_SANITIZE_URL);
     $analytics = filter_input(INPUT_POST, 'analyticTag', FILTER_SANITIZE_STRING);
     $business = filter_input(INPUT_POST, 'businessTag', FILTER_SANITIZE_STRING);
 
