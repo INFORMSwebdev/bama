@@ -103,7 +103,7 @@ class Course extends AOREducationObject
     }
 
     public function getDeliveryMethodOptions($first = NULL){
-        $db = new EduDb();
+        $db = new EduDB();
 
         $sql = 'SELECT id, method FROM delivery_methods';
         $results = $db->query($sql);
@@ -226,7 +226,7 @@ class Course extends AOREducationObject
      * @return int number of database rows affected by operation
      */
     public function unassignAllInstructors(){
-        $db = new EduDb();
+        $db = new EduDB();
         $sql = "DELETE FROM course_instructors WHERE CourseId = $this->id";
         return $db->exec( $sql );
     }
@@ -301,7 +301,7 @@ class Course extends AOREducationObject
     }
 
     public function getProgram( $asObject = FALSE ){
-        $db = new EduDb();
+        $db = new EduDB();
         $sql = "SELECT ProgramId FROM program_courses WHERE CourseId = $this->id";
         $programId = $db->queryColumn( $sql );
         if($asObject){

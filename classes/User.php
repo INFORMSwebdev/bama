@@ -94,7 +94,7 @@ class User extends AOREducationObject
 
     public function getInstitutions( $active = TRUE, $asObjects = FALSE ){
         $instOut = [];
-        $db = new EduDb();
+        $db = new EduDB();
         if($this->id == 1){
             //get all institutions
             $sql = "SELECT * FROM institutions";
@@ -223,19 +223,19 @@ EOT;
     }
 
     public function getCourses(){
-        $db = new EduDb();
+        $db = new EduDB();
         $sql = "SELECT CourseId FROM program_courses pc INNER JOIN programs p ON pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id)";
         return $db->queryColumn( $sql );
     }
 
     public function getBookAssignments(){
-        $db = new EduDb();
+        $db = new EduDB();
         $sql = "SELECT ct.TextbookId FROM course_textbooks ct INNER JOIN program_courses pc ON ct.CourseId = pc.CourseId INNER JOIN programs p ON pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id)";
         return $db->queryColumn( $sql );
     }
 
     public function getDatasets(){
-        $db = new EduDb();
+        $db = new EduDB();
         $sql = "SELECT DatasetId FROM course_datasets cd INNER JOIN program_courses pc ON cd.CourseId = pc.CourseId INNER JOIN programs p on pc.ProgramId = p.ProgramId WHERE p.InstitutionId IN (SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id);";
         return $db->queryColumn( $sql );
     }

@@ -34,7 +34,7 @@ class Institution extends AOREducationObject {
     public static $parent_class = NULL;
 
     public function assignAdmin( $UserId ) {
-        $db = new EduDb;
+        $db = new EduDB;
         $sql = "INSERT IGNORE INTO institution_admins (InstitutionId, UserId) VALUES ($this->id, :UserId)";
         $params = array( array( ":UserId", $UserId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
@@ -152,7 +152,7 @@ class Institution extends AOREducationObject {
     }
 
     public function getUserAssignments( $asObjects = FALSE ) {
-        $db = new EduDb;
+        $db = new EduDB();
         $sql = "SELECT UserID FROM institution_admins WHERE InstitutionId = $this->id";
         $users = $db->queryColumn( $sql );
         if ($asObjects)  {

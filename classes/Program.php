@@ -187,7 +187,7 @@ EOT;
     }
 
     public function getDeliveryMethodOptions($first = NULL){
-        $db = new EduDb();
+        $db = new EduDB();
 
         $sql = 'SELECT id, method FROM delivery_methods';
         $results = $db->query($sql);
