@@ -33,6 +33,7 @@ if($id){
     $name = $prog->Attributes['ProgramName'];
     $type = $prog->Attributes['ProgramType'];
     //$delivery = $prog->Attributes['DeliveryMethod'];
+    $courses = $prog->getCourses(TRUE, TRUE);
     $delivery = $prog->getDeliveryMethod();
     $access = $prog->Attributes['ProgramAccess'];
     if(isset($access) && !empty($access)){
@@ -174,6 +175,45 @@ EOT;
 EOT;
     }
 
+    $courseHTML = '';
+    if($courses) {
+        $courseHTML = <<<EOT
+<table class="table table-striped" id="courseTable">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Number</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+EOT;
+
+        foreach($courses as $co){
+            $courseHTML .= <<<EOT
+        <tr>
+            <td>{$co->Attributes['CourseTitle']}</td>
+            <td>{$co->Attributes['CourseNumber']}</td>
+            <td>
+                <a role="button" class="btn btn-info btn-block" href="/courses/display.php?id={$co->Attributes['CourseId']}">View Course Details</a>
+                <a role="button" class="btn btn-warning btn-block" href="/courses/edit.php?id={$co->Attributes['CourseId']}">Edit this Course</a>
+                <button id="id_{$co->Attributes['CourseId']}" name="courseDelete" type="submit" class="btn btn-danger btn-block btn-delete">Delete this Course</button>
+            </td>
+        </tr>
+EOT;
+        }
+
+        $courseHTML .= <<<EOT
+    </tbody>
+</table>
+<hr/>
+<a role="button" class="btn btn-primary btn-block" href="/courses/add.php?progId={$prog->Attributes['ProgramId']}">Add Course</a>
+EOT;
+    }
+    else {
+        $courseHTML = '<p class="alert alert-info">No courses are currently assigned to this program.</p>';
+    }
+
     //get institution details to display
     $instName = $inst->Attributes['InstitutionName'];
     $instAddr = $inst->Attributes['InstitutionAddress'];
@@ -210,6 +250,9 @@ EOT;
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="contactDetails" href="#tabContact" data-toggle="tab" aria-selected="false" aria-controls="tabContact">Contact Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="courseList" href="#tabCourse" data-toggle="tab" aria-selected="false" aria-controls="tabCourse">Assigned Courses</a>
             </li>
         </ul>
     </div>
@@ -278,6 +321,11 @@ EOT;
         <div class="tab-pane fade" id="tabContact" role="tabpanel" aria-labelledby="contactDetails">
             <div class="card-body">
                 {$contactHTML}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="tabCourse" role="tabpanel" aria-labelledby="courseList">
+            <div class="card-body">
+                {$courseHTML}
             </div>
         </div>
     </div>

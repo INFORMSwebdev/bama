@@ -386,25 +386,30 @@ $(function() {
                         //courses tab
                         html += '<div class="tab-pane fade" id="tabCourse' + i + '" role="tabpanel" aria-labelledby="courseDetails' + i + '">';
                         html += '<div class="card-body">';
-                        html += '<table class="table table-striped" id="courseTable">';
-                        html += '<thead>';
-                        html += '<tr><th>Title</th><th>Number</th><th>Instructor</th><th></th></tr>';
-                        html += '</thead>';
-                        html += '<tbody>';
-                        for( var y = 0; y < progs[x].programs[i].courses.length; y++){
-                            html += '<tr>';
-                            html += '<td>' + progs[x].programs[i].courses[y].CourseTitle + '</td>';
-                            html += '<td>' + progs[x].programs[i].courses[y].CourseNumber + '</td>';
-                            html += '<td>' + progs[x].programs[i].courses[y].instructor.InstructorName + '</td>';
-                            html += '<td>';
-                            html += '<a role="button" class="btn btn-info btn-block" href="/courses/display.php?id=' + progs[x].programs[i].courses[y].CourseId + '">View Course Details</a>';
-                            html += '<a role="button" class="btn btn-warning btn-block" href="/courses/edit.php?id=' + progs[x].programs[i].courses[y].CourseId + '">Edit this Course</a>';
-                            html += '<button id="id_' + progs[x].programs[i].courses[y].CourseId + '" name="courseDelete" type="submit" class="btn btn-danger btn-block btn-delete">Delete this Course</button>';  
-                            html += '</td>';
-                            html += '</tr>';
+                        if(progs[x].programs[i].courses.length == 0){
+                            html += '<p class="alert alert-info">No courses are currently assigned to this program.</p>';
                         }
-                        html += '</tbody>';
-                        html += '</table>';
+                        else {
+                            html += '<table class="table table-striped" id="courseTable">';
+                            html += '<thead>';
+                            html += '<tr><th>Title</th><th>Number</th><!--<th>Instructor</th>--><th></th></tr>';
+                            html += '</thead>';
+                            html += '<tbody>';
+                            for( var y = 0; y < progs[x].programs[i].courses.length; y++){
+                                html += '<tr>';
+                                html += '<td>' + progs[x].programs[i].courses[y].CourseTitle + '</td>';
+                                html += '<td>' + progs[x].programs[i].courses[y].CourseNumber + '</td>';
+                                //html += '<td>' + progs[x].programs[i].courses[y].instructor.InstructorName + '</td>';
+                                html += '<td>';
+                                html += '<a role="button" class="btn btn-info btn-block" href="/courses/display.php?id=' + progs[x].programs[i].courses[y].CourseId + '">View Course Details</a>';
+                                html += '<a role="button" class="btn btn-warning btn-block" href="/courses/edit.php?id=' + progs[x].programs[i].courses[y].CourseId + '">Edit this Course</a>';
+                                html += '<button id="id_' + progs[x].programs[i].courses[y].CourseId + '" name="courseDelete" type="submit" class="btn btn-danger btn-block btn-delete">Delete this Course</button>';  
+                                html += '</td>';
+                                html += '</tr>';
+                            }
+                            html += '</tbody>';
+                            html += '</table>';
+                        }
                         html += '</div>'; //card-body
                         html += '<div class="card-footer">';
                         html += '<a role="button" class="btn btn-primary" href="/courses/add.php?progId=' + progs[x].programs[i].ProgramId + '">Add Course</a>';
