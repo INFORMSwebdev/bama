@@ -49,14 +49,14 @@ try {
             $recipients[] = $User->Attributes['Username'];
         }
     }
+    $approved = ($action==APPROVAL_TYPE_APPROVE)? "approved" : "denied";
+    $details = '<br /><br />';
+    $S_ancestry = $Obj->getAncestry();
+    $details .= '<p>'.$S_ancestry.'</p>';
+    foreach( $Class::$data_structure AS $key => $props ) {
+        $details .= $props['label'] . ": ".$Obj->Attributes[$key]."<br/>";
+    }
     if (count($recipients)) {
-        $approved = ($action==APPROVAL_TYPE_APPROVE)? "approved" : "denied";
-        $details = '<br /><br />';
-        $S_ancestry = $Obj->getAncestry();
-        $details .= '<p>'.$S_ancestry.'</p>';
-        foreach( $Class::$data_structure AS $key => $props ) {
-            if ($props['editable']) $details .= $props['label'] . ": ".$Obj->Attributes[$key]."<br/>";
-        }
         $e_params['to'] = implode(",", $recipients );
         $e_params['subject'] = "Analytics and Operations Research Education Database - Pending Update Approval";
         $e_params['body_html'] = <<<EOT
@@ -67,7 +67,15 @@ EOT;
         $email = new email($e_params);
         $email->send();
     }
-
+    $e_params = [];
+    $e_params['to'] = ADMIN_EMAIL;
+    $e_params['subject'] = "Analytics and Operations Research Education Database - Pending Update Approval";
+    $e_params['body_html'] = <<<EOT
+<p>The submitted update request was $approved.</p>
+$details
+EOT;
+    $email = new email($e_params);
+    $email->send();
 }
 catch (Exception $e) {
     $errors[] = $e->getMessage();
