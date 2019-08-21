@@ -18,6 +18,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if($results['errors'] == TRUE){
         //set up the error message and pass the input back to the form page so the user doesn't have to re-input everything
         $_SESSION['registerErrors'] = $results;
+
+        $_SESSION['editMessage']['success'] = FALSE;
+        $errorString = '';
+        if(!empty($results['usernameError'])){
+            $errorString .= 'Username Error: ' . $results['usernameError'];
+        }
+
+        if(!empty($results['passwordError'])){
+            if(empty($errorString)){
+                $errorString .= 'Password Error: ' . $results['passwordError'];
+            }
+            else {
+                $errorString .= '<br/>Password Error: ' . $results['passwordError'];
+            }
+        }
+
+        if(!empty($results['confirmError'])){
+            if(empty($errorString)){
+                $errorString .= 'Password Confirmation Error: ' . $results['confirmError'];
+            }
+            else {
+                $errorString .= '<br/>Password Confirmation Error: ' . $results['confirmError'];
+            }
+        }
+
+        if(!empty($results['institutionError'])){
+            if(empty($errorString)){
+                $errorString .= 'Institution Error: ' . $results['institutionError'];
+            }
+            else {
+                $errorString .= '<br/>Institution Error: ' . $results['institutionError'];
+            }
+        }
+
+        $_SESSION['editMessage']['text'] = $errorString;
         $_SESSION['registerInput'] = array( $user, $firstName, $lastName, $instId, $comments );
 
         //redirect to the register page
@@ -113,7 +148,8 @@ function validateInputs($email, $firstName, $lastName, $inst){
     }
 
     //validate institution field has something selected
-    if(empty($inst)){
+    //if(empty($inst)){
+    if(!isset($inst)){
         $institution_err = "No institution selected.";
     } else if( !is_numeric($inst)){
         $institution_err = "Valid institution must be selected. InstitutionId passed was non-numeric.";
