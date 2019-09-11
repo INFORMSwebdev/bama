@@ -32,7 +32,14 @@ class User extends AOREducationObject
     public function assignToInstitution($InstitutionId)
     {
         $db = new EduDB();
-        $sql = "INSERT IGNORE INTO institution_admins (InstitutionId, UserId) VALUES (:InstitutionId, {$this->id})";
+        $sql = "SELECT InstitutionId FROM institution_admins WHERE UserId = $this->id";
+        $exists = $db->queryItem( $sql );
+        if ($exists) {
+            $sql = "UPDATE institution_admins SET InstitutionId = :InstitutionId WHERE UserId = $this->id";
+        }
+        else {
+            $sql = "INSERT IGNORE INTO institution_admins (InstitutionId, UserId) VALUES (:InstitutionId, {$this->id})";
+        }
         $params = array(array(":InstitutionId", $InstitutionId, PDO::PARAM_INT));
         $result = $db->execSafe($sql, $params);
         return $result;
