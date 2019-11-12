@@ -54,7 +54,8 @@ if($instId){
     $city = $instObj->Attributes['InstitutionCity'];
     $state = $instObj->Attributes['InstitutionState'];
     $zip = $instObj->Attributes['InstitutionZip'];
-    $region = $instObj->Attributes['InstitutionRegion'];
+    //$region = $instObj->Attributes['InstitutionRegion'];
+    $region = $instObj->Attributes['RegionId'];
     $phone = $instObj->Attributes['InstitutionPhone'];
     $email = $instObj->Attributes['InstitutionEmail'];
     $access = $instObj->Attributes['InstitutionAccess'];
@@ -70,6 +71,14 @@ if($instId){
     $stateListHTML = optionsHTML($stateListHelper);
     //since state is required, we don't need to check if there is already one set to make it the currently selected option
     $stateListHTML = str_replace('<option value="' . $state . '">', '<option value="' . $state . '" selected>', $stateListHTML);
+
+    $regionOptions = '';
+    if(!empty($region)){
+        $regionOptions = Dropdowns::getRegionOptionsHTML($region);
+    } else {
+        $regionOptions = Dropdowns::getRegionOptionsHTML();
+    }
+
 
     //display form w/ the specified institution info
     $content = <<<EOT
@@ -110,7 +119,10 @@ if($instId){
         <br />
         <div class="form-row"> 
             <label for="region">Region</label>
-            <input type="text" class="form-control" name="region" id="region" placeholder="Geographical region where institution is located" value="{$region}" />
+            <!--<input type="text" class="form-control" name="region" id="region" placeholder="Geographical region where institution is located" value="{$region}" />-->
+            <select id="region" name="region" placeholder="Geographical region where institution is located"> 
+                {$regionOptions}
+            </select>
         </div>
         <br />
         <div class="form-row"> 

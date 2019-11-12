@@ -47,11 +47,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $city = filter_input(INPUT_POST, 'city', FILTER_SANITIZE_STRING);
         $state = filter_input(INPUT_POST, 'state', FILTER_SANITIZE_STRING);
         $zip = filter_input(INPUT_POST, 'zip', FILTER_SANITIZE_STRING);
-        $region = filter_input(INPUT_POST, 'region', FILTER_SANITIZE_STRING);
+        //$region = filter_input(INPUT_POST, 'region', FILTER_SANITIZE_STRING);
+        $region = filter_input(INPUT_POST, 'region', FILTER_VALIDATE_INT);
         $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING);
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $access = filter_input(INPUT_POST, 'access', FILTER_VALIDATE_URL);
         $instId = filter_input(INPUT_POST, 'instId', FILTER_VALIDATE_INT);
+        # ToDo: Update Region stuff to new dropdown approach
 
         //update the record
         $inst->Attributes['InstitutionName'] = $name;
@@ -59,7 +61,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $inst->Attributes['InstitutionCity'] = $city;
         $inst->Attributes['InstitutionState'] = $state;
         $inst->Attributes['InstitutionZip'] = $zip;
-        $inst->Attributes['InstitutionRegion'] = $region;
+        //$inst->Attributes['InstitutionRegion'] = $region;
+        $inst->Attributes['RegionId'] = $region;
         $inst->Attributes['InstitutionPhone'] = $phone;
         $inst->Attributes['InstitutionEmail'] = $email;
         $inst->Attributes['InstitutionAccess'] = $access;

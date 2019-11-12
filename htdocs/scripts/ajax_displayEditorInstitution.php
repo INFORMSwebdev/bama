@@ -41,7 +41,14 @@ else {
         $helper = [];
         //check for and update the the response for null fields
         foreach($insts as $foo){
-            if(empty($foo['InstitutionRegion'])){
+            if(isset($foo['RegionId'])){
+                $name = Dropdowns::getInstitutionRegionName($foo['RegionId']);
+                if(!empty($name)){
+                    $foo['InstitutionRegion'] = $name;
+                } else {
+                    $foo['InstitutionRegion'] = 'Region information not set.';
+                }
+            } else {
                 $foo['InstitutionRegion'] = 'Region information not set.';
             }
 

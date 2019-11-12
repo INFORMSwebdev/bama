@@ -17,7 +17,7 @@ class Institution extends AOREducationObject {
         'InstitutionCity' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'City', 'editable' => TRUE  ),
         'InstitutionState' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'State', 'editable' => TRUE  ),
         'InstitutionZip' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Postal Code', 'editable' => TRUE  ),
-        'InstitutionRegion' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Region', 'editable' => TRUE  ),
+        //'InstitutionRegion' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Region', 'editable' => TRUE  ),
         'InstitutionPhone' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Phone', 'editable' => TRUE  ),
         'InstitutionEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Email', 'editable' => TRUE  ),
         'InstitutionAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Website', 'editable' => TRUE  ),
@@ -28,6 +28,7 @@ class Institution extends AOREducationObject {
         'Token' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Token', 'editable' => FALSE ),
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
+        'RegionId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Region', 'editable' => TRUE ),
     );
     public static $full_text_columns = 'InstitutionName, InstitutionCity, InstitutionState, InstitutionRegion';
     public static $name_sql = 'InstitutionName';
