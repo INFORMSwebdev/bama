@@ -53,7 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $access = filter_input(INPUT_POST, 'access', FILTER_VALIDATE_URL);
         $instId = filter_input(INPUT_POST, 'instId', FILTER_VALIDATE_INT);
-        # ToDo: Update Region stuff to new dropdown approach
 
         //update the record
         $inst->Attributes['InstitutionName'] = $name;

@@ -27,6 +27,24 @@ $user = new User($_SESSION['loggedIn']);
 if($collegeId){
     $college = new College($collegeId);
 
+    $colType = $college->Attributes['TypeId'];
+    $typeOptions = '';
+    if(!is_null($colType)){
+        $typeOptions = Dropdowns::getCollegeTypeOptions($colType);
+    } else {
+        $typeOptions = Dropdowns::getCollegeTypeOptions();
+    }
+
+    $otherHidden = 'd-none';
+    if($colType == 6){
+        $otherHidden = '';
+    }
+
+    $otherType = $college->getOtherType();
+    if(is_null($otherType)){
+        $otherType = '';
+    }
+
     $content = <<<EOT
 <div class="flex-column">
     <p>Fields marked with <span class="text text-danger">*</span> are required.</p>
@@ -38,11 +56,18 @@ if($collegeId){
         </div>
         <div class="form-row"> 
             <label for="collegeName">Title</label><span class="text text-danger">*</span>
-            <input type="text" class="form-control" name="collegeName" id="collegeName" value="{$college->Attributes['CollegeName']}" value="{$college->Attributes['CollegeName']}" placeholder="Name of college" required />
+            <input type="text" class="form-control" name="collegeName" id="collegeName" value="{$college->Attributes['CollegeName']}"  placeholder="Name of college" required />
         </div>
         <div class="form-row"> 
             <label for="collegeType">Type</label>
-            <input type="text" class="form-control" name="collegeType" id="collegeType" value="{$college->Attributes['CollegeType']}" value="{$college->Attributes['CollegeType']}" placeholder="Type of college" />
+            <!--<input type="text" class="form-control" name="collegeType" id="collegeType" value="" placeholder="Type of college" />-->
+            <select id="collegeType" name="collegeType" class="form-control" required> 
+                {$typeOptions}
+            </select>
+        </div>
+        <div class="form-row {$otherHidden}" id="otherRow"> 
+            <label for="otherType">Other Type</label>
+            <input type="text" class="form-control" name="otherType" id="otherType" placeholder="Specify other type" value="{$otherType}" />
         </div>
         <br />
         <div class="form-row">
@@ -65,12 +90,31 @@ else {
     die;
 }
 
+$typeJS = <<<EOT
+$(function() {
+    //college delete button functionality
+    $(document).on( 'change', '#collegeType', function(e) {
+        //check whether the option for 'Other' is selected
+        var selection = $('#collegeType option:selected').val();
+        //alert(selection);
+        if(selection == 6){
+            //show the text field for input
+            $('#otherRow').removeClass('d-none');
+        } else {
+            $('#otherRow').addClass('d-none');
+        }
+    });
+});
+EOT;
+
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "Edit College Information";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
+$page_params['js'][] = array( 'text' => $typeJS );
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content

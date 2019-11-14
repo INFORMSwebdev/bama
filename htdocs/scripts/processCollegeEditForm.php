@@ -47,7 +47,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //update the record
         $college->Attributes['CollegeName'] = $name;
-        $college->Attributes['CollegeType'] = $type;
+        //$college->Attributes['CollegeType'] = $type;
+        $typeId = filter_input(INPUT_POST, 'collegeType', FILTER_VALIDATE_INT);
+        if(is_numeric($typeId)){
+            $college->Attributes['TypeId'] = $typeId;
+        } else {
+            $college->Attributes['TypeId'] = NULL;
+        }
+
+        $otherType = filter_input(INPUT_POST, 'otherType', FILTER_SANITIZE_STRING);
+        if($otherType === FALSE){
+            $otherType = NULL;
+        }
+        $college->Attributes['OtherType'] = $otherType;
 
         if($user->id == 1){
             //$college->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;

@@ -261,7 +261,14 @@ else {
                         $fooHelper = [];
                         $fooHelper['CollegeId'] = $col->id;
                         $fooHelper['CollegeName'] = $col->Attributes['CollegeName'];
-                        $fooHelper['CollegeType'] = $col->Attributes['CollegeType'];
+                        //$fooHelper['CollegeType'] = $col->Attributes['CollegeType'];
+                        if($col->Attributes['TypeId'] == 6){
+                            $fooHelper['CollegeType'] = 'Other&mdash;' . $col->Attributes['OtherType'];
+                        } else {
+                            $fooHelper['CollegeType'] = Dropdowns::getCollegeTypeName($col->Attributes['TypeId']);
+                        }
+
+                        $fooHelper['otherType'] = $col->Attributes['OtherType'];
                         $fooHelper['CollegeCreated'] = $col->Attributes['CreateDate'];
                         //add college info to array of colleges
                         $collegeHelper[] = $fooHelper;

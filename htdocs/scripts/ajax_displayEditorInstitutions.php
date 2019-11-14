@@ -276,7 +276,17 @@ else {
                         $fooHelper = [];
                         $fooHelper['CollegeId'] = $col->id;
                         $fooHelper['CollegeName'] = $col->Attributes['CollegeName'];
-                        $fooHelper['CollegeType'] = $col->Attributes['CollegeType'];
+                        $typeId = $col->Attributes['TypeId'];
+                        if(!is_null($typeId)){
+                            $fooHelper['CollegeType'] = Dropdowns::getCollegeTypeName($typeId);
+                        } else {
+                            $fooHelper['CollegeType'] = 'Type not set.';
+                        }
+                        if(stripos($fooHelper['CollegeType'], 'Other') !== FALSE){
+                            $fooHelper['CollegeType'] .= '&mdash;' . $col->getOtherType();
+                        }
+
+                        //$fooHelper['CollegeType'] = $col->Attributes['CollegeType'];
                         $fooHelper['CollegeCreated'] = $col->Attributes['CreateDate'];
                         //add college info to array of colleges
                         $collegeHelper[] = $fooHelper;

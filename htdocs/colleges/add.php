@@ -24,6 +24,9 @@ $instId = filter_input(INPUT_GET, 'instId', FILTER_VALIDATE_INT);
 
 if($instId){
 
+    //get type dropdown options
+    $typeOptions = Dropdowns::getCollegeTypeOptions();
+
     $content = <<<EOT
 <div class="flex-column">
     <p>This college will be associated with your assigned institution. Fields marked with <span class="text text-danger">*</span> are required.</p>
@@ -39,7 +42,14 @@ if($instId){
         </div>
         <div class="form-row"> 
             <label for="collegeType">Type</label><span class="text text-danger">*</span>
-            <input type="text" class="form-control" name="collegeType" id="collegeType" placeholder="Type of college" required />
+            <!--<input type="text" class="form-control" name="collegeType" id="collegeType" placeholder="Type of college" required />-->
+            <select class="form-control" id="collegeType" name="collegeType" required> 
+                {$typeOptions}
+            </select>
+        </div>
+        <div class="form-row d-none" id="otherRow"> 
+            <label for="otherType">Other Type</label>
+            <input type="text" class="form-control" name="otherType" id="otherType" placeholder="Specify other type" />
         </div>
         <br />
         <div class="form-row">
@@ -58,12 +68,30 @@ else {
     die;
 }
 
+$typeJS = <<<EOT
+$(function() {
+    //college delete button functionality
+    $(document).on( 'change', '#collegeType', function(e) {
+        //check whether the option for 'Other' is selected
+        var selection = $('#collegeType option:selected').val();
+        //alert(selection);
+        if(selection == 6){
+            //show the text field for input
+            $('#otherRow').removeClass('d-none');
+        } else {
+            $('#otherRow').addClass('d-none');
+        }
+    });
+});
+EOT;
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "Add New College";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
+$page_params['js'][] = array( 'text' => $typeJS );
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content

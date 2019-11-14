@@ -18,13 +18,22 @@ $college = new College($collegeId);
 //get info to display
 $instId = $college->Attributes['InstitutionId'];
 $name = $college->Attributes['CollegeName'];
-$type = $college->Attributes['CollegeType'];
+//$type = $college->Attributes['CollegeType'];
+$type = $college->Attributes['TypeId'];
 if(!empty($instId)) {
     $inst = new Institution($instId);
     $instName = $inst->Attributes['InstitutionName'];
 }
 else {
     $instName = 'Not currently assigned to an institution.';
+}
+
+$typeText = '';
+if(!is_null($type)){
+    $typeText = $college->getType();
+    if(stripos($typeText, 'Other') !== FALSE){
+        $typeText .= '&mdash;' . $college->getOtherType();
+    }
 }
 
 $content .= <<<EOT
@@ -34,7 +43,7 @@ $content .= <<<EOT
     </div>
     <div class="card-body"> 
         <h3>Type of College</h3>
-        <p>{$type}</p>
+        <p>{$typeText}</p>
         <h3>Part of Institution</h3>
         <p>{$instName}</p>
         <div class="btn-group">

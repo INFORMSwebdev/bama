@@ -45,7 +45,7 @@ EOT;
     $custom_js = <<<EOT
 $(function() {
     $('#programList').html('<p>Loading data, please wait&hellip;</p>');
-    $.getJSON( "/scripts/ajax_displayEditorInstitutions.php", function( data ) {
+    $.get( "/scripts/ajax_displayEditorInstitutions.php", function( data ) {
         //alert( data );
         if (data.errors.length > 0) { 
             var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
@@ -223,7 +223,7 @@ $(function() {
                 }
             });
         }
-    });
+    }, "json");
   
     function processProgramList(progs){
         if(progs.length < 1) {

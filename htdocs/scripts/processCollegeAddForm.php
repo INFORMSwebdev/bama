@@ -22,14 +22,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //gather form fields
     $name = filter_input(INPUT_POST, 'collegeName', FILTER_SANITIZE_STRING);
-    $type = filter_input(INPUT_POST, 'collegeType', FILTER_SANITIZE_STRING);
+    //$type = filter_input(INPUT_POST, 'collegeType', FILTER_SANITIZE_STRING);
+    $type = filter_input(INPUT_POST, 'collegeType', FILTER_VALIDATE_INT);
+    $otherType = filter_input(INPUT_POST, 'otherType', FILTER_SANITIZE_STRING);
+    if($otherType === FALSE){
+        $otherType = NULL;
+    }
     $instId = filter_input(INPUT_POST, 'institutionId', FILTER_VALIDATE_INT);
 
     //get the form data into an array to create an object
     $data = array(
         'InstitutionId' => $instId,
         'CollegeName' => $name,
-        'CollegeType' => $type
+        //'CollegeType' => $type
+        'TypeId' => $type,
+        'OtherType' => $otherType
     );
 
     //create an object w/ Id

@@ -15,12 +15,14 @@ class College extends AOREducationObject
         'CollegeId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'College ID', 'editable' => FALSE ),
         'InstitutionId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Institution ID', 'editable' => FALSE ),
         'CollegeName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'College Name', 'editable' => TRUE ),
-        'CollegeType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'College Type', 'editable' => TRUE ),
+        //'CollegeType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'College Type', 'editable' => TRUE ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Delete', 'editable' => FALSE ),
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
         'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified Date', 'editable' => FALSE ),
+        'TypeId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'College Type', 'editable' => TRUE ),
+        'OtherType' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Other Type', 'editable' => TRUE ),
     );
     public static $full_text_columns = 'CollegeName';
     public static $name_sql = 'CollegeName';
@@ -42,6 +44,20 @@ class College extends AOREducationObject
         }
 
         return $colleges;
+    }
+
+    public function getType(){
+        $db = new EduDb();
+        $sql = 'SELECT name FROM college_type_dropdown a INNER JOIN colleges b ON a.id = b.TypeId WHERE b.COllegeId = ' . $this->id;
+        $results = $db->queryColumn($sql);
+        return $results[0];
+    }
+
+    public function getOtherType(){
+        $db = new EduDb();
+        $sql = 'SELECT OtherType FROM colleges WHERE CollegeId = ' . $this->id;
+        $results = $db->queryColumn($sql);
+        return $results[0];
     }
 
     public function getParent( $asObject = TRUE ) {

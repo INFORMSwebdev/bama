@@ -32,9 +32,12 @@ if ($id) {
     $zip = $inst->Attributes['InstitutionZip'];
     $city = $inst->Attributes['InstitutionCity'];
     $state = $inst->Attributes['InstitutionState'];
-    $region = $inst->Attributes['InstitutionRegion'];
+    //$region = $inst->Attributes['InstitutionRegion'];
+    $region = $inst->Attributes['RegionId'];
     if(!isset($region) || empty($region)){
         $region = 'Region information is not currently available for this institution.';
+    } else {
+        $region = Dropdowns::getInstitutionRegionName($region);
     }
     $phone = $inst->Attributes['InstitutionPhone'];
     if(!isset($phone) || empty($phone)){
@@ -91,13 +94,13 @@ $id = filter_input( INPUT_GET, 'id', FILTER_VALIDATE_INT );
 $content = <<<EOT
 <div class="container-fluid" id="programList"> 
 </div>
-
 EOT;
 
 $custom_js = <<<EOT
 $(function() {
     $('#programList').html('<p>Loading data, please wait&hellip;</p>');
-    $.getJSON( "/scripts/ajax_displayEditorInstitution.php", {'id': $id }, function( data ) {
+    $.get( "/scripts/ajax_displayEditorInstitution.php", {'id': $id }, function( data ) {
+        //alert(data);
         if (data.errors.length > 0) { 
             var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
             for (var i = 0; i < data.errors.length; i++) {
@@ -241,7 +244,7 @@ $(function() {
                 }
             });
         }
-    });
+    }, "json");
   
     function processProgramList(progs){
 

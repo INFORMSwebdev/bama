@@ -120,7 +120,7 @@ if($instId){
         <div class="form-row"> 
             <label for="region">Region</label>
             <!--<input type="text" class="form-control" name="region" id="region" placeholder="Geographical region where institution is located" value="{$region}" />-->
-            <select id="region" name="region" placeholder="Geographical region where institution is located"> 
+            <select id="region" name="region" class="form-control" placeholder="Geographical region where institution is located"> 
                 {$regionOptions}
             </select>
         </div>
