@@ -58,7 +58,7 @@ if($instId){
     $region = $instObj->Attributes['RegionId'];
     $phone = $instObj->Attributes['InstitutionPhone'];
     $email = $instObj->Attributes['InstitutionEmail'];
-    $access = $instObj->Attributes['InstitutionAccess'];
+    //$access = $instObj->Attributes['InstitutionAccess'];
 
     //get list of states
     $states = User::getStateList();
@@ -136,11 +136,7 @@ if($instId){
             <p id="emailHelp">Only valid email addresses will be accepted (e.g. name@organization.com)</p>
         </div>
         <!--<br />-->
-        <div class="form-row"> 
-            <label for="access">Access</label>
-            <input type="text" class="form-control" name="access" id="access" placeholder="Website for the institution" value="{$access}" aria-describedby="accessHelp" />
-            <p id="accessHelp">Only valid URLs will be accepted</p>
-        </div>
+
         <!--<br />-->
         <div class="form-row">
             <input type="hidden" id="instId" name="instId" value="{$instId}" />

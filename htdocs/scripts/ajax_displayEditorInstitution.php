@@ -60,9 +60,9 @@ else {
                 $foo['InstitutionEmail'] = 'Email not set.';
             }
 
-            if(empty($foo['InstitutionAccess'])){
-                $foo['InstitutionAccess'] = 'Access link not set.';
-            }
+            //if(empty($foo['InstitutionAccess'])){
+            //    $foo['InstitutionAccess'] = 'Access link not set.';
+            //}
 
             if($user->id > 1 || $is_admin){
                 $instHelp = new Institution($foo['InstitutionId']);

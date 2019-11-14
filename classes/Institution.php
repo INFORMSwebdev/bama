@@ -20,7 +20,7 @@ class Institution extends AOREducationObject {
         //'InstitutionRegion' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Region', 'editable' => TRUE  ),
         'InstitutionPhone' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Phone', 'editable' => TRUE  ),
         'InstitutionEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Email', 'editable' => TRUE  ),
-        'InstitutionAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Website', 'editable' => TRUE  ),
+        //'InstitutionAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Website', 'editable' => TRUE  ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
         'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified', 'editable' => FALSE ),
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  ),

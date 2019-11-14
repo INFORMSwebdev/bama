@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $region = filter_input(INPUT_POST, 'region', FILTER_SANITIZE_STRING);
     $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING);
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $access = filter_input(INPUT_POST, 'access', FILTER_VALIDATE_URL);
+    //$access = filter_input(INPUT_POST, 'access', FILTER_VALIDATE_URL);
 
     //get the form data into an array to create an object
     $data = array(
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'InstitutionZip' => $zip,
         'InstitutionRegion' => $region,
         'InstitutionPhone' => $phone,
-        'InstitutionAccess' => $access,
+        //'InstitutionAccess' => $access,
         'InstitutionEmail' => $email
     );
 

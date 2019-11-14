@@ -289,13 +289,13 @@ $(function() {
             else {
                 html += '<p><a href="mailto:' + progs[0].InstitutionEmail + '">' + progs[0].InstitutionEmail + '</a></p>';
             }
-            html += '<h4>Access</h4>';
-            if(progs[0].InstitutionAccess.indexOf("www") < 0){
-                html += '<p>' + progs[0].InstitutionAccess + '</p>';
-            }
-            else{
-                html += '<p><a href="' + progs[0].InstitutionAccess + '" target="_blank">' + progs[0].InstitutionAccess + '</a></p>';
-            }
+            //html += '<h4>Access</h4>';
+            //if(progs[0].InstitutionAccess.indexOf("www") < 0){
+            //    html += '<p>' + progs[0].InstitutionAccess + '</p>';
+            //}
+            //else{
+            //    html += '<p><a href="' + progs[0].InstitutionAccess + '" target="_blank">' + progs[0].InstitutionAccess + '</a></p>';
+            //}
             html += '<h3>Last Modified</h3>';
             html += '<p>' + progs[0].LastModifiedDate + '</p>';
             html += '<div class="btn-group">';

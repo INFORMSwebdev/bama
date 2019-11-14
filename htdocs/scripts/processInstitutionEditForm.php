@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $region = filter_input(INPUT_POST, 'region', FILTER_VALIDATE_INT);
         $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING);
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $access = filter_input(INPUT_POST, 'access', FILTER_VALIDATE_URL);
+        //$access = filter_input(INPUT_POST, 'access', FILTER_VALIDATE_URL);
         $instId = filter_input(INPUT_POST, 'instId', FILTER_VALIDATE_INT);
 
         //update the record
@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $inst->Attributes['RegionId'] = $region;
         $inst->Attributes['InstitutionPhone'] = $phone;
         $inst->Attributes['InstitutionEmail'] = $email;
-        $inst->Attributes['InstitutionAccess'] = $access;
+        //$inst->Attributes['InstitutionAccess'] = $access;
 
         if($user->id == 1){
             //$inst->Attributes['ApprovalStatusId'] = APPROVAL_TYPE_APPROVE;
