@@ -76,6 +76,23 @@ class Course extends AOREducationObject
         return $db->execSafe( $sql, $params );
     }
 
+    public function assignTag( $TagId ) {
+        $tag_count = $this->countTags();
+        $ini = parse_ini_file( "/common/settings/common.ini", TRUE );
+        $aes = $ini['analytics_education_settings'];
+        $max_tags = $aes['max_course_tags'];
+        if ($tag_count >= $max_tags) {
+            $success = 0;
+            throw new Exception("This course already has reach the max tag count of $max_tags.");
+        }
+        else {
+            $db = new EduDB();
+            $sql = "INSERT IGNORE INTO course_tags (CourseId, TagId) VALUES ($this->id, $TagId )";
+            $success = $db->exec( $sql );
+        }
+        return $success;
+    }
+
     /**
      * add course - textbook association
      * @param $TextbookId int
@@ -86,6 +103,13 @@ class Course extends AOREducationObject
         $sql = "INSERT IGNORE INTO course_textbooks (CourseId, TextbookId) VALUES ($this->id, :TextbookId)";
         $params = array( array( ":TextbookId", $TextbookId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
+    }
+
+    public function countTags() {
+        $db = new EduDB();
+        $sql = "SELECT COUNT(*) FROM course_tags WHERE CourseID = $this->id";
+        $count = $db->queryItem( $sql );
+        return $count;
     }
 
     public function getDeliveryMethod(){
@@ -151,6 +175,13 @@ class Course extends AOREducationObject
         }
 
         return $Instructors;
+    }
+
+    public function getTags() {
+        $db = new EduDB;
+        $sql = "SELECT name FROM course_tags ct JOIN course_tag_options cto ON ct.TagId = cto.id WHERE ct.CourseId = $this->id";
+        $tags = $db->queryColumn( $sql );
+        return $tags;
     }
 
     public function getParent( $asObject = TRUE ) {
@@ -265,6 +296,12 @@ class Course extends AOREducationObject
         $sql = "DELETE course_softwares WHERE CourseId = $this->id AND SoftwareId = :SoftwareId)";
         $params = array( array( ":SoftwareId", $SoftwareId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
+    }
+
+    public function unassignTag( $TagId ) {
+        $db = new EduDB;
+        $sql = "DELETE FROM course_tags WHERE CourseId = $this->id AND TagId = $TagId";
+        return $db->exec( $sql ); //note: if there was no such row, this will return 0
     }
 
     /**
