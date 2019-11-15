@@ -8,6 +8,9 @@
 //include the init file
 require_once '../../init.php';
 
+#ToDo: figure out how to make phone numbers fit a specific format for display; expected input should not have -'s, but
+#  it should look like it does to users during input
+
 //checks for messages?
 $content = '';
 
@@ -280,7 +283,7 @@ $(function() {
             html += '<h3>Region</h3>';
             html += '<p>' + progs[0].InstitutionRegion + '</p>';
             html += '<h3>Contact Information</h3>';
-            html += '<h4>Phone Number</h4>';
+            html += '<h4 id="instPhone">Phone Number</h4>';
             html += '<p>' + progs[0].InstitutionPhone + '</p>';
             html += '<h4>Email</h4>';
             if(progs[0].InstitutionEmail.indexOf("@") < 0){
@@ -501,8 +504,6 @@ $(function() {
             return html;
         }
     }
-    
-    
 });
 EOT;
 
@@ -513,6 +514,7 @@ $page_params['site_title'] = "Analytics & Operations Research Education Program 
 $page_params['site_url'] = WEB_ROOT . 'index.php';
 //put custom/extra JS files
 $page_params['js'][] = array("text" => $custom_js );
+$page_params['js'][] = array("url" => 'https://rawgit.com/RobinHerbots/Inputmask/5.x/dist/jquery.inputmask.js' );
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content

@@ -54,6 +54,8 @@ else {
 
             if(empty($foo['InstitutionPhone'])){
                 $foo['InstitutionPhone'] = 'Phone number not set.';
+            } else {
+                $foo['InstitutionPhone'] = AOREducationObject::formatPhoneNumber($foo['InstitutionPhone']);
             }
 
             if(empty($foo['InstitutionEmail'])){
