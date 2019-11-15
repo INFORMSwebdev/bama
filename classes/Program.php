@@ -58,6 +58,30 @@ class Program extends AOREducationObject
         return $db->execSafe( $sql, $params );
     }
 
+    public function assignTag( $TagId ) {
+        $tag_count = $this->countTags();
+        $ini = parse_ini_file( "/common/settings/common.ini", TRUE );
+        $aes = $ini['analytics_education_settings'];
+        $max_tags = $aes['max_program_tags'];
+        if ($tag_count >= $max_tags) {
+            $success = 0;
+            throw new Exception("This program already has reach the max tag count of $max_tags.");
+        }
+        else {
+            $db = new EduDB();
+            $sql = "INSERT IGNORE INTO program_tags (ProgramId, TagId) VALUES ($this->id, $TagId )";
+            $success = $db->exec( $sql );
+        }
+        return $success;
+    }
+
+    public function countTags() {
+        $db = new EduDB();
+        $sql = "SELECT COUNT(*) FROM program_tags WHERE ProgramID = $this->id";
+        $count = $db->queryItem( $sql );
+        return $count;
+    }
+
     public function getContact( $asObject = TRUE ) {
         $Contact = new Contact( $this->Attributes['ContactId'] );
         return $Contact;
@@ -79,6 +103,13 @@ EOT;
             foreach($ContactIds as $ContactId ) $Contacts[] = new Contact($ContactId);
             return $Contacts;
         }
+    }
+
+    public function getTags() {
+        $db = new EduDB;
+        $sql = "SELECT name FROM program_tags pt JOIN program_tag_options pto ON pt.TagId = pto.id WHERE pt.ProgramId = $this->id";
+        $tags = $db->queryColumn( $sql );
+        return $tags;
     }
 
     public function getTextbooks( $active = TRUE, $asObjects = FALSE ) {
@@ -330,5 +361,11 @@ EOT;
         $params = array( array( ":ContactId", $ContactId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
 
+    }
+
+    public function unassignTag( $TagId ) {
+        $db = new EduDB;
+        $sql = "DELETE FROM program_tags WHERE ProgramyeajId = $this->id AND TagId = $TagId";
+        return $db->exec( $sql ); //note: if there was no such row, this will return 0
     }
 }
