@@ -181,7 +181,7 @@ EOT;
         $ext = $matches[5];
 
         $out = "$three-$four";
-        if(!empty($area)) $out = "$area-$out";
+        if(!empty($area)) $out = "($area) $out";
         if(!empty($country)) $out = "+$country-$out";
         if(!empty($ext)) $out .= "x$ext";
 

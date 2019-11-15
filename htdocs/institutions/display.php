@@ -514,7 +514,7 @@ $page_params['site_title'] = "Analytics & Operations Research Education Program 
 $page_params['site_url'] = WEB_ROOT . 'index.php';
 //put custom/extra JS files
 $page_params['js'][] = array("text" => $custom_js );
-$page_params['js'][] = array("url" => 'https://rawgit.com/RobinHerbots/Inputmask/5.x/dist/jquery.inputmask.js' );
+//$page_params['js'][] = array("url" => 'https://rawgit.com/RobinHerbots/Inputmask/5.x/dist/jquery.inputmask.js' );
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content
