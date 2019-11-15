@@ -192,7 +192,7 @@ EOT;
 
 $maskJS = <<<EOT
 $(function() {
-    $('#phone').inputmask('(999) 999-9999');
+    $('#phone').inputmask('999-999-9999');
 });
 EOT;
 
