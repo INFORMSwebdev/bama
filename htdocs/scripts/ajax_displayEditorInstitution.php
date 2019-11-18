@@ -227,7 +227,7 @@ else {
                                 if (empty($c->Attributes['ContactPhone'])) {
                                     $cPhone = 'Contact phone not set.';
                                 } else {
-                                    $cPhone = $c->Attributes['ContactPhone'];
+                                    $cPhone = AOREducationObject::formatPhoneNumber($c->Attributes['ContactPhone']);
                                 }
 
                                 if (empty($c->Attributes['ContactEmail'])) {

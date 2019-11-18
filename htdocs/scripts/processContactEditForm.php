@@ -47,7 +47,9 @@ else {
     //gather form data
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
     $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
-    $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING);
+    //$phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING);
+    $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_NUMBER_INT);
+    $phone = str_replace('-', '', $phone);
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
     //update the record

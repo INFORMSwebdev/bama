@@ -35,13 +35,14 @@ else {
         <br />
         <div class="form-row"> 
             <label for="contactPhone">Phone</label>
-            <input type="text" class="form-control" name="contactPhone" id="contactPhone" placeholder="Phone number of contact (if applicable)" />
+            <input type="text" class="form-control" name="contactPhone" id="contactPhone" placeholder="555-555-5555" aria-describedby="phoneHelp" />
+            <small id="phoneHelp" class="form-text text-muted">Enter only digits, the phone number is formatted automatically.</small>
         </div>
         <br />
         <div class="form-row"> 
             <label for="email">Email</label>
-            <input type="text" class="form-control" name="email" id="email" placeholder="Email address of contact" aria-describedby="emailHelp" />
-            <p id="emailHelp">Only valid email addresses will be accepted (e.g. name@organization.com)</p>
+            <input type="text" class="form-control" name="email" id="email" placeholder="name@organization.com" aria-describedby="emailHelp" />
+            <p id="emailHelp">Only valid email addresses will be accepted.</p>
         </div>
         <div class="form-row">
             <input type="hidden" name="programId" id="programId" value="{$progId}" />
@@ -52,12 +53,20 @@ else {
 EOT;
 }
 
+$maskJS = <<<EOT
+$(function() {
+    $('#contactPhone').inputmask('999-999-9999');
+});
+EOT;
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "Add New Contact";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
+$page_params['js'][] = array('url' => 'https://rawgit.com/RobinHerbots/Inputmask/5.x/dist/jquery.inputmask.js' );
+$page_params['js'][] = array('text' => $maskJS );
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content

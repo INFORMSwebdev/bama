@@ -127,7 +127,8 @@ if($instId){
         <br />
         <div class="form-row"> 
             <label for="phone">Phone</label>
-            <input type="text" class="form-control" name="phone" id="phone" placeholder="E.g. 555-555-5555 or (555) 555-5555" value="{$phone}"/>
+            <input type="text" class="form-control" name="phone" id="phone" placeholder="E.g. 555-555-5555" value="{$phone}" aria-describedby="phoneHelp" />
+            <small id="phoneHelp" class="form-text text-muted">Enter only digits, the phone number is formatted automatically.</small>
         </div>
         <br />
         <div class="form-row"> 
