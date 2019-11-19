@@ -37,11 +37,7 @@ function createSQL( $category, $class, $search_term, $statuses ) {
     $name_sql = $class::$name_sql;
     $match_phrase = "MATCH($full_text_cols) AGAINST ('$search_term' IN NATURAL LANGUAGE MODE)";
     if (!$search_term) $match_phrase = "1";
-    $sql = <<<EOT
-SELECT '$category' AS category, $name_sql AS name, $primary_key AS id, $match_phrase AS score 
-FROM $table_name
-WHERE $match_phrase
-EOT;
+    $sql = "SELECT '$category' AS category, $name_sql AS name, $primary_key AS id, $match_phrase AS score FROM $table_name WHERE $match_phrase";
     if (count($statuses)) $sql .= ' AND ApprovalStatusId IN ('.implode(",", $statuses).")";
     return $sql;
 }

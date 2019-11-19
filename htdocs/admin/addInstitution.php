@@ -21,6 +21,13 @@ foreach( $states as $state ) {
     $state_options .= '<option value="'.$state['abbr'].'">'. $state['name'] .'</option>';
 }
 
+$region_options = '';
+$sql = "SELECT id, name FROM region_dropdown";
+$regions = $db->query( $sql );
+foreach( $regions as $region ) {
+    $region_options .= '<option value="'.$region['id'].'">'. $region['name'] .'</option>';
+}
+
 $content = <<<EOT
 <div class="flex-column">
     <h1>Analytics & OR Education Database ADMIN</h1>
@@ -61,13 +68,9 @@ $content = <<<EOT
       <input type="text" class="form-control" id="InstitutionZip" name="InstitutionZip" placeholder="Institution Zip"/>
     </div>
     <div class="form-group">
-      <label for="InstitutionRegion">Region</label>
-      <select class="form-control" id="InstitutionRegion" name="InstitutionRegion" placeholder="Region">
-        <option>South</option>
-        <option>Northeast</option>
-        <option>Midwest</option>
-        <option>West</option>
-        <option>Other</option>
+      <label for="RegionId">Region</label>
+      <select class="form-control" id="RegionId" name="RegionId" placeholder="Region">
+        $region_options
       </select>
     </div>
     <div class="form-group">

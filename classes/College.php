@@ -13,11 +13,11 @@ class College extends AOREducationObject
     public static $tableId = 5;
     public static $data_structure = array(
         'CollegeId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'College ID', 'editable' => FALSE ),
-        'InstitutionId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Institution ID', 'editable' => FALSE ),
+        'InstitutionId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Institution', 'editable' => FALSE ),
         'CollegeName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'College Name', 'editable' => TRUE ),
         //'CollegeType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'College Type', 'editable' => TRUE ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
-        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Delete', 'editable' => FALSE ),
+        'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE ),
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
         'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified Date', 'editable' => FALSE ),
@@ -44,6 +44,26 @@ class College extends AOREducationObject
         }
 
         return $colleges;
+    }
+
+    public function getCollegeTypeLabel() {
+        $db = new EduDb;
+        $sql = "SELECT name FROM college_type_dropdown WHERE id = {$this->Attributes['TypeId']}";
+        $Type = $db->queryItem( $sql );
+        if ($Type === "Other") {
+            $Type = "Other&mdash;" . $this->Attributes['OtherType'];
+        }
+        return $Type;
+    }
+
+    public function getName() {
+        return $this->Attributes['CollegeName'];
+    }
+
+    public static function getNameById( $id ) {
+        $db = new EduDB;
+        $sql = "SELECT CollegeName FROM colleges WHERE CollegeId = $id ";
+        return $db->queryItem( $sql );
     }
 
     public function getType(){
@@ -74,6 +94,41 @@ class College extends AOREducationObject
         $sql = "SELECT ProgramId FROM programs WHERE CollegeId = $this->id";
         $ProgramIds = $db->query( $sql );
         return (count($ProgramIds)) ? TRUE : FALSE;
+    }
+
+    public function renderObject( $changed_keys = [] ) {
+        $data_html = "";
+        foreach( $this->Attributes as $key => $value ) {
+            // logic to render value differently based on type goes here
+            switch ( $key ) {
+                case 'TypeId':
+                    $value = $this->getCollegeTypeLabel();
+                    if (in_array( 'OtherType', $changed_keys)) $changed_keys[] = 'TypeId';
+                    break;
+                case 'ApprovalStatusId':
+                    $value = AOREducationObject::getStatusLabelFromId( $value );
+                    break;
+                case 'Deleted':
+                    $value = ($value) ? "Yes" : "No";
+                    break;
+                case 'InstitutionId':
+                    $value = Institution::getNameById( $value );
+                    break;
+                case 'OriginalRecordId':
+                case 'OtherType':
+                    continue 2;
+                default:
+                    $value = $value; // I know this line is unnecessary but putting it in so the logic here is more clear
+            }
+
+            if (!$value) $value = '&nbsp;';
+            $changed_class = (in_array($key, $changed_keys)) ? ' changed' : '';
+            $data_html .= '<div class="row data_row">';
+            $data_html .= '<div class="data_label">' . College::$data_structure[$key]['label'] . '</div>';
+            $data_html .= '<div class="data_value' . $changed_class . '">' . $value . '</div>';
+            $data_html .= '</div>';
+        }
+        return $data_html;
     }
 
     public function swapID( $OldId ) {

@@ -30,7 +30,7 @@ class Institution extends AOREducationObject {
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
         'RegionId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Region', 'editable' => TRUE ),
     );
-    public static $full_text_columns = 'InstitutionName, InstitutionCity, InstitutionState, InstitutionRegion';
+    public static $full_text_columns = 'InstitutionName, InstitutionCity, InstitutionState';
     public static $name_sql = 'InstitutionName';
     public static $parent_class = NULL;
 
@@ -134,6 +134,16 @@ class Institution extends AOREducationObject {
             }
         }
         return $Instructors;
+    }
+
+    public function getName() {
+        return $this->Attributes['InstitutionName'];
+    }
+
+    public static function getNameById( $id ) {
+        $db = new EduDB;
+        $sql = "SELECT InstitutionName FROM institutions WHERE InstitutionId = $id ";
+        return $db->queryItem( $sql );
     }
 
     public function getPrograms( $asObjects = TRUE, $ApprovalStatusId = APPROVAL_TYPE_APPROVE ) {

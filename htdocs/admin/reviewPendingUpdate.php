@@ -35,8 +35,12 @@ if ($UpdateType == 'Update') {
     $changed_keys = $Class::compareObjects( $obj1, $obj2 );
 }
 
-$data_html = '';
+$thing = $Class::createInstance( $data );
+
+$data_html = $thing->renderObject( $changed_keys );
+
 // TODO:  we really should make the column names have friendly descriptions, and columns holding foreign keys should  have their values translated into friendly values
+/*
 foreach( $data as $key => $value ) {
     if (!$value) $value = '&nbsp;';
     $changed_class = (in_array( $key, $changed_keys )) ? ' changed' : '';
@@ -45,7 +49,7 @@ foreach( $data as $key => $value ) {
     $data_html .= '<div class="data_value'.$changed_class.'">' . $value . '</div>';
     $data_html .= '</div>';
 }
-$thing = $Class::createInstance( $data );
+*/
 if ($UpdateType == 'Update' || $UpdateType == 'Delete') {
     $thing->id = $thing->Attributes[$Class::$primary_key];
 }

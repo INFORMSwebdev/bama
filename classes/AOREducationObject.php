@@ -209,6 +209,17 @@ EOT;
       return $asString ? $str : $coll;
   }
 
+  public function getStatusLabel() {
+        $label = NULL;
+        if( isset( $this->Attributes['ApprovalStatusId'])) $label = $this->Attributes['ApprovalStatusId'];
+        return $label;
+  }
+  public static function getStatusLabelFromId( $id ) {
+      $db = new EduDB;
+      $sql = "SELECT StatusName FROM approval_status WHERE ApprovalStatusId = $id ";
+      return $db->queryItem( $sql );
+  }
+
     /**
      * write to application log at root_dir . log_dir
      * @param $text
@@ -222,6 +233,22 @@ EOT;
       fwrite( $fh, date('Y-m-d H:i:s') ." ================ ".PHP_EOL );
       fwrite( $fh, $text . PHP_EOL );
       fclose( $fh );
+  }
+
+  public function renderObject( $changed_keys = [] ) {
+        $data_html = "";
+        $Class = get_class($this);
+        foreach( $this->Attributes as $key => $value ) {
+            // logic to render value differently based on type goes here
+
+            if (!$value) $value = '&nbsp;';
+            $changed_class = (in_array($key, $changed_keys)) ? ' changed' : '';
+            $data_html .= '<div class="row data_row">';
+            $data_html .= '<div class="data_label">' . $Class::$data_structure[$key]['label'] . '</div>';
+            $data_html .= '<div class="data_value' . $changed_class . '">' . $value . '</div>';
+            $data_html .= '</div>';
+        }
+        return $data_html;
   }
 
   public function save() {

@@ -16,6 +16,7 @@ $msg = '';
 $InstitutionId = Institution::create( $_POST );
 if ($InstitutionId) {
     $Institution = new Institution( $InstitutionId );
+    $Institution->update( 'ApprovalStatusId', APPROVAL_TYPE_APPROVE );
     $Name = $Institution->Attributes['InstitutionName'];
     $msg = "$Name has been added to the Institutions table.";
 }
