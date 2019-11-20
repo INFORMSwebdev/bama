@@ -150,10 +150,12 @@ $(function() {
   });
   $('#form-addInstitution').submit( function(e) {
     e.preventDefault();
+    
     $.post( "/scripts/ajax_addInstitution.php", $(this).serialize(), function(data) {
       ajaxResponseHandler( data );
     }, "json");
   });
+  $('#InstitutionPhone').inputmask('999-999-9999');
 });
 EOT;
 
@@ -163,5 +165,6 @@ $p_params['page_title'] = "INFORMS Analytics &amp; OR Education Database - ADMIN
 $p_params['content'] = $content;
 $p_params['css'][] = array( 'text' => $custom_css );
 $p_params['js'][] = array( 'text' => $custom_js );
+$p_params['js'][] = array('url' => 'https://rawgit.com/RobinHerbots/Inputmask/5.x/dist/jquery.inputmask.js' );
 $wrapper = new wrapperBama($p_params);
 $wrapper->html();
