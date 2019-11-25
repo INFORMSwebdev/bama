@@ -27,6 +27,7 @@ class College extends AOREducationObject
     public static $full_text_columns = 'CollegeName';
     public static $name_sql = 'CollegeName';
     public static $parent_class = 'Institution';
+    public static $hidden_fields = ['OriginalRecordId', 'OtherType'];
 
     public static function getAllColleges( $active = TRUE, $asObjects = FALSE ){
         $colleges = [];
@@ -99,6 +100,7 @@ class College extends AOREducationObject
     public function renderObject( $changed_keys = [] ) {
         $data_html = "";
         foreach( $this->Attributes as $key => $value ) {
+            if (in_array( $key, self::$hidden_fields)) continue;
             // logic to render value differently based on type goes here
             switch ( $key ) {
                 case 'TypeId':
@@ -114,9 +116,6 @@ class College extends AOREducationObject
                 case 'InstitutionId':
                     $value = Institution::getNameById( $value );
                     break;
-                case 'OriginalRecordId':
-                case 'OtherType':
-                    continue 2;
                 default:
                     $value = $value; // I know this line is unnecessary but putting it in so the logic here is more clear
             }

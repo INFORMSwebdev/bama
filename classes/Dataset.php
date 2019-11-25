@@ -30,6 +30,7 @@ class Dataset extends AOREducationObject
     public static $full_text_columns = 'DatasetName, DatasetUseDescription, AnalyticTag, BusinessTag';
     public static $name_sql = 'DatasetName';
     public static $parent_class = 'Course';
+    public static $hidden_fields = ['OriginalRecordId'];
 
     /**
      * add course - dataset association
@@ -85,6 +86,30 @@ class Dataset extends AOREducationObject
         $CourseId = $db->queryItem( $sql );
         if ($asObject) return new Course( $CourseId );
         else return $CourseId;
+    }
+
+    public function renderObject( $changed_keys = [] ) {
+        $data_html = "";
+        foreach( $this->Attributes as $key => $value ) {
+            if (in_array( $key, self::$hidden_fields)) continue;
+            // logic to render value differently based on type goes here
+            switch ( $key ) {
+                case 'ApprovalStatusId':
+                    $value = AOREducationObject::getStatusLabelFromId( $value );
+                    break;
+                case 'Deleted':
+                    $value = ($value) ? "Yes" : "No";
+                    break;
+            }
+
+            if (!$value) $value = '&nbsp;';
+            $changed_class = (in_array($key, $changed_keys)) ? ' changed' : '';
+            $data_html .= '<div class="row data_row">';
+            $data_html .= '<div class="data_label">' . get_class($this)::$data_structure[$key]['label'] . '</div>';
+            $data_html .= '<div class="data_value' . $changed_class . '">' . $value . '</div>';
+            $data_html .= '</div>';
+        }
+        return $data_html;
     }
 
     public function swapID( $OldId ) {

@@ -33,6 +33,7 @@ class Institution extends AOREducationObject {
     public static $full_text_columns = 'InstitutionName, InstitutionCity, InstitutionState';
     public static $name_sql = 'InstitutionName';
     public static $parent_class = NULL;
+    public static $hidden_fields = ['OriginalRecordId'];
 
     public function assignAdmin( $UserId ) {
         $db = new EduDB;
@@ -189,6 +190,30 @@ class Institution extends AOREducationObject {
         $sql = "SELECT ProgramId FROM programs WHERE InstitutionId = $this->id AND Deleted = 0";
         $Ids = $db->query( $sql );
         return (count($Ids)) ? TRUE : FALSE;
+    }
+
+    public function renderObject( $changed_keys = [] ) {
+        $data_html = "";
+        foreach( $this->Attributes as $key => $value ) {
+            if (in_array( $key, self::$hidden_fields)) continue;
+            // logic to render value differently based on type goes here
+            switch ( $key ) {
+                case 'ApprovalStatusId':
+                    $value = AOREducationObject::getStatusLabelFromId( $value );
+                    break;
+                case 'Deleted':
+                    $value = ($value) ? "Yes" : "No";
+                    break;
+            }
+
+            if (!$value) $value = '&nbsp;';
+            $changed_class = (in_array($key, $changed_keys)) ? ' changed' : '';
+            $data_html .= '<div class="row data_row">';
+            $data_html .= '<div class="data_label">' . self::$data_structure[$key]['label'] . '</div>';
+            $data_html .= '<div class="data_value' . $changed_class . '">' . $value . '</div>';
+            $data_html .= '</div>';
+        }
+        return $data_html;
     }
 
     public function sendExpirationNotice() {

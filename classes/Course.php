@@ -32,6 +32,7 @@ class Course extends AOREducationObject
     public static $full_text_columns = 'CourseTitle, CourseText, AnalyticTag, BusinessTag';
     public static $name_sql = 'CourseTitle';
     public static $parent_class = 'Program';
+    public static $hidden_fields = ['OriginalRecordId','InstructorId'];
 
     /**
      * add course - case study association
@@ -126,6 +127,12 @@ class Course extends AOREducationObject
         }
     }
 
+    public function getDeliveryMethodLabel() {
+        $db = new EduDb;
+        $sql = "SELECT method FROM delivery_methods WHERE id={$this->Attributes['DeliveryMethodId']}";
+        return $db->queryItem( $sql );
+    }
+
     public function getDeliveryMethodOptions($first = NULL){
         $db = new EduDB();
 
@@ -161,6 +168,13 @@ class Course extends AOREducationObject
         if (!$this->hasInstructor()) return FALSE;
         $Instructor = new Instructor( $this->Attributes['InstructorId']);
         return $Instructor;
+    }
+
+    public function getInstructorLabel() {
+        $db = new EduDB;
+        $sql = "SELECT InstructorPrefix, InstructorFirstName, InstructorLastName FROM instructors WHERE InstructorId = {this->Attributes['InstructorId']}";
+        $instructor = $db->queryRow( $sql );
+        return trim( implode(" ", $instructor));
     }
 
     public function getInstructors( $asObjects = FALSE ) {
@@ -233,6 +247,36 @@ class Course extends AOREducationObject
         $sql = "SELECT TextbookId FROM course_textbooks WHERE CourseId = $this->id AND Deleted = 0";
         $Ids = $db->query( $sql );
         return (count($Ids)) ? TRUE : FALSE;
+    }
+
+    public function renderObject( $changed_keys = [] ) {
+        $data_html = "";
+        foreach( $this->Attributes as $key => $value ) {
+            if (in_array( $key, self::$hidden_fields)) continue;
+            // logic to render value differently based on type goes here
+            switch ( $key ) {
+                case 'ApprovalStatusId':
+                    $value = AOREducationObject::getStatusLabelFromId( $value );
+                    break;
+                case 'Deleted':
+                    $value = ($value) ? "Yes" : "No";
+                    break;
+                case 'DeliveryMethodId':
+                    $value = $this->getDeliveryMethodLabel();
+                    break;
+                case 'InstructorId':
+                    $value = $this->getInstructorLabel();
+                    break;
+            }
+
+            if (!$value) $value = '&nbsp;';
+            $changed_class = (in_array($key, $changed_keys)) ? ' changed' : '';
+            $data_html .= '<div class="row data_row">';
+            $data_html .= '<div class="data_label">' . Course::$data_structure[$key]['label'] . '</div>';
+            $data_html .= '<div class="data_value' . $changed_class . '">' . $value . '</div>';
+            $data_html .= '</div>';
+        }
+        return $data_html;
     }
 
     public function swapID( $OldId ) {
