@@ -16,7 +16,7 @@ class AOREducationObject {
           $sql = "SELECT * FROM ".static::$table." WHERE ".static::$primary_key."=:primary_key";
           $params = array( array( ":primary_key", $id, PDO::PARAM_INT ) );
           $row = $db->queryRowSafe( $sql, $params );
-          foreach( $row as $key => $value ) $this->Attributes[$key] = $value;
+          foreach( $row as $key => $value ) if ($key != 'SyllabusFile') $this->Attributes[$key] = $value;
           $this->valid = (count($row)) ? TRUE : FALSE;
       }
   }
@@ -161,6 +161,13 @@ EOT;
     $sql = "DELETE FROM ".static::$table." WHERE ".static::$primary_key."=$this->id";
     return $db->exec( $sql );
   }
+
+    function fixMSChars( $s ) {
+        return  str_replace(
+            [chr(145), chr(146), chr(147), chr(148), chr(150), chr(151), chr(133)],
+            ["'", "'", '"', '"', '-', '--', '...'],
+            $s );
+    }
 
     public static function formatPhoneNumber($s) {
         $rx = "/

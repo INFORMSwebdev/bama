@@ -138,7 +138,7 @@ EOT;
         $courses = $db->queryColumn( $sql );
         if($asObjects){
             foreach($courses as $course){
-                $coursesOut[] = new Course($course);
+                $coursesOut[] = new Course( $course );
             }
         }
         else {
