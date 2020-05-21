@@ -105,7 +105,7 @@ class Dataset extends AOREducationObject
             if (!$value) $value = '&nbsp;';
             $changed_class = (in_array($key, $changed_keys)) ? ' changed' : '';
             $data_html .= '<div class="row data_row">';
-            $data_html .= '<div class="data_label">' . get_class($this)::$data_structure[$key]['label'] . '</div>';
+            $data_html .= '<div class="data_label">' . self::$data_structure[$key]['label'] . '</div>';
             $data_html .= '<div class="data_value' . $changed_class . '">' . $value . '</div>';
             $data_html .= '</div>';
         }
