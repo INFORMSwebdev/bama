@@ -18,6 +18,7 @@ class Course extends AOREducationObject
         'DeliveryMethod' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Delivery Method', 'editable' => TRUE  ),
         'HasCapstoneProject' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Has Capstone Project', 'editable' => TRUE  ),
         'CourseText' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Course Text', 'editable' => TRUE ),
+        'SoftwareLanguage' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Software/Programming Language', 'editable'=>TRUE ),
         'SyllabusFile' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_LOB, 'label' => 'Syllabus File', 'editable' => TRUE  ),
         'SyllabusFilesize' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Syllabus File Size', 'editable' => TRUE  ),
         'AnalyticTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Analytic Tag', 'editable' => TRUE  ),
@@ -113,6 +114,12 @@ class Course extends AOREducationObject
         return $count;
     }
 
+    public static function getCourseDeliveryMethods() {
+        $db = new EduDb;
+        $sql = "SELECT * FROM course_delivery_methods  ORDER BY name";
+        return $db->query( $sql );
+    }
+
     public function getDeliveryMethod(){
         $db = new EduDB();
 
@@ -120,7 +127,7 @@ class Course extends AOREducationObject
             return 'No Delivery Method set for this program.';
         }
         else {
-            $sql = 'SELECT method FROM delivery_methods WHERE id=' . $this->Attributes['DeliveryMethodId'];
+            $sql = 'SELECT `name` FROM course_delivery_methods WHERE id=' . $this->Attributes['DeliveryMethodId'];
             //should only have the 1 delivery method
             $results = $db->queryColumn($sql);
             return $results[0];
@@ -129,7 +136,7 @@ class Course extends AOREducationObject
 
     public function getDeliveryMethodLabel() {
         $db = new EduDb;
-        $sql = "SELECT method FROM delivery_methods WHERE id={$this->Attributes['DeliveryMethodId']}";
+        $sql = "SELECT `name` FROM course_delivery_methods WHERE id={$this->Attributes['DeliveryMethodId']}";
         return $db->queryItem( $sql );
     }
 
@@ -277,6 +284,20 @@ class Course extends AOREducationObject
             $data_html .= '</div>';
         }
         return $data_html;
+    }
+
+    public static function renderTagHTML( $checked = [] ) {
+        $db = new EduDB;
+        $sql = "SELECT * FROM course_tag_options ORDER BY name";
+        $tags = $db->query( $sql );
+        $html = '<div class="tag_container">';
+        foreach( $tags as $tag ) {
+            $html .= '<div class="option_row"><input type="checkbox" class="courses_option" name="CourseTags[]" ';
+            $checked_val = (in_array($tag['id'], $checked)) ? 'checked="checked" ' : '' ;
+            $html .= $checked_val . 'value="'.$tag['id'].'"><span>'.$tag['name'].'</span></div>';
+        }
+        $html .= '</div>';
+        return $html;
     }
 
     public function swapID( $OldId ) {

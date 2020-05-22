@@ -319,6 +319,12 @@ EOT;
         }
     }
 
+    public static function getProgramTypes() {
+        $db = new EduDB;
+        $sql = "SELECT DISTINCT ProgramType FROM programs WHERE ProgramType > '' AND ApprovalStatusId = " . APPROVAL_TYPE_APPROVE . ' ORDER BY ProgramType';
+        return $db->queryColumn( $sql );
+    }
+
     public function hasContact() {
         $has = FALSE;
         if ($this->Attributes['ContactId']) {
@@ -362,6 +368,30 @@ EOT;
             $data_html .= '</div>';
         }
         return $data_html;
+    }
+
+    public static function renderProgramTypesOptions( $selected = null ) {
+        $types = self::getProgramTypes();
+        $html = '';
+        foreach( $types as $type ) {
+            $selectedVal = ($selected == $type) ? ' selected="selected" ' : '';
+            $html .= '<option value="'.$type.'"'.$selectedVal.'>'.$type.'</option>';
+        }
+        return $html;
+    }
+
+    public static function renderTagHTML( $checked = [] ) {
+        $db = new EduDB;
+        $sql = "SELECT * FROM program_tag_options ORDER BY name";
+        $tags = $db->query( $sql );
+        $html = '<div class="tag_container">';
+        foreach( $tags as $tag ) {
+            $html .= '<div class="option_row"><input type="checkbox" class="programs_option" name="ProgramTags[]" ';
+            $checked_val = (in_array($tag['id'], $checked)) ? 'checked="checked" ' : '' ;
+            $html .= $checked_val . 'value="'.$tag['id'].'"><span>'.$tag['name'].'</span></div>';
+        }
+        $html .= '</div>';
+        return $html;
     }
 
     public function swapID( $OldId ) {

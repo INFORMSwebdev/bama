@@ -193,7 +193,7 @@ EOT;
         <meta name="Content-Type" content="text/html; charset=utf-8" />
         <meta name="Content-language" content="en-US" />
         <meta name="author" content="INFORMS" />
-        <meta name="copyright" content="INFORMS 2014" />
+        <meta name="copyright" content="INFORMS 2020" />
         <meta name="description" content="The Institute for Operations Research and the Management Sciences" />
         <meta name="keywords" content="INFORMS, analytics, operations research, management science, modeling, decision analysis, simulation, marketing science" />
         <meta name="MSSmartTagsPreventParsing" content="TRUE" />
@@ -206,6 +206,7 @@ EOT;
     
         <link rel="icon" type="image/png" href="https://common.informs.org/images/favicon-16x16.png" />
 	    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/edu-admin-style.css" />
         
         {$this->cssHTML()}
         {$this->iecssHTML()}

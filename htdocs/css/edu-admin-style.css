@@ -1,0 +1,15 @@
+.tag_container {
+    column-count: 2;
+}
+.option_row {
+    display: flex;
+    overflow: hidden;
+    break-inside: avoid-column;
+    -webkit-column-break-inside: avoid;
+}
+.option_row input {
+    margin: 4px 8px 0;
+}
+.form-row button[type=submit] {
+    margin: 10px 0;
+}

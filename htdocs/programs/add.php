@@ -32,6 +32,10 @@ else {
 
 }
 
+$programTypeOptions = Program::renderProgramTypesOptions();
+
+$tagHTML = Program::renderTagHTML();
+
 //user is logged in, let them add a program
 $content = <<<EOT
 <div class="flex-column">
@@ -68,7 +72,8 @@ $content = <<<EOT
         </div>
         <div class="form-row">
             <label for="ProgramType">Type</label><span class="text text-danger">*</span>
-            <input type="text" class="form-control" name="ProgramType" id="ProgramType" placeholder="Program Type" required />
+            <!--<input type="text" class="form-control" name="ProgramType" id="ProgramType" placeholder="Program Type" required />-->
+            <select class="form-control" name="ProgramType" is="ProgramType" placeholder="Program Type" required>$programTypeOptions</select>
         </div>
         <div class="form-row">
             <label for="ProgramAccess">Access Link</label>
@@ -79,7 +84,7 @@ $content = <<<EOT
             <input type="text" class="form-control" name="YearEstablished" id="YearEstablished" />
         </div>
         <div class="form-row">
-            <label for="Scholarship">Scholarships</label>
+            <label for="Scholarship">Financial Assistance (for example: scholarship, fellowship, etc.)</label>
             <textarea class="form-control" name="Scholarship" id="Scholarship"></textarea>
         </div>
         <br />
@@ -140,6 +145,12 @@ $content = <<<EOT
             <div id="collegeList"><!-- empty div for college list AJAX stuff --></div>
         </div>
         <div class="form-row">
+            <h3>Program Tags</h3>
+        </div>
+        <div class="form-row">
+            $tagHTML
+        </div>
+        <div class="form-row">
             <input type="hidden" name="instId" id="instId" value="{$instId}" />
             <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Program</button>
         </div>
@@ -181,6 +192,26 @@ $(function() {
             $('#collegeList').html('<p>Derp</p>');
         }
     }); 
+    
+    $('.programs_option').on( 'change', function(e) {
+      if ($('.programs_option:checked').length > 3) {
+        alert('You may select a maximum of three tags.');
+        this.checked = false;
+      }
+    });
+    
+    $('form').submit( function(e) { 
+      var errors = [];
+      if ($('.programs_option:checked').length < 1) errors.push('You must select at least one tag.');
+      if (errors.length > 0) {
+        msg = "One or more errors were encountered: \\n\\n" + errors.join("\\n\\n");
+        alert(msg);
+        return false;
+      } else {
+        return true;
+      }
+    });
+    
 });
 
 function processCollegeList(colleges){
