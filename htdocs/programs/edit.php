@@ -73,28 +73,28 @@ if (is_numeric($_SESSION['loggedIn'])) {
             $opsHTML = <<<EOT
 <div class="form-check">
     <input class="form-check-input" type="checkbox" id="ORFlag" name="ORFlag" value="0" />
-    <label class="ml-1" for="ORFlag">Operations Research Program</label>
+    <label class="form-check-label" for="ORFlag">Operations Research Program</label>
 </div>
 EOT;
             if ($ops == true) {
                 $opsHTML = <<<EOT
 <div class="form-check">
-    <input class="form-check-input" type="checkbox" id="ORFlag" name="ORFlag" value="1" checked />
-    <label for="ORFlag">Operations Research Program</label>
+    <input class="form-check-input" type="checkbox" id="ORFlag" name="ORFlag" value="1" checked >
+    <label class="form-check-label" for="ORFlag">Operations Research Program</label>
 </div>
 EOT;
             }
             $analytics = $prog->Attributes['AnalyticsFlag'];
             $analyticsHTML = <<<EOT
 <div class="form-check">
-    <input class="form-check-input" type="checkbox" id="AnalyticsFlag" name="AnalyticsFlag" value="0" />
+    <input class="form-check-input" type="checkbox" id="AnalyticsFlag" name="AnalyticsFlag" value="0" >
     <label class="form-check-label" for="AnalyticsFlag">Analytics Program</label>
 </div>
 EOT;
             if ($analytics == true) {
                 $analyticsHTML = <<<EOT
 <div class="form-check">
-    <input class="form-check-input" type="checkbox" id="AnalyticsFlag" name="AnalyticsFlag" value="1" checked />
+    <input class="form-check-input" type="checkbox" id="AnalyticsFlag" name="AnalyticsFlag" value="1" checked >
     <label class="form-check-label" for="AnalyticsFlag">Analytics Program</label>
 </div>
 EOT;
@@ -129,10 +129,11 @@ EOT;
             $instCity = $inst->Attributes['InstitutionCity'];
             $instState = $inst->Attributes['InstitutionState'];
             $instZip = $inst->Attributes['InstitutionZip'];
-            $instRegion = $inst->Attributes['InstitutionRegion'];
+            //$instRegion = $inst->Attributes['InstitutionRegion'];
+            $instRegion = Dropdowns::getInstitutionRegionName($inst->Attributes['RegionId']);
             $instPhone = $inst->Attributes['InstitutionPhone'];
             $instEmail = $inst->Attributes['InstitutionEmail'];
-            $instAccess = $inst->Attributes['InstitutionAccess'];
+            //$instAccess = $inst->Attributes['InstitutionAccess']; //this field was removed from the DB
 
             //get list of institutions for editor to select from
             //get list of all institutions
@@ -161,6 +162,19 @@ EOT;
                 $collegeListHTML = str_replace('<option value="' . $collegeId . '">', '<option value="' . $collegeId . '" selected>', $collegeListHTML);
             }
 
+            //program tags addition
+            //find out if any tags are currently selected
+            $curTags = $prog->getTags();
+            if($curTags){
+                //currently assigned tags
+                # ToDo: Test this and make sure it works as expected
+                $tagHTML = Dropdowns::getProgramTagOptionsHTML($curTags);
+            } else {
+                //no tags yet
+                $tagHTML = Dropdowns::getProgramTagOptionsHTML();
+            }
+
+
             $contactHTML = <<<EOT
 <br />
         <div class="form-row">
@@ -185,7 +199,7 @@ EOT;
             <!--<p id="InstitutionHelp">The list may take a second or two to load, please be patient after clicking the field.</p>-->
         </div>
 EOT;
-
+            # ToDo: Fix the form groups for all pages
             //user DOES have permission to edit this page, display the form
             $content = <<<EOT
 <div class="flex-column">
@@ -193,111 +207,97 @@ EOT;
 </div>
 <div class="container-fluid">
     <form action="../scripts/processProgramEditForm.php" method="POST">
-        <div class="form-row">
-            <h3>Program Details</h3>
-        </div>
-        <div class="form-row">
+        <h3>Program Details</h3>
+        <div class="form-group">
             <label for="programName">Program Name</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="programName" id="programName" value="{$name}" placeholder="Program Name" required />
         </div>
-        <br />
-        <div class="form-row">
+        <div class="form-group">
             <label for="AnalyticsFlag">Program Classification</label>
-        </div>
-        <div class="form-row">
             {$analyticsHTML}
-        </div>
-        <div class="form-row">
             {$opsHTML}
         </div>
-        <div class="form-row">
+        <div class="form-group">
             <label for="ProgramObjs">Objectives</label>
             <textarea class="form-control" name="ProgramObjs" id="ProgramObjs" rows="3">{$objectives}</textarea>
         </div>
-        <div class="form-row">
+        <div class="form-group">
             <label for="ProgramType">Type</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="ProgramType" id="ProgramType" value="{$type}" placeholder="Program Type" required />
         </div>
-        <div class="form-row">
+        <div class="form-group">
             <label for="ProgramAccess">Access Link</label>
             <input type="text" class="form-control" name="ProgramAccess" id="ProgramAccess" value="{$access}" placeholder="URL to external program page" />
         </div>
-        <div class="form-row">
+        <div class="form-group">
             <label for="YearEstablished">Year Established</label>
             <input type="text" class="form-control" name="YearEstablished" id="YearEstablished" value="{$year}" />
         </div>
-        <div class="form-row">
+        <div class="form-group">
             <label for="Scholarship">Scholarships</label>
             <textarea class="form-control" name="Scholarship" id="Scholarship">{$scholarship}</textarea>
         </div>
-        <br />
-        <div class="form-row">
-            <h3>Delivery Details</h3>
+        <h4>Tags</h4>
+        <div class="form-group"> 
+            <p class="form-text text-info">Limited to selection of at MOST 3 tags</p>
+            <div class="form-row">
+                {$tagHTML}
+            </div>
         </div>
-        <div class="form-row">
+        <h3>Delivery Details</h3>
+        <div class="form-group">
             <label for="DeliveryMethod">Method</label>
             <select class="form-control" id="DeliveryMethod" name="DeliveryMethod">
                 {$deliveryMethods}
             </select>                
         </div>
-        <div class="form-row">
+        <div class="form-group">
             <label for="FullTime">Full Time Duration</label>
-                <input type="text" class="form-control" name="FullTime" id="FullTime" value="{$fullTime}" />
+            <input type="text" class="form-control" name="FullTime" id="FullTime" value="{$fullTime}" />
         </div>
-        <div class="form-row">
+        <div class="form-group">
             <label for="PartTime">Part Time Duration</label>
             <input type="text" class="form-control" name="PartTime" id="PartTime" value="{$partTime}" />
         </div>
-        <br />
-        <div class="form-row">
-            <h3>Requirement Details</h3>
-        </div>
-        <div class="form-row">
+        <h3>Requirement Details</h3>
+        <div class="form-group">
             <label for="TestingRequirement">Testing Requirements</label>
             <input type="text" class="form-control" name="TestingRequirement" id="TestingRequirement" value="{$reqs}" />
         </div>
-        <div class="form-row">
+        <div class="form-group">
             <label for="OtherRequirement">Other Requirements</label>
             <input type="text" class="form-control" name="OtherRequirement" id="OtherRequirement" value="{$otherReqs}" />
         </div>
-        <br />
-        <div class="form-row">
-            <h3>Credit Details</h3>
-        </div>
-        <div class="form-row">
+        <h3>Credit Details</h3>
+        <div class="form-group">
             <label for="Credits">Credits</label>
             <input type="text" class="form-control" name="Credits" id="Credits" value="{$credits}" />
         </div>
-        <div class="form-row">
+        <div class="form-group">
             <label for="CostPerCredit">Cost per Credit</label>
             <input type="text" class="form-control" name="CostPerCredit" id="CostPerCredit" value="{$cost}" />
         </div>
-        <div class="form-row">
+        <div class="form-group">
             <label for="ResidentTuition">Estimated Resident Tuition</label>
             <input type="text" class="form-control" name="ResidentTuition" id="ResidentTuition" value="{$res}" />
         </div>
-        <div class="form-row">
+        <div class="form-group">
             <label for="NonResident">Estimated Non-Resident Tuition</label>
             <input type="text" class="form-control" name="NonResident" id="NonResident" value="{$nonRes}" />
         </div>
         <!-- Contact & College details went here -->
-        <br />
-        <div class="form-row">
-            <h3>College Assignment</h3>
-        </div>
-        <div class="form-row"> 
+        <h3>College Assignment</h3>
+        <div class="form-group"> 
             <div id="collegeList"><!-- empty div for college list AJAX stuff --></div>
         </div>
-        <br />
-        <div class="form-row">
+        <div class="form-group">
             <input type="hidden" id="currentCollege" name="currentCollege" value="{$prog->Attributes['CollegeId']}" />
             <input type="hidden" id="programId" name="programId" value="{$progId}" />
             <input type="hidden" id="institutionId" name="institutionId" value="{$inst->id}" />
             <button class="btn btn-warning mr-2" type="submit" name="edit" value="edit">Submit changes</button>
             <button class="btn btn-danger" type="submit" name="delete" value="delete">Delete This Program</button>
         </div>
-        <!--<br />-->
-        <div class="form-row">
+        <div class="form-group">
             <p class="lead">These changes will not take effect until they have been approved by an INFORMS administrator.</p>
         </div>
     </form>
@@ -349,6 +349,15 @@ EOT;
 
 $customJS = <<<EOT
 $(function() {
+    //max limit on number of tags
+    $('input.programTag').on('change', function(e){
+        var maxAllowed = 3;
+        if($('input.programTag:checked').length > maxAllowed){
+            $(this).prop('checked', '');
+            alert('Too many tags selected, the limit is 3.');
+        }
+    });
+
     //make sure message box gets re-hidden if its shown
     $('#message').hide();
         
@@ -381,14 +390,14 @@ $(function() {
 });
 
 function processCollegeList(colleges){
-    var html = '<h4>Colleges</h4>';
-    html += '<p>Select one college below to assign this program to:</p>';
+    //var html = '<h4>Colleges</h4>';
+    html = '<p class="form-text">Select <strong>one</strong> college below to assign this program to:</p>';
     
     //html += '<form>'
     var id = $('#currentCollege').val();
     //console.log(id);
     //set up the select list
-    html += '<select size="5" id="collegeSelectList" name="collegeSelectList">';
+    html += '<select size="5" id="collegeSelectList" name="collegeSelectList" class="form-control">';
     html += '<option></option>';
     //set up how the info gets displayed in the div for the user to select the college
     for(var i = 0; i < colleges.length; i++) {

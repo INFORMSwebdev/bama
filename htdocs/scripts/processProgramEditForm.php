@@ -72,6 +72,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $orFlag = filter_input(INPUT_POST, 'ORFlag', FILTER_VALIDATE_BOOLEAN);
         if(!$orFlag) $orFlag = 0;
 
+        //the line below didn't end up working, so I just used the $_POST variable directly
+        //$tags = filter_input(INPUT_POST, 'programTags', FILTER_REQUIRE_ARRAY);
+
+        //get the tags
+//        if(isset($_POST['programTags']) && !empty($_POST['programTags'])){
+//            foreach($_POST['programTags'] as $t){
+//                try{
+//                    $prog->assignTag($t);
+//                } catch(Exception $e){
+//                    //this means that the DB has more tags in it than we can handle
+//                    $_SESSION['editMessage']['success'] = FALSE;
+//                    $_SESSION['editMessage']['text'] = 'Exception thrown when attempting to assign tag id ' . $t . '; no changes saved.';
+//                    //no changes saved
+//                    header("Location: /programs/edit.php?id={$progId}");
+//                    die;
+//                }
+//            }
+//        }
+
         //update the info in the objects attributes
         $prog->Attributes['InstitutionId'] = $instId;
         $prog->Attributes['ContactId'] = $contactId;

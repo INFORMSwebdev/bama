@@ -45,108 +45,6 @@ class Program extends AOREducationObject
     public static $parent_class = 'Institution';
     public static $hidden_fields = ['OriginalRecordId'];
 
-    public function assignContact( $ContactId ){
-        $db = new EduDB();
-        $sql = "INSERT IGNORE INTO program_contacts (ProgramId, ContactId) VALUES ($this->id, :ContactId)";
-        $params = array( array( ":ContactId", $ContactId, PDO::PARAM_INT));
-        return $db->execSafe( $sql, $params );
-    }
-
-    public function assignCourse( $CourseId ){
-        $db = new EduDB();
-        $sql = "INSERT IGNORE INTO program_courses (ProgramId, CourseId) VALUES ( $this->id, :CourseId)";
-        $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
-        return $db->execSafe( $sql, $params );
-    }
-
-    public function assignTag( $TagId ) {
-        $tag_count = $this->countTags();
-        $ini = parse_ini_file( "/common/settings/common.ini", TRUE );
-        $aes = $ini['analytics_education_settings'];
-        $max_tags = $aes['max_program_tags'];
-        if ($tag_count >= $max_tags) {
-            $success = 0;
-            throw new Exception("This program already has reach the max tag count of $max_tags.");
-        }
-        else {
-            $db = new EduDB();
-            $sql = "INSERT IGNORE INTO program_tags (ProgramId, TagId) VALUES ($this->id, $TagId )";
-            $success = $db->exec( $sql );
-        }
-        return $success;
-    }
-
-    public function countTags() {
-        $db = new EduDB();
-        $sql = "SELECT COUNT(*) FROM program_tags WHERE ProgramID = $this->id";
-        $count = $db->queryItem( $sql );
-        return $count;
-    }
-
-    public function getContact( $asObject = TRUE ) {
-        $Contact = new Contact( $this->Attributes['ContactId'] );
-        return $Contact;
-    }
-
-    public function getContacts( $asObjects = TRUE, $ApprovalStatusId = APPROVAL_TYPE_APPROVE ) {
-        $db = new EduDB;
-        $sql = <<<EOT
-SELECT pc.ContactId
-FROM program_contacts pc
-JOIN contacts c ON pc.ContactId = c.ContactId
-WHERE pc.Deleted = 0 AND c.Deleted = 0 AND ProgramId = $this->id 
-EOT;
-        if ($ApprovalStatusId) $sql .= " AND c.ApprovalStatusId = $ApprovalStatusId";
-        $ContactIds = $db->queryColumn( $sql );
-        if (!$asObjects) return $ContactIds;
-        else {
-            $Contacts = null;
-            foreach($ContactIds as $ContactId ) $Contacts[] = new Contact($ContactId);
-            return $Contacts;
-        }
-    }
-
-    public function getTags() {
-        $db = new EduDB;
-        $sql = "SELECT name FROM program_tags pt JOIN program_tag_options pto ON pt.TagId = pto.id WHERE pt.ProgramId = $this->id";
-        $tags = $db->queryColumn( $sql );
-        return $tags;
-    }
-
-    public function getTextbooks( $active = TRUE, $asObjects = FALSE ) {
-        $booksOut = [];
-        $db = new EduDB();
-        $sql = "SELECT t.* FROM textbooks t INNER JOIN course_textbooks ct ON t.TextbookId = ct.TextbookId INNER JOIN program_courses pc ON pc.CourseId = ct.CourseId WHERE pc.ProgramId = $this->id";
-        if ($active !== null) $sql .= " AND t.Deleted = " . (($active == TRUE) ? "0" : "1");
-        $books = $db->query( $sql );
-        if ($asObjects) {
-            foreach( $books as $book) {
-                $booksOut[] = new Textbook($book);
-            }
-        }
-        else {
-            $booksOut = $books;
-        }
-        return $booksOut;
-    }
-
-    public function getCourses( $active = TRUE, $asObjects = FALSE ) {
-        $coursesOut = [];
-        $db = new EduDB();
-        $sql = "SELECT a.CourseId FROM program_courses a join courses b on a.CourseId = b.CourseId WHERE a.ProgramId = $this->id and b.ApprovalStatusId = 2";
-        if ($active !== null) $sql .= " AND b.Deleted = " . (($active == TRUE) ? "0" : "1");
-        $courses = $db->queryColumn( $sql );
-        if($asObjects){
-            foreach($courses as $course){
-                $coursesOut[] = new Course( $course );
-            }
-        }
-        else {
-            $coursesOut = $courses;
-        }
-        return $coursesOut;
-    }
-
     public static function getAllPrograms( $active = TRUE, $asObjects = FALSE, $ApprovalStatusId=2 ){
         $programs = [];
         $db = new EduDB();
@@ -204,6 +102,132 @@ EOT;
         return $programs;
     }
 
+    public static function getEditorPrograms( $userId, $active = TRUE, $asObjects = FALSE ){
+        $programs = [];
+        $db = new EduDB();
+        $subQuery = "SELECT InstitutionId FROM institution_admins WHERE UserId = $userId";
+        $sql = "SELECT * FROM programs WHERE InstitutionId IN ($subQuery)";
+        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        if($userId == 1){
+            $sql = "SELECT * FROM programs";
+            if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        }
+        $progs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $progs as $prog) {
+                $programs[] = new Program($prog);
+            }
+        }
+        else {
+            $programs = $progs;
+        }
+
+        return $programs;
+    }
+
+    public static function getAllProgramsAndInstitutions( $active = TRUE, $asObjects = FALSE ){
+        $programs = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM programs p JOIN institutions i on p.InstitutionId = i.InstitutionId";
+        if ($active !== null) $sql .= " WHERE p.Deleted = " . (($active == TRUE) ? "0" : "1");
+        $sql .= " ORDER BY p.ProgramName, i.InstitutionName";
+        $progs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $progs as $prog) {
+                $programs[] = new Program($prog);
+            }
+        }
+        else {
+            $programs = $progs;
+        }
+
+        return $programs;
+    }
+
+    public function assignContact( $ContactId ){
+        $db = new EduDB();
+        $sql = "INSERT IGNORE INTO program_contacts (ProgramId, ContactId) VALUES ($this->id, :ContactId)";
+        $params = array( array( ":ContactId", $ContactId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
+    }
+
+    public function assignCourse( $CourseId ){
+        $db = new EduDB();
+        $sql = "INSERT IGNORE INTO program_courses (ProgramId, CourseId) VALUES ( $this->id, :CourseId)";
+        $params = array( array( ":CourseId", $CourseId, PDO::PARAM_INT));
+        return $db->execSafe( $sql, $params );
+    }
+
+    public function assignTag( $TagId ) {
+        $tag_count = $this->countTags();
+        $ini = parse_ini_file( "/common/settings/common.ini", TRUE );
+        $aes = $ini['analytics_education_settings'];
+        $max_tags = $aes['max_program_tags'];
+        if ($tag_count >= $max_tags) {
+            $success = 0;
+            throw new Exception("This program already has reach the max tag count of $max_tags.");
+        }
+        else {
+            $db = new EduDB();
+            $sql = "INSERT IGNORE INTO program_tags (ProgramId, TagId) VALUES ($this->id, $TagId )";
+            $success = $db->exec( $sql );
+        }
+        return $success;
+    }
+
+    public function countTags() {
+        $db = new EduDB();
+        $sql = "SELECT COUNT(*) FROM program_tags WHERE ProgramID = $this->id";
+        $count = $db->queryItem( $sql );
+        return $count;
+    }
+
+    public function getContact( $asObject = TRUE ) {
+        $Contact = new Contact( $this->Attributes['ContactId'] );
+        return $Contact;
+    }
+
+    public function getTags() {
+        $db = new EduDB;
+        $sql = "SELECT name FROM program_tags pt JOIN program_tag_options pto ON pt.TagId = pto.id WHERE pt.ProgramId = $this->id";
+        $tags = $db->queryColumn( $sql );
+        return $tags;
+    }
+
+    public function getTextbooks( $active = TRUE, $asObjects = FALSE ) {
+        $booksOut = [];
+        $db = new EduDB();
+        $sql = "SELECT t.* FROM textbooks t INNER JOIN course_textbooks ct ON t.TextbookId = ct.TextbookId INNER JOIN program_courses pc ON pc.CourseId = ct.CourseId WHERE pc.ProgramId = $this->id";
+        if ($active !== null) $sql .= " AND t.Deleted = " . (($active == TRUE) ? "0" : "1");
+        $books = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $books as $book) {
+                $booksOut[] = new Textbook($book);
+            }
+        }
+        else {
+            $booksOut = $books;
+        }
+        return $booksOut;
+    }
+
+    public function getCourses( $active = TRUE, $asObjects = FALSE ) {
+        $coursesOut = [];
+        $db = new EduDB();
+        $sql = "SELECT a.CourseId FROM program_courses a join courses b on a.CourseId = b.CourseId WHERE a.ProgramId = $this->id and b.ApprovalStatusId = 2";
+        if ($active !== null) $sql .= " AND b.Deleted = " . (($active == TRUE) ? "0" : "1");
+        $courses = $db->queryColumn( $sql );
+        if($asObjects){
+            foreach($courses as $course){
+                $coursesOut[] = new Course( $course );
+            }
+        }
+        else {
+            $coursesOut = $courses;
+        }
+        return $coursesOut;
+    }
+
     public function getDeliveryMethod(){
         $db = new EduDB();
 
@@ -249,48 +273,6 @@ EOT;
         }
     }
 
-    public static function getEditorPrograms( $userId, $active = TRUE, $asObjects = FALSE ){
-        $programs = [];
-        $db = new EduDB();
-        $subQuery = "SELECT InstitutionId FROM institution_admins WHERE UserId = $userId";
-        $sql = "SELECT * FROM programs WHERE InstitutionId IN ($subQuery)";
-        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
-        if($userId == 1){
-            $sql = "SELECT * FROM programs";
-            if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
-        }
-        $progs = $db->query( $sql );
-        if ($asObjects) {
-            foreach( $progs as $prog) {
-                $programs[] = new Program($prog);
-            }
-        }
-        else {
-            $programs = $progs;
-        }
-
-        return $programs;
-    }
-
-    public static function getAllProgramsAndInstitutions( $active = TRUE, $asObjects = FALSE ){
-        $programs = [];
-        $db = new EduDB();
-        $sql = "SELECT * FROM programs p JOIN institutions i on p.InstitutionId = i.InstitutionId";
-        if ($active !== null) $sql .= " WHERE p.Deleted = " . (($active == TRUE) ? "0" : "1");
-        $sql .= " ORDER BY p.ProgramName, i.InstitutionName";
-        $progs = $db->query( $sql );
-        if ($asObjects) {
-            foreach( $progs as $prog) {
-                $programs[] = new Program($prog);
-            }
-        }
-        else {
-            $programs = $progs;
-        }
-
-        return $programs;
-    }
-
     public function getInstructors( $active = TRUE, $asObjects = FALSE){
         $instructors = [];
         $db = new EduDB();
@@ -331,6 +313,24 @@ EOT;
     public function hasContacts( $ApprovalStatusId = APPROVAL_TYPE_APPROVE ) {
         $Contacts = $this->getContacts( FALSE, $ApprovalStatusId );
         return (count($Contacts)) ? TRUE : FALSE;
+    }
+
+    public function getContacts( $asObjects = TRUE, $ApprovalStatusId = APPROVAL_TYPE_APPROVE ) {
+        $db = new EduDB;
+        $sql = <<<EOT
+SELECT pc.ContactId
+FROM program_contacts pc
+JOIN contacts c ON pc.ContactId = c.ContactId
+WHERE pc.Deleted = 0 AND c.Deleted = 0 AND ProgramId = $this->id 
+EOT;
+        if ($ApprovalStatusId) $sql .= " AND c.ApprovalStatusId = $ApprovalStatusId";
+        $ContactIds = $db->queryColumn( $sql );
+        if (!$asObjects) return $ContactIds;
+        else {
+            $Contacts = null;
+            foreach($ContactIds as $ContactId ) $Contacts[] = new Contact($ContactId);
+            return $Contacts;
+        }
     }
 
     public function hasCourses() {

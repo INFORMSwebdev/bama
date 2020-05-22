@@ -14,7 +14,7 @@ $content = '';
 $progs = Program::getAllProgramsAndInstitutions();
 //turn that into an array of name/value pairs to pass to the optionsHTML.php file
 $progListHelper = array();
-foreach($progs as $prog){
+foreach ($progs as $prog) {
     $progListHelper[] = array('text' => $prog['ProgramName'] . ' – ' . $prog['InstitutionName'], 'value' => $prog['ProgramId']);
 }
 //pass the name/value pairs to the file to get the generated HTML for a select list
@@ -23,7 +23,7 @@ $progListHTML = optionsHTML($progListHelper);
 
 //get the programID from the query string, if it was given
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-if($id){
+if ($id) {
     //get all the details about the requested program to display
     $prog = new Program($id);
     $instId = $prog->Attributes['InstitutionId'];
@@ -36,80 +36,78 @@ if($id){
     $courses = $prog->getCourses(TRUE, TRUE);
     $delivery = $prog->getDeliveryMethod();
     $access = $prog->Attributes['ProgramAccess'];
-    if(isset($access) && !empty($access)){
+    if (isset($access) && !empty($access)) {
         $accessHTML = "<p><a target='_blank' href='$access'>$access</a></p>";
-    }
-    else {
+    } else {
         $accessHTML = "<p class='text-info'>Access information for this program is currently not available.</p>";
     }
     $objectives = $prog->Attributes['ProgramObjectives'];
-    if(!isset($objectives) || empty($objectives)){
+    if (!isset($objectives) || empty($objectives)) {
         $objectives = 'Objectives for this program are not currently available.';
     }
     $fullTime = $prog->Attributes['FullTimeDuration'];
-    if(!isset($fullTime) || empty($fullTime)){
+    if (!isset($fullTime) || empty($fullTime)) {
         $fullTime = 'Full time duration for this program is not currently available.';
     }
     $partTime = $prog->Attributes['PartTimeDuration'];
-    if(!isset($partTime) || empty($partTime)){
+    if (!isset($partTime) || empty($partTime)) {
         $partTime = 'Part time duration for this program is not currently available.';
     }
     $reqs = $prog->Attributes['TestingRequirement'];
-    if(!isset($reqs) || empty($reqs)){
+    if (!isset($reqs) || empty($reqs)) {
         $reqs = 'Requirements for this program is not currently available.';
     }
     $otherReqs = $prog->Attributes['OtherRequirement'];
-    if(!isset($otherReqs) || empty($otherReqs)){
+    if (!isset($otherReqs) || empty($otherReqs)) {
         $otherReqs = 'Other requirements for this program is not currently available.';
     }
     $credits = $prog->Attributes['Credits'];
-    if(!isset($credits) || empty($credits)) {
+    if (!isset($credits) || empty($credits)) {
         $credits = 'Credit total for this program is not currently available.';
     }
     $year = $prog->Attributes['YearEstablished'];
-    if(!isset($year) || empty($year)) {
-      $year = 'Year established is not currently available.';
+    if (!isset($year) || empty($year)) {
+        $year = 'Year established is not currently available.';
     }
     $scholarship = $prog->Attributes['Scholarship'];
-    if(!isset($scholarship) || empty($scholarship)) {
+    if (!isset($scholarship) || empty($scholarship)) {
         $scholarship = 'Scholarship information for this program is not currently available.';
     }
     $res = $prog->Attributes['EstimatedResidentTuition'];
-    if(!isset($res) || empty($res)) {
+    if (!isset($res) || empty($res)) {
         $res = 'Estimated resident tuition information for this program is not currently available.';
     }
     $nonRes = $prog->Attributes['EstimatedNonresidentTuition'];
-    if(!isset($nonRes) || empty($nonRes)) {
+    if (!isset($nonRes) || empty($nonRes)) {
         $nonRes = 'Estimated non-resident tuition information for this program is not currently available.';
     }
     $cost = $prog->Attributes['CostPerCredit'];
-    if(!isset($cost) || empty($cost)) {
+    if (!isset($cost) || empty($cost)) {
         $cost = 'Cost per credit information for this program is not currently available.';
     }
 
     $contactHTML = '';
     //get contact details to display
-    if($contacts){
+    if ($contacts) {
         $contactHTML .= '<div class="card-column">';
 
         //$contact = new Contact($contactId);
-        foreach($contacts as $contact) {
+        foreach ($contacts as $contact) {
             $contactName = $contact->Attributes['ContactName'];
             $contactTitle = $contact->Attributes['ContactTitle'];
-            if(!isset($contactTitle)){
+            if (!isset($contactTitle)) {
                 $contactTitle = 'Title not set.';
             }
 
             $contactPhone = $contact->Attributes['ContactPhone'];
-            if(!isset($contactPhone)){
+            if (!isset($contactPhone)) {
                 $contactPhone = 'Phone not set.';
             }
 
             $contactEmail = $contact->Attributes['ContactEmail'];
-            if(!isset($contactEmail)){
+            if (!isset($contactEmail)) {
                 $contactEmail = 'Email not set.';
-            }
-            else {
+            } else {
                 $contactEmail = "<a href=mailto:$contactEmail'>$contactEmail</a>";
             }
 
@@ -135,8 +133,7 @@ EOT;
         $contactHTML .= '</div>';
         $contactHTML .= "<a type='button' role='button' class='btn btn-primary btn-block btn-assign-contacts mt-3' id='id_{$prog->id}' href='/programs/assignProgramContact.php?progId={$prog->id}'>Assign Existing Contact(s)</a>";
         $contactHTML .= "<a role='button' href='/contacts/add.php?progId=$prog->id' id='addNewContact' class='btn btn-info btn-block btn-contact-add'>Add New Contact and Assign</a>";
-    }
-    else {
+    } else {
         $contactName = $contactTitle = $contactPhone = $contactEmail = 'No contacts are currently assigned to this program.';
         $contactHTML = "<p class='text text-info'>$contactName</p>";
         $contactHTML .= "<a type='button' role='button' class='btn btn-primary btn-block btn-assign-contacts mt-3' id='id_{$prog->id}' href='/programs/assignProgramContact.php?progId={$prog->id}'>Assign Existing Contact(s)</a>";
@@ -145,13 +142,20 @@ EOT;
 
     $collegeId = $prog->Attributes['CollegeId'];
     $collegeHTML = '';
-    if(empty($collegeId) || !is_numeric($collegeId)){
+    if (empty($collegeId) || !is_numeric($collegeId)) {
         $collegeName = $collegeType = 'This program is not currently assigned to a college.';
         $collegeHTML = "<p class='text text-info'>$collegeName</p>";
         $collegeHTML .= "<button id='id_{$instId}' class='btn btn-primary btn-assignToCollege'>Assign to College</button>";
-    }
-    else {
+    } else {
         $c = new College($collegeId);
+        if (!empty($c->Attributes['TypeId'])) {
+            $cType = Dropdowns::getCollegeTypeName($c->Attributes['TypeId']);
+            if ($c->Attributes['TypeId'] == 6) {
+                //this is Other type
+                $cType .= '&mdash;' . $c->getOtherType();
+            }
+        }
+
         $collegeHTML = <<<EOT
 <div class="card">
     <div class="card-header"> 
@@ -159,7 +163,7 @@ EOT;
     </div>
     <div class="card-body"> 
         <h4>Type</h4>
-        <p>{$c->Attributes['CollegeType']}</p>
+        <p>{$cType}</p>
         <h4>Created</h4>
         <p>{$c->Attributes['CreateDate']}</p>
     </div>
@@ -176,7 +180,7 @@ EOT;
     }
 
     $courseHTML = '';
-    if($courses) {
+    if ($courses) {
         $courseHTML = <<<EOT
 <table class="table table-striped" id="courseTable">
     <thead>
@@ -189,7 +193,7 @@ EOT;
     <tbody>
 EOT;
 
-        foreach($courses as $co){
+        foreach ($courses as $co) {
             $courseHTML .= <<<EOT
         <tr>
             <td>{$co->Attributes['CourseTitle']}</td>
@@ -209,8 +213,7 @@ EOT;
 <hr/>
 <a role="button" class="btn btn-primary btn-block" href="/courses/add.php?progId={$prog->Attributes['ProgramId']}">Add Course</a>
 EOT;
-    }
-    else {
+    } else {
         $courseHTML = '<p class="alert alert-info">No courses are currently assigned to this program.</p>';
     }
 
@@ -220,10 +223,11 @@ EOT;
     $instCity = $inst->Attributes['InstitutionCity'];
     $instState = $inst->Attributes['InstitutionState'];
     $instZip = $inst->Attributes['InstitutionZip'];
-    $instRegion = $inst->Attributes['InstitutionRegion'];
+    //$instRegion = $inst->Attributes['InstitutionRegion'];
+    $instRegion = Dropdowns::getInstitutionRegionName($inst->Attributes['RegionId']);
     $instPhone = $inst->Attributes['InstitutionPhone'];
     $instEmail = $inst->Attributes['InstitutionEmail'];
-    $instAccess = $inst->Attributes['InstitutionAccess'];
+    //$instAccess = $inst->Attributes['InstitutionAccess']; //this field was removed from the DB
 
     $content .= <<<EOT
 <div class="card">
@@ -337,8 +341,7 @@ EOT;
     </div>
 </div>
 EOT;
-}
-else {
+} else {
     //invalid input, either not there or not an integer
     $content .= <<<EOT
 <div class="flex-column">
