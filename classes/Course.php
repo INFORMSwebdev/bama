@@ -115,7 +115,7 @@ class Course extends AOREducationObject
     }
 
     public static function getCourseDeliveryMethods() {
-        $db = new EduDb;
+        $db = new EduDB;
         $sql = "SELECT * FROM course_delivery_methods  ORDER BY name";
         return $db->query( $sql );
     }
