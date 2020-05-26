@@ -80,6 +80,31 @@ class Program extends AOREducationObject
         return $success;
     }
 
+    public function assignTags( $tagIDs ) {
+        if (!count($tags)) return FALSE;
+        $this->unassignAllTags(); // remove any pre-existing tag associations
+        $success = FALSE;
+        $db = new EduDB;
+        for ($i = 0; $i < min(3, count($tags)); $i++) {
+            $sql = "INSERT IGNORE INTO program_tags (ProgramId, TagId) VALUE ($this->id, $tags[$i])";
+            $success = $db->exec( $sql );
+        }
+        return $success;
+    }
+
+    public function assignTestingRequirement( $reqID ) {
+        $db = new EduDB;
+        $sql = "INSERT IGNORE INTO program_testing_requirements (program_id, requirement_id ) VALUES( $this->id, $reqID )";
+        return $db->exec( $sql );
+    }
+
+    public function assignTestingRequirements( $reqIDs ) {
+        if (!count($reqIDs)) return FALSE;
+        $this->unassignAllTestingRequirements();
+        foreach( $reqIDs as $regID ) $this->assignTestingRequirement( $reqID );
+        return TRUE;
+    }
+
     public function countTags() {
         $db = new EduDB();
         $sql = "SELECT COUNT(*) FROM program_tags WHERE ProgramID = $this->id";
@@ -492,6 +517,18 @@ EOT;
     public function unassignAllContacts() {
         $db = new EduDB;
         $sql = "DELETE FROM program_contacts WHERE ProgramId = $this->id";
+        return $db->exec( $sql );
+    }
+
+    public function unassignAllTags() {
+        $db = new EduDB;
+        $sql = "DELETE FROM program_tags WHERE ProgramId = $this->id";
+        return $db->exec( $sql );
+    }
+
+    public function unassignAllTestingRequirements() {
+        $db = new EduDB;
+        $sql = "DELETE FROM program_testing_requirements WHERE ProgramId = $this->id";
         return $db->exec( $sql );
     }
 

@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //collect the submitted info
     $progName = filter_input(INPUT_POST, 'programName', FILTER_SANITIZE_STRING);
     $instId = filter_input(INPUT_POST, 'instId', FILTER_VALIDATE_INT);
-    $progType = filter_input(INPUT_POST, 'ProgramType', FILTER_SANITIZE_STRING);
+    $progType = filter_input(INPUT_POST, 'ProgramType', FILTER_SANITIZE_NUMBER_INT);
     $progObjs = filter_input(INPUT_POST, 'ProgramObjs', FILTER_SANITIZE_STRING);
     $progAccess = filter_input(INPUT_POST, 'ProgramAccess', FILTER_VALIDATE_URL);
     //make sure if this field is blank, we don't pass FALSE to the DB
@@ -35,27 +35,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $progScholarships = filter_input(INPUT_POST, 'Scholarship', FILTER_SANITIZE_STRING);
     //$progDeliveryMethod = filter_input(INPUT_POST, 'DeliveryMethod', FILTER_SANITIZE_STRING);
-    $progDeliveryMethod = filter_input(INPUT_POST, 'DeliveryMethod', FILTER_VALIDATE_INT);
+    $progDeliveryMethod = filter_input(INPUT_POST, 'DeliveryMethodId', FILTER_VALIDATE_INT);
     //default delivery method to unknown if none selected
     if(!$progDeliveryMethod) $progDeliveryMethod = 10;
-    $progFullTime = filter_input(INPUT_POST, 'FullTime', FILTER_SANITIZE_STRING);
-    $progPartTime = filter_input(INPUT_POST, 'PartTime', FILTER_SANITIZE_STRING);
-    $progTestingReqs = filter_input(INPUT_POST, 'TestingRequirement', FILTER_SANITIZE_STRING);
+    $progFullTime = filter_input(INPUT_POST, 'FullTime', FILTER_SANITIZE_INT);
+    $progPartTime = filter_input(INPUT_POST, 'PartTime', FILTER_SANITIZE_INT);
+    $progTestingReqs = filter_input(INPUT_POST, 'TestingRequirements', FILTER_SANITIZE_INT, FILTER_REQUIRE_ARRAY );
     $progOtherReqs = filter_input(INPUT_POST, 'OtherRequirement', FILTER_SANITIZE_STRING);
     $progCredits = filter_input(INPUT_POST, 'Credits', FILTER_SANITIZE_STRING);
-    $progCostPer = filter_input(INPUT_POST, 'CostPerCredit', FILTER_SANITIZE_STRING);
+    //$progCostPer = filter_input(INPUT_POST, 'CostPerCredit', FILTER_SANITIZE_STRING);
     $progResTuition = filter_input(INPUT_POST, 'ResidentTuition', FILTER_SANITIZE_STRING);
     $progNonResTuition = filter_input(INPUT_POST, 'NonResident', FILTER_SANITIZE_STRING);
-    $analyticsFlag = filter_input(INPUT_POST, 'AnalyticsFlag', FILTER_VALIDATE_BOOLEAN);
+    //$analyticsFlag = filter_input(INPUT_POST, 'AnalyticsFlag', FILTER_VALIDATE_BOOLEAN);
     //if the flag value is null, the checkbox was NOT checked
-    if(!isset($analyticsFlag)){
-        $analyticsFlag = FALSE;
-    }
-    $orFlag = filter_input(INPUT_POST, 'ORFlag', FILTER_VALIDATE_BOOLEAN);
+    //if(!isset($analyticsFlag)){
+        //$analyticsFlag = FALSE;
+   // }
+    //$orFlag = filter_input(INPUT_POST, 'ORFlag', FILTER_VALIDATE_BOOLEAN);
     //if the flag value is null, the checkbox was NOT checked
-    if(!isset($orFlag)){
-        $orFlag = FALSE;
-    }
+   // if(!isset($orFlag)){
+       // $orFlag = FALSE;
+    //}
+
+    $ProgramTags = filter_input( INPUT_POST, 'ProgramTags', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY );
 
     $collegeId = filter_input(INPUT_POST, 'collegeSelectList', FILTER_VALIDATE_INT);
 
@@ -63,28 +65,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = array(
         "InstitutionId" => $instId,
         'ProgramName' => $progName,
-        'ProgramType' => $progType,
+        'ProgramTypeId' => $progType,
         //'DeliveryMethod' => $progDeliveryMethod,
         'DeliveryMethodId' => $progDeliveryMethod,
         'ProgramAccess' => $progAccess,
         'ProgramObjectives' => $progObjs,
-        'FullTimeDuration' => $progFullTime,
-        'PartTimeDuration' => $progPartTime,
-        'TestingRequirements' => $progTestingReqs,
+        'FullTimeDurationId' => $progFullTime,
+        'PartTimeDurationId' => $progPartTime,
+        /*'TestingRequirements' => $progTestingReqs,*/
         'OtherRequirements' => $progOtherReqs,
         'Credits' => $progCredits,
         'YearEstablished' => $progYear,
         'Scholarship' => $progScholarships,
         'EstimatedResidentTuition' => $progResTuition,
         'EstimatedNonresidentTuition' => $progNonResTuition,
-        'CostPerCredit' => $progCostPer,
-        'ORFlag' => $orFlag,
-        'AnalyticsFlag' => $analyticsFlag,
+       /* 'CostPerCredit' => $progCostPer,*/
+       /* 'ORFlag' => $orFlag,*/
+       /* 'AnalyticsFlag' => $analyticsFlag, */
         'CollegeId' => $collegeId
     );
 
     //make a Program record
     $x = new Program(Program::create( $data ));
+
+    // add tags and testing requirements, because they are in separate tables and not subject to review
+    // assign tags (we are going to assign the tags regardless of whether the added course is approved)
+    if ($x && $x->valid) {
+        $x->assignTags( $ProgramTags );
+        $x->assignTestingRequirements( $progTestingReqs );
+    }
 
     if($user->id == 1){
         if($x){
@@ -113,6 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['editMessage']['text'] = "New program was not added to the system. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";
         }
     }
+
 }
 //redirect user to index
 header('Location: /index.php');
