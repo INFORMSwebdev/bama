@@ -346,10 +346,22 @@ EOT;
         }
     }
 
+    public function getFullTimeDuration(){
+        $db = new EduDB();
+        $sql = 'SELECT FullTimeDurationId FROM programs WHERE ProgramId = ' . $this->Attributes['ProgramId'];
+        return $db->queryItem($sql);
+    }
+
     public function getPartTimeDurationLabel() {
         $db = new EduDB;
-        $sql = "SELECT `name` FROM parttime_program_duration_options WHERE id = " . $this->Attributes['PartTimeDurationId'];
+        $sql = "SELECT `name` FROM parttime_program_duration_options WHERE id = " . $this->Attributes['ProgramId'];
         return $db->queryItem( $sql );
+    }
+
+    public function getPartTimeDuration(){
+        $db = new EduDB();
+        $sql = 'SELECT PartTimeDurationId FROM programs WHERE ProgramId = ' . $this->Attributes['ProgramId'];
+        return $db->queryItem($sql);
     }
 
     public static function getPartTimeDurationOptionHTML( $selected = NULL ) {
@@ -375,6 +387,7 @@ EOT;
     }
 
     public static function getProgramTypes() {
+        // ToDo: update this?
         $db = new EduDB;
         $sql = "SELECT DISTINCT ProgramType FROM programs WHERE ProgramType > '' AND ApprovalStatusId = " . APPROVAL_TYPE_APPROVE . ' ORDER BY ProgramType';
         return $db->queryColumn( $sql );
@@ -382,7 +395,7 @@ EOT;
 
     public function getTags() {
         $db = new EduDB;
-        $sql = "SELECT name FROM program_tags pt JOIN program_tag_options pto ON pt.TagId = pto.id WHERE pt.ProgramId = $this->id";
+        $sql = "SELECT TagId FROM program_tags pt JOIN program_tag_options pto ON pt.TagId = pto.id WHERE pt.ProgramId = $this->id";
         $tags = $db->queryColumn( $sql );
         return $tags;
     }
@@ -420,6 +433,12 @@ EOT;
             $booksOut = $books;
         }
         return $booksOut;
+    }
+
+    public function getType(){
+        $db = new EduDB;
+        $sql = 'SELECT `name` FROM program_type_options WHERE id = ' . $this->Attributes['ProgramTypeId'];
+        return $db->queryItem( $sql );
     }
 
     public function hasContact() {

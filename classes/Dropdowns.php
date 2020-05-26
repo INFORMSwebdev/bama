@@ -35,6 +35,60 @@ class Dropdowns
         return $db->queryColumn($qry)[0];
     }
 
+    public static function getProgramFullTimeDurationOptionsHTML($curSelection = NULL){
+        $db = new EduDB();
+        $qry = 'SELECT id, name FROM fulltime_program_duration_options';
+        $types = $db->query($qry, PDO::FETCH_ASSOC);
+        if($types){
+            $optionHelper = array();
+            foreach($types as $t){
+                $optionHelper[] = array('text' => $t['name'], 'value' => $t['id']);
+            }
+
+            if(empty($curSelection)){
+                return optionsHTML($optionHelper);
+            } else {
+                return optionsHTML($optionHelper, $curSelection, TRUE, array(TRUE, ''));
+            }
+        }
+    }
+
+    public static function getProgramPartTimeDurationOptionsHTML($curSelection = NULL){
+        $db = new EduDB();
+        $qry = 'SELECT id, name FROM parttime_program_duration_options';
+        $types = $db->query($qry, PDO::FETCH_ASSOC);
+        if($types){
+            $optionHelper = array();
+            foreach($types as $t){
+                $optionHelper[] = array('text' => $t['name'], 'value' => $t['id']);
+            }
+
+            if(empty($curSelection)){
+                return optionsHTML($optionHelper);
+            } else {
+                return optionsHTML($optionHelper, $curSelection, TRUE, array(TRUE, ''));
+            }
+        }
+    }
+
+    public static function getProgramTypeOptionsHTML($curSelection = NULL){
+        $db = new EduDB();
+        $qry = 'SELECT id, name FROM program_type_options';
+        $types = $db->query($qry, PDO::FETCH_ASSOC);
+        if($types){
+            $optionHelper = array();
+            foreach($types as $t){
+                $optionHelper[] = array('text' => $t['name'], 'value' => $t['id']);
+            }
+
+            if(empty($curSelection)){
+                return optionsHTML($optionHelper);
+            } else {
+                return optionsHTML($optionHelper, $curSelection, FALSE, array(TRUE, ''));
+            }
+        }
+    }
+
     public static function getProgramTagOptionsHTML($curSelection = NULL){
         $db = new EduDB();
         $qry = 'SELECT id,name FROM program_tag_options ORDER BY `name`';

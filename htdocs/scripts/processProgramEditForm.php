@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //get all the form field values
         $progName = filter_input(INPUT_POST, 'programName', FILTER_SANITIZE_STRING);
         $instId = filter_input(INPUT_POST, 'institutionId', FILTER_VALIDATE_INT);
-        $progType = filter_input(INPUT_POST, 'ProgramType', FILTER_SANITIZE_STRING);
+        $progType = filter_input(INPUT_POST, 'ProgramType', FILTER_VALIDATE_INT);
         $progObjs = filter_input(INPUT_POST, 'ProgramObjs', FILTER_SANITIZE_STRING);
         $progAccess = filter_input(INPUT_POST, 'ProgramAccess', FILTER_VALIDATE_URL);
         $progYear = filter_input(INPUT_POST, 'YearEstablished', FILTER_SANITIZE_NUMBER_INT);
@@ -56,9 +56,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             //default to unknown delivery method if none were selected
             $progDeliveryMethod = 10;
         }
-        $progFullTime = filter_input(INPUT_POST, 'FullTime', FILTER_SANITIZE_STRING);
-        $progPartTime = filter_input(INPUT_POST, 'PartTime', FILTER_SANITIZE_STRING);
-        $progTestingReqs = filter_input(INPUT_POST, 'TestingRequirement', FILTER_SANITIZE_STRING);
+        //$progFullTime = filter_input(INPUT_POST, 'FullTime', FILTER_SANITIZE_STRING);
+        $progFullTime = filter_input(INPUT_POST, 'FullTime', FILTER_VALIDATE_INT);
+        //$progPartTime = filter_input(INPUT_POST, 'PartTime', FILTER_SANITIZE_STRING);
+        $progPartTime = filter_input(INPUT_POST, 'PartTime', FILTER_VALIDATE_INT);
+        //$progTestingReqs = filter_input(INPUT_POST, 'TestingRequirement', FILTER_SANITIZE_STRING);
         $progOtherReqs = filter_input(INPUT_POST, 'OtherRequirement', FILTER_SANITIZE_STRING);
         $progCredits = filter_input(INPUT_POST, 'Credits', FILTER_SANITIZE_STRING);
         $progCostPer = filter_input(INPUT_POST, 'CostPerCredit', FILTER_SANITIZE_STRING);
@@ -67,42 +69,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //since the following 2 Id's can be null, we don't want a filter
         $contactId = filter_input(INPUT_POST, 'ContactId');
         $collegeId = filter_input(INPUT_POST, 'collegeSelectList');
-        $analyticsFlag = filter_input(INPUT_POST, 'AnalyticsFlag', FILTER_VALIDATE_BOOLEAN);
-        if (!$analyticsFlag) $analyticsFlag = 0;
-        $orFlag = filter_input(INPUT_POST, 'ORFlag', FILTER_VALIDATE_BOOLEAN);
-        if(!$orFlag) $orFlag = 0;
+        $progTags = filter_input(INPUT_POST, 'ProgramTags', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
+        $testingReqs = filter_input(INPUT_POST, 'TestingRequirements', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
+        $waiver = filter_input(INPUT_POST, 'Waiver', FILTER_VALIDATE_INT);
+        if($waiver !== 1){
+            $wavier = 0;
+        }
 
-        //the line below didn't end up working, so I just used the $_POST variable directly
-        //$tags = filter_input(INPUT_POST, 'programTags', FILTER_REQUIRE_ARRAY);
-
-        //get the tags
-//        if(isset($_POST['programTags']) && !empty($_POST['programTags'])){
-//            foreach($_POST['programTags'] as $t){
-//                try{
-//                    $prog->assignTag($t);
-//                } catch(Exception $e){
-//                    //this means that the DB has more tags in it than we can handle
-//                    $_SESSION['editMessage']['success'] = FALSE;
-//                    $_SESSION['editMessage']['text'] = 'Exception thrown when attempting to assign tag id ' . $t . '; no changes saved.';
-//                    //no changes saved
-//                    header("Location: /programs/edit.php?id={$progId}");
-//                    die;
-//                }
-//            }
-//        }
+        //$analyticsFlag = filter_input(INPUT_POST, 'AnalyticsFlag', FILTER_VALIDATE_BOOLEAN);
+        //if (!$analyticsFlag) $analyticsFlag = 0;
+        //$orFlag = filter_input(INPUT_POST, 'ORFlag', FILTER_VALIDATE_BOOLEAN);
+        //if(!$orFlag) $orFlag = 0;
 
         //update the info in the objects attributes
         $prog->Attributes['InstitutionId'] = $instId;
         $prog->Attributes['ContactId'] = $contactId;
         $prog->Attributes['ProgramName'] = $progName;
-        $prog->Attributes['ProgramType'] = $progType;
+        $prog->Attributes['ProgramTypeId'] = $progType;
         //$prog->Attributes['DeliveryMethod'] = $progDeliveryMethod;
         $prog->Attributes['DeliveryMethodId'] = $progDeliveryMethod;
         $prog->Attributes['ProgramAccess'] = $progAccess;
         $prog->Attributes['ProgramObjectives'] = $progObjs;
-        $prog->Attributes['FullTimeDuration'] = $progFullTime;
-        $prog->Attributes['PartTimeDuration'] = $progPartTime;
-        $prog->Attributes['TestingRequirement'] = $progTestingReqs;
+        //$prog->Attributes['FullTimeDuration'] = $progFullTime;
+        $prog->Attributes['FullTimeDurationId'] = $progFullTime;
+        //$prog->Attributes['PartTimeDuration'] = $progPartTime;
+        $prog->Attributes['PartTimeDurationId'] = $progPartTime;
+        //$prog->Attributes['TestingRequirement'] = $progTestingReqs;
+        $prog->assignTestingRequirements($testingReqs);
+        $prog->assignTags($progTags);
         $prog->Attributes['OtherRequirement'] = $progOtherReqs;
         $prog->Attributes['Credits'] = $progCredits;
         $prog->Attributes['YearEstablished'] = $progYear;
@@ -110,9 +104,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $prog->Attributes['EstimatedResidentTuition'] = $progResTuition;
         $prog->Attributes['EstimatedNonresidentTuition'] = $progNonResTuition;
         $prog->Attributes['CostPerCredit'] = $progCostPer;
-        $prog->Attributes['ORFlag'] = $orFlag;
-        $prog->Attributes['AnalyticsFlag'] = $analyticsFlag;
+        //$prog->Attributes['ORFlag'] = $orFlag;
+        //$prog->Attributes['AnalyticsFlag'] = $analyticsFlag;
         $prog->Attributes['CollegeId'] = $collegeId;
+        $prog->Attributes['Waiver'] = $waiver;
 
         if($user->id == 1){
             //this was needed for our old update scheme, but no longer

@@ -168,12 +168,42 @@ EOT;
             if($curTags){
                 //currently assigned tags
                 # ToDo: Test this and make sure it works as expected
-                $tagHTML = Dropdowns::getProgramTagOptionsHTML($curTags);
+                //$tagHTML = Dropdowns::getProgramTagOptionsHTML($curTags);
+                $tagHTML = Program::renderTagHTML($curTags);
             } else {
                 //no tags yet
-                $tagHTML = Dropdowns::getProgramTagOptionsHTML();
+                //$tagHTML = Dropdowns::getProgramTagOptionsHTML();
+                $tagHTML = Program::renderTagHTML();
             }
 
+            $curReqs = $prog->getTestingRequirements();
+            $reqIds = array();
+            if($curReqs){
+                foreach($curReqs as $r){
+                    $reqIds[] = $r['id'];
+                }
+            }
+            $requirementsHTML = Program::renderTestingRequirementsHTML($reqIds);
+
+            //program type dropdown change
+            $curType = $prog->getType();
+            if($curType){
+                $typeHtml = Dropdowns::getProgramTypeOptionsHTML($curType);
+            } else {
+                $typeHtml = Dropdowns::getProgramTypeOptionsHTML();
+            }
+            $curFullTime = $prog->getFullTimeDuration();
+            if($curFullTime){
+                $fullTimeOptions = Dropdowns::getProgramFullTimeDurationOptionsHTML($curFullTime);
+            } else {
+                $fullTimeOptions = Dropdowns::getProgramFullTimeDurationOptionsHTML();
+            }
+            $curPartTime = $prog->getPartTimeDuration();
+            if($curPartTime){
+                $partTimeOptions  = Dropdowns::getProgramPartTimeDurationOptionsHTML($curPartTime);
+            } else {
+                $partTimeOptions  = Dropdowns::getProgramPartTimeDurationOptionsHTML();
+            }
 
             $contactHTML = <<<EOT
 <br />
@@ -213,17 +243,21 @@ EOT;
             <input type="text" class="form-control" name="programName" id="programName" value="{$name}" placeholder="Program Name" required />
         </div>
         <div class="form-group">
-            <label for="AnalyticsFlag">Program Classification</label>
-            {$analyticsHTML}
-            {$opsHTML}
+            <label for="programType">Program Type</label><span class="text text-danger">*</span>
+            <select class="form-control" id="ProgramType" name="ProgramType" required>
+                {$typeHtml}
+            </select> 
+        </div>
+        <div class="form-group">
+            <label for="programs_option">Program Classification</label>
+            <div class="form-row">
+                {$tagHTML}
+            </div>
+            <p class="form-text text-info">Limited to selection of at MOST 3 tags</p>
         </div>
         <div class="form-group">
             <label for="ProgramObjs">Objectives</label>
             <textarea class="form-control" name="ProgramObjs" id="ProgramObjs" rows="3">{$objectives}</textarea>
-        </div>
-        <div class="form-group">
-            <label for="ProgramType">Type</label><span class="text text-danger">*</span>
-            <input type="text" class="form-control" name="ProgramType" id="ProgramType" value="{$type}" placeholder="Program Type" required />
         </div>
         <div class="form-group">
             <label for="ProgramAccess">Access Link</label>
@@ -236,14 +270,7 @@ EOT;
         <div class="form-group">
             <label for="Scholarship">Scholarships</label>
             <textarea class="form-control" name="Scholarship" id="Scholarship">{$scholarship}</textarea>
-        </div>
-        <h4>Tags</h4>
-        <div class="form-group"> 
-            <p class="form-text text-info">Limited to selection of at MOST 3 tags</p>
-            <div class="form-row">
-                {$tagHTML}
-            </div>
-        </div>
+        </div>        
         <h3>Delivery Details</h3>
         <div class="form-group">
             <label for="DeliveryMethod">Method</label>
@@ -253,24 +280,34 @@ EOT;
         </div>
         <div class="form-group">
             <label for="FullTime">Full Time Duration</label>
-            <input type="text" class="form-control" name="FullTime" id="FullTime" value="{$fullTime}" />
+            <select class="form-control" id="FullTime" name="FullTime">
+                {$fullTimeOptions}
+            </select>  
         </div>
         <div class="form-group">
             <label for="PartTime">Part Time Duration</label>
-            <input type="text" class="form-control" name="PartTime" id="PartTime" value="{$partTime}" />
+            <select class="form-control" id="PartTime" name="PartTime">
+                {$partTimeOptions}
+            </select> 
         </div>
         <h3>Requirement Details</h3>
         <div class="form-group">
             <label for="TestingRequirement">Testing Requirements</label>
-            <input type="text" class="form-control" name="TestingRequirement" id="TestingRequirement" value="{$reqs}" />
+            <div class="form-row">
+                {$requirementsHTML}
+            </div>
         </div>
         <div class="form-group">
             <label for="OtherRequirement">Other Requirements</label>
             <input type="text" class="form-control" name="OtherRequirement" id="OtherRequirement" value="{$otherReqs}" />
         </div>
+        <div class="form-check"> 
+            <input type="checkbox" class="form-check-input" id="Waiver" name="Waiver" value="1">
+            <label class="form-check-label" for="Waiver">Has Waiver?</label>
+        </div>
         <h3>Credit Details</h3>
         <div class="form-group">
-            <label for="Credits">Credits</label>
+            <label for="Credits">Credit Hours</label>
             <input type="text" class="form-control" name="Credits" id="Credits" value="{$credits}" />
         </div>
         <div class="form-group">
@@ -387,6 +424,25 @@ $(function() {
             $('#collegeList').html('<p>Derp</p>');
         }
     }); 
+    
+    $('.programs_option').on( 'change', function(e) {
+      if ($('.programs_option:checked').length > 3) {
+        alert('You may select a maximum of three tags.');
+        this.checked = false;
+      }
+    });
+    
+    $('form').submit( function(e) { 
+      var errors = [];
+      if ($('.programs_option:checked').length < 1) errors.push('You must select at least one tag.');
+      if (errors.length > 0) {
+        msg = "One or more errors were encountered: \\n\\n" + errors.join("\\n\\n");
+        alert(msg);
+        return false;
+      } else {
+        return true;
+      }
+    });
 });
 
 function processCollegeList(colleges){
