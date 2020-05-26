@@ -32,7 +32,7 @@ else {
 
 }
 
-$programTypeOptions = Program::renderProgramTypesOptions();
+$programTypeOptions = Program::renderProgramTypeOptionHTML();
 
 $tagHTML = Program::renderTagHTML();
 
@@ -86,7 +86,7 @@ $content = <<<EOT
         <div class="form-row">
             <label for="ProgramType">Type</label><span class="text text-danger">*</span>
             <!--<input type="text" class="form-control" name="ProgramType" id="ProgramType" placeholder="Program Type" required />-->
-            <select class="form-control" name="ProgramType" is="ProgramType" placeholder="Program Type" required>$programTypeOptions</select>
+            <select class="form-control" name="ProgramTypeId" id="ProgramTypeId" placeholder="Program Type" required>$programTypeOptions</select>
         </div>
         <div class="form-row">
             <label for="ProgramAccess">Access Link</label>
@@ -156,7 +156,7 @@ $content = <<<EOT
         <br/>
         <div class=""form-row">
             <label for="Waiver">Has Waiver?</label>
-            <input type="checkbox" name="Waiver" id="Waiver" />
+            <input type="checkbox" name="Waiver" id="Waiver" value="1" />
         </div>
         <br />
         <div class="form-row">

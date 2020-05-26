@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //collect the submitted info
     $progName = filter_input(INPUT_POST, 'programName', FILTER_SANITIZE_STRING);
     $instId = filter_input(INPUT_POST, 'instId', FILTER_VALIDATE_INT);
-    $progType = filter_input(INPUT_POST, 'ProgramType', FILTER_SANITIZE_NUMBER_INT);
+    $progType = filter_input(INPUT_POST, 'ProgramTypeId', FILTER_SANITIZE_NUMBER_INT);
     $progObjs = filter_input(INPUT_POST, 'ProgramObjs', FILTER_SANITIZE_STRING);
     $progAccess = filter_input(INPUT_POST, 'ProgramAccess', FILTER_VALIDATE_URL);
     //make sure if this field is blank, we don't pass FALSE to the DB
@@ -47,6 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $progResTuition = filter_input(INPUT_POST, 'ResidentTuition', FILTER_SANITIZE_STRING);
     $progNonResTuition = filter_input(INPUT_POST, 'NonResident', FILTER_SANITIZE_STRING);
     $waiver = filter_input( INPUT_POST, 'Waiver', FILTER_SANITIZE_NUMBER_INT );
+    if (!$waiver) $waiver = 0; // making sure value is 0 or 1
     //$analyticsFlag = filter_input(INPUT_POST, 'AnalyticsFlag', FILTER_VALIDATE_BOOLEAN);
     //if the flag value is null, the checkbox was NOT checked
     //if(!isset($analyticsFlag)){
@@ -111,6 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     else {
         //add record to pending_updates
+        $x->update('ApprovalStatusId', APPROVAL_TYPE_NEW);
         $result = $x->createPendingUpdate(UPDATE_TYPE_INSERT, $user->Attributes['UserId']);
 
         //check to make sure the insert occurred successfully
