@@ -354,7 +354,7 @@ EOT;
 
     public function getPartTimeDurationLabel() {
         $db = new EduDB;
-        $sql = "SELECT `name` FROM parttime_program_duration_options WHERE id = " . $this->Attributes['ProgramId'];
+        $sql = "SELECT `name` FROM parttime_program_duration_options WHERE id = " . $this->Attributes['PartTimeDurationId'];
         return $db->queryItem( $sql );
     }
 
@@ -519,6 +519,20 @@ EOT;
             $html .= '<div class="option_row"><input type="checkbox" class="reqs_option" name="TestingRequirements[]" ';
             $checked_val = (in_array($tag['id'], $checked)) ? 'checked="checked" ' : '' ;
             $html .= $checked_val . 'value="'.$tag['id'].'"><span>'.$tag['name'].'</span></div>';
+        }
+        $html .= '</div>';
+        return $html;
+    }
+
+    public static function renderReadOnlyTestingRequirementsHTML( $checked = [] ) {
+        $db = new EduDB;
+        $sql = "SELECT * FROM program_testing_requirement_options ORDER BY name";
+        $tags = $db->query( $sql );
+        $html = '<div class="tag_container">';
+        foreach( $tags as $tag ) {
+            $html .= '<div class="option_row"><input type="checkbox" class="reqs_option" name="TestingRequirements[]" ';
+            $checked_val = (in_array($tag['id'], $checked)) ? 'checked="checked" ' : '' ;
+            $html .= $checked_val . 'value="'.$tag['id'].'" disabled><span>'.$tag['name'].'</span></div>';
         }
         $html .= '</div>';
         return $html;
