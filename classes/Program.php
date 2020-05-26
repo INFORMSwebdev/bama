@@ -81,12 +81,12 @@ class Program extends AOREducationObject
     }
 
     public function assignTags( $tagIDs ) {
-        if (!count($tags)) return FALSE;
+        if (!count($tagIDs)) return FALSE;
         $this->unassignAllTags(); // remove any pre-existing tag associations
         $success = FALSE;
         $db = new EduDB;
-        for ($i = 0; $i < min(3, count($tags)); $i++) {
-            $sql = "INSERT IGNORE INTO program_tags (ProgramId, TagId) VALUE ($this->id, $tags[$i])";
+        for ($i = 0; $i < min(3, count($tagIDs)); $i++) {
+            $sql = "INSERT IGNORE INTO program_tags (ProgramId, TagId) VALUE ($this->id, $tagIDs[$i])";
             $success = $db->exec( $sql );
         }
         return $success;
