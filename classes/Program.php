@@ -18,12 +18,15 @@ class Program extends AOREducationObject
         'ContactId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Contact ID', 'editable' => FALSE ),
         'ProgramName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Program Name', 'editable' => TRUE ),
         'ProgramType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Program Type', 'editable' => TRUE ),
+        'ProgramTypeId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Program Type ID', 'editable' => TRUE ),
         'DeliveryMethod' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Delivery Method', 'editable' => TRUE ),
         'DeliveryMethodId' => array('required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Delivery Method', 'editable' => TRUE),
         'ProgramAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Program Website', 'editable' => TRUE ),
         'ProgramObjectives' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Program Objectives', 'editable' => TRUE ),
         'FullTimeDuration' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Full-Time Duration', 'editable' => TRUE ),
+        'FullTimeDurationId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Full-Time Duration Id', 'editable' => TRUE ),
         'PartTimeDuration' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Part-Time Duration', 'editable' => TRUE ),
+        'PartTimeDurationId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Part-Time Duration Id', 'editable' => TRUE ),
         'TestingRequirement' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Testing Requirement(s)', 'editable' => TRUE ),
         'OtherRequirement' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Other Requirement(s)', 'editable' => TRUE ),
         'Credits' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Credits', 'editable' => TRUE ),
@@ -44,105 +47,6 @@ class Program extends AOREducationObject
     public static $name_sql = 'ProgramName';
     public static $parent_class = 'Institution';
     public static $hidden_fields = ['OriginalRecordId'];
-
-    public static function getAllPrograms( $active = TRUE, $asObjects = FALSE, $ApprovalStatusId=2 ){
-        $programs = [];
-        $db = new EduDB();
-        $sql = "SELECT * FROM programs";
-        $crit = '';
-        if ($active !== null) $crit .= " Deleted = " . (($active == TRUE) ? "0" : "1");
-        if ($ApprovalStatusId) $crit .= (($crit) ? " AND " : "") . " ApprovalStatusId = $ApprovalStatusId";
-        if ($crit) $sql .= " WHERE " . $crit;
-        $progs = $db->query( $sql );
-        if ($asObjects) {
-            foreach( $progs as $prog) {
-                $programs[] = new Program($prog);
-            }
-        }
-        else {
-            $programs = $progs;
-        }
-
-        return $programs;
-    }
-
-    public static function getAnalyticsPrograms( $active = TRUE, $asObjects = FALSE ){
-        $programs = [];
-        $db = new EduDB();
-        $sql = "SELECT * FROM programs";
-        if ($active !== null) $sql .= " WHERE AnalyticsFlag = 1 AND Deleted = " . (($active == TRUE) ? "0" : "1");
-        $progs = $db->query( $sql );
-        if ($asObjects) {
-            foreach( $progs as $prog) {
-                $programs[] = new Program($prog);
-            }
-        }
-        else {
-            $programs = $progs;
-        }
-
-        return $programs;
-    }
-
-    public static function getORPrograms( $active = TRUE, $asObjects = FALSE ){
-        $programs = [];
-        $db = new EduDB();
-        $sql = "SELECT * FROM programs";
-        if ($active !== null) $sql .= " WHERE ORFlag = 1 AND Deleted = " . (($active == TRUE) ? "0" : "1");
-        $progs = $db->query( $sql );
-        if ($asObjects) {
-            foreach( $progs as $prog) {
-                $programs[] = new Program($prog);
-            }
-        }
-        else {
-            $programs = $progs;
-        }
-
-        return $programs;
-    }
-
-    public static function getEditorPrograms( $userId, $active = TRUE, $asObjects = FALSE ){
-        $programs = [];
-        $db = new EduDB();
-        $subQuery = "SELECT InstitutionId FROM institution_admins WHERE UserId = $userId";
-        $sql = "SELECT * FROM programs WHERE InstitutionId IN ($subQuery)";
-        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
-        if($userId == 1){
-            $sql = "SELECT * FROM programs";
-            if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
-        }
-        $progs = $db->query( $sql );
-        if ($asObjects) {
-            foreach( $progs as $prog) {
-                $programs[] = new Program($prog);
-            }
-        }
-        else {
-            $programs = $progs;
-        }
-
-        return $programs;
-    }
-
-    public static function getAllProgramsAndInstitutions( $active = TRUE, $asObjects = FALSE ){
-        $programs = [];
-        $db = new EduDB();
-        $sql = "SELECT * FROM programs p JOIN institutions i on p.InstitutionId = i.InstitutionId";
-        if ($active !== null) $sql .= " WHERE p.Deleted = " . (($active == TRUE) ? "0" : "1");
-        $sql .= " ORDER BY p.ProgramName, i.InstitutionName";
-        $progs = $db->query( $sql );
-        if ($asObjects) {
-            foreach( $progs as $prog) {
-                $programs[] = new Program($prog);
-            }
-        }
-        else {
-            $programs = $progs;
-        }
-
-        return $programs;
-    }
 
     public function assignContact( $ContactId ){
         $db = new EduDB();
@@ -182,33 +86,85 @@ class Program extends AOREducationObject
         return $count;
     }
 
+    public static function getAllPrograms( $active = TRUE, $asObjects = FALSE, $ApprovalStatusId=2 ){
+        $programs = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM programs";
+        $crit = '';
+        if ($active !== null) $crit .= " Deleted = " . (($active == TRUE) ? "0" : "1");
+        if ($ApprovalStatusId) $crit .= (($crit) ? " AND " : "") . " ApprovalStatusId = $ApprovalStatusId";
+        if ($crit) $sql .= " WHERE " . $crit;
+        $progs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $progs as $prog) {
+                $programs[] = new Program($prog);
+            }
+        }
+        else {
+            $programs = $progs;
+        }
+
+        return $programs;
+    }
+
+    public static function getAllProgramsAndInstitutions( $active = TRUE, $asObjects = FALSE ){
+        $programs = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM programs p JOIN institutions i on p.InstitutionId = i.InstitutionId";
+        if ($active !== null) $sql .= " WHERE p.Deleted = " . (($active == TRUE) ? "0" : "1");
+        $sql .= " ORDER BY p.ProgramName, i.InstitutionName";
+        $progs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $progs as $prog) {
+                $programs[] = new Program($prog);
+            }
+        }
+        else {
+            $programs = $progs;
+        }
+
+        return $programs;
+    }
+
+    public static function getAnalyticsPrograms( $active = TRUE, $asObjects = FALSE ){
+        $programs = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM programs";
+        if ($active !== null) $sql .= " WHERE AnalyticsFlag = 1 AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $progs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $progs as $prog) {
+                $programs[] = new Program($prog);
+            }
+        }
+        else {
+            $programs = $progs;
+        }
+
+        return $programs;
+    }
+
     public function getContact( $asObject = TRUE ) {
         $Contact = new Contact( $this->Attributes['ContactId'] );
         return $Contact;
     }
 
-    public function getTags() {
+    public function getContacts( $asObjects = TRUE, $ApprovalStatusId = APPROVAL_TYPE_APPROVE ) {
         $db = new EduDB;
-        $sql = "SELECT name FROM program_tags pt JOIN program_tag_options pto ON pt.TagId = pto.id WHERE pt.ProgramId = $this->id";
-        $tags = $db->queryColumn( $sql );
-        return $tags;
-    }
-
-    public function getTextbooks( $active = TRUE, $asObjects = FALSE ) {
-        $booksOut = [];
-        $db = new EduDB();
-        $sql = "SELECT t.* FROM textbooks t INNER JOIN course_textbooks ct ON t.TextbookId = ct.TextbookId INNER JOIN program_courses pc ON pc.CourseId = ct.CourseId WHERE pc.ProgramId = $this->id";
-        if ($active !== null) $sql .= " AND t.Deleted = " . (($active == TRUE) ? "0" : "1");
-        $books = $db->query( $sql );
-        if ($asObjects) {
-            foreach( $books as $book) {
-                $booksOut[] = new Textbook($book);
-            }
-        }
+        $sql = <<<EOT
+SELECT pc.ContactId
+FROM program_contacts pc
+JOIN contacts c ON pc.ContactId = c.ContactId
+WHERE pc.Deleted = 0 AND c.Deleted = 0 AND ProgramId = $this->id 
+EOT;
+        if ($ApprovalStatusId) $sql .= " AND c.ApprovalStatusId = $ApprovalStatusId";
+        $ContactIds = $db->queryColumn( $sql );
+        if (!$asObjects) return $ContactIds;
         else {
-            $booksOut = $books;
+            $Contacts = null;
+            foreach($ContactIds as $ContactId ) $Contacts[] = new Contact($ContactId);
+            return $Contacts;
         }
-        return $booksOut;
     }
 
     public function getCourses( $active = TRUE, $asObjects = FALSE ) {
@@ -273,6 +229,35 @@ class Program extends AOREducationObject
         }
     }
 
+    public static function getEditorPrograms( $userId, $active = TRUE, $asObjects = FALSE ){
+        $programs = [];
+        $db = new EduDB();
+        $subQuery = "SELECT InstitutionId FROM institution_admins WHERE UserId = $userId";
+        $sql = "SELECT * FROM programs WHERE InstitutionId IN ($subQuery)";
+        if ($active !== null) $sql .= " AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        if($userId == 1){
+            $sql = "SELECT * FROM programs";
+            if ($active !== null) $sql .= " WHERE Deleted = " . (($active == TRUE) ? "0" : "1");
+        }
+        $progs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $progs as $prog) {
+                $programs[] = new Program($prog);
+            }
+        }
+        else {
+            $programs = $progs;
+        }
+
+        return $programs;
+    }
+
+    public function getFullTimeDurationLabel() {
+        $db = new EduDB;
+        $sql = "SELECT `name` FROM fulltime_program_duration_options WHERE id = " . $this->Attributes['FullTimeDurationId'];
+        return $db->queryItem( $sql );
+    }
+
     public function getInstructors( $active = TRUE, $asObjects = FALSE){
         $instructors = [];
         $db = new EduDB();
@@ -290,6 +275,24 @@ class Program extends AOREducationObject
         return $instructors;
     }
 
+    public static function getORPrograms( $active = TRUE, $asObjects = FALSE ){
+        $programs = [];
+        $db = new EduDB();
+        $sql = "SELECT * FROM programs";
+        if ($active !== null) $sql .= " WHERE ORFlag = 1 AND Deleted = " . (($active == TRUE) ? "0" : "1");
+        $progs = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $progs as $prog) {
+                $programs[] = new Program($prog);
+            }
+        }
+        else {
+            $programs = $progs;
+        }
+
+        return $programs;
+    }
+
     public function getParent( $asObject = TRUE ) {
         if ($this->Attributes['CollegeId']) {
             if ($asObject) return new College( $this->Attributes['CollegeId']);
@@ -301,10 +304,46 @@ class Program extends AOREducationObject
         }
     }
 
+    public function getPartTimeDurationLabel() {
+        $db = new EduDB;
+        $sql = "SELECT `name` FROM parttime_program_duration_options WHERE id = " . $this->Attributes['PartTimeDurationId'];
+        return $db->queryItem( $sql );
+    }
+
+    public function getProgramTypeLabel() {
+        $db = new EduDB;
+        $sql = "SELECT `name` FROM program_type_options WHERE id = " . $this->Attributes['ProgramTypeId'];
+        return $db->queryItem( $sql );
+    }
+
     public static function getProgramTypes() {
         $db = new EduDB;
         $sql = "SELECT DISTINCT ProgramType FROM programs WHERE ProgramType > '' AND ApprovalStatusId = " . APPROVAL_TYPE_APPROVE . ' ORDER BY ProgramType';
         return $db->queryColumn( $sql );
+    }
+
+    public function getTags() {
+        $db = new EduDB;
+        $sql = "SELECT name FROM program_tags pt JOIN program_tag_options pto ON pt.TagId = pto.id WHERE pt.ProgramId = $this->id";
+        $tags = $db->queryColumn( $sql );
+        return $tags;
+    }
+
+    public function getTextbooks( $active = TRUE, $asObjects = FALSE ) {
+        $booksOut = [];
+        $db = new EduDB();
+        $sql = "SELECT t.* FROM textbooks t INNER JOIN course_textbooks ct ON t.TextbookId = ct.TextbookId INNER JOIN program_courses pc ON pc.CourseId = ct.CourseId WHERE pc.ProgramId = $this->id";
+        if ($active !== null) $sql .= " AND t.Deleted = " . (($active == TRUE) ? "0" : "1");
+        $books = $db->query( $sql );
+        if ($asObjects) {
+            foreach( $books as $book) {
+                $booksOut[] = new Textbook($book);
+            }
+        }
+        else {
+            $booksOut = $books;
+        }
+        return $booksOut;
     }
 
     public function hasContact() {
@@ -321,23 +360,7 @@ class Program extends AOREducationObject
         return (count($Contacts)) ? TRUE : FALSE;
     }
 
-    public function getContacts( $asObjects = TRUE, $ApprovalStatusId = APPROVAL_TYPE_APPROVE ) {
-        $db = new EduDB;
-        $sql = <<<EOT
-SELECT pc.ContactId
-FROM program_contacts pc
-JOIN contacts c ON pc.ContactId = c.ContactId
-WHERE pc.Deleted = 0 AND c.Deleted = 0 AND ProgramId = $this->id 
-EOT;
-        if ($ApprovalStatusId) $sql .= " AND c.ApprovalStatusId = $ApprovalStatusId";
-        $ContactIds = $db->queryColumn( $sql );
-        if (!$asObjects) return $ContactIds;
-        else {
-            $Contacts = null;
-            foreach($ContactIds as $ContactId ) $Contacts[] = new Contact($ContactId);
-            return $Contacts;
-        }
-    }
+
 
     public function hasCourses() {
         $db = new EduDB;
