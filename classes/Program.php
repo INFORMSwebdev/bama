@@ -259,6 +259,22 @@ EOT;
         return $db->queryItem( $sql );
     }
 
+    public static function getFullTimeDurationOptionHTML( $selected = NULL ) {
+        $html = '';
+        $durations = self::getFullTimeDurations();
+        foreach( $durations as $duration) {
+            $selVal = ($duration['id'] == $selected) ? ' selected="selected" ' : '';
+            $html .= '<option value="'.$duration['id'].'" '.$selVal.'>'.$duration['name'].'</option>';
+        }
+        return $html;
+    }
+
+    public static function getFullTimeDurations() {
+        $db = new EduDB;
+        $sql = "SELECT * FROM fulltime_program_duration_options ORDER BY id";
+        return $db->query( $sql );
+    }
+
     public function getInstructors( $active = TRUE, $asObjects = FALSE){
         $instructors = [];
         $db = new EduDB();
@@ -309,6 +325,22 @@ EOT;
         $db = new EduDB;
         $sql = "SELECT `name` FROM parttime_program_duration_options WHERE id = " . $this->Attributes['PartTimeDurationId'];
         return $db->queryItem( $sql );
+    }
+
+    public static function getPartTimeDurationOptionHTML( $selected = NULL ) {
+        $html = '';
+        $durations = self::getPartTimeDurations();
+        foreach( $durations as $duration) {
+            $selVal = ($duration['id'] == $selected) ? ' selected="selected" ' : '';
+            $html .= '<option value="'.$duration['id'].'" '.$selVal.'>'.$duration['name'].'</option>';
+        }
+        return $html;
+    }
+
+    public static function getPartTimeDurations() {
+        $db = new EduDB;
+        $sql = "SELECT * FROM parttime_program_duration_options ORDER BY id";
+        return $db->query( $sql );
     }
 
     public function getProgramTypeLabel() {

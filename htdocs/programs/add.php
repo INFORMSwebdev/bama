@@ -36,6 +36,9 @@ $programTypeOptions = Program::renderProgramTypesOptions();
 
 $tagHTML = Program::renderTagHTML();
 
+$fullTimeDurationOptions = Program::getFullTimeDurationOptionHTML();
+$partTimeDurationOptions = Program::getPartTimeDurationOptionHTML();
+
 //user is logged in, let them add a program
 $content = <<<EOT
 <div class="flex-column">
@@ -52,6 +55,15 @@ $content = <<<EOT
         </div>
         <br />
         <div class="form-row">
+            <h3>Program Classification</h3>
+        </div>
+        <div class="form-row">
+            <p>Select up to three tags for this program. You must select at least one.</p>
+        </div>
+        <div class="form-row">
+            $tagHTML
+        </div>
+        <!--<div class="form-row">
             <label for="AnalyticsFlag">Program Classification</label>
         </div>
         <div class="form-row">
@@ -65,7 +77,7 @@ $content = <<<EOT
                 <input class="form-check-input" type="checkbox" id="ORFlag" name="ORFlag" value="1" />
                 <label class="ml-1" for="ORFlag">Operations Research Program</label>
             </div>
-        </div>
+        </div>-->
         <div class="form-row">
             <label for="ProgramObjs">Objectives</label>
             <textarea class="form-control" name="ProgramObjs" id="ProgramObjs" rows="3"></textarea>
@@ -99,11 +111,13 @@ $content = <<<EOT
         </div>
         <div class="form-row">
             <label for="FullTime">Full Time Duration</label>
-                <input type="text" class="form-control" name="FullTime" id="FullTime" />
+                <!--<input type="text" class="form-control" name="FullTime" id="FullTime" />-->
+            <select class="form-control" name="FullTime" id="FullTime">$fullTimeDurationOptions </select>
         </div>
         <div class="form-row">
             <label for="PartTime">Part Time Duration</label>
-            <input type="text" class="form-control" name="PartTime" id="PartTime" />
+            <!--<input type="text" class="form-control" name="PartTime" id="PartTime" />-->
+            <select class="form-control" name="PartTime" id="PartTime">$partTimeDurationOptions</select>
         </div>
         <br />
         <div class="form-row">
@@ -144,15 +158,7 @@ $content = <<<EOT
         <div class="form-row"> 
             <div id="collegeList"><!-- empty div for college list AJAX stuff --></div>
         </div>
-        <div class="form-row">
-            <h3>Program Tags</h3>
-        </div>
-        <div class="form-row">
-            <p>Select up to three tags for this program. You must select at least one.</p>
-        </div>
-        <div class="form-row">
-            $tagHTML
-        </div>
+        
         <div class="form-row">
             <input type="hidden" name="instId" id="instId" value="{$instId}" />
             <button class="btn btn-warning" type="submit" name="add" value="add">Submit New Program</button>
