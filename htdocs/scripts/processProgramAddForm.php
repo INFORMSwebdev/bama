@@ -38,9 +38,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $progDeliveryMethod = filter_input(INPUT_POST, 'DeliveryMethodId', FILTER_VALIDATE_INT);
     //default delivery method to unknown if none selected
     if(!$progDeliveryMethod) $progDeliveryMethod = 10;
-    $progFullTime = filter_input(INPUT_POST, 'FullTime', FILTER_SANITIZE_INT);
-    $progPartTime = filter_input(INPUT_POST, 'PartTime', FILTER_SANITIZE_INT);
-    $progTestingReqs = filter_input(INPUT_POST, 'TestingRequirements', FILTER_SANITIZE_INT, FILTER_REQUIRE_ARRAY );
+    $progFullTime = filter_input(INPUT_POST, 'FullTime', FILTER_SANITIZE_NUMBER_INT);
+    $progPartTime = filter_input(INPUT_POST, 'PartTime', FILTER_SANITIZE_NUMBER_INT);
+    $progTestingReqs = filter_input(INPUT_POST, 'TestingRequirements', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY );
     $progOtherReqs = filter_input(INPUT_POST, 'OtherRequirement', FILTER_SANITIZE_STRING);
     $progCredits = filter_input(INPUT_POST, 'Credits', FILTER_SANITIZE_STRING);
     //$progCostPer = filter_input(INPUT_POST, 'CostPerCredit', FILTER_SANITIZE_STRING);
