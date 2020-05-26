@@ -268,9 +268,9 @@ EOT;
             <input type="text" class="form-control" name="YearEstablished" id="YearEstablished" value="{$year}" />
         </div>
         <div class="form-group">
-            <label for="Scholarship">Scholarships</label>
+            <label for="Scholarship">Financial Assistance (for example: scholarship, fellowship, etc.)</label>
             <textarea class="form-control" name="Scholarship" id="Scholarship">{$scholarship}</textarea>
-        </div>        
+        </div>       
         <h3>Delivery Details</h3>
         <div class="form-group">
             <label for="DeliveryMethod">Method</label>
@@ -303,17 +303,17 @@ EOT;
         </div>
         <div class="form-check"> 
             <input type="checkbox" class="form-check-input" id="Waiver" name="Waiver" value="1">
-            <label class="form-check-label" for="Waiver">Has Waiver?</label>
-        </div>
+            <label class="form-check-label" for="Waiver">Does your program offer waivers for testing?</label>
+        </div> 
         <h3>Credit Details</h3>
         <div class="form-group">
             <label for="Credits">Credit Hours</label>
             <input type="text" class="form-control" name="Credits" id="Credits" value="{$credits}" />
         </div>
-        <div class="form-group">
+        <!--<div class="form-group">
             <label for="CostPerCredit">Cost per Credit</label>
             <input type="text" class="form-control" name="CostPerCredit" id="CostPerCredit" value="{$cost}" />
-        </div>
+        </div>-->
         <div class="form-group">
             <label for="ResidentTuition">Estimated Resident Tuition</label>
             <input type="text" class="form-control" name="ResidentTuition" id="ResidentTuition" value="{$res}" />

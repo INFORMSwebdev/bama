@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $prog->Attributes['Scholarship'] = $progScholarships;
         $prog->Attributes['EstimatedResidentTuition'] = $progResTuition;
         $prog->Attributes['EstimatedNonresidentTuition'] = $progNonResTuition;
-        $prog->Attributes['CostPerCredit'] = $progCostPer;
+        //$prog->Attributes['CostPerCredit'] = $progCostPer;
         //$prog->Attributes['ORFlag'] = $orFlag;
         //$prog->Attributes['AnalyticsFlag'] = $analyticsFlag;
         $prog->Attributes['CollegeId'] = $collegeId;

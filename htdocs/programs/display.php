@@ -31,7 +31,8 @@ if ($id) {
     //$contactId = $prog->Attributes['ContactId'];
     $contacts = $prog->getContacts();
     $name = $prog->Attributes['ProgramName'];
-    $type = $prog->Attributes['ProgramType'];
+    //$type = $prog->Attributes['ProgramType'];
+    $type = $prog->getType();
     //$delivery = $prog->Attributes['DeliveryMethod'];
     $courses = $prog->getCourses(TRUE, TRUE);
     $delivery = $prog->getDeliveryMethod();
@@ -45,15 +46,29 @@ if ($id) {
     if (!isset($objectives) || empty($objectives)) {
         $objectives = 'Objectives for this program are not currently available.';
     }
-    $fullTime = $prog->Attributes['FullTimeDuration'];
+    //$fullTime = $prog->Attributes['FullTimeDuration'];
+    $fullTime = $prog->getFullTimeDurationLabel();
     if (!isset($fullTime) || empty($fullTime)) {
         $fullTime = 'Full time duration for this program is not currently available.';
     }
-    $partTime = $prog->Attributes['PartTimeDuration'];
+    //$partTime = $prog->Attributes['PartTimeDuration'];
+    $partTime = $prog->getPartTimeDurationLabel();
     if (!isset($partTime) || empty($partTime)) {
         $partTime = 'Part time duration for this program is not currently available.';
     }
-    $reqs = $prog->Attributes['TestingRequirement'];
+
+    $waive = $prog->Attributes['Waiver'];
+    if($waive === 1){
+        $waiver = 'Waivers for testing are available';
+    } else {
+        $waiver = 'No waivers have been selected for this program.';
+    }
+    //$reqs = $prog->Attributes['TestingRequirement'];
+    $curReqs = $prog->getTestingRequirements(TRUE);
+    $reqs = '';
+    foreach($curReqs as $c){
+        $reqs .= $c . '<br/>';
+    }
     if (!isset($reqs) || empty($reqs)) {
         $reqs = 'Requirements for this program is not currently available.';
     }
@@ -271,7 +286,7 @@ EOT;
                 {$accessHTML}
                 <h3 class="display3">Year Established</h3>
                 <p>{$year}</p>
-                <h3>Scholarship</h3>
+                <h3>Financial Assistance (for example: scholarship, fellowship, etc.)</h3>
                 <p>{$scholarship}</p>
             </div>
             <input type="hidden" id="progId" value="{$prog->id}" />
@@ -293,14 +308,16 @@ EOT;
                 <p>{$reqs}</p>
                 <h3 class="display3">Other Requirements</h3>
                 <p>{$otherReqs}</p>
+                <h3>Waiver</h3>
+                <p>{$waiver}</p>
             </div>
         </div>
         <div class="tab-pane fade" id="tabCredit" role="tabpanel" aria-labelledby="creditDetails">
             <div class="card-body">
-                <h3 class="display3">Total Credits</h3>
+                <h3 class="display3">Credit Hours</h3>
                 <p>{$credits}</p>
-                <h3 class="display3">Cost per Credit</h3>
-                <p>{$cost}</p>
+                <!--<h3 class="display3">Cost per Credit</h3>
+                <p>{$cost}</p>-->
                 <h3 class="display3">Estimated Resident Tuition</h3>
                 <p>{$res}</p>
                 <h3 class="display3">Estimated Non-Resident Tuition</h3>
