@@ -6,7 +6,7 @@ class Dropdowns
 {
 
     public static function getCollegeTypeOptions($curSel = NULL){
-        $db = new EduDb();
+        $db = new EduDB();
         $qry = 'SELECT id, name FROM college_type_dropdown';
         $cols = $db->query($qry);
         if($cols){
@@ -24,20 +24,20 @@ class Dropdowns
     }
 
     public static function getCollegeTypeName($id){
-        $db = new EduDb();
+        $db = new EduDB();
         $qry = 'SELECT name FROM college_type_dropdown WHERE id = ' . $id;
         return $db->queryColumn($qry)[0];
     }
 
     public static function getInstitutionRegionName($id){
-        $db = new EduDb();
+        $db = new EduDB();
         $qry = 'SELECT name FROM region_dropdown WHERE id = ' . $id;
         return $db->queryColumn($qry)[0];
     }
 
     public static function getProgramTagOptionsHTML($curSelection = NULL){
-        $db = new EduDb();
-        $qry = 'SELECT id,name FROM program_tag_options';
+        $db = new EduDB();
+        $qry = 'SELECT id,name FROM program_tag_options ORDER BY `name`';
         $tags = $db->query($qry, PDO::FETCH_ASSOC);
         if($tags){
             //$optionHelper = array();
@@ -113,7 +113,7 @@ EOT;
     }
 
     public static function getProgramTagOptionsSelectHTML($curSelection = NULL){
-        $db = new EduDb();
+        $db = new EduDB();
         $qry = 'SELECT id,name FROM program_tag_options';
         $tags = $db->query($qry, PDO::FETCH_ASSOC);
         if($tags){
@@ -131,7 +131,7 @@ EOT;
     }
 
     public static function getRegionOptionsHTML($curSelection = NULL){
-        $db = new EduDb();
+        $db = new EduDB();
         $qry = 'SELECT id,name FROM region_dropdown';
         $regions = $db->query($qry, PDO::FETCH_ASSOC);
         if($regions){

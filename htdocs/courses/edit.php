@@ -89,6 +89,9 @@ if($courseId){
 
     $deliveryMethods = $co->getDeliveryMethodOptions();
 
+    $tags = $co->getTagIds();
+    $tagHTML = Course::renderTagHTML( $tags );
+
     //set up the form to serve on the page
     $content = <<<EOT
 <div class="flex-column">
@@ -120,18 +123,30 @@ if($courseId){
                 </div>
                 <br />
                 <div class="form-row"> 
+                    <label for="programmingLanguage">Software/Programming Language</label>
+                    <textarea class="form-control" name="programmingLanguage" id="programminLanguage" aria-describedby="textHelp">{$co->Attributes['ProgrammingLanguage']}</textarea>
+                    <p id="textHelp">Describe any software or programming language requirements relevant to this course.</p>
+                </div>
+                <br/>
+                <div class="form-row"> 
+                    <h3>Course Tags</h3>
+                </div>
+                <div class="form-row"> 
+                    $tagHTML
+                </div>
+                <!--<div class="form-row"> 
                     <label for="capstoneProject">Has Capstone Project?</label>
                     <input type="text" class="form-control" name="capstoneProject" id="capstoneProject" value="{$co->Attributes['HasCapstoneProject']}" aria-describedby="capstoneHelp" placeholder="Yes or No" />
                     <p id="capstoneHelp">Please input yes if there is a capstone project, or no if there is none as of now.</p>
-                </div>
+                </div>-->
                 <!--<br />-->
-                <div class="form-row"> 
+                <!--<div class="form-row"> 
                     <label for="courseText">Course Text</label>
                     <textarea class="form-control" name="courseText" id="courseText" aria-describedby="textHelp">{$co->Attributes['CourseText']}</textarea>
                     <p id="textHelp">You can copy-paste the contents of a syllabus in this field.</p>
-                </div>
+                </div>-->
                 <!--<br />-->
-                <div class="form-row"> 
+                <!--<div class="form-row"> 
                     <label for="analyticTag">Analytics Tags</label>
                     <input type="text" class="form-control" name="analyticTag" id="analyticTag" value="{$co->Attributes['AnalyticTag']}" placeholder="E.g. data mining; data visualization; optimization; etc." />
                 </div>
@@ -140,7 +155,7 @@ if($courseId){
                     <label for="businessTag">Business Tags</label>
                     <input type="text" class="form-control" name="businessTag" id="businessTag" value="{$co->Attributes['BusinessTag']}" placeholder="E.g. entertainment; marketing; healthcare; etc." />
                 </div>
-                <br />
+                <br />-->
                 <div class="form-row">
                     <input type="hidden" id="courseId" name="courseId" value="{$courseId}" />
                     <button class="btn btn-warning mr-2" type="submit" name="edit" value="edit">Submit changes</button>

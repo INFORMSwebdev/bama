@@ -148,6 +148,9 @@ $content = <<<EOT
             <h3>Program Tags</h3>
         </div>
         <div class="form-row">
+            <p>Select up to three tags for this program. You must select at least one.</p>
+        </div>
+        <div class="form-row">
             $tagHTML
         </div>
         <div class="form-row">
@@ -215,22 +218,27 @@ $(function() {
 });
 
 function processCollegeList(colleges){
+  
     var html = '<h4>Colleges</h4>';
-    html += '<p>Select one college below to assign this program to:</p>';
-    
-    //html += '<form>'
-    //set up the select list
-    html += '<select size="5" id="collegeSelectList" name="collegeSelectList">';
-    html += '<option></option>';
-    //set up how the info gets displayed in the div for the user to select the college
-    for(var i = 0; i < colleges.length; i++) {
-        html += '<option value="' + colleges[i].CollegeId + '">' + colleges[i].CollegeName + '</option>';
+    if (colleges.length > 0) {
+        html += '<p>Select one college below to assign this program to:</p>';
+        
+        //html += '<form>'
+        //set up the select list
+        html += '<select size="5" id="collegeSelectList" name="collegeSelectList">';
+        html += '<option></option>';
+        //set up how the info gets displayed in the div for the user to select the college
+        for(var i = 0; i < colleges.length; i++) {
+            html += '<option value="' + colleges[i].CollegeId + '">' + colleges[i].CollegeName + '</option>';
+        }
+        html += '</select>';
+        //html += '<br />';
+        //html += '<button id="collegeSelectSubmit" class="btn btn-info btn-submit-collegeAssignment">Assign to Selected College</button>';
+        //html += '</form>';
     }
-    html += '</select>';
-    //html += '<br />';
-    //html += '<button id="collegeSelectSubmit" class="btn btn-info btn-submit-collegeAssignment">Assign to Selected College</button>';
-    //html += '</form>';
-    
+    else {
+        html += '<p>There are no colleges listed for this institution. To assign this program to a college you will need to first add a college to the institution.</p>';
+    }
     //return the HTML to put in the div
     return html;
 }

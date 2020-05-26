@@ -30,7 +30,9 @@ else {
 $progId = filter_input(INPUT_GET, 'progId', FILTER_VALIDATE_INT);
 
 $c = new Course();
-$deliveryMethods = $c->getDeliveryMethodOptions(TRUE);
+$deliveryMethods = $c->getDeliveryMethodOptions( TRUE );
+
+$tagHTML = Course::renderTagHTML();
 
 $content = '';
 
@@ -51,7 +53,7 @@ $content = <<<EOT
         <br />
         <div class="form-row"> 
             <label for="courseNumber">Number</label>
-            <input type="text" class="form-control" name="courseNumber" id="courseNumber" placeholder="Number of course" aria-describedby="numberHelp" />
+            <input type="text" class="form-control" name="courseNumber" id="courseNumber" placeholder="eg. MSB101" aria-describedby="numberHelp" />
             <p id="numberHelp">Any alphanumeric characters are allowed.</p>
         </div>
         <div class="form-row"> 
@@ -60,20 +62,33 @@ $content = <<<EOT
                 {$deliveryMethods}    
             </select>
         </div>
-        <br />
         <div class="form-row"> 
+            <label for="programmingLanguage">Software/Programming Language</label>
+            <textarea class="form-control" name="programmingLanguage" id="programmingLanguage" aria-describedby="textHelp"></textarea>
+            <p id="textHelp">Describe any software and/or programming languages pertinent to this course.</p>
+        </div>
+        <div class="form-row">
+            <h3>Course Tags</h3>
+        </div>
+        <div class="form-row">
+            <p>Select up to four tags for this course.</p>
+        </div>
+        <div class="form-row"> 
+            $tagHTML
+        </div>
+        <!--<div class="form-row"> 
             <label for="capstoneProject">Has Capstone Project?</label>
             <input type="text" class="form-control" name="capstoneProject" id="capstoneProject" aria-describedby="capstoneHelp" placeholder="Yes or No" />
             <p id="capstoneHelp">Please input yes if there is a capstone project, or no if there is none as of now.</p>
-        </div>
+        </div>-->
         <!--<br />-->
-        <div class="form-row"> 
+        <!--<div class="form-row"> 
             <label for="courseText">Course Text</label>
             <textarea class="form-control" name="courseText" id="courseText" aria-describedby="textHelp"></textarea>
             <p id="textHelp">You can copy-paste the contents of a syllabus in this field.</p>
-        </div>
+        </div>-->
         <!--<br />-->
-        <div class="form-row"> 
+        <!--<div class="form-row"> 
             <label for="analyticTag">Analytics Tags</label>
             <input type="text" class="form-control" name="analyticTag" id="analyticTag" placeholder="E.g. data mining; data visualization; optimization; etc." />
         </div>
@@ -81,7 +96,7 @@ $content = <<<EOT
         <div class="form-row"> 
             <label for="businessTag">Business Tags</label>
             <input type="text" class="form-control" name="businessTag" id="businessTag" placeholder="E.g. entertainment; marketing; healthcare; etc." />
-        </div>
+        </div>-->
         <br />
         <div class="form-row">
             <input type="hidden" name="progId" id="progId" value="{$progId}" />
@@ -95,12 +110,25 @@ $content = <<<EOT
 </div>
 EOT;
 
+$custom_js = <<<EOT
+$(function() {
+    $('.courses_option').on( 'change', function(e) {
+      if ($('.courses_option:checked').length > 4) {
+        alert('You may select a maximum of four tags.');
+        this.checked = false;
+      }
+    });
+});
+EOT;
+
+
 //create the parameters to pass to the wrapper
 $page_params = array();
 $page_params['content'] = $content;
 $page_params['page_title'] = "Add New Course";
 $page_params['site_title'] = "Analytics & Operations Research Education Program Listing";
 $page_params['site_url'] = WEB_ROOT . 'index.php';
+$page_params['js'][] = ['text' => $custom_js];
 //wrapper class to pass all the content and params to
 $wrapper = new wrapperBama($page_params);
 //display the content

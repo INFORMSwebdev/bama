@@ -7,21 +7,20 @@
  */
 
 require_once( "../../init.php" );
+require_once( "../../classes/autoload.php");
 $response = [];
 $response['errors'] = [];
 $username = trim( filter_input( INPUT_POST, 'username' ) );
 $password = filter_input( INPUT_POST, 'password' );
 $is_admin = FALSE;
 if (isset($aes['sso_enabled']) && $aes['sso_enabled']==1) {
-    $ams_ws = new ams_ws;
-    $user_info = $ams_ws->login( array( "username" => $username, "password" => $password));
+    $user_info = fontevaSOAP::login( $username, $password, FALSE );
     if ($user_info) {
-        $cust_id = $user_info['custid'];
-        if (in_array($cust_id, $aes['admin_users'])) {
+        if (in_array($user_info['UserId'], $aes['admin_users'])) {
             $is_admin = TRUE;
         }
         else {
-            $response['errors'][] = "Login successful but you are not included in the list of authorized admins.";
+            $response['errors'][] = "Login successful but you are not included in the list of authorized admins.".print_r($user_info,1);
         }
     }
     else {

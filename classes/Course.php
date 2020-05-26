@@ -15,19 +15,19 @@ class Course extends AOREducationObject
         'InstructorId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'InstructorID', 'editable' => TRUE  ),
         'CourseNumber' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Course Number', 'editable' => TRUE  ),
         'CourseTitle' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_STR, 'label' => 'Course Title', 'editable' => TRUE  ),
-        'DeliveryMethod' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Delivery Method', 'editable' => TRUE  ),
-        'HasCapstoneProject' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Has Capstone Project', 'editable' => TRUE  ),
-        'CourseText' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Course Text', 'editable' => TRUE ),
-        'SoftwareLanguage' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Software/Programming Language', 'editable'=>TRUE ),
-        'SyllabusFile' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_LOB, 'label' => 'Syllabus File', 'editable' => TRUE  ),
-        'SyllabusFilesize' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Syllabus File Size', 'editable' => TRUE  ),
-        'AnalyticTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Analytic Tag', 'editable' => TRUE  ),
-        'BusinessTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Business Tag', 'editable' => TRUE  ),
+        'DeliveryMethodId' => array('required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Delivery Method', 'editable' => TRUE),
+        /* 'DeliveryMethod' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Delivery Method', 'editable' => TRUE  ),*/
+        /*'HasCapstoneProject' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Has Capstone Project', 'editable' => TRUE  ),*/
+        /* 'CourseText' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Course Text', 'editable' => TRUE ),*/
+        'ProgrammingLanguage' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Software/Programming Language', 'editable'=>TRUE ),
+        /*'SyllabusFile' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_LOB, 'label' => 'Syllabus File', 'editable' => TRUE  ),
+        'SyllabusFilesize' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Syllabus File Size', 'editable' => TRUE  ),*/
+        /*'AnalyticTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Analytic Tag', 'editable' => TRUE  ),
+        'BusinessTag' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Business Tag', 'editable' => TRUE  ),*/
         'CreateDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE  ),
         'Deleted' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  ),
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
-        'DeliveryMethodId' => array('required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Delivery Method', 'editable' => TRUE),
         'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified Date', 'editable' => FALSE ),
     );
     public static $full_text_columns = 'CourseTitle, CourseText, AnalyticTag, BusinessTag';
@@ -95,6 +95,18 @@ class Course extends AOREducationObject
         return $success;
     }
 
+    public function assignTags( $tags = [] ) {
+        if (!count($tags)) return FALSE;
+        $this->unassignAllTags(); // remove any pre-existing tag associations
+        $success = FALSE;
+        $db = new EduDB;
+        for ($i = 0; $i < min(4, count($tags)); $i++) {
+            $sql = "INSERT IGNORE INTO course_tags (CourseId, TagId) VALUE ($this->id, $tags[$i])";
+            $success = $db->exec( $sql );
+        }
+        return $success;
+    }
+
     /**
      * add course - textbook association
      * @param $TextbookId int
@@ -143,12 +155,12 @@ class Course extends AOREducationObject
     public function getDeliveryMethodOptions($first = NULL){
         $db = new EduDB();
 
-        $sql = 'SELECT id, method FROM delivery_methods';
+        $sql = 'SELECT id, `name` FROM course_delivery_methods';
         $results = $db->query($sql);
 
         $helper = array();
         foreach($results as $r){
-            $helper[] = array('value' => $r['id'], 'text' => $r['method']);
+            $helper[] = array('value' => $r['id'], 'text' => $r['name']);
         }
 
         if(!empty($this->Attributes['DeliveryMethodId'])){
@@ -163,7 +175,7 @@ class Course extends AOREducationObject
         else {
             //no current delivery method selected
             if(is_null($first)){
-                return optionsHTML($helper, 10, TRUE, array(FALSE));
+                return optionsHTML($helper, 0, TRUE, array(FALSE));
             }
             else {
                 return optionsHTML($helper);
@@ -198,13 +210,6 @@ class Course extends AOREducationObject
         return $Instructors;
     }
 
-    public function getTags() {
-        $db = new EduDB;
-        $sql = "SELECT name FROM course_tags ct JOIN course_tag_options cto ON ct.TagId = cto.id WHERE ct.CourseId = $this->id";
-        $tags = $db->queryColumn( $sql );
-        return $tags;
-    }
-
     public function getParent( $asObject = TRUE ) {
         $db = new EduDB;
         $sql = "SELECT ProgramId FROM program_courses WHERE CourseId = $this->id";
@@ -212,6 +217,20 @@ class Course extends AOREducationObject
         //die($sql);
         if ($asObject) return new Program( $ProgramId );
         else return $ProgramId;
+    }
+
+    public function getTagIds() {
+        $tags = $this->getTags();
+        $tagIds = [];
+        foreach( $tags as $tag ) $tagIds[] = $tag['id'];
+        return $tagIds;
+    }
+
+    public function getTags() {
+        $db = new EduDB;
+        $sql = "SELECT id, name FROM course_tags ct JOIN course_tag_options cto ON ct.TagId = cto.id WHERE ct.CourseId = $this->id";
+        $tags = $db->query( $sql );
+        return $tags;
     }
 
     public function hasCases() {
@@ -324,6 +343,12 @@ class Course extends AOREducationObject
     public function unassignAllInstructors(){
         $db = new EduDB();
         $sql = "DELETE FROM course_instructors WHERE CourseId = $this->id";
+        return $db->exec( $sql );
+    }
+
+    public function unassignAllTags() {
+        $db = new EduDB;
+        $sql = "DELETE FROM course_tags WHERE CourseId = $this->id";
         return $db->exec( $sql );
     }
 

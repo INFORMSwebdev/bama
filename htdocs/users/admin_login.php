@@ -16,7 +16,7 @@ $content = <<<EOT
     <h1>INFORMS Admin Login</h1>
 </div>
 <div class="flex-column">
-    <p>Log in with your AA front end (self-service) credentials.</p>
+    <p>Log in with your Salesforce front end (self-service) credentials.</p>
 </div>
 <div class="container-fluid">
     <form class="needs-validation" method="post" novalidate id="admin_login_form">

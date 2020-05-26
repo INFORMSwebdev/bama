@@ -30,29 +30,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $delivery = filter_input(INPUT_POST, 'deliveryMethod', FILTER_VALIDATE_INT);
     //if no option is selected, we will use the Unknown method in the select table
     if(!$delivery){
-        $delivery = 10;
+        $delivery = 0;
     }
-    $capstone = filter_input(INPUT_POST, 'capstoneProject', FILTER_SANITIZE_STRING);
-    $text = filter_input(INPUT_POST, 'courseText', FILTER_SANITIZE_STRING);
-    $analytics = filter_input(INPUT_POST, 'analyticTag', FILTER_SANITIZE_STRING);
-    $business = filter_input(INPUT_POST, 'businessTag', FILTER_SANITIZE_STRING);
+    //$capstone = filter_input(INPUT_POST, 'capstoneProject', FILTER_SANITIZE_STRING);
+    //$text = filter_input(INPUT_POST, 'courseText', FILTER_SANITIZE_STRING);
+    $progLang = filter_input( INPUT_POST, 'programmingLanguage', FILTER_SANITIZE_STRING);
+    //$analytics = filter_input(INPUT_POST, 'analyticTag', FILTER_SANITIZE_STRING);
+    //$business = filter_input(INPUT_POST, 'businessTag', FILTER_SANITIZE_STRING);
+    $course_tags = filter_input(INPUT_POST, 'CourseTags', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
     //since (for whatever reason) syllabus filesize column in the DB in non-nullable and we aren't allowing uploads of files
     //we have to set the filesize to 0
-    $sylSize = 0;
+    //$sylSize = 0;
     $progId = filter_input(INPUT_POST, 'progId', FILTER_VALIDATE_INT);
 
     //get the form data into an array to create an object
     $data = array(
         'CourseTitle' => $title,
-        'InstructorId' => $instructorId,
+       /* 'InstructorId' => $instructorId,*/
         'CourseNumber' => $number,
         //'DeliveryMethod' => $delivery,
         'DeliveryMethodId' => $delivery,
-        'HasCapstoneProject' => $capstone,
+        'ProgrammingLanguage' => $progLang,
+        /*'HasCapstoneProject' => $capstone,
         'CourseText' => $text,
         'SyllabusFilesize' => $sylSize,
         'AnalyticTag' => $analytics,
-        'BusinessTag' => $business
+        'BusinessTag' => $business*/
     );
     //create an object w/ Id
     $x = new Course(Course::create( $data ));
@@ -64,6 +67,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //assign course to this program
         $program->assignCourse($x->Attributes['CourseId']);
+    }
+
+    // assign tags (we are going to assign the tags regardless of whether the added course is approved)
+    if ($x && $x->valid) {
+        $x->assignTags( $course_tags );
     }
 
     if($user->id == 1){
