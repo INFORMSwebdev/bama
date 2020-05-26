@@ -35,6 +35,7 @@ class Program extends AOREducationObject
         'EstimatedResidentTuition' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Estimated Resident Tuition', 'editable' => TRUE ),
         'EstimatedNonresidentTuition' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Estimated Non-Resident Tuition', 'editable' => TRUE ),
         'CostPerCredit' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Cost per Credit', 'editable' => TRUE ),
+        'Waiver' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Waiver', 'editable' => TRUE ),
         'ORFlag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'OR Flag', 'editable' => TRUE ),
         'AnalyticsFlag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Analytics Flag', 'editable' => TRUE ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
@@ -327,6 +328,24 @@ EOT;
         $sql = "SELECT name FROM program_tags pt JOIN program_tag_options pto ON pt.TagId = pto.id WHERE pt.ProgramId = $this->id";
         $tags = $db->queryColumn( $sql );
         return $tags;
+    }
+
+    public function getTestingRequirements( $labelsOnly = FALSE ) {
+        $db = new EduDB;
+        $sql = <<<EOT
+SELECT ptro.id, ptro.`name` 
+FROM programs 
+JOIN program_testing_requirements prt ON prt.program_id = programs.ProgramId 
+JOIN program_testing_requirement_options ptro ON ptro.id = prt.requirement_id 
+WHERE programs.ProgramId = $this->id
+EOT;
+        $rows = $db->query( $sql );
+        if ($labelsOnly) {
+            $result = [];
+            foreach( $rows as $row ) $result[] = $row['name'];
+        }
+        else $result = $rows;
+        return $result;
     }
 
     public function getTextbooks( $active = TRUE, $asObjects = FALSE ) {
