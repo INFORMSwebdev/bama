@@ -46,6 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //$progCostPer = filter_input(INPUT_POST, 'CostPerCredit', FILTER_SANITIZE_STRING);
     $progResTuition = filter_input(INPUT_POST, 'ResidentTuition', FILTER_SANITIZE_STRING);
     $progNonResTuition = filter_input(INPUT_POST, 'NonResident', FILTER_SANITIZE_STRING);
+    $waiver = filter_input( INPUT_POST, 'Waiver', FILTER_SANITIZE_NUMBER_INT );
     //$analyticsFlag = filter_input(INPUT_POST, 'AnalyticsFlag', FILTER_VALIDATE_BOOLEAN);
     //if the flag value is null, the checkbox was NOT checked
     //if(!isset($analyticsFlag)){
@@ -79,6 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'Scholarship' => $progScholarships,
         'EstimatedResidentTuition' => $progResTuition,
         'EstimatedNonresidentTuition' => $progNonResTuition,
+        'Waiver' => $waiver,
        /* 'CostPerCredit' => $progCostPer,*/
        /* 'ORFlag' => $orFlag,*/
        /* 'AnalyticsFlag' => $analyticsFlag, */
