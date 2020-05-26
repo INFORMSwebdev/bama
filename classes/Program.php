@@ -101,7 +101,7 @@ class Program extends AOREducationObject
     public function assignTestingRequirements( $reqIDs ) {
         if (!count($reqIDs)) return FALSE;
         $this->unassignAllTestingRequirements();
-        foreach( $reqIDs as $regID ) $this->assignTestingRequirement( $reqID );
+        foreach( $reqIDs as $reqID ) $this->assignTestingRequirement( $reqID );
         return TRUE;
     }
 
