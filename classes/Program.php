@@ -411,8 +411,6 @@ EOT;
         return (count($Contacts)) ? TRUE : FALSE;
     }
 
-
-
     public function hasCourses() {
         $db = new EduDB;
         $sql = "SELECT CourseId FROM program_courses WHERE ProgramId = $this->id AND Deleted = 0";
@@ -461,6 +459,20 @@ EOT;
         $html = '<div class="tag_container">';
         foreach( $tags as $tag ) {
             $html .= '<div class="option_row"><input type="checkbox" class="programs_option" name="ProgramTags[]" ';
+            $checked_val = (in_array($tag['id'], $checked)) ? 'checked="checked" ' : '' ;
+            $html .= $checked_val . 'value="'.$tag['id'].'"><span>'.$tag['name'].'</span></div>';
+        }
+        $html .= '</div>';
+        return $html;
+    }
+
+    public static function renderTestingRequirementsHTML( $checked = [] ) {
+        $db = new EduDB;
+        $sql = "SELECT * FROM program_testing_requirement_options ORDER BY name";
+        $tags = $db->query( $sql );
+        $html = '<div class="tag_container">';
+        foreach( $tags as $tag ) {
+            $html .= '<div class="option_row"><input type="checkbox" class="reqs_option" name="TestingRequirements[]" ';
             $checked_val = (in_array($tag['id'], $checked)) ? 'checked="checked" ' : '' ;
             $html .= $checked_val . 'value="'.$tag['id'].'"><span>'.$tag['name'].'</span></div>';
         }

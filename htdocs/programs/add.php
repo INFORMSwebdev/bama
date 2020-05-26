@@ -38,6 +38,7 @@ $tagHTML = Program::renderTagHTML();
 
 $fullTimeDurationOptions = Program::getFullTimeDurationOptionHTML();
 $partTimeDurationOptions = Program::getPartTimeDurationOptionHTML();
+$TestingRequirementOptions = Program::renderTestingRequirementsHTML();
 
 //user is logged in, let them add a program
 $content = <<<EOT
@@ -112,12 +113,12 @@ $content = <<<EOT
         <div class="form-row">
             <label for="FullTime">Full Time Duration</label>
                 <!--<input type="text" class="form-control" name="FullTime" id="FullTime" />-->
-            <select class="form-control" name="FullTime" id="FullTime">$fullTimeDurationOptions </select>
+            <select class="form-control" name="FullTime" id="FullTime"><option/>$fullTimeDurationOptions </select>
         </div>
         <div class="form-row">
             <label for="PartTime">Part Time Duration</label>
             <!--<input type="text" class="form-control" name="PartTime" id="PartTime" />-->
-            <select class="form-control" name="PartTime" id="PartTime">$partTimeDurationOptions</select>
+            <select class="form-control" name="PartTime" id="PartTime"><option/>$partTimeDurationOptions</select>
         </div>
         <br />
         <div class="form-row">
@@ -125,7 +126,8 @@ $content = <<<EOT
         </div>
         <div class="form-row">
             <label for="TestingRequirement">Testing Requirements</label>
-            <input type="text" class="form-control" name="TestingRequirement" id="TestingRequirement" />
+            $TestingRequirementOptions
+            <!--<input type="text" class="form-control" name="TestingRequirement" id="TestingRequirement" />-->
         </div>
         <div class="form-row">
             <label for="OtherRequirement">Other Requirements</label>
@@ -136,13 +138,13 @@ $content = <<<EOT
             <h3>Credit Details</h3>
         </div>
         <div class="form-row">
-            <label for="Credits">Credits</label>
+            <label for="Credits">Credit Hours</label>
             <input type="text" class="form-control" name="Credits" id="Credits" />
         </div>
-        <div class="form-row">
+        <!--<div class="form-row">
             <label for="CostPerCredit">Cost per Credit</label>
             <input type="text" class="form-control" name="CostPerCredit" id="CostPerCredit" />
-        </div>
+        </div>-->
         <div class="form-row">
             <label for="ResidentTuition">Estimated Resident Tuition</label>
             <input type="text" class="form-control" name="ResidentTuition" id="ResidentTuition" />
@@ -150,6 +152,11 @@ $content = <<<EOT
         <div class="form-row">
             <label for="NonResident">Estimated Non-Resident Tuition</label>
             <input type="text" class="form-control" name="NonResident" id="NonResident" />
+        </div>
+        <br/>
+        <div class=""form-row">
+            <label for="Waiver">Has Waiver?</label>
+            <input type="checkbox" name="Waiver" id="Waiver" />
         </div>
         <br />
         <div class="form-row">
