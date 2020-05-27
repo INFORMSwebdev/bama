@@ -330,6 +330,8 @@ $(function() {
                         html += '<p>' + progs[x].programs[i].ProgramTestingRequirements + '</p>';
                         html += '<h4>Other Requirements</h4>';
                         html += '<p>' + progs[x].programs[i].ProgramOtherRequirements + '</p>';
+                        html += '<h4>Waiver Information</h4>';
+                        html += '<p>' + progs[x].programs[i].Waiver + '</p>';
                         html += '<h4>Year Established</h4>';
                         html += '<p>' + progs[x].programs[i].ProgramEstablished + '</p>';
                         html += '<h4>Financial Assistance (for example: scholarship, fellowship, etc.)</h4>';

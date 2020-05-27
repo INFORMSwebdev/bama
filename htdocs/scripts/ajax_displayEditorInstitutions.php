@@ -142,6 +142,14 @@ else {
 //                            $helperHelp['ProgramPartTime'] = $ip->Attributes['PartTimeDuration'];
 //                        }
 
+                        $waive = $ip->Attributes['Waiver'];
+                        if($waive === 1){
+                            $waiver = 'Waivers for testing are available';
+                        } else {
+                            $waiver = 'No waivers have been selected for this program.';
+                        }
+                        $helperHelp['Waiver'] = $waiver;
+
                         $curReqs = $ip->getTestingRequirements(TRUE);
                         $reqs = '';
                         foreach($curReqs as $c){

@@ -56,7 +56,7 @@ else {
     }
     //commenting out below because of the new delivery method dropdown
     //$delivery = $courseObj->Attributes['DeliveryMethod'];
-    $delivery = $courseObj->getDeliveryMethod();
+    $delivery = $courseObj->getDeliveryMethodLabel();
     $deliveryHTML = '<h3>Delivery Method</h3>';
     if(isset($delivery)){
         $deliveryHTML .= "<p>$delivery</p>";
@@ -64,38 +64,46 @@ else {
     else {
         $deliveryHTML .= '<p>Delivery method is currently not available.</p>';
     }
-    $capstone = $courseObj->Attributes['HasCapstoneProject'];
-    $capstoneHTML = '<h3>Has Capstone Project</h3>';
-    if(isset($capstone)){
-        $capstoneHTML .= "<p>$capstone</p>";
-    }
-    else {
-        $capstoneHTML .= '<p>Capstone information is currently not available.</p>';
-    }
-    $text = $courseObj->Attributes['CourseText'];
-    $textHTML = '<h3>Course Text</h3>';
-    if(isset($text)){
-        $textHTML .= "<p>$text</p>";
-    }
-    else {
-        $textHTML .= '<p>Course text is currently not available.</p>';
-    }
-    $analytic = $courseObj->Attributes['AnalyticTag'];
-    $analyticHTML = '<h3>Analytics Tags</h3>';
-    if(isset($analytic)){
-        $analyticHTML .= "<p>$analytic</p>";
+    $capstoneHTML = '';
+//    $capstone = $courseObj->Attributes['HasCapstoneProject'];
+//    $capstoneHTML = '<h3>Has Capstone Project</h3>';
+//    if(isset($capstone)){
+//        $capstoneHTML .= "<p>$capstone</p>";
+//    }
+//    else {
+//        $capstoneHTML .= '<p>Capstone information is currently not available.</p>';
+//    }
+    $textHTML = '';
+//    $text = $courseObj->Attributes['CourseText'];
+//    $textHTML = '<h3>Course Text</h3>';
+//    if(isset($text)){
+//        $textHTML .= "<p>$text</p>";
+//    }
+//    else {
+//        $textHTML .= '<p>Course text is currently not available.</p>';
+//    }
+    //$analytic = $courseObj->Attributes['AnalyticTag'];
+    $analyticHTML = '<h3>Course Tags</h3>';
+    $curTags = $courseObj->getTags();
+    if($curTags){
+        $analyticHTML .= '<p>';
+        foreach($curTags as $t){
+            $analyticHTML .= $t['name'] . "<br />";
+        }
+        $analyticHTML .= '</p>';
     }
     else {
         $analyticHTML .= '<p>Analytics tags are not currently available.</p>';
     }
-    $business = $courseObj->Attributes['BusinessTag'];
-    $businessHTML = '<h3>Business Tags</h3>';
-    if(isset($business)){
-        $businessHTML .= "<p>$business</p>";
-    }
-    else {
-        $businessHTML .= '<p>Business tags are not currently available.</p>';
-    }
+    $businessHTML = '';
+//    $business = $courseObj->Attributes['BusinessTag'];
+//    $businessHTML = '<h3>Business Tags</h3>';
+//    if(isset($business)){
+//        $businessHTML .= "<p>$business</p>";
+//    }
+//    else {
+//        $businessHTML .= '<p>Business tags are not currently available.</p>';
+//    }
     //$instructorId = $courseObj->Attributes['InstructorId'];
     //get the instructors assigned to this course
     $instructors = $courseObj->getInstructors(TRUE);

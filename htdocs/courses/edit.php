@@ -111,7 +111,7 @@ if($courseId){
                 <br />
                 <div class="form-row"> 
                     <label for="courseNumber">Number</label>
-                    <input type="text" class="form-control" name="courseNumber" id="courseNumber" value="{$co->Attributes['CourseNumber']}" placeholder="Number of course" aria-describedby="numberHelp" />
+                    <input type="text" class="form-control" name="courseNumber" id="courseNumber" value="{$co->Attributes['CourseNumber']}" placeholder="e.g. MSB101" aria-describedby="numberHelp" />
                     <p id="numberHelp">Any alphanumeric characters are allowed.</p>
                 </div>
                 <!--<br/>-->
