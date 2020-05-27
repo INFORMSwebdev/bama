@@ -393,6 +393,13 @@ EOT;
         return $db->queryColumn( $sql );
     }
 
+    public function getTagLabels() {
+        $db = new EduDB;
+        $sql = "SELECT pto.`name` FROM program_tags pt JOIN program_tag_options pto ON pt.TagId = pto.id WHERE pt.ProgramId = $this->id order by `name`";
+        $tags = $db->queryColumn( $sql );
+        return $tags;
+    }
+
     public function getTags() {
         $db = new EduDB;
         $sql = "SELECT TagId FROM program_tags pt JOIN program_tag_options pto ON pt.TagId = pto.id WHERE pt.ProgramId = $this->id";
@@ -561,7 +568,7 @@ EOT;
 
     public function unassignAllTestingRequirements() {
         $db = new EduDB;
-        $sql = "DELETE FROM program_testing_requirements WHERE ProgramId = $this->id";
+        $sql = "DELETE FROM program_testing_requirements WHERE program_id = $this->id";
         return $db->exec( $sql );
     }
 

@@ -101,7 +101,18 @@ else {
 
                         $helperHelp['ProgramId'] = $ip->id;
                         $helperHelp['ProgramName'] = $ip->Attributes['ProgramName'];
-                        $helperHelp['ProgramType'] = $ip->Attributes['ProgramType'];
+                        //$helperHelp['ProgramType'] = $ip->Attributes['ProgramType'];
+                        $helperHelp['ProgramType'] = $ip->getType();
+                        $curTags = $ip->getTagLabels();
+                        if($curTags){
+                            $helperHelp['ProgramClassification'] = '';
+                            foreach($curTags as $c){
+                                $helperHelp['ProgramClassification'] .= $c . '</br>';
+                            }
+                        } else {
+                            $helperHelp['ProgramClassification'] = 'None set.';
+                        }
+
                         //commented out below because of the new drop down list
                         //$helperHelp['ProgramDelivery'] = $ip->Attributes['DeliveryMethod'];
                         $helperHelp['ProgramDelivery'] = $ip->getDeliveryMethod();
@@ -117,23 +128,31 @@ else {
                         } else {
                             $helperHelp['ProgramObjectives'] = $ip->Attributes['ProgramObjectives'];
                         }
+                        $helperHelp['ProgramFullTime'] = $ip->getFullTimeDurationLabel();
+//                        if (empty($ip->Attributes['FullTimeDuration'])) {
+//                            $helperHelp['ProgramFullTime'] = 'Full time duration not set.';
+//                        } else {
+//                            $helperHelp['ProgramFullTime'] = $ip->Attributes['FullTimeDuration'];
+//                        }
 
-                        if (empty($ip->Attributes['FullTimeDuration'])) {
-                            $helperHelp['ProgramFullTime'] = 'Full time duration not set.';
-                        } else {
-                            $helperHelp['ProgramFullTime'] = $ip->Attributes['FullTimeDuration'];
+                        $helperHelp['ProgramPartTime'] = $ip->getPartTimeDurationLabel();
+//                        if (empty($ip->Attributes['PartTimeDuration'])) {
+//                            $helperHelp['ProgramPartTime'] = 'Part time duration not set.';
+//                        } else {
+//                            $helperHelp['ProgramPartTime'] = $ip->Attributes['PartTimeDuration'];
+//                        }
+
+                        $curReqs = $ip->getTestingRequirements(TRUE);
+                        $reqs = '';
+                        foreach($curReqs as $c){
+                            $reqs .= $c . '<br/>';
                         }
 
-                        if (empty($ip->Attributes['PartTimeDuration'])) {
-                            $helperHelp['ProgramPartTime'] = 'Part time duration not set.';
-                        } else {
-                            $helperHelp['ProgramPartTime'] = $ip->Attributes['PartTimeDuration'];
-                        }
-
-                        if (empty($ip->Attributes['TestingRequirements'])) {
+                        if (empty($reqs)) {
                             $helperHelp['ProgramTestingRequirements'] = 'Testing requirements not set.';
-                        } else {
-                            $helperHelp['ProgramTestingRequirements'] = $ip->Attributes['TestingRequirements'];
+                        }
+                        else {
+                            $helperHelp['ProgramTestingRequirements'] = $reqs;
                         }
 
                         if (empty($ip->Attributes['OtherRequirements'])) {
@@ -172,24 +191,24 @@ else {
                             $helperHelp['ProgramNonResidentTuition'] = $ip->Attributes['EstimatedNonResidentTuition'];
                         }
 
-                        if (empty($ip->Attributes['CostPerCredit'])) {
-                            $helperHelp['ProgramCostPerCredit'] = 'Cost per credit not set.';
-                        } else {
-                            $helperHelp['ProgramCostPerCredit'] = $ip->Attributes['CostPerCredit'];
-                        }
+//                        if (empty($ip->Attributes['CostPerCredit'])) {
+//                            $helperHelp['ProgramCostPerCredit'] = 'Cost per credit not set.';
+//                        } else {
+//                            $helperHelp['ProgramCostPerCredit'] = $ip->Attributes['CostPerCredit'];
+//                        }
 
                         //set up the appropriate message based on flags
-                        $analFlag = $ip->Attributes['AnalyticsFlag'];
-                        $orFlag = $ip->Attributes['ORFlag'];
-                        if ($analFlag == 1 && $orFlag == 1) {
-                            $helperHelp['ProgramAnalyticsOR'] = 'Both Analytics and O.R.';
-                        } else if ($analFlag == 0 && $orFlag == 1) {
-                            $helperHelp['ProgramAnalyticsOR'] = 'O.R.';
-                        } else if ($analFlag == 1 && $orFlag == 0) {
-                            $helperHelp['ProgramAnalyticsOR'] = 'Analytics';
-                        } else {
-                            $helperHelp['ProgramAnalyticsOR'] = 'Neither Analytics nor O.R.';
-                        }
+//                        $analFlag = $ip->Attributes['AnalyticsFlag'];
+//                        $orFlag = $ip->Attributes['ORFlag'];
+//                        if ($analFlag == 1 && $orFlag == 1) {
+//                            $helperHelp['ProgramAnalyticsOR'] = 'Both Analytics and O.R.';
+//                        } else if ($analFlag == 0 && $orFlag == 1) {
+//                            $helperHelp['ProgramAnalyticsOR'] = 'O.R.';
+//                        } else if ($analFlag == 1 && $orFlag == 0) {
+//                            $helperHelp['ProgramAnalyticsOR'] = 'Analytics';
+//                        } else {
+//                            $helperHelp['ProgramAnalyticsOR'] = 'Neither Analytics nor O.R.';
+//                        }
 
                         $helperHelp['ProgramCreated'] = $ip->Attributes['CreateDate'];
 
