@@ -400,10 +400,15 @@ EOT;
         return $tags;
     }
 
-    public function getTags() {
+    public function getTags( $justIDs = TRUE ) {
         $db = new EduDB;
-        $sql = "SELECT TagId FROM program_tags pt JOIN program_tag_options pto ON pt.TagId = pto.id WHERE pt.ProgramId = $this->id";
-        $tags = $db->queryColumn( $sql );
+        $sql = "SELECT TagId, name FROM program_tags pt JOIN program_tag_options pto ON pt.TagId = pto.id WHERE pt.ProgramId = $this->id ORDER BY name";
+        $tags = $db->query( $sql );
+        if ($justIDs) {
+            $ids = [];
+            foreach( $tags as $tag ) $ids[] = $tag['TagId'];
+            $tags = $ids;
+        }
         return $tags;
     }
 

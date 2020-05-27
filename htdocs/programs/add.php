@@ -129,6 +129,10 @@ $content = <<<EOT
             $TestingRequirementOptions
             <!--<input type="text" class="form-control" name="TestingRequirement" id="TestingRequirement" />-->
         </div>
+        <div class=""form-row">
+            <label for="Waiver">Waiver for testing requirements available?</label>
+            <input type="checkbox" name="Waiver" id="Waiver" value="1" /> Yes
+        </div>
         <div class="form-row">
             <label for="OtherRequirement">Other Requirements</label>
             <input type="text" class="form-control" name="OtherRequirement" id="OtherRequirement" />
@@ -154,11 +158,7 @@ $content = <<<EOT
             <input type="text" class="form-control" name="NonResident" id="NonResident" />
         </div>
         <br/>
-        <div class=""form-row">
-            <label for="Waiver">Has Waiver?</label>
-            <input type="checkbox" name="Waiver" id="Waiver" value="1" />
-        </div>
-        <br />
+
         <div class="form-row">
             <h3>College Assignment</h3>
         </div>
