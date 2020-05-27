@@ -45,6 +45,8 @@ class AOREducationObject {
       $ignored_fields = [ $class::$primary_key, 'ApprovalStatusId', 'CreateDate', 'LastModifiedDate'];
       foreach( $o1->Attributes as $key => $value ) {
           if (in_array( $key, $ignored_fields )) continue;
+          elseif (!in_array( $key, array_keys($class::$data_structure))) continue;
+          elseif (!in_array( $key, $o2->Attributes)) continue;
           else {
               if ($value != $o2->Attributes[$key]) $output[] = $key;
           }

@@ -15,29 +15,29 @@ class Program extends AOREducationObject
         'ProgramId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Program ID', 'editable' => FALSE ),
         'InstitutionId' => array( 'required' => TRUE, 'datatype' => PDO::PARAM_INT, 'label' => 'Institution ID', 'editable' => FALSE ),
         'CollegeId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'College ID', 'editable' => TRUE ),
-        'ContactId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Contact ID', 'editable' => FALSE ),
+        /*'ContactId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Contact ID', 'editable' => FALSE ),*/
         'ProgramName' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Program Name', 'editable' => TRUE ),
-        'ProgramType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Program Type', 'editable' => TRUE ),
-        'ProgramTypeId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Program Type ID', 'editable' => TRUE ),
-        'DeliveryMethod' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Delivery Method', 'editable' => TRUE ),
+        /*'ProgramType' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Program Type', 'editable' => TRUE ),*/
+        'ProgramTypeId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Program Type', 'editable' => TRUE ),
+        /*'DeliveryMethod' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Delivery Method', 'editable' => TRUE ),*/
         'DeliveryMethodId' => array('required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Delivery Method', 'editable' => TRUE),
         'ProgramAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Program Website', 'editable' => TRUE ),
         'ProgramObjectives' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Program Objectives', 'editable' => TRUE ),
-        'FullTimeDuration' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Full-Time Duration', 'editable' => TRUE ),
-        'FullTimeDurationId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Full-Time Duration Id', 'editable' => TRUE ),
-        'PartTimeDuration' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Part-Time Duration', 'editable' => TRUE ),
-        'PartTimeDurationId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Part-Time Duration Id', 'editable' => TRUE ),
-        'TestingRequirement' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Testing Requirement(s)', 'editable' => TRUE ),
+        /*'FullTimeDuration' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Full-Time Duration', 'editable' => TRUE ),*/
+        'FullTimeDurationId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Full-Time Duration', 'editable' => TRUE ),
+        /*'PartTimeDuration' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Part-Time Duration', 'editable' => TRUE ),*/
+        'PartTimeDurationId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Part-Time Duration', 'editable' => TRUE ),
+        /*'TestingRequirement' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Testing Requirement(s)', 'editable' => TRUE ),*/
         'OtherRequirement' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Other Requirement(s)', 'editable' => TRUE ),
-        'Credits' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Credits', 'editable' => TRUE ),
+        'Credits' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Credit Hours', 'editable' => TRUE ),
         'YearEstablished' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Year Established', 'editable' => TRUE ),
-        'Scholarship' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Scholarship', 'editable' => TRUE ),
+        'Scholarship' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Financial Assistance', 'editable' => TRUE ),
         'EstimatedResidentTuition' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Estimated Resident Tuition', 'editable' => TRUE ),
         'EstimatedNonresidentTuition' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Estimated Non-Resident Tuition', 'editable' => TRUE ),
-        'CostPerCredit' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Cost per Credit', 'editable' => TRUE ),
+        /*'CostPerCredit' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Cost per Credit', 'editable' => TRUE ),*/
         'Waiver' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Waiver', 'editable' => TRUE ),
-        'ORFlag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'OR Flag', 'editable' => TRUE ),
-        'AnalyticsFlag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Analytics Flag', 'editable' => TRUE ),
+       /* 'ORFlag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'OR Flag', 'editable' => TRUE ),*/
+       /* 'AnalyticsFlag' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Analytics Flag', 'editable' => TRUE ),*/
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE ),
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
@@ -481,6 +481,21 @@ EOT;
                 case 'Deleted':
                     $value = ($value) ? "Yes" : "No";
                     break;
+                case 'DeliveryMethodId':
+                    $value = $this->getDeliveryMethod();
+                    break;
+                case 'FullTimeDurationId':
+                    $value = $this->getFullTimeDurationLabel();
+                    break;
+                case 'PartTimeDurationId':
+                    $value = $this->getPartTimeDurationLabel();
+                    break;
+                case 'ProgramTypeId':
+                    $value = $this->getProgramTypeLabel();
+                    break;
+                case 'Waiver':
+                    $value = ($value) ? "Yes" : "No";
+                    break;
             }
 
             if (!$value) $value = '&nbsp;';
@@ -491,6 +506,18 @@ EOT;
             $data_html .= '</div>';
         }
         return $data_html;
+    }
+
+    public static function renderProgramTypeOptionHTML( $selected = null ) {
+        $db = new EduDB;
+        $sql = "SELECT id, name FROM program_type_options ORDER BY name";
+        $types = $db->query( $sql );
+        $html = '';
+        foreach( $types as $type) {
+            $selVal = ($type['id'] == $selected ) ? ' selected="selected" ' : '';
+            $html .= '<option value="'.$type['id'].'"'.$selVal.'>'.$type['name'].'</option>';
+        }
+        return $html;
     }
 
     public static function renderProgramTypesOptions( $selected = null ) {
