@@ -30,7 +30,7 @@ class Course extends AOREducationObject
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
         'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified Date', 'editable' => FALSE ),
     );
-    public static $full_text_columns = 'CourseTitle, CourseText, AnalyticTag, BusinessTag';
+    public static $full_text_columns = 'CourseTitle, CourseText';
     public static $name_sql = 'CourseTitle';
     public static $parent_class = 'Program';
     public static $hidden_fields = ['OriginalRecordId','InstructorId'];

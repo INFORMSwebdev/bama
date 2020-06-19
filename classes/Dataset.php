@@ -27,7 +27,7 @@ class Dataset extends AOREducationObject
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
         'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified Date', 'editable' => FALSE ),
     );
-    public static $full_text_columns = 'DatasetName, DatasetUseDescription, AnalyticTag, BusinessTag';
+    public static $full_text_columns = 'DatasetName, DatasetUseDescription';
     public static $name_sql = 'DatasetName';
     public static $parent_class = 'Course';
     public static $hidden_fields = ['OriginalRecordId'];

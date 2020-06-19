@@ -25,7 +25,7 @@ class CaseStudy extends AOREducationObject {
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
         'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified Date', 'editable' => FALSE ),
     );
-    public static $full_text_columns = 'CaseTitle, CaseUseDescription, AnalyticTag, BusinessTag';
+    public static $full_text_columns = 'CaseTitle, CaseUseDescription';
     public static $name_sql = 'CaseTitle';
     public static $parent_class = 'Course';
     public static $hidden_fields = ['OriginalRecordId'];

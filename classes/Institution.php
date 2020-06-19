@@ -30,7 +30,7 @@ class Institution extends AOREducationObject {
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
         'RegionId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Region', 'editable' => TRUE ),
     );
-    public static $full_text_columns = 'InstitutionName, InstitutionCity, InstitutionState';
+    public static $full_text_columns = 'InstitutionName, InstitutionCity';
     public static $name_sql = 'InstitutionName';
     public static $parent_class = NULL;
     public static $hidden_fields = ['OriginalRecordId'];
