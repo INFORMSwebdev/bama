@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($result == true) {
                 //set message to show user
                 $_SESSION['editMessage']['success'] = true;
-                $_SESSION['editMessage']['text'] = 'Dataset update successfully submitted and is awaiting approval for posting.';
+                $_SESSION['editMessage']['text'] = Dataset::getSubmissionMessage('edit');
             }
             else {
                 $_SESSION['editMessage']['success'] = false;

@@ -98,6 +98,7 @@ $(function() {
     });
     $('#btn-cancel').on( 'click keyup', function(e) {
       $('#userEditForm')[0].reset();
+      window.history.back();
     });
     $('#userEditForm').on( 'submit', function(e) {
       e.preventDefault();

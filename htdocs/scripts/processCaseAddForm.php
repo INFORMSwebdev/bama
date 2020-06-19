@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result == true) {
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'New case study successfully submitted and is awaiting approval for posting.';
+            $_SESSION['editMessage']['text'] = CaseStudy::getSubmissionMessage('add');
         } else {
             $_SESSION['editMessage']['success'] = false;
             $_SESSION['editMessage']['text'] = "New case study was not added to the system. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";

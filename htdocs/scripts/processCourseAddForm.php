@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result == true) {
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'New course successfully submitted and is awaiting approval for posting.';
+            $_SESSION['editMessage']['text'] = Course::getSubmissionMessage('add' );
         } else {
             //I can't think of why this case would ever happen, but just in case set the user to default ADMIN/system record
             $_SESSION['editMessage']['success'] = false;

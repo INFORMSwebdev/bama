@@ -30,9 +30,10 @@ class Dropdowns
     }
 
     public static function getInstitutionRegionName($id){
+        if (!$id) return '';
         $db = new EduDB();
         $qry = 'SELECT name FROM region_dropdown WHERE id = ' . $id;
-        return $db->queryColumn($qry)[0];
+        return $db->queryItem($qry);
     }
 
     public static function getProgramFullTimeDurationOptionsHTML($curSelection = NULL){

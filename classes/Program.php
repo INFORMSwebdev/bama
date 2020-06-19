@@ -551,7 +551,7 @@ EOT;
 
     public static function renderTestingRequirementsHTML( $checked = [] ) {
         $db = new EduDB;
-        $sql = "SELECT * FROM program_testing_requirement_options ORDER BY name";
+        $sql = "SELECT * FROM program_testing_requirement_options ORDER BY IF(name='Other',1,0),name";
         $tags = $db->query( $sql );
         $html = '<div class="tag_container">';
         foreach( $tags as $tag ) {

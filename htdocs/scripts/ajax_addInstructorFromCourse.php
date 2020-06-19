@@ -66,7 +66,7 @@ else {
     if($result == true) {
         $pU = new PendingUpdate($result);
         $response['NewInstructorId'] = $pU->Attributes['UpdateRecordId'];
-        $msg = 'New instructor successfully submitted and is awaiting approval for posting.';
+        $msg = Instructor::getSubmissionMessage('add');
     }
     else {
         $errors[] = "New instructor was not added to the system. Please contact <a href='mailto:webdev@mail.informs.org'>webdev@mail.informs.org</a>.";

@@ -218,6 +218,26 @@ EOT;
       return $asString ? $str : $coll;
   }
 
+  public static function getSubmissionMessage( $type = 'add', $thing = null ) {
+        // the $thing parameter allows something arbitrary to be filled in to indicate the thing that was updated, in case we need that
+        if (!$thing) $thing = get_called_class();
+        $html = "";
+        switch (strtolower($type)) {
+            case 'add':
+            case 'insert':
+                $html .= "New " . strtolower( $thing );
+                break;
+            case 'edit':
+            case 'update':
+            default:
+                $html .= $thing . " update";
+                break;
+        }
+        $html .= " successfully submitted and is awaiting approval for posting. ";
+        $html .= "Please allow 5-7 business days for updates to be approved.";
+        return $html;
+  }
+
   public function getStatusLabel() {
         $label = NULL;
         if( isset( $this->Attributes['ApprovalStatusId'])) $label = $this->Attributes['ApprovalStatusId'];

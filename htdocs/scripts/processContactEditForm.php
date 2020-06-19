@@ -79,7 +79,7 @@ else {
         if ($result == true) {
             //set message to show user
             $_SESSION['editMessage']['success'] = true;
-            $_SESSION['editMessage']['text'] = 'Contact update successfully submitted and is awaiting approval for posting.';
+            $_SESSION['editMessage']['text'] = Contact::getSubmissionMessage('edit' );
         }
         else {
             $_SESSION['editMessage']['success'] = false;
