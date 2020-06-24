@@ -43,13 +43,19 @@ class AOREducationObject {
       $class2 = get_class( $o2 );
       if ($class != $class2) die( "compareObjects failed because objects are of type $class and $class2 and need to be the same.");
       $ignored_fields = [ $class::$primary_key, 'ApprovalStatusId', 'CreateDate', 'LastModifiedDate'];
-      foreach( $o1->Attributes as $key => $value ) {
+      /*foreach( $o1->Attributes as $key => $value ) {
           if (in_array( $key, $ignored_fields )) continue;
           elseif (!in_array( $key, array_keys($class::$data_structure))) continue;
           elseif (!in_array( $key, $o2->Attributes)) continue;
           else {
               if ($value != $o2->Attributes[$key]) $output[] = $key;
           }
+      }*/
+      //echo "<pre>".print_r($o1,1)."</pre>";
+       // echo "<pre>".print_r($o2,1)."</pre>";die();
+      foreach( $o2->Attributes as $key => $value ) {
+          if (in_array( $key, $ignored_fields )) continue;
+          if ($o1->Attributes[$key] != $value ) $output[] = $key;
       }
       return $output;
   }
@@ -290,16 +296,17 @@ EOT;
   }
   
   public function update( $key, $value ) {
+        if( !array_key_exists( $key, static::$data_structure )) return false;
         $Class = get_class($this);
         $ignored_fields = [ $Class::$primary_key, 'CreateDate', 'LastModifiedDate'];
         if (in_array( $key, $ignored_fields )) return FALSE;
-    $db = new EduDB();
-    $params = array();
-    $sql = "UPDATE ".static::$table." SET $key=:value WHERE ".static::$primary_key ." = $this->id";
-    $datatype = (is_null($value)) ? PDO::PARAM_NULL : static::$data_structure[$key]['datatype'];
-    $params = array( array( ":value", $value, $datatype ) );
-    $this->Attributes[$key] = $value;
-    return $db->execSafe( $sql, $params );
+        $db = new EduDB();
+        $params = array();
+        $sql = "UPDATE ".static::$table." SET $key=:value WHERE ".static::$primary_key ." = $this->id";
+        $datatype = (is_null($value)) ? PDO::PARAM_NULL : static::$data_structure[$key]['datatype'];
+        $params = array( array( ":value", $value, $datatype ) );
+        $this->Attributes[$key] = $value;
+        return $db->execSafe( $sql, $params );
   }
   
   public function updateMultiple( $params ) {

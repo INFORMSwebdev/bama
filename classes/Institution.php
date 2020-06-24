@@ -33,7 +33,7 @@ class Institution extends AOREducationObject {
     public static $full_text_columns = 'InstitutionName, InstitutionCity';
     public static $name_sql = 'InstitutionName';
     public static $parent_class = NULL;
-    public static $hidden_fields = ['OriginalRecordId'];
+    public static $hidden_fields = ['OriginalRecordId', 'Token'];
 
     public function assignAdmin( $UserId ) {
         $db = new EduDB;
@@ -163,6 +163,14 @@ class Institution extends AOREducationObject {
         }
     }
 
+    public function getRegionLabel() {
+        $region_id = $this->Attributes['RegionId'];
+        if (!$region_id) return '';
+        $db = new EduDB;
+        $sql = "SELECT `name` FROM region_dropdown WHERE id=$region_id";
+        return $db->queryItem( $sql );
+    }
+
     public function getUserAssignments( $asObjects = FALSE ) {
         $db = new EduDB();
         $sql = "SELECT UserID FROM institution_admins WHERE InstitutionId = $this->id";
@@ -202,7 +210,11 @@ class Institution extends AOREducationObject {
                     $value = AOREducationObject::getStatusLabelFromId( $value );
                     break;
                 case 'Deleted':
+                case 'Expired':
                     $value = ($value) ? "Yes" : "No";
+                    break;
+                case 'RegionId':
+                    $value = $this->getRegionLabel();
                     break;
             }
 

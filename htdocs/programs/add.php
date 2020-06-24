@@ -36,8 +36,8 @@ $programTypeOptions = Program::renderProgramTypeOptionHTML();
 
 $tagHTML = Program::renderTagHTML();
 
-$fullTimeDurationOptions = Program::getFullTimeDurationOptionHTML();
-$partTimeDurationOptions = Program::getPartTimeDurationOptionHTML();
+//$fullTimeDurationOptions = Program::getFullTimeDurationOptionHTML();
+//$partTimeDurationOptions = Program::getPartTimeDurationOptionHTML();
 $TestingRequirementOptions = Program::renderTestingRequirementsHTML();
 
 //user is logged in, let them add a program
@@ -111,14 +111,14 @@ $content = <<<EOT
             </select>             
         </div>
         <div class="form-row">
-            <label for="FullTime">Full Time Duration</label>
-                <!--<input type="text" class="form-control" name="FullTime" id="FullTime" />-->
-            <select class="form-control" name="FullTime" id="FullTime"><option/>$fullTimeDurationOptions </select>
+            <label for="FullTime">Full Time Duration (months)</label>
+                <input type="text" class="form-control" name="FullTime" id="FullTime" />
+            <!--<select class="form-control" name="FullTime" id="FullTime"><option/>$fullTimeDurationOptions </select>-->
         </div>
         <div class="form-row">
-            <label for="PartTime">Part Time Duration</label>
-            <!--<input type="text" class="form-control" name="PartTime" id="PartTime" />-->
-            <select class="form-control" name="PartTime" id="PartTime"><option/>$partTimeDurationOptions</select>
+            <label for="PartTime">Part Time Duration (months)</label>
+            <input type="text" class="form-control" name="PartTime" id="PartTime" />
+            <!--<select class="form-control" name="PartTime" id="PartTime"><option/>$partTimeDurationOptions</select>-->
         </div>
         <br />
         <div class="form-row">

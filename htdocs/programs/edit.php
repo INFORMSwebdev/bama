@@ -279,16 +279,18 @@ EOT;
             </select>                
         </div>
         <div class="form-group">
-            <label for="FullTime">Full Time Duration</label>
-            <select class="form-control" id="FullTime" name="FullTime">
+            <label for="FullTime">Full Time Duration (months)</label>
+            <input type="text" class="form-control" id="FullTime" name="FullTime" value="{$fullTime}"/> 
+            <!--<select class="form-control" id="FullTime" name="FullTime">
                 {$fullTimeOptions}
-            </select>  
+            </select>-->
         </div>
         <div class="form-group">
-            <label for="PartTime">Part Time Duration</label>
-            <select class="form-control" id="PartTime" name="PartTime">
+            <label for="PartTime">Part Time Duration (months)</label>
+            <input type="text" class="form-control" id="PartTime" name="PartTime" value="{$partTime}"/>
+            <!--<select class="form-control" id="PartTime" name="PartTime">
                 {$partTimeOptions}
-            </select> 
+            </select> -->
         </div>
         <h3>Requirement Details</h3>
         <div class="form-group">
@@ -432,7 +434,13 @@ $(function() {
       }
     });
     
+    var orig_data = $('form').serialize();
+    
     $('form').submit( function(e) { 
+      if (orig_data == $('form').serialize()) {
+        alert('There have been no changes made.');
+        return false;
+      }
       var errors = [];
       if ($('.programs_option:checked').length < 1) errors.push('You must select at least one tag.');
       if (errors.length > 0) {
