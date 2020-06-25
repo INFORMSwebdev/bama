@@ -37,7 +37,10 @@ class Institution extends AOREducationObject {
 
     public function assignAdmin( $UserId ) {
         $db = new EduDB;
-        $sql = "INSERT IGNORE INTO institution_admins (InstitutionId, UserId) VALUES ($this->id, :UserId)";
+        $sql = "SELECT id FROM institution_admins WHERE InstitutionId = {$this->id} AND UserId = $UserId";
+        $id = $db->queryItem( $sql );
+        if ($id) return 1; // user is already assigned to this institution but we will pretend operation successful so there is no error feedback to admin
+        $sql = "INSERT INTO institution_admins (InstitutionId, UserId) VALUES ($this->id, :UserId)";
         $params = array( array( ":UserId", $UserId, PDO::PARAM_INT));
         return $db->execSafe( $sql, $params );
     }
