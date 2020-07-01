@@ -57,9 +57,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $progDeliveryMethod = 10;
         }
         //$progFullTime = filter_input(INPUT_POST, 'FullTime', FILTER_SANITIZE_STRING);
-        $progFullTime = filter_input(INPUT_POST, 'FullTime', FILTER_VALIDATE_INT);
+        $progFullTime = filter_input(INPUT_POST, 'FullTime', FILTER_SANITIZE_STRING);
         //$progPartTime = filter_input(INPUT_POST, 'PartTime', FILTER_SANITIZE_STRING);
-        $progPartTime = filter_input(INPUT_POST, 'PartTime', FILTER_VALIDATE_INT);
+        $progPartTime = filter_input(INPUT_POST, 'PartTime', FILTER_SANITIZE_STRING);
         //$progTestingReqs = filter_input(INPUT_POST, 'TestingRequirement', FILTER_SANITIZE_STRING);
         $progOtherReqs = filter_input(INPUT_POST, 'OtherRequirement', FILTER_SANITIZE_STRING);
         $progCredits = filter_input(INPUT_POST, 'Credits', FILTER_SANITIZE_STRING);
