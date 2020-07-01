@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $testingReqs = filter_input(INPUT_POST, 'TestingRequirements', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
         $waiver = filter_input(INPUT_POST, 'Waiver', FILTER_VALIDATE_INT);
         if($waiver !== 1){
-            $wavier = 0;
+            $waiver = 0;
         }
 
         //$analyticsFlag = filter_input(INPUT_POST, 'AnalyticsFlag', FILTER_VALIDATE_BOOLEAN);
