@@ -337,7 +337,7 @@ else {
         $response['institutions'] = $helper;
     }
     else {
-        $response['errors'][] = 'You are not assigned as an administrator of any institutions.';
+        $response['errors'][] = 'You are not assigned as an administrator of any institutions.'.'<pre>'.print_r($_SESSION,1).'</pre>';
     }
 }
 
