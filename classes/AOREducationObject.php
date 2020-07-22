@@ -81,7 +81,7 @@ class AOREducationObject {
       $qparams[] = array( ":$key", $value, $datatype );
     }
     $result = $db->execSafe( $sql, $qparams );
-    if (!$result) die( "Something went wrong in static create method " . print_r(EduDB::$connection->errorInfo(),1) . sql);
+    if (!$result) die( "Something went wrong in static create method " . print_r(EduDB::$connection->errorInfo(),1) . $sql);
     $sql = "SELECT LAST_INSERT_ID()";
     return $db->queryItem( $sql );
   }
