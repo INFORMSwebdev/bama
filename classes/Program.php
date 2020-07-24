@@ -219,8 +219,8 @@ EOT;
         else {
             $sql = 'SELECT method FROM delivery_methods WHERE id=' . $this->Attributes['DeliveryMethodId'];
             //should only have the 1 delivery method
-            $results = $db->queryColumn($sql);
-            return $results[0];
+            $result = $db->queryItem($sql);
+            return $result;
         }
     }
 
