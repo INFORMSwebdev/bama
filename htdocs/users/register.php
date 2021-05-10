@@ -48,7 +48,8 @@ $content = <<<EOT
 	<p>Please fill this form to submit a request to become an Institution Administrator. Fields marked with <span class="text text-danger">*</span> are required.</p>
 </div>
 <div class="container-fluid">
-	<form action="{$registerFormProcessor}" method="post">
+<p class="btn-warning">This form is under maintenance, please check back later.</p>
+	<form action="{$registerFormProcessor}" method="post" disabled>
 		<div class="form-group">
 			<label for="Username">Email Address</label><span class="text text-danger">*</span>
 			<input type="text" class="form-control" name="Username" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." required />

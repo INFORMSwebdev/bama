@@ -1,7 +1,7 @@
 <?php
 //include the init.php file
 require_once '../../init.php';
-
+die();
 //ensure we are processing only on a POST request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
