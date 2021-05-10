@@ -22,6 +22,35 @@ if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true){
     }
 }
 
+//user is anonymous
+$page_title = 'Become an Institution Administrator';
+$commentBoxLabel = 'Justification';
+
+$captcha = new recaptcha2;
+
+//set up array of default field values
+$data = [
+    'Username' => '',
+    'FirstName' => '',
+    'LastName' => '',
+    'Comments' => '',
+    'inst' => 0
+];
+
+$error_html = "";
+if (isset($_SESSION['registerResponse'])) {
+    $response = unserialize( $_SESSION['registerResponse'] );
+    if (count($response->errors)) {
+        $error_html = '<div class="btn-danger"><ul>';
+        foreach ( $response->errors as $error ) $error_html .= "<li>$error</li>";
+        $error_html .= "</ul></div>";
+    }
+    // fill form with previously submitted values
+    foreach ( array_keys($data) as $key ) $data[$key] = $response->data[$key];
+    // nullify the session variable so error messaging is cleared
+    unset($_SESSION['registerResponse']);
+}
+
 //get list of all institutions
 $institutions = Institution::getInstitutions();
 //turn that into an array of name/value pairs to pass to the optionsHTML.php file
@@ -32,11 +61,9 @@ foreach($institutions as $inst){
 $instListHelper[] = array('text' => 'Other', 'value' => 'Other');
 //pass the name/value pairs to the file to get the generated HTML for a select list
 include_once('/common/classes/optionsHTML.php');
-$instListHTML = optionsHTML($instListHelper);
+$selected = (isset($response)) ? $response->data['inst'] : 0;
+$instListHTML = optionsHTML($instListHelper, $selected, TRUE);
 
-//user is anonymous
-$page_title = 'Become an Institution Administrator';
-$commentBoxLabel = 'Justification';
 
 //user is anonymous, show them the Request for Access form
 //set the form that will be displayed to users
@@ -48,21 +75,21 @@ $content = <<<EOT
 	<p>Please fill this form to submit a request to become an Institution Administrator. Fields marked with <span class="text text-danger">*</span> are required.</p>
 </div>
 <div class="container-fluid">
-<p class="btn-warning">This form is under maintenance, please check back later.</p>
+$error_html
 	<form action="{$registerFormProcessor}" method="post" disabled>
 		<div class="form-group">
 			<label for="Username">Email Address</label><span class="text text-danger">*</span>
-			<input type="text" class="form-control" name="Username" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." required />
+			<input type="text" class="form-control" name="Username" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." required value="{$data['Username']}"/>
 			<small id="UserNameHelp" class="form-text text-muted">This is a separate login from an INFORMS account.</small>
 		</div>
 		<div class="form-group">
 			<label for="FirstName">First Name</label><span class="text text-danger">*</span>
-			<input type="text" class="form-control" name="FirstName" id="FirstName" placeholder="First Name" required />
+			<input type="text" class="form-control" name="FirstName" id="FirstName" placeholder="First Name" required value="{$data['FirstName']}"/>
 			<!--<small id="FirstNameHelp" class="form-text text-muted">We could add in help text for international people here if needed</small>-->
 		</div>
 		<div class="form-group">
 			<label for="LastName">Last Name</label><span class="text text-danger">*</span>
-			<input type="text" class="form-control" name="LastName" id="LastName" placeholder="Last Name" required />
+			<input type="text" class="form-control" name="LastName" id="LastName" placeholder="Last Name" required value="{$data['LastName']}"/>
 			<!--<small id="LastNameHelp" class="form-text text-muted">We could add in help text for international people here if needed</small>-->
 		</div>
         <div class="form-group" id="instPickerContainer">
@@ -82,7 +109,11 @@ $content = <<<EOT
 	    </div>        
         <div class="form-group">
             <label for="Comments">{$commentBoxLabel}</label>
-            <textarea class="form-control" id="Comments" name="Comments" rows="3"></textarea>
+            <textarea class="form-control" id="Comments" name="Comments" rows="3">{$data['Comments']}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="Captcha">Please confirm you are human</label>
+            <div id="Captcha">{$captcha->html()}</div>
         </div>
 		<div class="form-group">
 			<button type="submit" class="btn btn-primary" value="Submit">Submit</button>
@@ -106,8 +137,10 @@ display: none;}
 
 EOT;
 
+$selected = (isset($response)) ? $response->data['inst'] : 'null';
+
 $custom_js = <<<EOT
-function fillInsts( filter ) {
+function fillInsts( filter, selected = 0 ) {
   $('#inst').empty();
   $('#inst').append( $('<option>Loading...</option>' ));
   $('#inst').prop( "disabled", "disabled" );
@@ -115,15 +148,18 @@ function fillInsts( filter ) {
     $('#inst').empty();
     $('#inst').append( $('<option value="0">(no selection)</option>' ));
     for( var i = 0; i < data.insts.length; i++ ) {
-      var opt = $('<option value="'+data.insts[i].InstitutionId+'">'+data.insts[i].InstitutionName+'</option>');
-      $('#inst').append( opt );
+      var opt = '<option value="'+data.insts[i].InstitutionId+'"';
+      if (selected > 0 && data.insts[i].InstitutionId == selected) opt += ' selected="selected" ';
+      opt += '>'+data.insts[i].InstitutionName+'</option>';
+      var optElem = $( opt );
+      $('#inst').append( optElem );
     }
     $('#inst').append( $('<option value="0">Other</option>' ));
     $('#inst').prop( "disabled", false );
   });
 }
 $(function() {
-  fillInsts( null );
+  fillInsts( null, $selected );
   $('#instFilter').on( 'click keyup', function (e) {
     if ($(this).val().length > 2 ) {
       fillInsts( $(this).val() );
