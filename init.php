@@ -6,8 +6,6 @@
  * Time: 10:48 AM
  */
 
-ini_set('display_errors',1);
-error_reporting(E_ALL);
 session_start();
 $ini = parse_ini_file( "/common/settings/common.ini", TRUE );
 $aes = $ini['analytics_education_settings'];
