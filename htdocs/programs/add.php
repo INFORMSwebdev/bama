@@ -112,13 +112,11 @@ $content = <<<EOT
         </div>
         <div class="form-row">
             <label for="FullTime">Full Time Duration (months)</label>
-                <input type="text" class="form-control" name="FullTime" id="FullTime" />
-            <!--<select class="form-control" name="FullTime" id="FullTime"><option/></select>-->
+            <input type="number" class="form-control" id="FullTime" name="FullTime" min="1" max="100"/>
         </div>
         <div class="form-row">
             <label for="PartTime">Part Time Duration (months)</label>
-            <input type="text" class="form-control" name="PartTime" id="PartTime" />
-            <!--<select class="form-control" name="PartTime" id="PartTime"><option/></select>-->
+            <input type="number" class="form-control" id="PartTime" name="PartTime" min="1" max="100"/>
         </div>
         <br />
         <div class="form-row">

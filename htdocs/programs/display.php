@@ -47,7 +47,7 @@ if ($id) {
         $objectives = 'Objectives for this program are not currently available.';
     }
     //$fullTime = $prog->Attributes['FullTimeDuration'];
-    $fullTime = $prog->getFullTimeDurationLabel();
+    $fullTime = "TESTTEST";//$prog->getFullTimeDurationLabel();
     if (!isset($fullTime) || empty($fullTime)) {
         $fullTime = 'Full time duration for this program is not currently available.';
     }

@@ -129,16 +129,16 @@ else {
                             $helperHelp['ProgramObjectives'] = $ip->Attributes['ProgramObjectives'];
                         }
 
-                        if (empty($ip->Attributes['FullTimeDuration'])) {
+                        if (empty($ip->Attributes['FullTimeDurationInt'])) {
                             $helperHelp['ProgramFullTime'] = 'Full time duration not set.';
                         } else {
-                            $helperHelp['ProgramFullTime'] = $ip->Attributes['FullTimeDuration'];
+                            $helperHelp['ProgramFullTime'] = $ip->Attributes['FullTimeDurationInt'] . " months";
                         }
 
-                        if (empty($ip->Attributes['PartTimeDuration'])) {
+                        if (empty($ip->Attributes['PartTimeDurationInt'])) {
                             $helperHelp['ProgramPartTime'] = 'Part time duration not set.';
                         } else {
-                            $helperHelp['ProgramPartTime'] = $ip->Attributes['PartTimeDuration'];
+                            $helperHelp['ProgramPartTime'] = $ip->Attributes['PartTimeDurationInt'] . " months";
                         }
 
                         if (empty($ip->Attributes['TestingRequirements'])) {

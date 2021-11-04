@@ -52,3 +52,6 @@
     border-color: #003087 !important;
     color: #003087 !important;
 }
+input[type=number].form-control {
+    width: 300px;
+}

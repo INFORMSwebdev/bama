@@ -24,9 +24,11 @@ class Program extends AOREducationObject
         'ProgramAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Program Website', 'editable' => TRUE ),
         'ProgramObjectives' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Program Objectives', 'editable' => TRUE ),
         /*'FullTimeDuration' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Full-Time Duration', 'editable' => TRUE ),*/
-        'FullTimeDurationId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Full-Time Duration', 'editable' => TRUE ),
+        /*'FullTimeDurationId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Full-Time Duration', 'editable' => TRUE ),*/
+        'FullTimeDurationInt' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Full-Time Duration', 'editable' => TRUE ),
         /*'PartTimeDuration' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Part-Time Duration', 'editable' => TRUE ),*/
-        'PartTimeDurationId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Part-Time Duration', 'editable' => TRUE ),
+        /*'PartTimeDurationId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Part-Time Duration', 'editable' => TRUE ),*/
+        'PartTimeDurationInt' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Part-Time Duration', 'editable' => TRUE ),
         /*'TestingRequirement' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Testing Requirement(s)', 'editable' => TRUE ),*/
         'OtherRequirement' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Other Requirement(s)', 'editable' => TRUE ),
         'Credits' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Credit Hours', 'editable' => TRUE ),
@@ -280,8 +282,11 @@ EOT;
 
     public function getFullTimeDurationLabel() {
         $db = new EduDB;
-        $sql = "SELECT `name` FROM fulltime_program_duration_options WHERE id = " . $this->Attributes['FullTimeDurationId'];
-        return $db->queryItem( $sql );
+        $sql = "SELECT FullTimeDurationInt FROM programs WHERE ProgramId = {$this->id}";
+        $val = $db->queryItem( $sql );
+        $label = "";
+        if ($val > 0) $label = $val . " months";
+        return $label;
     }
 
     public static function getFullTimeDurationOptionHTML( $selected = NULL ) {
@@ -354,8 +359,11 @@ EOT;
 
     public function getPartTimeDurationLabel() {
         $db = new EduDB;
-        $sql = "SELECT `name` FROM parttime_program_duration_options WHERE id = " . $this->Attributes['PartTimeDurationId'];
-        return $db->queryItem( $sql );
+        $sql = "SELECT PartTimeDurationInt FROM programs WHERE ProgramId = {$this->id}";
+        $val = $db->queryItem( $sql );
+        $label = "";
+        if ($val > 0) $label = $val . " months";
+        return $label;
     }
 
     public function getPartTimeDuration(){

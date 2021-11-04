@@ -58,8 +58,10 @@ if (is_numeric($_SESSION['loggedIn'])) {
             $deliveryMethods = $prog->getDeliveryMethodOptions();
             $access = $prog->Attributes['ProgramAccess'];
             $objectives = $prog->Attributes['ProgramObjectives'];
-            $fullTime = $prog->Attributes['FullTimeDuration'];
-            $partTime = $prog->Attributes['PartTimeDuration'];
+            $fullTime = $prog->Attributes['FullTimeDurationInt'];
+            if (!$fullTime) $fullTime = '';
+            $partTime = $prog->Attributes['PartTimeDurationInt'];
+            if (!$partTime) $partTime = '';
             $reqs = $prog->Attributes['TestingRequirement'];
             $otherReqs = $prog->Attributes['OtherRequirement'];
             $credits = $prog->Attributes['Credits'];
@@ -192,7 +194,7 @@ EOT;
             } else {
                 $typeHtml = Dropdowns::getProgramTypeOptionsHTML();
             }
-            $curFullTime = $prog->getFullTimeDuration();
+            /*$curFullTime = $prog->getFullTimeDuration();
             if($curFullTime){
                 $fullTimeOptions = Dropdowns::getProgramFullTimeDurationOptionsHTML($curFullTime);
             } else {
@@ -203,7 +205,7 @@ EOT;
                 $partTimeOptions  = Dropdowns::getProgramPartTimeDurationOptionsHTML($curPartTime);
             } else {
                 $partTimeOptions  = Dropdowns::getProgramPartTimeDurationOptionsHTML();
-            }
+            }*/
 
             $contactHTML = <<<EOT
 <br />
@@ -280,17 +282,13 @@ EOT;
         </div>
         <div class="form-group">
             <label for="FullTime">Full Time Duration (months)</label>
-            <input type="text" class="form-control" id="FullTime" name="FullTime" value="{$fullTime}"/> 
-            <!--<select class="form-control" id="FullTime" name="FullTime">
-                {$fullTimeOptions}
-            </select>-->
+           <input type="number" class="form-control" id="FullTime" name="FullTime" min="1" max="100" value="{$fullTime}"/>
+           <i>Please enter numbers only, no alpha characters</i>
         </div>
         <div class="form-group">
             <label for="PartTime">Part Time Duration (months)</label>
-            <input type="text" class="form-control" id="PartTime" name="PartTime" value="{$partTime}"/>
-            <!--<select class="form-control" id="PartTime" name="PartTime">
-                {$partTimeOptions}
-            </select> -->
+            <input type="number" class="form-control" id="PartTime" min="1" max="100"  name="PartTime" value="{$partTime}"/>
+            <i>Please enter numbers only, no alpha characters</i>
         </div>
         <h3>Requirement Details</h3>
         <div class="form-group">
