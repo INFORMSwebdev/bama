@@ -281,12 +281,12 @@ EOT;
             </select>                
         </div>
         <div class="form-group">
-            <label for="FullTime">Full Time Duration (months)</label>
+            <label for="FullTime">Estimated Full Time Duration (months)</label>
            <input type="number" class="form-control" id="FullTime" name="FullTime" min="1" max="100" value="{$fullTime}"/>
            <i>Please enter numbers only, no alpha characters</i>
         </div>
         <div class="form-group">
-            <label for="PartTime">Part Time Duration (months)</label>
+            <label for="PartTime">Estimated Part Time Duration (months)</label>
             <input type="number" class="form-control" id="PartTime" min="1" max="100"  name="PartTime" value="{$partTime}"/>
             <i>Please enter numbers only, no alpha characters</i>
         </div>

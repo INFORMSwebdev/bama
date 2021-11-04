@@ -25,10 +25,10 @@ class Program extends AOREducationObject
         'ProgramObjectives' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Program Objectives', 'editable' => TRUE ),
         /*'FullTimeDuration' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Full-Time Duration', 'editable' => TRUE ),*/
         /*'FullTimeDurationId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Full-Time Duration', 'editable' => TRUE ),*/
-        'FullTimeDurationInt' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Full-Time Duration', 'editable' => TRUE ),
+        'FullTimeDurationInt' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Estimated Full-Time Duration', 'editable' => TRUE ),
         /*'PartTimeDuration' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Part-Time Duration', 'editable' => TRUE ),*/
         /*'PartTimeDurationId' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Part-Time Duration', 'editable' => TRUE ),*/
-        'PartTimeDurationInt' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Part-Time Duration', 'editable' => TRUE ),
+        'PartTimeDurationInt' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Estimated Part-Time Duration', 'editable' => TRUE ),
         /*'TestingRequirement' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Testing Requirement(s)', 'editable' => TRUE ),*/
         'OtherRequirement' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Other Requirement(s)', 'editable' => TRUE ),
         'Credits' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Credit Hours', 'editable' => TRUE ),

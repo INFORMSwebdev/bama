@@ -296,9 +296,9 @@ EOT;
                 <h3 class="display3">Delivery Method</h3>
                 <p>{$delivery}</p>
                 <h3 class="display3">Duration</h3>
-                <h4 class="display4">Full Time</h4>
+                <h4 class="display4">Estimated Full Time</h4>
                 <p>{$fullTime}</p>
-                <h4 class="display4">Part Time</h4>
+                <h4 class="display4">Estimated Part Time</h4>
                 <p>{$partTime}</p>
             </div>
         </div>

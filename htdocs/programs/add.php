@@ -111,11 +111,11 @@ $content = <<<EOT
             </select>             
         </div>
         <div class="form-row">
-            <label for="FullTime">Full Time Duration (months)</label>
+            <label for="FullTime">Estimated Full Time Duration (months)</label>
             <input type="number" class="form-control" id="FullTime" name="FullTime" min="1" max="100"/>
         </div>
         <div class="form-row">
-            <label for="PartTime">Part Time Duration (months)</label>
+            <label for="PartTime">Estimated Part Time Duration (months)</label>
             <input type="number" class="form-control" id="PartTime" name="PartTime" min="1" max="100"/>
         </div>
         <br />

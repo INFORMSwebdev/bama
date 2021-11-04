@@ -343,9 +343,9 @@ $(function() {
                         html += '<p>' + progs[x].programs[i].ProgramAccess + '</p>';
                         html += '<h4>Objectives</h4>';
                         html += '<p>' + progs[x].programs[i].ProgramObjectives + '</p>';
-                        html += '<h4>Full Time Duration</h4>';
+                        html += '<h4>Estimated Full Time Duration</h4>';
                         html += '<p>' + progs[x].programs[i].ProgramFullTime + '</p>';
-                        html += '<h4>Part Time Duration</h4>';
+                        html += '<h4>Estimated Part Time Duration</h4>';
                         html += '<p>' + progs[x].programs[i].ProgramPartTime + '</p>';
                         html += '<h4>Testing Requirements</h4>';
                         html += '<p>' + progs[x].programs[i].ProgramTestingRequirements + '</p>';
