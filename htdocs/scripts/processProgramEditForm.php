@@ -91,9 +91,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $prog->Attributes['ProgramAccess'] = $progAccess;
         $prog->Attributes['ProgramObjectives'] = $progObjs;
         //$prog->Attributes['FullTimeDuration'] = $progFullTime;
-        $prog->Attributes['FullTimeDurationId'] = $progFullTime;
+        $prog->Attributes['FullTimeDurationInt'] = $progFullTime;
         //$prog->Attributes['PartTimeDuration'] = $progPartTime;
-        $prog->Attributes['PartTimeDurationId'] = $progPartTime;
+        $prog->Attributes['PartTimeDurationInt'] = $progPartTime;
         //$prog->Attributes['TestingRequirement'] = $progTestingReqs;
         $prog->assignTestingRequirements($testingReqs);
         $prog->assignTags($progTags);

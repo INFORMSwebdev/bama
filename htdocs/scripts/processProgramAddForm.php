@@ -72,8 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'DeliveryMethodId' => $progDeliveryMethod,
         'ProgramAccess' => $progAccess,
         'ProgramObjectives' => $progObjs,
-        'FullTimeDurationId' => $progFullTime,
-        'PartTimeDurationId' => $progPartTime,
+        'FullTimeDurationInt' => $progFullTime,
+        'PartTimeDurationInt' => $progPartTime,
         /*'TestingRequirements' => $progTestingReqs,*/
         'OtherRequirements' => $progOtherReqs,
         'Credits' => $progCredits,

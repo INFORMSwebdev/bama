@@ -105,18 +105,24 @@ $content = <<<EOT
             <h3>Delivery Details</h3>
         </div>
         <div class="form-row">
+          <div class="form-group">
             <label for="DeliveryMethod">Method</label>
             <select class="form-control" id="DeliveryMethod" name="DeliveryMethod">
                 {$deliveryOptions}
             </select>             
+           </div>
         </div>
         <div class="form-row">
+          <div class="form-group">
             <label for="FullTime">Estimated Full Time Duration (months)</label>
             <input type="number" class="form-control" id="FullTime" name="FullTime" min="1" max="100"/>
+          </div>
         </div>
         <div class="form-row">
+          <div class="form-group">
             <label for="PartTime">Estimated Part Time Duration (months)</label>
             <input type="number" class="form-control" id="PartTime" name="PartTime" min="1" max="100"/>
+          </div>
         </div>
         <br />
         <div class="form-row">
