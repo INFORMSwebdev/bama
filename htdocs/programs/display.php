@@ -47,11 +47,11 @@ if ($id) {
         $objectives = 'Objectives for this program are not currently available.';
     }
     //$fullTime = $prog->Attributes['FullTimeDuration'];
-    $fullTime = "TESTTEST";//$prog->getFullTimeDurationLabel();
+    $fullTime = $prog->getFullTimeDurationLabel();
     if (!isset($fullTime) || empty($fullTime)) {
         $fullTime = 'Full time duration for this program is not currently available.';
     }
-    //$partTime = $prog->Attributes['PartTimeDuration'];
+    //$partTime = $prog->Attributes['ParttTimeDuration'];
     $partTime = $prog->getPartTimeDurationLabel();
     if (!isset($partTime) || empty($partTime)) {
         $partTime = 'Part time duration for this program is not currently available.';
