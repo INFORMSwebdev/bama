@@ -21,6 +21,7 @@ class Institution extends AOREducationObject {
         'InstitutionPhone' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Phone', 'editable' => TRUE  ),
         'InstitutionEmail' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Email', 'editable' => TRUE  ),
         //'InstitutionAccess' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Website', 'editable' => TRUE  ),
+        'Country' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Country Code', 'editable' => TRUE ),
         'CreateDate' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_STR, 'label' => 'Created', 'editable' => FALSE ),
         'LastModifiedDate' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Last Modified', 'editable' => FALSE ),
         'Deleted' => array( 'required' => FALSE, 'datatype'=> PDO::PARAM_INT, 'label' => 'Deleted', 'editable' => FALSE  ),
@@ -34,6 +35,12 @@ class Institution extends AOREducationObject {
     public static $name_sql = 'InstitutionName';
     public static $parent_class = NULL;
     public static $hidden_fields = ['OriginalRecordId', 'Token'];
+    public $countryName = '';
+
+    public function __construct( $id = null ) {
+        parent::__construct( $id );
+        $this->countryName = un_data::getCountryName( $this->Attributes['Country'] );
+    }
 
     public function assignAdmin( $UserId ) {
         $db = new EduDB;

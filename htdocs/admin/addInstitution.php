@@ -21,6 +21,8 @@ foreach( $states as $state ) {
     $state_options .= '<option value="'.$state['abbr'].'">'. $state['name'] .'</option>';
 }
 
+$country_options = Dropdowns::getCountryOptionsHTML();
+
 $region_options = '';
 $sql = "SELECT id, name FROM region_dropdown";
 $regions = $db->query( $sql );
@@ -62,6 +64,10 @@ $content = <<<EOT
     <div class="form-group">
       <label for="InstitutionState">State</label>
       <select class="form-control" id="InstitutionState" name="InstitutionState">$state_options</select>
+    </div>
+    <div class="form-group">
+      <label for="Country">Country</label>
+      <select class="form-control" id="Country" name="Country">$country_options</select>
     </div>
     <div class="form-group">
       <label for="InstitutionZip">Postal Code</label>

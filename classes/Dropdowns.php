@@ -29,6 +29,12 @@ class Dropdowns
         return $db->queryColumn($qry)[0];
     }
 
+    public static function getCountryOptionsHTML( $selected = 'USA' ) {
+        $db = new EduDB;
+        $sql = "SELECT ISO_alpha3_Code, Country_or_Area FROM un_country_region_data ORDER BY Country_or_Area";
+        return optionsHTML( $db->query($sql), $selected, TRUE, [FALSE] );
+    }
+
     public static function getInstitutionRegionName($id){
         if (!$id) return '';
         $db = new EduDB();

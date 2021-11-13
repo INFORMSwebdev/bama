@@ -35,6 +35,8 @@ if ($id) {
     $zip = $inst->Attributes['InstitutionZip'];
     $city = $inst->Attributes['InstitutionCity'];
     $state = $inst->Attributes['InstitutionState'];
+    $country = $inst->Attributes['Country'];
+    $countryName = un_data::getCountryName( $country );
     //$region = $inst->Attributes['InstitutionRegion'];
     $region = $inst->Attributes['RegionId'];
     if(!isset($region) || empty($region)){
@@ -280,6 +282,7 @@ $(function() {
             html += '<h3>Address</h3>';
             html += '<p>' + progs[0].InstitutionAddress + '</p>';
             html += '<p>' + progs[0].InstitutionCity + ', ' + progs[0].InstitutionState + ' ' + progs[0].InstitutionZip + '</p>';
+            html += '<p>' + progs[0].countryName + '</p>';
             html += '<h3>Region</h3>';
             html += '<p>' + progs[0].InstitutionRegion + '</p>';
             html += '<h3>Contact Information</h3>';

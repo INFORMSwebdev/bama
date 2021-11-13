@@ -50,6 +50,7 @@ class Program extends AOREducationObject
     public static $name_sql = 'ProgramName';
     public static $parent_class = 'Institution';
     public static $hidden_fields = ['OriginalRecordId'];
+    public $countryName = '';
 
     public function assignContact( $ContactId ){
         $db = new EduDB();

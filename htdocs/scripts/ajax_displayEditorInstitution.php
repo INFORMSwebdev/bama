@@ -52,6 +52,8 @@ else {
                 $foo['InstitutionRegion'] = 'Region information not set.';
             }
 
+            $foo['countryName'] = un_data::getCountryName( $foo['Country'] );
+
             if(empty($foo['InstitutionPhone'])){
                 $foo['InstitutionPhone'] = 'Phone number not set.';
             } else {

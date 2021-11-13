@@ -56,6 +56,7 @@ if($instId){
     $zip = $instObj->Attributes['InstitutionZip'];
     //$region = $instObj->Attributes['InstitutionRegion'];
     $region = $instObj->Attributes['RegionId'];
+    $country = $instObj->Attributes['Country'];
     $phone = $instObj->Attributes['InstitutionPhone'];
     $email = $instObj->Attributes['InstitutionEmail'];
     //$access = $instObj->Attributes['InstitutionAccess'];
@@ -71,6 +72,8 @@ if($instId){
     $stateListHTML = optionsHTML($stateListHelper);
     //since state is required, we don't need to check if there is already one set to make it the currently selected option
     $stateListHTML = str_replace('<option value="' . $state . '">', '<option value="' . $state . '" selected>', $stateListHTML);
+
+    $countryOptions = Dropdowns::getCountryOptionsHTML();
 
     $regionOptions = '';
     if(!empty($region)){
@@ -106,8 +109,8 @@ if($instId){
         </div>
         <br />
         <div class="form-row"> 
-            <label for="state">State</label><span class="text text-danger">*</span>
-            <select class="form-control" name="state" id="state" required>
+            <label for="state">State</label>
+            <select class="form-control" name="state" id="state">
 		        {$stateListHTML}
             </select>
         </div>
@@ -118,7 +121,14 @@ if($instId){
         </div>
         <br />
         <div class="form-row"> 
-            <label for="region">Region</label>
+            <label for="country">Country</label><span class="text text-danger">*</span>
+            <select class="form-control" name="Country" id="Country" placeholder="Country">
+              {$countryOptions}
+             </select>
+        </div>
+        <br />
+        <div class="form-row"> 
+            <label for="region">U.S. Region</label>
             <!--<input type="text" class="form-control" name="region" id="region" placeholder="Geographical region where institution is located" value="{$region}" />-->
             <select id="region" name="region" class="form-control" placeholder="Geographical region where institution is located"> 
                 {$regionOptions}

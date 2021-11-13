@@ -9,15 +9,13 @@ $sql = "SELECT * FROM un_country_region_data WHERE Region_Code IS NOT NULL ORDER
 $rows = $db->query( $sql );
 $data = [];
 foreach( $rows as $row ) {
-    if (!isset($row['Region_Code'])) $data[$row['Region_Code']] = ['Region_Name' => $row['Region_Code'],'Subregions'=>[]];
-    if (!isset($row['Region_Code']['Subregions'][$row['Sub_region_Code']])) $data[$row['Region_Code']]['SubRegions'][$row['Sub_region_Code']] = ['Sub_region_Name' => $row['Sub_region_Name'],'Subregions'=>[]];
-    if (!isset($row['Region_Code']['Subregions'][$row['Sub_region_Code']]['IntermediateRegions'][$row['Intermediate_Region_Code']])) $data[$row['Region_Code']]['Subregions'][$row['Sub_region_Code']]['IntermediateRegions'][$row['Intermediate_Region_Code']] = ['Intermediate_Region_Name'=> $row['Intermediate_Region_Name'],'Countries'=>[]];
-    $data[$row['Region_Code']]['Subregions'][$row['Sub_region_Code']]['IntermediateRegions'][$row['Intermediate_Region_Code']]['Countries'][]=['CountryName'=>$row['Country_or_Area'],'Code'=>$row['ISO_alpha3_Code']];
-
+    if (!isset($data[$row['Region_Code']])) $data[$row['Region_Code']] = ['RegionName' => $row['Region_Name'],'Subregions'=>[]];
+    if (!isset($data[$row['Region_Code']]['Subregions'][$row['Sub_region_Code']]) && isset($row['Sub_region_Code'])) $data[$row['Region_Code']]['Subregions'][$row['Sub_region_Code']] = ['SubregionName' => $row['Sub_region_Name'],'IntermediateRegions'=>[]];
+    if (!isset($data[$row['Region_Code']]['Subregions'][$row['Sub_region_Code']]['IntermediateRegions'][$row['Intermediate_Region_Code']]) && isset($row['Intermediate_Region_Code'])) $data[$row['Region_Code']]['Subregions'][$row['Sub_region_Code']]['IntermediateRegions'][$row['Intermediate_Region_Code']] = ['IntermediateRegionName'=> $row['Intermediate_Region_Name']];
 }
 
 echo json_encode( $data );
-/*
-$fh = fopen("country_data.json", "w" );
+
+$fh = fopen("../htdocs/data/country_data.json", "w" );
 fwrite(  $fh, json_encode( $data ) );
-fclose($fh );*/
+fclose($fh );

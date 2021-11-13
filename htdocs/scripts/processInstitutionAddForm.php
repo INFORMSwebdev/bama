@@ -26,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $state = filter_input(INPUT_POST, 'state', FILTER_SANITIZE_STRING);
     $zip = filter_input(INPUT_POST, 'zip', FILTER_SANITIZE_STRING);
     $region = filter_input(INPUT_POST, 'region', FILTER_SANITIZE_STRING);
+    $country = filter_input( INPUT_POST, 'Country', FILTER_SANITIZE_STRING );
     //$phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING);
     $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_NUMBER_INT);
     $phone = str_replace('-', '', $phone);
@@ -41,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'InstitutionZip' => $zip,
         'InstitutionRegion' => $region,
         'InstitutionPhone' => $phone,
+        'Country' => $country,
         //'InstitutionAccess' => $access,
         'InstitutionEmail' => $email
     );
