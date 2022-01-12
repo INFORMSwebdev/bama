@@ -29,17 +29,18 @@ class Institution extends AOREducationObject {
         'Token' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_STR, 'label' => 'Token', 'editable' => FALSE ),
         'ApprovalStatusId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Status', 'editable' => FALSE ),
         'OriginalRecordId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Original Record ID', 'editable' => FALSE ),
-        'RegionId' => array( 'required' => FALSE, 'datatype' => PDO::PARAM_INT, 'label' => 'Region', 'editable' => TRUE ),
     );
     public static $full_text_columns = 'InstitutionName, InstitutionCity';
     public static $name_sql = 'InstitutionName';
     public static $parent_class = NULL;
     public static $hidden_fields = ['OriginalRecordId', 'Token'];
     public $countryName = '';
+    public $regionName = '';
 
     public function __construct( $id = null ) {
         parent::__construct( $id );
         $this->countryName = un_data::getCountryName( $this->Attributes['Country'] );
+        $this->regionName = un_data::getRegionName( $this->Attributes['Country'] );
     }
 
     public function assignAdmin( $UserId ) {
@@ -174,11 +175,7 @@ class Institution extends AOREducationObject {
     }
 
     public function getRegionLabel() {
-        $region_id = $this->Attributes['RegionId'];
-        if (!$region_id) return '';
-        $db = new EduDB;
-        $sql = "SELECT `name` FROM region_dropdown WHERE id=$region_id";
-        return $db->queryItem( $sql );
+        return un_data::getRegionName( $this->Attributes['Country'] );
     }
 
     public function getUserAssignments( $asObjects = FALSE ) {

@@ -38,12 +38,8 @@ if ($id) {
     $country = $inst->Attributes['Country'];
     $countryName = un_data::getCountryName( $country );
     //$region = $inst->Attributes['InstitutionRegion'];
-    $region = $inst->Attributes['RegionId'];
-    if(!isset($region) || empty($region)){
-        $region = 'Region information is not currently available for this institution.';
-    } else {
-        $region = Dropdowns::getInstitutionRegionName($region);
-    }
+    $region = un_data::getRegionName( $country );
+    $us_region = states::getRegionName( $state );
     $phone = $inst->Attributes['InstitutionPhone'];
     if(!isset($phone) || empty($phone)){
         $phone = 'Phone number not currently available for this institution.';
@@ -104,7 +100,7 @@ EOT;
 $custom_js = <<<EOT
 $(function() {
     $('#programList').html('<p>Loading data, please wait&hellip;</p>');
-    $.get( "/scripts/ajax_displayEditorInstitution.php", {'id': $id }, function( data ) {
+    $.get( "/scripts/ajax_displayEditorInstitution.php", {'id': $id }, function( data ) { 
         //alert(data);
         if (data.errors.length > 0) { 
             var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
@@ -252,7 +248,6 @@ $(function() {
     }, "json");
   
     function processProgramList(progs){
-
         if(progs.length < 1) {
             //there are no programs in the passed list
             var foo = '<p class="text text-danger">No institutions available to display right now, please try again later.</p>';
@@ -274,7 +269,7 @@ $(function() {
             html += '</li>';
             html += '</ul>';
             html += '</div>';
-        
+
             //institution tab
             html += '<div class="tab-content" id="InstitutionTabContent">';
             html += '<div class="tab-pane fade show active" id="tabInstitution" role="tabpanel" aria-labelledby="institutionDetails">';
@@ -282,9 +277,12 @@ $(function() {
             html += '<h3>Address</h3>';
             html += '<p>' + progs[0].InstitutionAddress + '</p>';
             html += '<p>' + progs[0].InstitutionCity + ', ' + progs[0].InstitutionState + ' ' + progs[0].InstitutionZip + '</p>';
-            html += '<p>' + progs[0].countryName + '</p>';
-            html += '<h3>Region</h3>';
-            html += '<p>' + progs[0].InstitutionRegion + '</p>';
+            html += '<p>' + progs[0].countryName + '</p>';            
+            html += '<h3>International Region</h3><p>' + progs[0].regionName;
+            if (progs[0].countryName == 'United States of America') {
+              html += '<h3>U.S. Region</h3>';
+              html += '<p>' + progs[0].usRegionName + '</p>';
+            }
             html += '<h3>Contact Information</h3>';
             html += '<h4 id="instPhone">Phone Number</h4>';
             html += '<p>' + progs[0].InstitutionPhone + '</p>';

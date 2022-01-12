@@ -41,9 +41,10 @@ else {
 
             if(empty($foo['InstitutionPhone'])){
                 $foo['InstitutionPhone'] = 'Phone number not set.';
-            } else {
-                $foo['InstitutionPhone'] = AOREducationObject::formatPhoneNumber($foo['InstitutionPhone']);
+            } elseif ($foo['Country'] == 'USA') {
+                $foo['InstitutionPhone'] = AOREducationObject::formatUSPhoneNumber($foo['InstitutionPhone']);
             }
+            else  $foo['InstitutionPhone'] = AOREducationObject::formatIntlPhoneNumber($foo['InstitutionPhone']);
 
             if(empty($foo['InstitutionEmail'])){
                 $foo['InstitutionEmail'] = 'Email not set.';
@@ -245,10 +246,10 @@ else {
                                 if(empty($c->Attributes['ContactPhone'])){
                                     $cPhone = 'Contact phone not set.';
                                 }
-                                else {
-                                    //AOREducationObject::formatPhoneNumber($foo['InstitutionPhone']);
-                                    $cPhone = AOREducationObject::formatPhoneNumber($c->Attributes['ContactPhone']);
+                                elseif ($foo['Country'] == 'USA') {
+                                    $foo['InstitutionPhone'] = AOREducationObject::formatUSPhoneNumber($c->Attributes['ContactPhone']);
                                 }
+                                else  $foo['InstitutionPhone'] = AOREducationObject::formatIntlPhoneNumber($c->Attributes['ContactPhone']);
 
                                 if(empty($c->Attributes['ContactEmail'])){
                                     $cEmail = 'Contact email not set.';

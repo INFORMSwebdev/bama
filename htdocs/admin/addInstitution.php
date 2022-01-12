@@ -74,12 +74,6 @@ $content = <<<EOT
       <input type="text" class="form-control" id="InstitutionZip" name="InstitutionZip" placeholder="Institution Zip"/>
     </div>
     <div class="form-group">
-      <label for="RegionId">Region</label>
-      <select class="form-control" id="RegionId" name="RegionId" placeholder="Region">
-        $region_options
-      </select>
-    </div>
-    <div class="form-group">
       <label for="InstitutionName">Institution Contact Phone</label>
       <input type="text" class="form-control" id="InstitutionPhone" name="InstitutionPhone" placeholder="Institution Contact Phone"/>
     </div>

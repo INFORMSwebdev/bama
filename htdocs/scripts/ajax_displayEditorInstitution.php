@@ -11,6 +11,7 @@ require_once '../../init.php';
 //set up response variables
 $response = [];
 $response['errors'] = [];
+$cPhone = '';
 
 $id = filter_input( INPUT_GET, 'id', FILTER_VALIDATE_INT );
 $is_admin = isset($_SESSION['admin']);
@@ -41,24 +42,17 @@ else {
         $helper = [];
         //check for and update the the response for null fields
         foreach($insts as $foo){
-            if(isset($foo['RegionId'])){
-                $name = Dropdowns::getInstitutionRegionName($foo['RegionId']);
-                if(!empty($name)){
-                    $foo['InstitutionRegion'] = $name;
-                } else {
-                    $foo['InstitutionRegion'] = 'Region information not set.';
-                }
-            } else {
-                $foo['InstitutionRegion'] = 'Region information not set.';
-            }
 
             $foo['countryName'] = un_data::getCountryName( $foo['Country'] );
+            $foo['regionName'] = un_data::getRegionName( $foo['Country'] );
+            $foo['usRegionName'] = ( $foo['Country'] == 'USA' ) ? states::getRegionName( $foo['InstitutionState'] ) : 'TEST';
 
             if(empty($foo['InstitutionPhone'])){
                 $foo['InstitutionPhone'] = 'Phone number not set.';
-            } else {
-                $foo['InstitutionPhone'] = AOREducationObject::formatPhoneNumber($foo['InstitutionPhone']);
+            } elseif ($foo['Country'] == 'USA') {
+                $foo['InstitutionPhone'] = AOREducationObject::formatUSPhoneNumber($foo['InstitutionPhone']);
             }
+            else  $foo['InstitutionPhone'] = AOREducationObject::formatIntlPhoneNumber($foo['InstitutionPhone']);
 
             if(empty($foo['InstitutionEmail'])){
                 $foo['InstitutionEmail'] = 'Email not set.';
@@ -228,9 +222,10 @@ else {
 
                                 if (empty($c->Attributes['ContactPhone'])) {
                                     $cPhone = 'Contact phone not set.';
-                                } else {
-                                    $cPhone = AOREducationObject::formatPhoneNumber($c->Attributes['ContactPhone']);
+                                } else if ($foo['Country'] == 'USA') {
+                                    $foo['InstitutionPhone'] = AOREducationObject::formatUSPhoneNumber($c->Attributes['ContactPhone']);
                                 }
+                                else $foo['InstitutionPhone'] = AOREducationObject::formatIntlPhoneNumber($c->Attributes['ContactPhone']);
 
                                 if (empty($c->Attributes['ContactEmail'])) {
                                     $cEmail = 'Contact email not set.';

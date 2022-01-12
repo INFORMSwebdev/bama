@@ -177,7 +177,11 @@ EOT;
             $s );
     }
 
-    public static function formatPhoneNumber($s) {
+    public static function formatIntlPhoneNumber($s) {
+        return "+".$s;
+    }
+
+    public static function formatUSPhoneNumber($s) {
         $rx = "/
             (1)?\D*     # optional country code
             (\d{3})?\D* # optional area code
@@ -196,7 +200,7 @@ EOT;
         $ext = $matches[5];
 
         $out = "$three-$four";
-        if(!empty($area)) $out = "$area-$out";
+        if(!empty($area)) $out = "($area) $out";
         if(!empty($country)) $out = "+$country-$out";
         if(!empty($ext)) $out .= "x$ext";
 

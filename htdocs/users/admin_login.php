@@ -16,7 +16,9 @@ $content = <<<EOT
     <h1>INFORMS Admin Login</h1>
 </div>
 <div class="flex-column">
-    <p>Log in with your Salesforce front end (self-service) credentials.</p>
+    <p>This is the part of the website where INFORMS staff manages the institutions and institutional editors. This part uses 
+    single-sign-on with Salesforce, whereas institutional editor currently use a standalone user system.</p>
+    <p>Log in with your Salesforce front or back end credentials.</p>
 </div>
 <div class="container-fluid">
     <form class="needs-validation" method="post" novalidate id="admin_login_form">

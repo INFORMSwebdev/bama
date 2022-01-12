@@ -24,22 +24,17 @@ class Dropdowns
     }
 
     public static function getCollegeTypeName($id){
+        if (!$id) return 'unknown';
         $db = new EduDB();
         $qry = 'SELECT name FROM college_type_dropdown WHERE id = ' . $id;
         return $db->queryColumn($qry)[0];
     }
 
-    public static function getCountryOptionsHTML( $selected = 'USA' ) {
+    public static function getCountryOptionsHTML( $selected = 'USA' )
+    {
         $db = new EduDB;
         $sql = "SELECT ISO_alpha3_Code, Country_or_Area FROM un_country_region_data ORDER BY Country_or_Area";
-        return optionsHTML( $db->query($sql), $selected, TRUE, [FALSE] );
-    }
-
-    public static function getInstitutionRegionName($id){
-        if (!$id) return '';
-        $db = new EduDB();
-        $qry = 'SELECT name FROM region_dropdown WHERE id = ' . $id;
-        return $db->queryItem($qry);
+        return optionsHTML($db->query($sql), $selected, TRUE, [FALSE]);
     }
 
     public static function getProgramFullTimeDurationOptionsHTML($curSelection = NULL){

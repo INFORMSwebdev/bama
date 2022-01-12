@@ -19,8 +19,11 @@ if (isset($aes['sso_enabled']) && $aes['sso_enabled']==1) {
         if (in_array($user_info['UserId'], $aes['admin_users'])) {
             $is_admin = TRUE;
         }
+        elseif (!$user_info['UserId']) {
+            $response['errors'][] = implode(", ",$user_info['errors']);
+        }
         else {
-            $response['errors'][] = "Login successful but you are not included in the list of authorized admins.".print_r($user_info,1);
+            $response['errors'][] = "Login successful but you are not included in the list of authorized admins.";
         }
     }
     else {

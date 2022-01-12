@@ -73,7 +73,7 @@ if($instId){
     //since state is required, we don't need to check if there is already one set to make it the currently selected option
     $stateListHTML = str_replace('<option value="' . $state . '">', '<option value="' . $state . '" selected>', $stateListHTML);
 
-    $countryOptions = Dropdowns::getCountryOptionsHTML();
+    $countryOptions = Dropdowns::getCountryOptionsHTML( $country );
 
     $regionOptions = '';
     if(!empty($region)){
@@ -108,15 +108,15 @@ if($instId){
 		    <input type="text" class="form-control" name="city" id="city" placeholder="City where institution is located" value="{$city}" required />
         </div>
         <br />
-        <div class="form-row"> 
-            <label for="state">State</label>
+        <div class="form-row" id="us-state-row"> 
+            <label for="state">U.S. State/Territory</label>
             <select class="form-control" name="state" id="state">
 		        {$stateListHTML}
             </select>
         </div>
         <br />
         <div class="form-row"> 
-            <label for="zip">Zip Code</label><span class="text text-danger">*</span>
+            <label for="zip">Postal Code</label><span class="text text-danger">*</span>
             <input type="text" class="form-control" name="zip" id="zip" placeholder="Zip code" value="{$zip}" required />
         </div>
         <br />
@@ -128,16 +128,8 @@ if($instId){
         </div>
         <br />
         <div class="form-row"> 
-            <label for="region">U.S. Region</label>
-            <!--<input type="text" class="form-control" name="region" id="region" placeholder="Geographical region where institution is located" value="{$region}" />-->
-            <select id="region" name="region" class="form-control" placeholder="Geographical region where institution is located"> 
-                {$regionOptions}
-            </select>
-        </div>
-        <br />
-        <div class="form-row"> 
             <label for="phone">Phone</label>
-            <input type="text" class="form-control" name="phone" id="phone" placeholder="E.g. 555-555-5555" value="{$phone}" aria-describedby="phoneHelp" />
+            <input type="text" class="form-control" name="phone" id="phone" placeholder="(555) 555-5555" value="{$phone}" aria-describedby="phoneHelp" />
             <small id="phoneHelp" class="form-text text-muted">Enter only digits, the phone number is formatted automatically.</small>
         </div>
         <br />
@@ -202,8 +194,25 @@ EOT;
 }
 
 $maskJS = <<<EOT
+function toggleIntl() {
+      if ($('#Country').val() == "USA") {
+        $('#us-state-row, #us-state-row+br').show();
+        $('#phone').inputmask('(999) 999-9999');
+        $('#phone').attr( 'placeholder', '(555) 555-5555)' );
+      }
+      else {
+        $(#us-state-row, #us-state-row+br').hide();
+        $('#phone').inputmask('+9[9][9] 99999[9][9][9][9][9][9][9]');
+        $('#phone').attr( 'placeholder', '+555 555555555555' );
+        $("#state").val($("#state option:first").val());
+      }
+}
 $(function() {
-    $('#phone').inputmask('999-999-9999');
+    $('#phone').inputmask('(999) 999-9999');
+    toggleIntl();
+    $(document).on( 'click keyup', '#Country', function(e) {
+      toggleIntl();
+    });
 });
 EOT;
 
