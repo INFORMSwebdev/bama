@@ -3,3 +3,6 @@
 *.log
 **mailoutput/**
 settings
+robots.txt
+node_modules/
+package-lock.json
