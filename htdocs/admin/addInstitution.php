@@ -61,7 +61,7 @@ $content = <<<EOT
       <label for="InstitutionCity">City</label>
       <input type="text" class="form-control" id="InstitutionCity" name="InstitutionCity" placeholder="City"/>
     </div>
-    <div class="form-group">
+    <div class="form-group" id="InstitutionStateContainer">
       <label for="InstitutionState">State</label>
       <select class="form-control" id="InstitutionState" name="InstitutionState">$state_options</select>
     </div>
@@ -125,6 +125,27 @@ function fillInsts( selectID, filter, crits ) {
     select.prop( "disabled", false );
   });
 }
+function toggleIntl() {
+      if ($('#Country').val() == "USA") {
+        $('#InstitutionStateContainer').show();
+        $('#InstitutionPhone').inputmask('(999) 999-9999');
+        $('#InstitutionPhone').attr( 'placeholder', '(555) 555-5555)' );
+      }
+      else {
+        $('#InstitutionStateContainer').hide();
+        $('#InstitutionPhone').inputmask('+9[9][9] 99999[9][9][9][9][9][9][9]');
+        $('#InstitutionPhone').attr( 'placeholder', '+555 555555555555' );
+        $("#InstitutionState").val($("#state option:first").val());
+      }
+}
+$(function() {
+    $('#phone').inputmask('(999) 999-9999');
+    toggleIntl();
+    $(document).on( 'click keyup', '#Country', function(e) {
+      toggleIntl();
+    });
+});
+
 $(function() {
   fillInsts( 'expiredInsts', null, ['expired'] );
   fillInsts( 'deletedInsts', null, ['deleted'] );
@@ -148,6 +169,7 @@ $(function() {
       if (data.msg) fillInsts( 'deletedInsts', null, ['deleted'] );
     }, "json");
   });
+
   $('#form-addInstitution').submit( function(e) {
     e.preventDefault();
     
