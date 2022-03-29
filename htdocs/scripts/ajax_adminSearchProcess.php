@@ -1,13 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dwirth
- * Date: 3/21/2019
- * Time: 12:14 PM
- */
+ini_set('error_reporting', 1);
+error_reporting(E_ALL);
 
 require_once ('../../init.php');
-if(!isset($_SESSION['admin']) || !$_SESSION['admin']) die("unauthorized access");
+//if(!isset($_SESSION['admin']) || !$_SESSION['admin']) die("unauthorized access");
 
 $classes = [
     'Institutions' => 'Institution',
@@ -24,6 +20,7 @@ $classes = [
 
 $response = [];
 $cat = filter_input( INPUT_GET, 'category');
+if (!$cat) $cat = 'All';
 
 if (!in_array($cat, array_keys($classes)) && $cat != "All") die("invalid value for category");
 $search_term = filter_input( INPUT_GET, 'search_term');
@@ -56,6 +53,10 @@ else {
 $sql .= " ORDER BY score DESC, name ASC";
 $db = new EduDB;
 $rows = $db->query( $sql );
+foreach($rows as &$row) {
+    $row['name'] = utf8_encode($row['name']);
+}
+
 $result['data'] = $rows;
 $result['msg'] = $sql;
 echo json_encode( $result );
