@@ -37,6 +37,12 @@ class Dropdowns
         return optionsHTML($db->query($sql), $selected, TRUE, [FALSE]);
     }
 
+    public static function getInstitutionRegionName( $regionId ) {
+        $name = '';
+        $db = new EduDB;
+        return $name;
+    }
+
     public static function getProgramFullTimeDurationOptionsHTML($curSelection = NULL){
         $db = new EduDB();
         $qry = 'SELECT id, name FROM fulltime_program_duration_options';

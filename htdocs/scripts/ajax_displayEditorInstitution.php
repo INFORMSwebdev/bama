@@ -26,6 +26,7 @@ else {
     //get info for all institutions this user is an editor of
     if (!$is_admin) {
         $insts = $user->getInstitutions(true, false);
+
         if(array_search($id, array_column($insts, 'InstitutionId')) === false) {
             $response['errors'][] = "You are not authorized the edit this institution";
         }
@@ -291,6 +292,7 @@ else {
         $response['errors'][] = 'You are not assigned as an administrator of any institutions.';
     }
 }
-
+// utf8_encode everything in the array so it doesn't break JSON
+array_walk_recursive($response, function (&$entry) { $entry = mb_convert_encoding( $entry, 'UTF-8' ); });
 //echo the response (as JSON) so the page that needs it can get the info from this script
 echo json_encode($response);

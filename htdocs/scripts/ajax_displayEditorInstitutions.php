@@ -28,18 +28,9 @@ else {
         $helper = [];
         //check for and update the the response for null fields
         foreach($insts as $foo){
-            if(isset($foo['RegionId'])){
-                $name = Dropdowns::getInstitutionRegionName($foo['RegionId']);
-                if(!empty($name)){
-                    $foo['InstitutionRegion'] = $name;
-                } else {
-                    $foo['InstitutionRegion'] = 'Region information not set.';
-                }
-            } else {
-                $foo['InstitutionRegion'] = 'Region information not set.';
-            }
-
-            if(empty($foo['InstitutionPhone'])){
+            $instHelp = new Institution($foo['InstitutionId']);
+            $foo['RegionName'] =  $instHelp->regionName;
+            if(empty($foo['InstitutionPhone'])) {
                 $foo['InstitutionPhone'] = 'Phone number not set.';
             } elseif ($foo['Country'] == 'USA') {
                 $foo['InstitutionPhone'] = AOREducationObject::formatUSPhoneNumber($foo['InstitutionPhone']);
@@ -49,13 +40,10 @@ else {
             if(empty($foo['InstitutionEmail'])){
                 $foo['InstitutionEmail'] = 'Email not set.';
             }
+            //die("<pre>".print_r($foo,1)."</pre>");
 
-            //if(empty($foo['InstitutionAccess'])){
-            //    $foo['InstitutionAccess'] = 'Access link not set.';
-            //}
+            if($user->id > 1) {
 
-            if($user->id > 1){
-                $instHelp = new Institution($foo['InstitutionId']);
                 $instProgs = $instHelp->getPrograms(TRUE);
                 $programHelper = [];
                 if($instProgs) {
@@ -130,18 +118,9 @@ else {
                             $helperHelp['ProgramObjectives'] = $ip->Attributes['ProgramObjectives'];
                         }
                         $helperHelp['ProgramFullTime'] = $ip->getFullTimeDurationLabel();
-//                        if (empty($ip->Attributes['FullTimeDuration'])) {
-//                            $helperHelp['ProgramFullTime'] = 'Full time duration not set.';
-//                        } else {
-//                            $helperHelp['ProgramFullTime'] = $ip->Attributes['FullTimeDuration'];
-//                        }
+
 
                         $helperHelp['ProgramPartTime'] = $ip->getPartTimeDurationLabel();
-//                        if (empty($ip->Attributes['PartTimeDuration'])) {
-//                            $helperHelp['ProgramPartTime'] = 'Part time duration not set.';
-//                        } else {
-//                            $helperHelp['ProgramPartTime'] = $ip->Attributes['PartTimeDuration'];
-//                        }
 
                         $waive = $ip->Attributes['Waiver'];
                         if($waive === 1){
@@ -200,25 +179,6 @@ else {
                             $helperHelp['ProgramNonResidentTuition'] = $ip->Attributes['EstimatedNonResidentTuition'];
                         }
 
-//                        if (empty($ip->Attributes['CostPerCredit'])) {
-//                            $helperHelp['ProgramCostPerCredit'] = 'Cost per credit not set.';
-//                        } else {
-//                            $helperHelp['ProgramCostPerCredit'] = $ip->Attributes['CostPerCredit'];
-//                        }
-
-                        //set up the appropriate message based on flags
-//                        $analFlag = $ip->Attributes['AnalyticsFlag'];
-//                        $orFlag = $ip->Attributes['ORFlag'];
-//                        if ($analFlag == 1 && $orFlag == 1) {
-//                            $helperHelp['ProgramAnalyticsOR'] = 'Both Analytics and O.R.';
-//                        } else if ($analFlag == 0 && $orFlag == 1) {
-//                            $helperHelp['ProgramAnalyticsOR'] = 'O.R.';
-//                        } else if ($analFlag == 1 && $orFlag == 0) {
-//                            $helperHelp['ProgramAnalyticsOR'] = 'Analytics';
-//                        } else {
-//                            $helperHelp['ProgramAnalyticsOR'] = 'Neither Analytics nor O.R.';
-//                        }
-
                         $helperHelp['ProgramCreated'] = $ip->Attributes['CreateDate'];
 
                         if(empty($ip->Attributes['CollegeId'])){
@@ -235,27 +195,23 @@ else {
                         if (!$progContacts) {
                             $helperHelp['Contacts'][] = null;
                         } else {
-                            foreach($progContacts as $c){
-                                if(empty($c->Attributes['ContactTitle'])){
+                            foreach ($progContacts as $c) {
+                                if (empty($c->Attributes['ContactTitle'])) {
                                     $cTitle = 'Contact title not set.';
-                                }
-                                else {
+                                } else {
                                     $cTitle = $c->Attributes['ContactTitle'];
                                 }
 
-                                if(empty($c->Attributes['ContactPhone'])){
+                                if (empty($c->Attributes['ContactPhone'])) {
                                     $cPhone = 'Contact phone not set.';
-                                }
-                                elseif ($foo['Country'] == 'USA') {
+                                } elseif ($foo['Country'] == 'USA') {
                                     $foo['InstitutionPhone'] = AOREducationObject::formatUSPhoneNumber($c->Attributes['ContactPhone']);
-                                }
-                                else  $foo['InstitutionPhone'] = AOREducationObject::formatIntlPhoneNumber($c->Attributes['ContactPhone']);
+                                } else  $foo['InstitutionPhone'] = AOREducationObject::formatIntlPhoneNumber($c->Attributes['ContactPhone']);
 
-                                if(empty($c->Attributes['ContactEmail'])){
+                                if (empty($c->Attributes['ContactEmail'])) {
                                     $cEmail = 'Contact email not set.';
-                                }
-                                else {
-                                    $cEmail = '<a href="mailto:' . $c->Attributes['ContactEmail'] . '">' . $c->Attributes['ContactEmail'] .  '</a>';
+                                } else {
+                                    $cEmail = '<a href="mailto:' . $c->Attributes['ContactEmail'] . '">' . $c->Attributes['ContactEmail'] . '</a>';
                                 }
 
                                 $helperHelp['Contacts'][] = array(
@@ -266,29 +222,7 @@ else {
                                     'ContactEmail' => $cEmail
                                 );
                             }
-//                            $progContact = new Contact($ip->Attributes['ContactId']);
-//
-//                            $helperHelp['ContactName'] = $progContact->Attributes['ContactName'];
-//
-//                            if (empty($progContact->Attributes['ContactTitle'])) {
-//                                $helperHelp['ContactTitle'] = 'Title not set.';
-//                            } else {
-//                                $helperHelp['ContactTitle'] = $progContact->Attributes['ContactTitle'];
-//                            }
-//
-//                            if (empty($progContact->Attributes['ContactPhone'])) {
-//                                $helperHelp['ContactPhone'] = 'Phone not set.';
-//                            } else {
-//                                $helperHelp['ContactPhone'] = $progContact->Attributes['ContactPhone'];
-//                            }
-//
-//                            if (empty($progContact->Attributes['ContactEmail'])) {
-//                                $helperHelp['ContactEmail'] = 'Email not set.';
-//                            } else {
-//                                $helperHelp['ContactEmail'] = "<a href='{$progContact->Attributes['ContactEmail']}' target='_blank'>{$progContact->Attributes['ContactEmail']}</a>";
-//                            }
                         }
-                        //$helperHelp['ApprovalStatusId'] = $ip->Attributes['ApprovalStatusId'];
                         //add record to the array
                         $programHelper[] = $helperHelp;
                     }
@@ -341,6 +275,9 @@ else {
         $response['errors'][] = 'You are not assigned as an administrator of any institutions.';
     }
 }
+
+// utf8_encode everything in the array so it doesn't break JSON
+array_walk_recursive($response, function (&$entry) { $entry = mb_convert_encoding( $entry, 'UTF-8' ); });
 
 //echo the response (as JSON) so the page that needs it can get the info from this script
 echo json_encode($response);
