@@ -1,3 +1,9 @@
+.navbar-light .navbar-nav .superadmin.nav-link {
+    background-color: #E87722;
+    color: #fff;
+    border-radius: 10px;
+}
+
 .tag_container {
     column-count: 4;
 }
