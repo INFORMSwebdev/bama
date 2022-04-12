@@ -24,7 +24,7 @@ else {
     //user is already logged in, get their userID from the session
     $user = new User($_SESSION['loggedIn']);
     $userName = $user->Attributes['Username'];
-    if(isset($_SESSION['admin'])){
+    if(isset($_SESSION['admin']) && !isset($_SESSION['originalUserId'])) {
         $contentHelp = "<p>Welcome $userName! Below are all institutions. You can use the Search box to find records quickly.</p><p>This is a <strong>very</strong> large list, please give the page up to 30 seconds to load the information initially.</p>";
     }
     else {

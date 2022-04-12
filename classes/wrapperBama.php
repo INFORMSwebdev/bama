@@ -47,6 +47,7 @@ class wrapperBama
     {
         //this section is to display certain things in the User menu, depending on whether a user is an INFORMS admin, program admin, or anon user
         $admin_login_link = (isset($_COOKIE['aes_admin'])) ? $admin_login_link = '<a class="nav-item nav-link" href="/users/admin_login.php">Admin Log In</a>' : '';
+        $loginas_logout_link = (isset($_SESSION['originalUserId'])) ? '<div class="nav-item"><a class="nav-item nav-link" href="/admin/restoreAdmin.php">Restore Admin</a></div>' : '';
         //this will also be used for the Users nav tab, but I am not changing the name of the variable
         $admin_navtab = '';
 
@@ -84,6 +85,7 @@ EOT;
         <a class="nav-item nav-link" href="/admin/addInstitution.php">Add Institution</a>
     </div>
 </div>
+$loginas_logout_link
 EOT;
         }
         else if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {

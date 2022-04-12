@@ -76,21 +76,22 @@ $(function() {
         "data": "UserId",
         "className": "ctrl-col",
         "render": function ( data, type, row, meta ) {
-          var btn_edit = '<input type="image" src="/images/icon-edit.png" class="btn btn-edit" id="id_'+data+'" />';
-          var btn_del = '<input type="image" src="/images/icon-delete.png" class="btn btn-delete" id="id_'+data+'" />';
-          return btn_edit + btn_del;
+          var btn_edit = '<input type="image" src="/images/icon-edit.png" class="btn btn-edit" id="edtid_'+data+'" />';
+          var btn_del = '<input type="image" src="/images/icon-delete.png" class="btn btn-delete" id="delid_'+data+'" />';
+          var btn_log = '<input type="image" src="/images/icon-loginasuser.png" class="btn btn-loginasuser" id="logid_'+data+'" />';
+          return btn_edit + btn_del + btn_log;
         }
       }
     ]
   });
   $(document).on( 'click keyup', '.btn-edit', function(e) {
-    var id = $(this).attr('id').substring(3);
+    var id = $(this).attr('id').substring(6);
     window.location.href="/admin/editUser.php?UserId="+id;
   });
   $(document).on( 'click keyup', '.btn-delete', function(e) {
     var conf = confirm( "Are you sure you want to delete this user?" );
     if (conf) {
-      var id = $(this).attr('id').substring(3);
+      var id = $(this).attr('id').substring(6);
       $.post( "/scripts/ajax_deleteUser.php", { 'UserId': id }, function(data) {
         if (data.errors.length > 0 ) {
           var msg = 'One or more errors were encountered:\\r\\n\\r\\n';
@@ -105,6 +106,10 @@ $(function() {
         }
       }, "json");
     }
+  });
+  $(document).on( 'click keyup', '.btn-loginasuser', function(e) { 
+    var id = $(this).attr('id').substring(6);
+    window.location.href="/admin/impersonateUser.php?UserId="+id;
   });
 });
 EOT;

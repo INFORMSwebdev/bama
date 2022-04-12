@@ -11,7 +11,6 @@ require_once '../../init.php';
 //set up response variables
 $response = [];
 $response['errors'] = [];
-
 if(!isset($_SESSION['loggedIn'])){
     //user is not logged in
     $response['errors'][] = 'You must log in in order to get a list of editable programs.';
@@ -201,7 +200,7 @@ else {
                                 } else {
                                     $cTitle = $c->Attributes['ContactTitle'];
                                 }
-
+                                $cPhone = '';
                                 if (empty($c->Attributes['ContactPhone'])) {
                                     $cPhone = 'Contact phone not set.';
                                 } elseif ($foo['Country'] == 'USA') {
