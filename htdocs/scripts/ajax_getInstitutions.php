@@ -20,7 +20,7 @@ $filter = filter_input( INPUT_GET, 'filter' );
 $crits = filter_input( INPUT_GET, 'crits', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
 $addl_params = '';
-if (count($crits)) {
+if ($crits && count($crits)) {
     foreach( $crits as $crit ) {
         $addl_params .= " AND " . $ok_crits[$crit];
     }
@@ -31,5 +31,8 @@ $db = new EduDB();
 $sql = "SELECT InstitutionId, InstitutionName FROM institutions WHERE InstitutionName LIKE concat('%', :filter, '%') $addl_params";
 $params = [[":filter", $filter, PDO::PARAM_STR]];
 $insts = $db->querySafe( $sql, $params );
+
 $response = ['insts' => $insts];
+array_walk_recursive($response, function (&$entry) { $entry = mb_convert_encoding( $entry, 'UTF-8' ); });
+header( "Content-Type: application/json" );
 echo json_encode( $response );
