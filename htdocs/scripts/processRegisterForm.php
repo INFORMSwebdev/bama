@@ -22,8 +22,7 @@ if (empty($FirstName)) $results->errors[] = 'The First Name field is required.';
 
 if (empty($LastName)) $results->errors[] = 'The Last Name field is required.';
 
-if (empty($inst)) $results->errors[] = "No institution selected.";
-elseif (!is_numeric($inst)) $results->errors = "Valid institution must be selected. InstitutionId passed was non-numeric.";
+if (!is_numeric($inst)) $results->errors = "Valid institution must be selected. InstitutionId passed was non-numeric.";
 
 if (empty($g_recaptcha_response)) $results->errors[] = 'The captcha is required.';
 elseif (!(new recaptcha2)->verify($g_recaptcha_response)) $results->errors[] = 'The captcha response was not valid.';

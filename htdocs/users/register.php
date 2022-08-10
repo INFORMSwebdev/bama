@@ -59,6 +59,7 @@ foreach($institutions as $inst){
     $instListHelper[] = array('text' => $inst['InstitutionName'], 'value' => $inst['InstitutionId']);
 }
 $instListHelper[] = array('text' => 'Other', 'value' => 'Other');
+
 //pass the name/value pairs to the file to get the generated HTML for a select list
 include_once('/common/classes/optionsHTML.php');
 $selected = (isset($response)) ? $response->data['inst'] : 0;

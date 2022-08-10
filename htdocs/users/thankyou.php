@@ -20,8 +20,13 @@ if(isset($_SESSION['registerSuccess']) && is_numeric($_SESSION['registerSuccess'
         $lastName = htmlspecialchars($_SESSION['registerInput'][2]);
         $instId = $_SESSION['registerInput'][3];
         //get the institution name from this id to display
-        $inst = new Institution($instId);
-        $instName = $inst->Attributes['InstitutionName'];
+        if (is_numeric($instId) && $instId > 0 ) {
+            $inst = new Institution($instId);
+            $instName = $inst->Attributes['InstitutionName'];
+        }
+        else {
+            $instName = "(Did not specify or chose 'other,' see Justification.)";
+        }
         $comments = htmlspecialchars($_SESSION['registerInput'][4]);
         $content = <<<EOT
 <div class="flex-column">
