@@ -77,7 +77,7 @@ $content = <<<EOT
 </div>
 <div class="container-fluid">
 $error_html
-	<form action="{$registerFormProcessor}" method="post" disabled>
+	<form id="regForm" action="{$registerFormProcessor}" method="post" disabled>
 		<div class="form-group">
 			<label for="Username">Email Address</label><span class="text text-danger">*</span>
 			<input type="text" class="form-control" name="Username" id="Username" aria-describedby="UserNameHelp" placeholder="Email address is the username." required value="{$data['Username']}"/>
@@ -96,7 +96,9 @@ $error_html
         <div class="form-group" id="instPickerContainer">
 	        <div class="col-xs-6 form-group">
                 <label for="inst">Institution</label>
-                <select name="inst" id="inst" class="form-control"></select>
+                <select name="inst" id="inst" class="form-control" required="" 
+                    oninvalid="this.setCustomValidity('Select the institution for which you wish to be an administrator. If you do not see your institution in the list, please select the &quot;Other&quot; option (last item in the list) and specify your institution in the Justification box below.');" 
+                    oninput="setCustomValidity('');"></select>
                 <small id="InstitutionHelp" class="form-text text-muted">Select the institution that you wish to be an administrator for.</small>
                 <small id="InstitutionOther" class="form-text text-warning">If you do not see your institution in the list, please select the 'Other' option and specify your institution in the Justification box below.</small>
             </div>
@@ -147,7 +149,7 @@ function fillInsts( filter, selected = 0 ) {
   $('#inst').prop( "disabled", "disabled" );
   $.getJSON( "/scripts/ajax_getInstitutions.php", { 'filter': filter, 'crits': ['not-deleted','not-expired'] }, function( data ) {
     $('#inst').empty();
-    $('#inst').append( $('<option value="0">(no selection)</option>' ));
+    $('#inst').append( $('<option value="">(no selection)</option>' ));
     for( var i = 0; i < data.insts.length; i++ ) {
       var opt = '<option value="'+data.insts[i].InstitutionId+'"';
       if (selected > 0 && data.insts[i].InstitutionId == selected) opt += ' selected="selected" ';
@@ -155,7 +157,7 @@ function fillInsts( filter, selected = 0 ) {
       var optElem = $( opt );
       $('#inst').append( optElem );
     }
-    $('#inst').append( $('<option value="0">Other</option>' ));
+    $('#inst').append( $('<option value="Other">Other</option>' ));
     $('#inst').prop( "disabled", false );
   });
 }
@@ -172,6 +174,20 @@ $(function() {
     $('#instFilter').val( null );
     $('#clearFilter').hide();
     fillInsts( null );
+  });
+  $('#regForm').on( 'submit', function(e) {
+      let response = grecaptcha.getResponse();
+      if(response.length == 0) 
+      { 
+        // reCaptcha not verified
+        alert( "Please verify that you are human." ); 
+        e.preventDefault();
+        return false;
+      }
+      else {
+        //captcha verified
+        return true;
+      }  
   });
 });
 EOT;

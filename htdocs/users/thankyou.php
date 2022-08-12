@@ -25,7 +25,7 @@ if(isset($_SESSION['registerSuccess']) && is_numeric($_SESSION['registerSuccess'
             $instName = $inst->Attributes['InstitutionName'];
         }
         else {
-            $instName = "(Did not specify or chose 'other,' see Justification.)";
+            $instName = "(Chose &quot;Other,&quot; see Justification.)";
         }
         $comments = htmlspecialchars($_SESSION['registerInput'][4]);
         $content = <<<EOT

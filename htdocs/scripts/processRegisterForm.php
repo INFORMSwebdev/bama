@@ -22,7 +22,7 @@ if (empty($FirstName)) $results->errors[] = 'The First Name field is required.';
 
 if (empty($LastName)) $results->errors[] = 'The Last Name field is required.';
 
-if (!is_numeric($inst)) $results->errors = "Valid institution must be selected. InstitutionId passed was non-numeric.";
+if (!is_numeric($inst) && $inst !== "Other") $results->errors = "Valid institution must be selected. InstitutionId passed was non-numeric or not &quot;Other&quot;.";
 
 if (empty($g_recaptcha_response)) $results->errors[] = 'The captcha is required.';
 elseif (!(new recaptcha2)->verify($g_recaptcha_response)) $results->errors[] = 'The captcha response was not valid.';
@@ -39,6 +39,9 @@ else {
     # required inputs = Email (Username), First Name, Last Name, Institution
     # optional inputs = Justification (Comments)
 
+    //if Other was selected for institution, need to pass 0 instead of 'Other' to PendingUser instance
+    if ($inst == 'Other') $inst = 0;  // TO-DO: modify PendingUser to handle non-numeric instId without error so this workaround can be removed
+
     //add record to pending_users table
     $pendingUserId = PendingUser::create(
         array(
@@ -52,7 +55,7 @@ else {
 
     if ($pendingUserId) {
         //notify INFORMS admin a user requested access
-        $InstitutionName = '(not specified)'; // default value
+        $InstitutionName = 'Other'; // default value
         if ($inst) {
             $Institution = new Institution( $inst);
             if ($Institution->valid) $InstitutionName = $Institution->Attributes['InstitutionName'];
